@@ -1,15 +1,5 @@
 红盟云卡系统是【云商学院】旗下的一款基于PHP+MySQL开发的虚拟商品在线售卖平台
 
-最新版安装包【官方】下载（免费下载）：http://download.yuns.life/hmyk-newest.zip
-
-官方演示站①（默认模板）：http://yk.yuns.life/
-
-官方演示站②（天蝎座模板）：http://tx.yuns.life/
-
-官方演示站（后台）：http://yk.yuns.life/admin/
-
-管理员帐号：admin 密码：123456
-
 免备案服务器购买地址：https://hmyun.life/
 
 ## 简介
