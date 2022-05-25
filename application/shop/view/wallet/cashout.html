@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>提现 - {$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/base.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/user-index.css"/>
+
+    <style>
+
+        .section-title{
+            background: #fff;
+        }
+        .bui-label{
+            display: inline!important;
+            font-size: .6rem;
+        }
+        #money{
+            height: 1rem;
+            font-size: .8rem;
+            padding-left: .2rem;
+        }
+        .cashout-btn{
+            margin-top: .5rem;
+            width: 90%;
+            border-radius: 5px;
+            padding: .2rem 0;
+            min-height: unset;
+            line-height: .35rem;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">提现</div>
+            <div class="bui-bar-right">
+                <!--<a href="{:url('setting')}" class="setting-btn">
+                    <img src="/assets/shop/images/setting.png" />
+                </a>-->
+            </div>
+        </div>
+    </header>
+    <main>
+
+        <h3 class="section-title">提现金额</h3>
+        <ul class="bui-list">
+            <li class="bui-btn bui-box clearactive">
+                <label class="bui-label" for="money">&yen;</label>
+                <div class="span1">
+                    <div class="bui-input user-input">
+                        <input id="money" type="number" value="" placeholder="">
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <p style="padding: .2rem; padding-bottom: 0; margin-bottom: 0; font-size: .25rem; color: #7d7d7d;">
+            {:$site.cashout_charged > 0 ? "提现手续费：" . $site.cashout_charged ."%" : '提现免手续费'}
+
+        </p>
+        {if condition="$site.min_cashout > 0 || $site.max_cashout_num > 0"}
+        <p style="padding: .2rem; font-size: .25rem; color: #7d7d7d;">
+            {if condition="$site.min_cashout > 0"}
+            最低提现金额{$site.min_cashout}元 &nbsp;&nbsp;
+            {/if}
+            {if condition="$site.max_cashout_num > 0"}
+            每日最多提现{$site.max_cashout_num}次
+            {/if}
+        </p>
+        {/if}
+
+        <div class="bui-btn primary cashout-btn">立即提现</div>
+
+    </main>
+    <footer>
+
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/bui/js/zepto.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+<script src="/assets/shop/dist/uaredirect.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+<script>
+    bui.btn(".cashout-btn").submit(function(loading) {
+        var money = $('#money').val();
+        if(money == ""){
+            hint("请输入提现金额");
+            loading.stop();
+            return;
+        }
+        var min_cashout = Number("{:$site.min_cashout}");
+
+
+        if(min_cashout == 0){
+            /*if(money < 1){
+                hint('最低提现1元');
+                loading.stop();
+                return;
+            }*/
+        }else{
+            if(money < min_cashout){
+                hint('最低提现' + min_cashout + '元');
+                loading.stop();
+                return;
+            }
+        }
+
+        var data = {"money": money};
+        $.ajax({
+            type: "post",
+            url: "",
+            data: data,
+            success: function(e){
+                loading.stop();
+                if(e.code == 1){
+                    $('#money').val("");
+                    bui.confirm({
+                        "autoClose": false,
+                        "height": 260,
+                        "content": '<div class="bui-box-center"><p>已发起提现申请，请等待管理员审核</p></div>',
+                        "buttons": [{ name: "继续提现", className: "primary-reverse" },{ name: "返回", className: "primary-default" }],
+                        callback:function(e){
+                            var text = $(e.target).text();
+                            if( text == "继续提现"){
+                                this.close();
+                            }else{
+                                history.back();
+                            }
+                        }
+                    });
+                }else{
+                    var msg = e.msg;
+                    if(msg == '您当日提现次数已达上限，明日再来吧~'){
+                        bui.confirm({
+                            "autoClose": false,
+                            "height": 260,
+                            "content": '<div class="bui-box-center"><p>您当日提现次数已达上限，明日再来吧~</p></div>',
+                            "buttons": [{ name: "确定", className: "primary-reverse" },{ name: "取消", className: "primary-default" }],
+                            callback:function(e){
+                                var text = $(e.target).text();
+                                if( text == "确定"){
+                                    history.back();
+                                }else{
+                                    this.close();
+                                }
+                            }
+                        });
+                    }else{
+                        bui.confirm({
+                            "autoClose": false,
+                            "height": 260,
+                            "content": '<div class="bui-box-center"><p>'+msg+'</p></div>',
+                            "buttons": [{ name: "重新填写", className: "primary-reverse" },{ name: "返回", className: "primary-default" }],
+                            callback:function(e){
+                                var text = $(e.target).text();
+                                if( text == "重新填写"){
+                                    $('#money').val("");
+                                    $('#money').focus();
+                                    this.close();
+                                }else{
+                                    history.back();
+                                }
+                            }
+                        });
+                    }
+
+                }
+
+
+            },
+            error: function(){
+                loading.stop();
+                hint('请求失败');
+            }
+        })
+
+    })
+</script>
+{if condition="!$alipay"}
+<script>
+    bui.confirm({
+        "autoClose": false,
+        "height": 260,
+        "content": '<div class="bui-box-center"><p>您还未绑定支付宝，无法进行提现操作</p></div>',
+        "buttons": [{ name: "去绑定", className: "primary-reverse" },{ name: "取消", className: "primary-default" }],
+        callback:function(e){
+            var text = $(e.target).text();
+            if( text == "去绑定"){
+                // do something
+                location.href="{:url('user/alipay')}";
+            }else{
+                history.back();
+            }
+        }
+    });
+
+</script>
+{/if}
+{if condition="$site['max_cashout_num'] > 0 && $cashout_num >= $site.max_cashout_num"}
+<script>
+    bui.confirm({
+        "autoClose": false,
+        "height": 260,
+        "content": '<div class="bui-box-center"><p>您当日提现次数已达上限，明日再来吧~</p></div>',
+        "buttons": [{ name: "确定", className: "primary-reverse" },{ name: "取消", className: "primary-default" }],
+        callback:function(e){
+            var text = $(e.target).text();
+            if( text == "确定"){
+                history.back();
+            }else{
+                this.close();
+            }
+        }
+    });
+
+</script>
+{/if}
+</body>
+
+</html>

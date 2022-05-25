@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>独角数卡</title>
+    <meta name="Keywords" content="独角数卡">
+    <meta name="Description" content="独角数卡">
+    <link rel="stylesheet" href="/assets/layui/css/layui.css">
+    <link rel="stylesheet" href="/assets/luna/main.css">
+    <link rel="shortcut icon" href="/assets/style/favicon.ico" />
+    </head>
+    <body>
+    <div class="header" style="">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div class="header-box">
+                <a href="/">
+                    <img src="https://dujiaoka.com/uploads/images/default.jpg"
+                         alt="">
+                    <div class="info">独角数卡</div>
+                </a>
+                <div class="query layui-hide-xs">
+                    <a href="https://dujiaoka.com/searchOrder">
+                        <svg t="1602923269232" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                             xmlns="http://www.w3.org/2000/svg" p-id="4816" width="20" height="20">
+                            <path d="M965.6 447.2 752 447.2c-14.4 0-26.4-12-26.4-26.4 0-14.4 12-26.4 26.4-26.4l213.6 0c14.4 0 26.4 12 26.4 26.4C992.8 435.2 980.8 447.2 965.6 447.2zM965.6 233.6 699.2 233.6c-14.4 0-26.4-12-26.4-26.4 0-14.4 12-26.4 26.4-26.4l267.2 0c14.4 0 26.4 12 26.4 26.4C992.8 221.6 980.8 233.6 965.6 233.6zM606.4 623.2l156.8 156.8c21.6 21.6 21.6 56.8 0 78.4-21.6 21.6-56.8 21.6-78.4 0L528 701.6c-16-16-20-39.2-12-59.2-51.2 44-117.6 72-190.4 72-162.4 0-293.6-131.2-293.6-293.6s131.2-293.6 293.6-293.6 293.6 131.2 293.6 293.6c0 72.8-28 139.2-72 190.4C567.2 603.2 590.4 607.2 606.4 623.2zM324.8 233.6c-103.2 0-187.2 84-187.2 187.2s84 187.2 187.2 187.2S512 523.2 512 420 428 233.6 324.8 233.6zM805.6 607.2l160 0c14.4 0 26.4 12 26.4 26.4 0 14.4-12 26.4-26.4 26.4l-160 0c-14.4 0-26.4-12-26.4-26.4C779.2 619.2 791.2 607.2 805.6 607.2z"
+                                  p-id="4817" fill="#ffffff"></path>
+                        </svg>
+                        <span>订单查询</span>
+                    </a>
+                </div>
+                    <div class="notice layui-hide-xs">
+    <p class="tit">公告:</p>
+    <div class="tips"><p><span style="color: rgb(255, 0, 0);"><strong>这里是独角数卡官方demo站</strong></span></p><p><strong>所有商品仅供测试，并无实际商品。</strong></p><p><span style="color: rgb(0, 176, 80);"><strong>发行包下载github</strong></span><strong>:<a href="https://github.com/assimon/dujiaoka/releases" target="_blank" textvalue="https://github.com/assimon/dujiaoka/releases">https://github.com/assimon/dujiaoka/releases</a></strong></p><p><span style="color: rgb(255, 0, 0);"><strong>国内网盘下载:</strong></span>&nbsp;<a href="https://dujiaoka.lanzoui.com/iTLUrhse77i" target="_blank" textvalue="https://dujiaoka.lanzoui.com/iTLUrhse77i">https://dujiaoka.lanzoui.com/iTLUrhse77i</a></p></div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="main">
+        <div class="layui-row">
+            <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+                <div class="main-box">
+                    <div class="title">
+                        <svg t="1602925747464" class="icon" viewBox="0 0 1024 1024"
+                             version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1270"
+                             data-spm-anchor-id="a313x.7781069.0.i4" width="20" height="20">
+                            <path
+                                d="M619.52 578.56V808.96h194.56V660.48h-133.12v-81.92h215.04V849.92l-40.96 40.96h-276.48l-40.96-40.96V578.56z"
+                                fill="#00EAFF" p-id="1271" data-spm-anchor-id="a313x.7781069.0.i0" class=""></path>
+                            <path
+                                d="M619.52 512V215.04h194.56v172.032h-133.12v81.92h174.08l40.96-40.96V174.08l-40.96-40.96h-276.48l-40.96 40.96v337.92z"
+                                fill="#3C8CE7" p-id="1272" data-spm-anchor-id="a313x.7781069.0.i6" class=""></path>
+                            <path
+                                d="M445.44 890.88h-276.48l-40.96-40.96V619.52l40.96-40.96h174.08v81.92h-133.12V808.96h194.56V215.04h-194.56v172.032h133.12v81.92h-174.08l-40.96-40.96V174.08l40.96-40.96h276.48l40.96 40.96v675.84z"
+                                fill="#3C8CE7" p-id="1273" data-spm-anchor-id="a313x.7781069.0.i3" class=""></path>
+                        </svg>
+                        <span>选择分类</span>
+                    </div>
+                    <div class="cate"></div>
+                    <div class="goods">
+                        <p class="title-2">
+                            <svg t="1602925988984" class="icon" viewBox="0 0 1024 1024"
+                                 version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1945" width="17" height="17">
+                                <path
+                                    d="M803.84 883.712h-163.84v-81.92h133.12l118.784-393.216-178.176 95.232-55.296-15.36L512 240.64 365.568 488.448l-55.296 15.36-178.176-95.232 118.784 393.216h133.12v81.92h-163.84l-38.912-28.672L25.6 336.896l58.368-47.104 230.4 122.88 162.816-272.384h69.632l162.816 272.384 230.4-122.88 58.368 47.104-155.648 518.144z"
+                                    fill="#3C8CE7" p-id="1946" data-spm-anchor-id="a313x.7781069.0.i17" class=""></path>
+                                <path
+                                    d="M305.152 620.544h61.44v61.44h-61.44zM481.28 620.544h61.44v61.44h-61.44zM657.408 620.544h61.44v61.44h-61.44z"
+                                    fill="#00EAFF" p-id="1947" data-spm-anchor-id="a313x.7781069.0.i14" class=""></path>
+                            </svg>
+                            <span>选择商品</span>
+                        </p>
+                        <div class="goods-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div style="text-align: center"><script type="text/javascript" src="https://v1.cnzz.com/z_stat.php?id=1278833350&web_id=1278833350"></script></div>
+            <p>Powered by <a href="https://github.com/assimon/dujiaoka" target="_blank">@独角数卡.DJK</a></p>
+        </div>
+    </div>
+</div>
+
+    <div class="query-m">
+        <a href="https://dujiaoka.com/searchOrder">
+            <svg t="1602926403006" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="3391" width="30" height="30">
+                <path d="M320.512 428.032h382.976v61.44H320.512zM320.512 616.448h320.512v61.44H320.512z" fill="#ffffff"
+                      p-id="3392" data-spm-anchor-id="a313x.7781069.0.i38" class="selected"></path>
+                <path
+                    d="M802.816 937.984H221.184l-40.96-40.96V126.976l40.96-40.96h346.112l26.624 10.24 137.216 117.76 98.304 79.872 15.36 31.744v571.392l-41.984 40.96z m-540.672-81.92h500.736V345.088L677.888 276.48 550.912 167.936H262.144v688.128z"
+                    fill="#ffffff" p-id="3393" data-spm-anchor-id="a313x.7781069.0.i37" class="selected"></path>
+            </svg>
+            <span>查单</span>
+        </a>
+    </div>
+
+    </body>
+    <script id="cateTpl" type="text/html">
+        <div class="cate-box" data-key="<< d.key >>">
+            <p><< d.name >></p>
+            <div>商品数量：<< d.products.length >></div>
+        </div>
+    </script>
+    <script id="goodsTpl" type="text/html">
+        <a href="<<# if(d.in_stock > 0){ >>/buy/<< d.id >><<#  } else { >>javascript:void(0);<<# }; >>"
+           class="goods-box" style="<<# if(d.in_stock <= 0){ >>cursor:not-allowed;<<# }; >>">
+            <div class="goods-name"><< d.pd_name >></div>
+            <div class="goods-price">
+                ￥<< d.actual_price >>
+                <<# layui.each(d.wholesale_price_arr, function(index, item){ >>
+                <div>满<< item[0] >>个 单价<< item[1]
+                    >>元/件</div>
+                <<# }); >>
+            </div>
+            <div class="goods-num">
+                <div><p style="width: << d.proportion >>%;"></p></div>
+                <span>剩余<< d.in_stock>>件</span>
+            </div>
+        </a>
+    </script>
+
+    <script>
+        let title    = "公告",
+            tipsCon  = '<p><span style="color: rgb(255, 0, 0);"><strong>这里是独角数卡官方demo站</strong></span></p><p><strong>所有商品仅供测试，并无实际商品。</strong></p><p><span style="color: rgb(0, 176, 80);"><strong>发行包下载github</strong></span><strong>:<a href="https://github.com/assimon/dujiaoka/releases" target="_blank" textvalue="https://github.com/assimon/dujiaoka/releases">https://github.com/assimon/dujiaoka/releases</a></strong></p><p><span style="color: rgb(255, 0, 0);"><strong>国内网盘下载:</strong></span>&nbsp;<a href="https://dujiaoka.lanzoui.com/iTLUrhse77i" target="_blank" textvalue="https://dujiaoka.lanzoui.com/iTLUrhse77i">https://dujiaoka.lanzoui.com/iTLUrhse77i</a></p>',
+            goodsMsg = [{"id":1,"name":"\u6d4b\u8bd5\u5206\u7c7b","icon":null,"ord":1,"c_status":1,"created_at":"2020-04-06 22:39:40","updated_at":"2020-07-07 15:09:20","products":[{"id":2,"pd_name":"\u6d4b\u8bd5\u5361\u5bc6\u5546\u54c1\ud83d\ude03","cost_price":"20.00","actual_price":"0.05","wholesale_price":"2=0.03\r\n3=0.02\r\n4=0.01","in_stock":0,"sales_volume":426,"pd_picture":"images\/b7be90b1b3a1fb50102eb43ab4db5148.png","ord":1,"buy_prompt":"<p style=\"text-align: center;\"><span style=\"color: rgb(255, 0, 0);\"><strong><br\/><\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0);\"><strong><br\/><\/strong><\/span><\/p><p style=\"text-align: center;\"><span style=\"color: rgb(255, 0, 0); font-size: 24px;\"><strong>\u6d4b\u8bd5\u5546\u54c1\uff0c\u65e0\u5b9e\u9645\u7528\u9014<\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0);\"><strong><br\/><\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0);\"><strong><br\/><\/strong><\/span><\/p>","pd_info":"<p><span style=\"color: rgb(255, 0, 0);\"><strong><br\/><\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0);\"><\/span><strong style=\"color: rgb(255, 0, 0); white-space: normal;\">\u6d4b\u8bd5\u5546\u54c1\uff0c\u65e0\u5b9e\u9645\u7528\u9014<\/strong><\/p><p><br\/><\/p>","pd_type":1,"other_ipu":null,"pd_status":1,"pd_class":1,"isopen_coupon":1,"created_at":"2020-04-06 23:33:26","updated_at":"2020-12-11 19:45:28","deleted_at":null},{"id":9,"pd_name":"\u8bf7\u4f5c\u8005\u6070\u676f\u5361\u5e03\u5947\u8bfa","cost_price":"20.00","actual_price":"1.00","wholesale_price":null,"in_stock":8762,"sales_volume":126,"pd_picture":"images\/af64d64b275d6fe1f1a6473939d725b8.png","ord":1,"buy_prompt":"<p style=\"text-align: center;\"><span style=\"color: rgb(255, 0, 0);\"><br\/><\/span><\/p><p style=\"text-align: center;\"><strong><span style=\"color: rgb(255, 0, 0);\">\u5982\u679c\u60a8\u89c9\u5f97\u672c\u9879\u76ee\u5bf9\u60a8\u6709\u6240\u5e2e\u52a9\uff01<\/span><br\/><\/strong><\/p><p style=\"text-align: center;\"><strong><span style=\"color: rgb(255, 0, 0);\">\u4e0d\u59a8\u8bf7\u6211\u6070\u4e00\u676f\u5361\u5e03\u5947\u8bfa\uff01<\/span><\/strong><\/p><p style=\"text-align: center;\"><span style=\"color: rgb(255, 0, 0);\">&nbsp;\u2615\ufe0f<span style=\"color: rgb(255, 0, 0);\">&nbsp;\u2615\ufe0f<\/span><span style=\"color: rgb(255, 0, 0);\">&nbsp;\u2615\ufe0f<\/span><span style=\"color: rgb(255, 0, 0);\">&nbsp;\u2615\ufe0f<\/span><span style=\"color: rgb(255, 0, 0);\">&nbsp;\u2615\ufe0f<\/span><\/span><\/p><p style=\"text-align: center;\"><span style=\"color: rgb(255, 0, 0);\"><span style=\"color: rgb(255, 0, 0);\"><img src=\"http:\/\/img.baidu.com\/hi\/tsj\/t_0002.gif\"\/><img src=\"http:\/\/img.baidu.com\/hi\/tsj\/t_0001.gif\"\/><\/span><\/span><\/p><p><br\/><\/p>","pd_info":"<p style=\"text-align: center;\"><span style=\"color: rgb(255, 0, 0); font-size: 20px;\"><strong><br\/><\/strong><\/span><\/p><p style=\"text-align: center;\"><span style=\"color: rgb(255, 0, 0); font-size: 20px;\"><strong>\u672c\u9879\u76ee\u9760\u7231\u53d1\u7535\uff0c\u5982\u679c\u5bf9\u60a8\u6709\u6240\u5e2e\u52a9\uff0c\u4e0d\u59a8\u8bf7\u4f5c\u8005\u559d\u51e0\u676f\u5361\u5e03\u5947\u8bfa<\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0); font-size: 20px;\"><strong><br\/><\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0); font-size: 20px;\"><strong><br\/><\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0); font-size: 20px;\"><strong><br\/><\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0); font-size: 20px;\"><strong><br\/><\/strong><\/span><\/p>","pd_type":2,"other_ipu":"nickname=\u600e\u4e48\u79f0\u547c\uff1f=true\r\ncontact_details=\u8054\u7cfb\u65b9\u5f0f=false","pd_status":1,"pd_class":1,"isopen_coupon":2,"created_at":"2020-04-21 14:40:38","updated_at":"2021-01-05 19:49:29","deleted_at":null}]},{"id":3,"name":"\u3010\u5b98\u65b9\u3011\u4ed8\u8d39\u670d\u52a1","icon":null,"ord":1,"c_status":1,"created_at":"2020-07-07 15:09:26","updated_at":"2020-07-07 15:21:33","products":[{"id":10,"pd_name":"\u72ec\u89d2\u6570\u5361\u7cfb\u7edf\u642d\u5efa","cost_price":"100.00","actual_price":"80.00","wholesale_price":null,"in_stock":996,"sales_volume":25,"pd_picture":"images\/18c4593e10a43676369c646a5026e570.jpg","ord":1,"buy_prompt":"<p style=\"text-align: center;\"><br\/><\/p><p style=\"text-align: center;\"><span style=\"font-size: 24px;\">\u8bf7\u4ed4\u7ec6\u9605\u8bfb\u5546\u54c1\u4e0b\u65b9\ud83d\udc47\ud83d\udc47\ud83d\udc47\u670d\u52a1\u8bf4\u660e\uff0c\u671f\u5f85\u5408\u4f5c\uff01\ud83d\ude01<\/span><br\/><\/p><p><span style=\"font-size: 24px;\"><br\/><\/span><\/p>","pd_info":"<p><span style=\"font-size: 16px; color: rgb(255, 0, 0);\"><strong><span style=\"font-size: 16px;\">\u987b\u77e5\uff1a<\/span><\/strong><\/span><\/p><p><strong><span style=\"font-size: 14px; color: rgb(0, 176, 80);\">\u672c\u670d\u52a1\u63d0\u4f9b\u72ec\u89d2\u6570\u5361\u7cfb\u7edf\u642d\u5efa\uff0c\u4e3a\u4e00\u6b21\u6027\u670d\u52a1\u3002<\/span><\/strong><\/p><p><strong><span style=\"font-size: 14px; color: rgb(255, 0, 0);\">\u672c\u670d\u52a1\u4e0d\u5305\u542b\u552e\u540e\uff0c\u642d\u5efa\u6210\u529f\u7cfb\u7edf\u6b63\u5e38\u8fd0\u884c\u540e\u89c6\u4e3a\u670d\u52a1\u5b8c\u6210\uff01<\/span><\/strong><\/p><p><span style=\"color:#ff0000\"><span style=\"font-size: 14px;\"><strong>\u4e0d\u8bae\u4ef7\uff0c\u80fd\u63a5\u53d7\u8005\u62cd\uff01<\/strong><\/span><\/span><\/p><p><br\/><\/p><p><strong><span style=\"font-size: 16px; color: rgb(255, 0, 0);\">\u5ba2\u6237\u9700\u63d0\u4f9b\uff1a<\/span><\/strong><\/p><p><span style=\"font-size: 14px;\">1.\u53ef\u505a\u89e3\u6790\u57df\u540d\uff0c\u5e76\u4e14\u63d0\u524d\u89e3\u6790\u5230\u670d\u52a1\u5668ip\u4e0a<\/span><\/p><p><span style=\"font-size: 14px;\">2.\u4e00\u53f0vps\u6216\u4e91\u670d\u52a1\u5668\uff0c\u4e0d\u652f\u6301\u865a\u62df\u4e3b\u673a\uff0c\u914d\u7f6e\u5efa\u8bae1G1H1M\u6216\u4ee5\u4e0a<\/span><\/p><p><span style=\"font-size: 14px;\">3.\u670d\u52a1\u5668\u7cfb\u7edf\u53ea\u80fd\u4e3alinux\uff0c\u53d1\u884c\u7248\u672cdebian\u3001centos\u3001ubuntu\u968f\u610f\u3002<\/span><\/p><p><span style=\"font-size: 14px;\"><br\/><\/span><\/p><p><span style=\"font-size: 14px;\"><strong style=\"white-space: normal;\"><span style=\"color: rgb(255, 0, 0);\">\u5176\u4ed6\u8bf4\u660e\uff1a<\/span><\/strong><\/span><\/p><p><strong style=\"font-size: 14px;\">\u670d\u52a1\u5c06\u9ed8\u8ba4\u63d0\u4f9b\u5b9d\u5854\u65b9\u5f0f\u5b89\u88c5\uff0c\u5982\u9700\u5176\u4ed6\u65b9\u5f0f\u9700\u91cd\u65b0\u5546\u5b9a\u670d\u52a1\u4ef7\u683c\u3002<\/strong><\/p><p><span style=\"color: rgb(255, 0, 0);\"><strong style=\"font-size: 14px;\">\u4e0b\u5355\u540e\u51ed\u8ba2\u5355\u53f7\u8054\u7cfb\u670d\u52a1QQ\uff1a53331323\u3002\u8bf7\u5907\u6ce8\u8ba2\u5355\u53f7<\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0);\"><strong style=\"font-size: 14px;\"><br\/><\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0);\"><strong style=\"font-size: 14px;\"><br\/><\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0);\"><strong style=\"font-size: 14px;\"><br\/><\/strong><\/span><\/p><p><span style=\"color: rgb(255, 0, 0);\"><strong style=\"font-size: 14px;\"><br\/><\/strong><\/span><\/p>","pd_type":2,"other_ipu":"lxfs=\u8054\u7cfb\u65b9\u5f0f=true","pd_status":1,"pd_class":3,"isopen_coupon":1,"created_at":"2020-07-07 15:21:00","updated_at":"2021-01-06 10:16:38","deleted_at":null},{"id":11,"pd_name":"\u7591\u96be\u6742\u75c7\u89e3\u51b3","cost_price":"20.00","actual_price":"5.00","wholesale_price":null,"in_stock":992,"sales_volume":71,"pd_picture":"images\/1007a87f2734b35ec0d6ebe3c8c08254.jpg","ord":1,"buy_prompt":"<p style=\"text-align: center;\"><br\/><\/p><p style=\"text-align: center;\"><span style=\"font-size: 24px; text-align: center;\">\u8bf7\u4ed4\u7ec6\u9605\u8bfb\u5546\u54c1\u4e0b\u65b9\ud83d\udc47\ud83d\udc47\ud83d\udc47\u670d\u52a1\u8bf4\u660e\uff0c\u671f\u5f85\u5408\u4f5c\uff01\ud83d\ude01<\/span><\/p><p><span style=\"font-size: 24px; text-align: center;\"><br\/><\/span><\/p>","pd_info":"<p style=\"white-space: normal;\"><span style=\"color: rgb(255, 0, 0);\"><strong>\u987b\u77e5\uff1a<\/strong><\/span><\/p><p style=\"white-space: normal;\"><strong><span style=\"font-size: 14px; color: rgb(0, 176, 80);\">\u672c\u670d\u52a1\u63d0\u4f9b\u89e3\u51b3\u72ec\u89d2\u6570\u5361\u4f7f\u7528\u8fc7\u7a0b\u51fa\u73b0\u7684\u7591\u96be\u6742\u75c7\u3002<\/span><\/strong><\/p><p style=\"white-space: normal;\"><strong><span style=\"font-size: 14px; color: rgb(255, 0, 0);\">\u672c\u670d\u52a1\u4ef7\u683c\u5e76\u975e\u4e00\u53e3\u4ef7\uff0c\u6839\u636e\u5ba2\u6237\u63d0\u4f9b\u4e0d\u540c\u95ee\u9898\u62cd\u4e0d\u540c\u6570\u91cf\u3002<\/span><\/strong><\/p><p style=\"white-space: normal;\"><span style=\"color: rgb(255, 0, 0);\"><span style=\"font-size: 14px;\"><strong>\u52a0QQ\uff1a53331323\uff0c\u8be2\u95ee\u5177\u4f53\u4ef7\u683c\uff01\u5907\u6ce8\u6765\u610f\uff01<\/strong><\/span><\/span><\/p><p style=\"white-space: normal;\"><br\/><\/p><p style=\"white-space: normal;\"><strong><span style=\"color: rgb(255, 0, 0);\">\u4e3e\u4e2a\u4f8b\u5b50\uff1a<\/span><\/strong><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\">1.\u652f\u4ed8\u914d\u7f6e\u95ee\u9898\u7b49\u3002<\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\">2.\u90ae\u4ef6\u95ee\u9898\uff0c\u7cfb\u7edf\u5f02\u5e38\u95ee\u9898<\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\">3.\u7cfb\u7edf\u914d\u7f6e\u95ee\u9898\u7b49\u7b49.....<\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><br\/><\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><strong><span style=\"color: rgb(255, 0, 0);\">\u5176\u4ed6\u8bf4\u660e\uff1a<\/span><\/strong><\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><strong>\u7279\u5b9a\u60c5\u51b5\u4e0b\u53e3\u5934\u65e0\u6cd5\u89e3\u51b3\u7b49\u95ee\u9898\uff0c\u9700\u5ba2\u6237\u63d0\u4f9b\u670d\u52a1\u5668root\u6743\u9650\uff0c\u6280\u672f\u4e0a\u624b\u89e3\u51b3\uff01<\/strong><\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><strong>\u8bf7\u63d0\u524d\u5907\u4efd\u76f8\u5173\u8d44\u6599\u6216\u9690\u79c1\u3002<\/strong><\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><strong><br\/><\/strong><\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><strong><br\/><\/strong><\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><strong><br\/><\/strong><\/span><\/p><p><br\/><\/p>","pd_type":2,"other_ipu":"lxfs=\u8054\u7cfb\u65b9\u5f0f=true","pd_status":1,"pd_class":3,"isopen_coupon":1,"created_at":"2020-07-07 15:28:05","updated_at":"2021-01-05 12:58:16","deleted_at":null},{"id":12,"pd_name":"\u4e8c\u6b21\u5f00\u53d1\u670d\u52a1","cost_price":"100.00","actual_price":"50.00","wholesale_price":null,"in_stock":1993,"sales_volume":7,"pd_picture":"images\/a516a58f9a742a3afb0b429470035caf.jpg","ord":1,"buy_prompt":null,"pd_info":"<p style=\"white-space: normal;\"><span style=\"color: rgb(255, 0, 0);\"><strong>\u987b\u77e5\uff1a<\/strong><\/span><\/p><p style=\"white-space: normal;\"><strong><span style=\"font-size: 14px; color: rgb(0, 176, 80);\">\u672c\u670d\u52a1\u63d0\u4f9b\u72ec\u89d2\u6570\u5361\u4e8c\u6b21\u5f00\u53d1\u670d\u52a1\u3002<\/span><\/strong><\/p><p style=\"white-space: normal;\"><strong><span style=\"font-size: 14px; color: rgb(255, 0, 0);\">\u672c\u670d\u52a1\u4ef7\u683c\u5e76\u975e\u4e00\u53e3\u4ef7\uff0c\u6839\u636e\u5ba2\u6237\u63d0\u4f9b\u4e0d\u540c\u95ee\u9898\u62cd\u4e0d\u540c\u6570\u91cf\u3002<\/span><\/strong><\/p><p style=\"white-space: normal;\"><span style=\"color: rgb(255, 0, 0);\"><span style=\"font-size: 14px;\"><strong>\u52a0QQ\uff1a53331323\uff0c\u8be2\u95ee\u5177\u4f53\u4ef7\u683c\uff01\u5907\u6ce8\u6765\u610f\uff01<\/strong><\/span><\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><br\/><\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><strong><span style=\"color: rgb(255, 0, 0);\">\u5176\u4ed6\u8bf4\u660e\uff1a<\/span><\/strong><\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\">\u5f00\u53d1\u524d\u4f1a\u4e0e\u5ba2\u6237\u786e\u5b9a\u5177\u4f53\u9700\u6c42\uff0c\u5b9a\u7a3f\u540e\u5f00\u53d1\u8fc7\u7a0b\u4e2d\u4e0d\u518d\u505a\u9700\u6c42\u4fee\u6539\uff08\u5c0f\u95ee\u9898\u53ef\u4ee5\uff09\uff01<\/span><br\/><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\">\u672c\u670d\u52a1\u53ea\u505a\u4e8c\u6b21\u5f00\u53d1\u670d\u52a1\uff0c\u540e\u671f\u8fd0\u884c\u6240\u4f7f\u7528\u7684\u670d\u52a1\u5668\u3001\u57df\u540d\u7b49\u9700\u5ba2\u6237\u81ea\u884c\u627f\u62c5\uff01<\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\">\u6709\u8bbe\u8ba1\u3001\u5b9a\u5236\u5927\u529f\u80fd\u7b49\u60c5\u51b5\u53ef\u80fd\u4f1a\u8d39\u7528\u8fc7\u9ad8\uff0c\u8bf7\u81ea\u884c\u8bc4\u4f30\u9700\u6c42\u53ca\u4ef7\u683c\u63a5\u53d7\u8303\u56f4\u3002<\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\">\u4e0d\u63a5\u53d7\u5176\u4ed6\u7b2c\u4e09\u65b9\u76d7\u7248\u7cfb\u7edf\u5f00\u53d1\uff0c\u7cfb\u7edf\u7834\u89e3\u7b49\u8fdd\u89c4\u9700\u6c42\u3002<\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\">\u53ef\u63a5\u53d7\u957f\u671f\u6280\u672f\u5305\u517b\uff01\ud83d\ude01<\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><br\/><\/span><\/p><p style=\"white-space: normal;\"><span style=\"font-size: 14px;\"><br\/><\/span><\/p><p style=\"white-space: normal;\"><br\/><\/p><p><span style=\"font-size: 14px;\"><strong><br\/><\/strong><\/span><\/p><p><br\/><\/p>","pd_type":2,"other_ipu":"lxfs=\u8054\u7cfb\u65b9\u5f0f=true","pd_status":1,"pd_class":3,"isopen_coupon":1,"created_at":"2020-07-07 15:34:46","updated_at":"2020-12-31 11:44:50","deleted_at":null}]}];
+    </script>
+<script src="/assets/layui/layui.js"></script>
+<script src="/assets/luna/js/jquery-3.4.1.min.js"></script>
+<script src="/assets/luna/main.js"></script>
+<script src="/assets/layui/lay/modules/layer.js"></script>
+</html>

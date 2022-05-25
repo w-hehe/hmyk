@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>付款完成 - {$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css" />
+    <link rel="stylesheet" href="/assets/shop/css/base.css" />
+    <link rel="stylesheet" href="/assets/shop/css/user-index.css" />
+    <script src="/assets/shop/dist/uaredirect.js"></script>
+
+    <style>
+
+        .msg {
+            text-align: center;
+            padding:.5rem .2rem 0 .2rem;
+        }
+        .msg i{
+            font-size: 1.4rem;
+        }
+        .msg .msg-title {
+            padding-top: .5rem;
+            margin-bottom: .2rem;
+            font-size: .4rem;
+        }
+        .msg .msg-content {
+            font-size: .2rem;
+            color: #999;
+            margin-bottom: .2rem;
+            line-height:1.5;
+        }
+
+        .success{
+            background: #666;
+        }
+        [class*=bui-btn].success{
+            border: 1px solid #666;
+        }
+
+
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">付款完成</div>
+            <div class="bui-bar-right"></div>
+        </div>
+    </header>
+    <main>
+
+        <div class="msg">
+            <i class="icon-successfill success"></i>
+            <div class="msg-title">付款完成</div>
+            <div class="msg-content">感谢惠顾，祝您愉快~</div>
+            <div class="bui-interval">
+                <div class="bui-btn success look-order">查看订单</div>
+                <div class="bui-btn back-index">返回首页</div>
+            </div>
+        </div>
+
+
+    </main>
+    <footer>
+
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/bui/js/zepto.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+<script>
+
+    $('.look-order').click(function(){
+        location.href="{:url('/order/all')}";
+    })
+
+    $('.back-index').click(function(){
+        location.href="{:url('/')}";
+    })
+
+
+
+</script>
+</body>
+
+</html>

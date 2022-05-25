@@ -1,0 +1,166 @@
+/**
+  *author:neil
+  *version:1.5.0
+*/
+
+body {
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-image: url(/static/img/bg.jpg);
+}
+
+html, body {
+    font-family: Roboto-Light,'Noto Sans CJK Light';
+    font-size: 14px;
+}
+
+.conlist {
+    list-style: none;
+    margin: 15px;
+    padding: 15px;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+    .conlist > li {
+        margin-top: 50px;
+        padding: 70px 15px 20px 15px;
+        position: relative;
+        background-color: #fbfbfb;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
+    }
+
+        .conlist > li:first-child {
+            margin-top: 0;
+        }
+
+        .conlist > li > ul {
+            list-style: none;
+            padding: 10px;
+        }
+
+            .conlist > li > ul > li {
+                padding: 5px 10px 10px 21px;
+                position: relative;
+            }
+
+                .conlist > li > ul > li .line {
+                    margin: 5px 0;
+                }
+
+.contitle {
+    border-left: 5px solid #0094ff;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    font-size: 25px;
+    font-weight: bold;
+    text-indent: 10px;
+    color: #303030;
+}
+
+.button {
+    width: auto;
+    height: auto;
+    padding: 18px 45px;
+    margin: 0 8px 8px 0;
+    border: 0;
+    border-radius: 2px;
+    font-size: 1.1em;
+    font-weight: 400;
+    color: #fcfcfc;
+    background: rgba(41,182,246,1);
+    outline: none;
+    cursor: pointer;
+    transition: all .4s;
+}
+
+    .button:hover {
+        transition: all .4s;
+        background: rgba(41,182,246,.8);
+    }
+
+.conlist > li ul li h5 {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    margin-top: 10px;
+}
+
+.conlist > li ul li h3 {
+    border-left: 3px solid #00b1ff;
+    text-indent: 10px;
+    margin-left: -15px;
+}
+
+hr {
+    border: 3px solid #0094ff;
+    height: 0;
+}
+
+.pagetitle {
+    text-indent: 30px;
+}
+
+ul.listblock {
+    list-style: none;
+    padding: 10px;
+    margin: 0 0 50px 0;
+    overflow: hidden;
+}
+
+    ul.listblock li {
+        padding: 2.5em;
+        /*box-shadow: 0 0 1px 0 #808080;*/
+        float: left;
+        margin: 20px 0 0 20px;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        transition: box-shadow .3s;
+    }
+
+        ul.listblock li:hover {
+            transition: box-shadow .3s;
+            box-shadow: 0 0 15px 0 #aaaaaa;
+        }
+
+    ul.listblock::after {
+        clear: both;
+    }
+
+.disposelist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    margin-left: -5px;
+}
+
+ul.disposelist li {
+    float: left;
+    margin: 10px 0 0 5px;
+}
+
+.textbox {
+    padding: 5px 10px;
+    width: 230px;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    outline: none;
+    transition: all .5s;
+}
+
+    .textbox:focus {
+        border-color: #ccc;
+        transition: all .5s;
+    }
+
+.descript {
+    padding: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #ff0000;
+}

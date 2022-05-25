@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>充值 - {$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/base.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/user-index.css"/>
+
+    <style>
+        .section-title{
+            background: #fff;
+        }
+        .bui-label{
+            display: inline!important;
+            font-size: .6rem;
+        }
+        #money{
+            height: 1rem;
+            font-size: .8rem;
+            padding-left: .2rem;
+        }
+        .hm-btn{
+            margin: 0 .2rem;
+            margin-top: .3rem;
+            color: #fff;
+            background: #2098ff;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">充值</div>
+            <div class="bui-bar-right">
+                <!--<a href="{:url('setting')}" class="setting-btn">
+                    <img src="/assets/shop/images/setting.png" />
+                </a>-->
+            </div>
+        </div>
+    </header>
+    <main>
+
+        <h3 class="section-title">充值金额</h3>
+        <ul class="bui-list">
+            <li class="bui-btn bui-box clearactive">
+                <label class="bui-label" for="money">&yen;</label>
+                <div class="span1">
+                    <div class="bui-input user-input">
+                        <input id="money" type="number" value="" placeholder="">
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="bui-btn round hm-btn">下一步</div>
+
+
+    </main>
+    <footer>
+
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/bui/js/zepto.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+<script src="/assets/shop/dist/uaredirect.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+<script>
+
+    $('.hm-btn').click(function(){
+        var money = $('#money').val();
+        if(money == ''){
+            hint("请输入充值金额");
+            return;
+        }
+        /*if(money < 1){
+            hint("充值金额不能低于1元");
+            return;
+        }*/
+        location.href = "/shop/wallet/recharge/money/" + money;
+    })
+
+
+</script>
+</body>
+
+</html>

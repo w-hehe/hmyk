@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>查看卡密 - {$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css" />
+    <link rel="stylesheet" href="/assets/shop/css/base.css" />
+    <link rel="stylesheet" href="/assets/shop/css/user-index.css" />
+    <script src="/assets/shop/dist/uaredirect.js"></script>
+
+    <style>
+
+        .shop{
+            padding: 10px;margin: 10px; margin-bottom: 0; min-height: 100px; background: #fff; border-radius: 5px;
+        }
+        .shop h2{
+            font-size: 16px; font-weight: bold;
+        }
+        .shop h2 span{
+            font-weight: normal; color: #f90; font-size: .3rem;float: right;
+        }
+        .order{
+            margin-top: .2rem;
+        }
+        .order img{
+            height: 100%;
+        }
+        .order .bui-box{
+            padding: 0; border: none; -webkit-box-align:start;
+        }
+        .order .bui-box .bui-thumbnail{
+            height: 2rem;
+        }
+        .order .item-title{
+            font-size: .3rem; line-height: .47rem;overflow: hidden;
+            word-break: break-all;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;-webkit-line-clamp:4;
+        }
+        .order .price{
+            text-align: right; margin-top: .2rem;
+        }
+        .shop .total{
+            text-align: right; margin-top: .2rem;
+        }
+        .btn-list{
+            margin-top: .2rem;
+            text-align: right;
+        }
+        .btn-list .bui-btn{
+            display: inline-block;
+            border-radius: 0.5rem;
+            color: #82848a;
+        }
+        .bui-scroll .bui-scroll-main{
+            background: unset;
+        }
+        [class*=bui-btn].active, [class*=bui-btn]:active{
+            background-color: unset;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">查看卡密</div>
+            <div class="bui-bar-right"></div>
+        </div>
+    </header>
+    <main>
+
+        <div class="shop">
+            <h2>红盟云商货源站<span style="">交易完成</span></h2>
+            <div class="order">
+                <a href="{:url('goods/detail', ['id' => $order.goods_id])}">
+                    <div class="bui-btn bui-box" data-goods="${el.goods_id}">
+                        <div class="bui-thumbnail"><img src="{$order.goods_cover}" alt=""></div>
+                        <div class="span1">
+                            <h3 class="item-title">{$order.goods_name}</h3>
+                        </div>
+                        <span class="price">￥{$order.goods_money}<br />x{$order.goods_num}</span>
+                    </div>
+                </a>
+            </div>
+<!--            <div class="total">共{$order.goods_num}件商品 合计：￥{$order.money}</div>-->
+
+        </div>
+
+        <div class="bui-list" style="margin: 10px;">
+            <div class="bui-btn bui-box">
+                <div class="bui-label">卡密</div>
+                <div class="span1">
+                    <div class="bui-value">{$kami}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="" style="margin: 10px; text-align: right;">
+            <div id="copy" class="bui-btn small" style="display: inline-block; padding-left: .4rem; padding-right: .4rem;">复制卡密</div>
+            <div class="bui-btn small href-index" style="display: inline-block; padding-left: .4rem; padding-right: .4rem;">回到首页</div>
+        </div>
+        <textarea id="kami" style="display: none;">{$order.kami}</textarea>
+    </main>
+    <footer>
+
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/jquery.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+<script src="/assets/shop/dist/clipboard.min.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+<script>
+
+    $('.href-index').click(function(){
+        location.href = "{:url('index/index')}";
+    })
+
+    var kami = $('#kami').html();
+    var clipboard = new Clipboard('#copy', {
+        text: function() {
+            return kami;
+        }
+    });
+    clipboard.on('success', function(e) {
+        hint("复制成功");
+    });
+
+    clipboard.on('error', function(e) {
+        hint("复制失败");
+        console.log(e);
+    });
+
+</script>
+</body>
+
+</html>

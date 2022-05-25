@@ -1,0 +1,104 @@
+{include file="content/template/default/header.html" /}
+<link rel="stylesheet" href="/content/template/default/css/order_detail.css?v={$template_version}">
+
+<div class="main">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div class="main-box order-detail">
+
+                <div style="padding: 0 32px; text-align: right;">
+                    <a href="/order.html"><< 返回订单列表</a>
+                </div>
+                <div style="padding: 22px 32px 0;" class="order_details_top">
+                    <div class="buj_after">
+                        <div class="order_details_left">
+                            <div>订单号：{$order.order_no} （{$remote_order.status}）</div>
+                            <div>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAATCAMAAAB4HKeYAAAAllBMVEUmX/8nYP84bP9mjv9rkv9ch/9nj/9sk/9nj/9okP8oYP8vZv9/of9/ov9ii/9rk/9mjv82a/88b/8qYv8nYP8nYP8nYP8qYv8oYP8mYP8lXv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv9/ov95nP8fWv8iXP8qYv8qYv8qYv8pYv95nf92mv9ymP97nv8mX/96nf9zmP/tyrbBAAAAKXRSTlMAAAAAAAEBBAUFDTI/P0FDQ0ZGSV5gYmJwcXh6h5Odn8XO4uTk8fHx/lWtEg0AAACISURBVHhexcdpDoIwFADhV/YdkX0rUET7Wha9/+UkIU28gd+fyQBDfCmIDPg4oDKMHDAlh0JSBFGZ8e0Sm5UAUdjz4zLbxfm5Iz8X6eR/+MyV27q/93WTbnZ+bYVBlNyTKAitWgA2mqH7y3PxdUNrELAkAF7XdR4AKRH4RCnt27btz04cGP5iX9TyJNQER2cEAAAAAElFTkSuQmCC" width="15" style="margin-left: 3px;">
+                                商品名称：
+                                <a href="{:url('/goods/' . $goods.id)}">
+                                    <span style="color: rgb(42, 98, 255);">{$goods.name}</span>
+                                </a>
+
+                            </div>
+                            <div>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAMAAABFjsb+AAABF1BMVEUqYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv9m7cYfAAAAXHRSTlMAt1vomp+Blufp4aAm6v2XrSQo4+v7+Ep7EyzUmYu27MzcLSWRkhnwwinm/rtLjlpY1a7613m/Ro8W3jwVBDDzYAOwASPbYhC+ieBo4gy6epMS0nyAggJv3fW5yIvSnAoAAADRSURBVHheXcjVdsJAAIThaXYpmxAV3KXu7u7uPu//HIVQQuG7mTk/OuZL6Mq50eQbprdeNE3f902vsj3VLIxjsqqrGVsXlmXpKk1LhDXYDNStIXTRpgxDBCQy9VYilUpEOmdsKY0J4Y785wYZrHLYNL5m57SehUVNyy6vgGUMWiOYRGxjcwsYHWg7ZKHfdvcA7B/w8ChueeP4BKdnPAfidnHJK++aN+g1B8DdPUM+IG6PaHt65gu6Xgm+Re89iz8fhP3plKSU5VxSRpwi8c1hP7/QqitMkDKKhAAAAABJRU5ErkJggg==" width="20">
+                                付款时间：{:date('Y-m-d H:i:s', $order.pay_time)}
+                            </div>
+                        </div>
+                        <div class="order_details_right">
+                            <div class="pay_tips">订单金额，
+                                <span>{$order.money}</span>元
+                            </div>
+                            {if condition="$kami"}
+                            <div>
+                                <a href="{:url('/complain')}" target="_blank" class="out_btn" id="">我要投诉</a>
+                                <div class="out_btn" id="export">导出</div>
+                                <div class="copy out_btn" id="copy">复制</div>
+                            </div>
+                            {/if}
+                        </div>
+                    </div>
+                    {if condition="$goods.buy_msg"}
+                    <div class="de_fu">
+                        {$goods.buy_msg}
+                    </div>
+                    {/if}
+                    {if condition="$params"}
+                    <div class="de_fu">
+                        {volist name="$params" id="vo"}
+                        {$vo.title}：{$vo.value} <br>
+                        {/volist}
+                    </div>
+
+                    {/if}
+                </div>
+                <div class="km_tit">发货内容</div>
+                {if condition="$kami"}
+                {volist name="$kami" id="vo" key="index"}
+                <div class="details_ite" style="border-bottom: none;">
+<!--                    <div class="num_count">第{$index}张</div>-->
+                    <div class="card_no">
+                        <p style="color: rgb(84, 84, 84); font-weight: bold; padding-right: 40px;word-break: break-all;">{$vo.content}</p>
+                    </div>
+                </div>
+                {/volist}
+                {else /}
+                <div class="details_ite" style="border-bottom: none;">未发出任何内容</div>
+                {/if}
+                <textarea id="kami-value" style="display: none;">{volist name="$kami" id="vo"}{$vo.content . "\\r\\n"}{/volist}</textarea>
+                {include file="content/template/default/order_empty.html" /}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.write('<script src="/assets/shop/dist/clipboard.min.js"><\/script>');
+
+    window.onload = function () {
+        var kami = $('#kami-value').html();
+        var clipboard = new Clipboard('#copy', {
+            text: function () {
+                return kami;
+            }
+        });
+        clipboard.on('success', function (e) {
+            layer.msg("复制成功");
+        });
+
+        clipboard.on('error', function (e) {
+            layer.msg("复制失败");
+            console.log(e);
+        });
+
+        $('#export').click(function(){
+            location.href = "/shop/order/exportCdk/order_no/{$order.order_no}";
+        })
+
+
+    }
+
+</script>
+{include file="content/template/default/footer.html" /}

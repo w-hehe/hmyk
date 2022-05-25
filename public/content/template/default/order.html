@@ -1,0 +1,287 @@
+{php}
+{/php}
+{include file="content/template/default/header.html" /}
+<style>
+.layui-card .layui-card-header span{
+    margin-left: 20px;
+}
+    .order-no span{
+        width: 70px; text-align: left; display: inline-block;
+    }
+    .goods-name{
+        display: flex;
+    }
+    .goods-name span{
+        width: 70px; flex-shrink: 0; text-align: left; display: inline-block;
+    }
+    .goods-price span{
+        width: 70px; text-align: left; display: inline-block; margin-bottom: 10px;
+    }
+    .sh-btn{
+        background: #5fb878;
+    }
+    .del-btn{
+        background: #ff5722;
+    }
+
+    .layui-card{
+        box-shadow: unset;
+        margin-bottom: 0;
+    }
+    .loading{
+        text-align: center;
+        margin-top: 20px;
+        padding: 5px 0;
+        cursor: pointer;
+        color: #737373;
+    }
+    .qfk-btn{
+        background: #01b5c5;
+    }
+    .goods-btn{
+        background: #01b5c5;
+    }
+    .goods-price{
+            width: unset;
+    display: flex;
+    justify-content: unset;
+    }
+
+</style>
+<div class="main">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div class="main-box" id="order-list">
+                <div class="pay-title" style="padding-bottom: 14px;">
+                    <svg style="margin-bottom: -6px;" t="1603120404646" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1611" width="27" height="27">
+                        <path d="M320.512 428.032h382.976v61.44H320.512zM320.512 616.448h320.512v61.44H320.512z" fill="#00EAFF" p-id="1612" data-spm-anchor-id="a313x.7781069.0.i3" class="selected"></path>
+                        <path d="M802.816 937.984H221.184l-40.96-40.96V126.976l40.96-40.96h346.112l26.624 10.24 137.216 117.76 98.304 79.872 15.36 31.744v571.392l-41.984 40.96z m-540.672-81.92h500.736V345.088L677.888 276.48 550.912 167.936H262.144v688.128z" fill="#3C8CE7" p-id="1613" data-spm-anchor-id="a313x.7781069.0.i0" class=""></path>
+                    </svg>
+                    订单列表
+                </div>
+                <div class="layui-card-body">
+
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="{:empty($search_type) ? 'layui-this' : ''} browser-btn"><a href="{:url('/order')}">{:$user ? '我的订单' : '浏览器缓存'}</a></li>
+                            <li class="{:$search_type == 'voucher' ? 'layui-this' : ''} email-btn"><a href="{:url('/order')}?search_type=voucher">凭证查询</a></li>
+                            <li class="{:$search_type == 'orderno' ? 'layui-this' : ''} order-btn"><a href="{:url('/order')}?search_type=orderno">订单号查询</a></li>
+                        </ul>
+                        <div class="layui-tab-content" style="text-align: center">
+                            <!-- 浏览器缓存 -->
+                            <div class="layui-tab-item layui-show browser-box" style="text-align: left">
+                                {if condition="!empty($_POST) || empty($search_type)"}
+                                <div id="list"></div>
+                                <p class="loading" data-loading="0">加载中...</p>
+                                {/if}
+
+                                <!-- 邮箱查询 -->
+                                {if condition="$search_type == 'voucher' && empty($_POST)"}
+                                <div style="text-align: center;">
+                                    <form class="layui-form" action="" method="post">
+                                        <input type="hidden" name="search_type" value="voucher">
+                                        <div class="entry">
+                                            <span class="l-msg">下单账号:</span>
+                                            <label class="input">
+                                                <input type="text" name="account" required="" lay-verify="required" placeholder="请输入下单账号" autocomplete="off">
+                                            </label>
+                                        </div>
+                                        {if condition="$site.buy_password == 1"}
+                                        <div class="entry">
+                                            <span class="l-msg">查单密码:</span>
+                                            <label class="input">
+                                                <input type="password" name="password" required="" lay-verify="required" placeholder="请输入查单密码" autocomplete="off">
+                                            </label>
+                                        </div>
+                                        {/if}
+                                        <div class="btn">
+                                            <button>
+                                                立即查询
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                {/if}
+                                <!-- 订单号查询 -->
+                                {if condition="$search_type == 'orderno' && empty($_POST)"}
+                                <div style="text-align: center;">
+                                    <form class="layui-form" action="" method="post">
+                                        <input type="hidden" name="search_type" value="order_no">
+                                        <div class="entry">
+                                            <span class="l-msg">订单号:</span>
+                                            <label class="input">
+                                                <input type="text" name="orderno" required="" lay-verify="required" placeholder="请输入订单号" autocomplete="off">
+                                            </label>
+                                        </div>
+                                        <div class="btn">
+                                            <button>
+                                                立即查询
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                {/if}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {include file="content/template/default/order_empty.html" /}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+
+window.onload = function(){
+    var offset = 0;
+    var limit = 10;
+    {if condition="empty($search_type)"}
+    load();
+    {elseif condition="!empty($post)"}
+    load();
+    {/if}
+    $(".loading").click(function(){
+        load();
+    })
+
+
+
+    function load(){
+        var loading = $(".loading").attr("data-loading");
+        if(loading == 1){
+            return false;
+        }
+        $(".loading").attr("data-loading", 1);
+        $(".loading").html("加载中...");
+        var api = "/module/order_list"; //需要module.php内搭配使用
+
+        var data = {"offset":offset, "limit": limit};
+
+        {if condition="$site.buy_password == 0"}
+        data.buy_password = 0;
+        {/if}
+        {if condition="!empty($post)"}
+        data.search_type = "{$post.search_type}";
+        {/if}
+        {if condition="!empty($post.orderno) && $post.search_type == 'order_no'"}
+        data.order_no = "{$post.orderno}";
+        {/if}
+
+        {if condition="!empty($post.account) && $post.search_type == 'voucher'"}
+        data.account = "{$post.account}";
+        data.password = "{:empty($post.password) ? '' : $post.password}";
+        {/if}
+
+
+        $.post(api, data, function(e){
+            var list = e.data;
+            var html = "";
+            for(var i = 0; i < list.length; i++){
+                html+= `<div class="layui-card" id="order-box-${list[i].id}" style="background: unset;">
+                            <div class="layui-card-header">${list[i].timestamp}<span id="order-status-${list[i].id}" style="color: ${list[i].s_color}">${list[i].s}</span></div>
+                            <div class="layui-card-body">
+                                <p class="order-no"><span>订单号：</span>${list[i].order_no}</p>
+                                <p class="goods-name"><span>商品：</span>${list[i].goods_name}</p>
+                                <p class="goods-price"><span>单价：</span>${list[i].goods_money}元 &times; ${list[i].buy_num}</p>`;
+                html += `<button type="button" class="layui-btn layui-btn-normal layui-btn-xs look-details look-details-${list[i].order_no}" data-id="${list[i].order_no}">订单详情</button>`;
+                if((list[i].status == 'weizhifu')){
+                    html += `<button type="button" class="layui-btn layui-btn-xs qfk-btn" data-pay_type="${list[i].pay_type}" data-id="${list[i].id}" data-goods-id="${list[i].goods_id}" data-goods-num="${list[i].goods_num}">去付款</button>`;
+                }
+                if(list[i].status == 9){
+                    html += `<button type="button" class="layui-btn layui-btn-xs goods-btn" data-goods-id="${list[i].goods_id}">再次购买</button>`;
+                }
+
+                if(list[i].status == 'yifahuo'){
+                    html += `<button type="button" id="sh-btn-${list[i].id}" class="layui-btn layui-btn-xs sh-btn" data-id="${list[i].id}">确认收货</button>`;
+                }
+                if(list[i].status == 'weizhifu' || list[i].status == 'yiguoqi'){ //订单完成或者未付款或者失效订单
+                    html += `<button type="button" class="layui-btn layui-btn-xs del-btn" data-id="${list[i].id}">删除订单</button>`;
+                }
+                html += `
+                            </div>
+                        </div>`;
+                offset++;
+            }
+            if(offset == 0){
+                $(".loading").hide();
+                $("#order-empty").show();
+                return;
+            }
+            $(".loading").attr("data-loading", 0);
+            $("#list").append(html)
+            if(list.length < limit){
+                $(".loading").attr("data-loading", 1);
+                $(".loading").html("没有更多记录了");
+            }else{
+                $(".loading").html("点击加载更多");
+            }
+        }, "json");
+    }
+
+
+
+    $("body").on("click", ".look-details", function(){
+        var order_id = $(this).data('id');
+
+        {if condition="!empty($post) && $post.search_type == 'voucher'"}
+        var search_content = "{$search_content}"
+        var href = "/order.html?order_no=" + order_id + "&search_content=" + search_content;
+        {elseif condition="!empty($post) && $post.search_type == 'order_no'"}
+        var search_content = "{$search_content}"
+        var href = "/order.html?order_no=" + order_id + "&search_content=" + search_content;
+        {else /}
+        var href = "/order.html?order_no=" + order_id;
+        {/if}
+        location.href = href;
+    })
+
+
+
+    $("body").on("click", ".sh-btn", function(){
+        var order_id = $(this).attr("data-id");
+        $.post("{:url('/shop/order/shouhuo')}", {"order_id":order_id}, function(e){
+            $("#sh-btn-" + order_id).hide(50);
+            $("#order-status-" + order_id).html("交易完成")
+        }, "json");
+    })
+
+    $("body").on("click", ".goods-btn", function(){
+        var goods_id = $(this).attr("data-goods-id");
+        location.href= "/goods/" + goods_id + ".html";
+        // location.href = "/buy_order/" + order_id;
+    })
+
+    $("body").on("click", ".qfk-btn", function(){
+        var order_id = $(this).attr('data-id');
+        var goods_id = $(this).attr("data-goods-id");
+        var goods_num = $(this).attr("data-goods-num");
+        var pay_type = $(this).attr("data-pay_type");
+        location.href= "{:url('/confirm')}" + "?goods_id=" + goods_id + "&order_id=" + order_id + "&goods_num=" + goods_num;
+    })
+
+    $("body").on("click", ".del-btn", function(){
+        var order_id = $(this).attr("data-id");
+        if(confirm('确定要删除这个订单吗？')){
+            console.log(order_id);
+            $.post("{:url('/shop/order/del')}", {"order_id":order_id}, function(e){
+                offset--;
+                $("#order-box-" + order_id).hide(500);
+            }, "json");
+        }
+    })
+
+}
+
+</script>
+
+
+
+{include file="content/template/default/footer.html" /}
+
+

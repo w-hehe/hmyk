@@ -1,0 +1,107 @@
+{include file="content/template/default/header.html" /}
+<link rel="stylesheet" href="/content/template/default/css/goods.css?v={$template_version}">
+<style>
+    video{
+        max-width: 100%;
+    }
+</style>
+<div class="main">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div class="main-box goods-detail">
+                <div class="title" style="border-bottom: 1px solid #f7f7f7;padding-bottom: 5px">
+                    <embed class="svg" src="/content/template/default/svg/spxq.svg" type="image/svg+xml"/>
+                    <span>商品详情</span>
+                </div>
+                <div class="layui-col-md4 layui-col-sm12">
+                    <div class="goods-img">
+                        <img class="viewer-pictures" src="{$goods.cover}" onerror="javascript:this.src='/assets/img/none.jpg';" alt="">
+                    </div>
+                </div>
+                <form class="layui-form layui-form-pane" action="{:url('/post_order')}" method="get">
+                    <input type="hidden" name="goods_id" value="{$goods.id}">
+                    <div class="layui-col-md8 layui-col-sm12">
+                        <div class="goods-msg">
+                            <div class="goods-name">
+                                <embed class="svg" style="vertical-align: middle;"
+                                       src="/content/template/default/svg/spmc.svg" type="image/svg+xml" />
+                                <span>
+                                    {$goods.name}
+                                    <span class="small-tips tips-blue">库存({:isset($goods.stock_show) ? $goods.stock_show : $goods.stock})</span>
+                                </span>
+                            </div>
+                            <div class="price">
+                                <span class="price-sign">￥</span>
+                                <span class="price-num">{$goods.real_price}</span>
+<!--                                <span class="price-c">[<del>￥{//$goods.original_price}</del>]</span>-->
+                            </div>
+
+
+
+                            <div class="entry notSelection">
+                                <div class="input-group order-number-box">
+                                    <div class="input-group-prepend sub">
+                                        <button class="btn btn-decrement btn-outline-secondary" type="button">-</button>
+                                    </div>
+                                    <input type="text" id="orderNumber" name="buy_num" style="text-align: center" class="form-control order-number" required="" lay-verify="required|order_number" value="1">
+                                    <div class="input-group-append add">
+                                        <button class="btn btn-increment btn-outline-secondary" type="button">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-sm6 buy btn">
+                            {if condition="$goods.stock > 0"}
+                            <button><span>立即下单</span></button>
+                            {/if}
+                            {if condition="$goods.stock <= 0"}
+                            <span>该商品已售磐</span>
+                            {/if}
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div class="main-box goods-detail">
+                <div class="title" style="border-bottom: 1px solid #f7f7f7;padding-bottom: 5px">
+                    <embed class="svg" src="/content/template/default/svg/spjs.svg" type="image/svg+xml" />
+                    <span>商品介绍</span>
+                </div>
+                <div class="intro">
+                    {$goods.details|default="<p>还没有为该商品添加介绍哦~</p>"}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var stock = {:$goods.stock == '正常' ? 999 : $goods.stock}
+
+    window.onload = function(){
+        {if condition="$site.eject_goods || $goods.eject"}
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            title: false,
+            area: [$(window).width() > 480 ? '780px' : '96%', ';max-height:100%'], //宽高
+            content: '<div style="padding: 10px 20px;">{:$goods.eject ? $goods.eject : $site.eject_goods}</div>',
+            shadeClose: true,
+            shade: 0.1,
+        });
+        {/if}
+    }
+
+</script>
+
+
+
+{include file="content/template/default/footer.html" /}

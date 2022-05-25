@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>{$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/base.css"/>
+    {include file="common/meta" /}
+    <style>
+
+        .water{
+            width: 100%;
+            padding: 0 .2rem;
+            padding-top: .2rem;
+        }
+        .water-left{
+            float: left;
+        }
+        .water-right{
+            float: right;
+        }
+        .water-left, .water-right{
+            width: calc(50% - 0.1rem);
+        }
+
+        .water > div > ul > li{
+            background-color: #fff;
+            margin-bottom: .2rem;
+            border-radius: 4px;
+        }
+
+
+        .water > div > ul > li dd.price{
+            padding: 0 .15rem .1rem .15rem;
+            font-size: .25rem;
+            line-height: .4rem;
+            /*letter-spacing: .02rem;*/
+        }
+        dd .money{
+            color: #ff6d64;
+            font-size: .33rem;
+        }
+        dd .money .yen{
+            color: #FF7870;
+            font-size: .25rem;
+        }
+        dd .soles{
+            font-size: .25rem;
+            color: #777;
+            /*float: right;*/
+        }
+        .load{
+            text-align: center;
+            color: #888;
+            clear: both;
+        }
+        .goods-none{
+            text-align: center;
+            padding-top: 0.3rem;
+        }
+        .goods-none span{
+            font-size: 2.5rem;
+        }
+        .like-goods{
+            font-size: .2rem;
+            color: #999;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">{$category_info.name | default="未分类"}</div>
+            <div class="bui-bar-right"></div>
+        </div>
+    </header>
+    <main class="bui-scroll" id="scroll">
+
+<!--        瀑布流-->
+        <div class="water">
+            <div class="water-left">
+                <ul></ul>
+            </div>
+            <div class="water-right">
+                <ul></ul>
+            </div>
+            <p class="load">正在加载...</p>
+        </div>
+        <div class="goods-none" style="display: none;">
+            <span class="iconfont iconmeiyoudingdan"></span>
+            <p>该分类下暂时没有任何商品</p>
+            <p class="like-goods">可以去看看其他哪些想买的</p>
+        </div>
+
+
+
+    </main>
+    <footer>
+        {include file="common/footer" /}
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/jquery.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+
+<script src="/assets/shop/dist/uaredirect.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+<script>
+
+    var offset = 0;
+    var limit = 10;
+    var load = true;
+    var img = new Image();
+    function getList(){
+        if(load == false){
+            return;
+        }
+        load = false;
+        $('.load').html('正在加载...');
+        $('.load').show();
+        var data = {offset: offset, limit: limit, category_id: {$category_info.id | default= 0 }};
+        $.get("", data, function(e){
+            var data = e.data;
+            if(data.length == 0 && offset == 0){
+                // $('.load').html('该分类下暂时没有任何商品');
+                $('.water').hide();
+                $('.goods-none').show();
+                return;
+            }
+            if(data.length == 0 && offset > 0){
+                $('.load').html('没有更多了~');
+                return;
+            }
+            for(var i = 0; i < data.length; i++){
+                var water_left_height = $('.water-left').height();
+                var water_right_height = $('.water-right').height();
+                img.src = data[i].cover;
+                img.onload = pubu(data[i], water_left_height, water_right_height);
+
+            }
+
+            if(data.length < limit && offset > 0){
+                $('.load').html('没有更多了~');
+                return;
+            }else{
+                load = true;
+                $('.load').hide();
+            }
+
+        }, "json");
+    }
+
+    function pubu(info, water_left_height, water_right_height){
+        var li = `<li>
+                        <a href="/shop/goods/detail/id/${info.id}">
+                            <dl>
+                                <dt>
+                                    <img src="${info.cover}" alt="" onerror="javascript:this.src='/assets/shop/images/loading.jpg'">
+                                </dt>
+                                <dd class="title">${info.name}</dd>
+                                <dd class="price">
+                                    <span class="money"><span class="yen">&yen;</span> ${info.price}</span>
+                                    <span class="soles">${info.sales}人付款</span>
+                                </dd>
+                            </dl>
+                        </a>
+                    </li>`;
+
+        if(water_left_height == water_right_height){
+            $('.water-left ul').append(li);
+        }else if(water_left_height > water_right_height){
+            $('.water-right ul').append(li);
+        }else if(water_left_height < water_right_height){
+            $('.water-left ul').append(li);
+        }
+        offset++;
+    }
+
+    getList();
+
+    // 初始化
+    var uiScroll = bui.scroll({
+        id: "#scroll",
+        children: ".bui-list",
+        page:1,
+        pageSize:10,
+        onLoad: getList
+    })
+
+</script>
+</body>
+
+</html>

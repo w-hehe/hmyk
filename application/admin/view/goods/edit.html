@@ -1,0 +1,227 @@
+<style>
+    .input-notice{
+        color: #4e73df;
+        margin-top: 5px;
+        display: block;
+    }
+    .ys-hidden{
+        display: none;
+    }
+
+</style>
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="panel panel-default panel-intro">
+        <div class="panel-heading">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#one" data-toggle="tab" aria-expanded="true">基础信息</a></li>
+                <li class=""><a href="#price" data-toggle="tab" aria-expanded="false">价格设置</a></li>
+                <li class=""><a href="#two" data-toggle="tab" aria-expanded="false">详细信息</a></li>
+                <li class=""><a href="#three" data-toggle="tab" aria-expanded="false">弹窗信息</a></li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            <div id="myTabContent" class="tab-content">
+
+                <div class="tab-pane fade active in" id="one">
+                    <div class="ys-hidden">对接站ID<input id="dock_id" type="text" name="row[dock_id]" value="{$row.dock_id}" /><br>对接商品ID<input id="remote_id" type="text" name="row[remote_id]" value="{$row.remote_id}" /><br>对接商品数据<textarea id="dock-data" name="row[dock_data]">{$row.dock_data}</textarea><br>对接站附加选项<textarea id="inputs" name="row[inputs]">{$row.inputs}</textarea></div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">分类</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <select id="c-category_id" class="form-control selectpicker" name="row[category_id]">
+                                {foreach name="category" item="vo"}
+                                <option value="{$vo.id}" {:$vo.id == $row.category_id ? 'selected':''}>{$vo.name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">商品类型</label>
+                        <div class="col-xs-12 col-sm-8">
+                            {:build_radios('row[goods_type]', ['alone'=>'独立卡密', 'fixed'=> '固定卡密', 'manual' => '人工代充', 'dock' => '对接货源'], $row.goods_type)}
+                        </div>
+                    </div>
+                    <div class="form-group goods-type-dock {:$row.goods_type == 'dock' ? '' : 'ys-hidden'}">
+                        <label class="control-label col-xs-12 col-sm-2">对接商品</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="input-group">
+                                <select id="c-dock_id" class="form-control selectpicker">
+                                    <option value="0">请选择对接网站</option>
+                                    {foreach name="dock" item="vo"}
+                                    <option value="{$vo.id}" {:$vo.id == $row.dock_id ? 'selected' : ''}>备注：{$vo.remark}</option>
+                                    {/foreach}
+                                </select>
+                                <div class="input-group-addon no-border no-padding">
+                                    <span><button type="button" id="dock-select-btn" class="btn btn-default"><i class="fa fa-reorder"></i> {:__('选择商品')}</button></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="form-group goods-type-dock ys-hidden">
+                        <label class="control-label col-xs-12 col-sm-2">加价模板</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <select id="c-increase_id" class="form-control selectpicker" name="row[increase_id]">
+                                <option value="0">请选择加价模板</option>
+                                {volist name="increase" id="vo"}
+                                <option value="{$vo.id}">{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>-->
+                    <div class="form-group goods-type-dock {:$row.goods_type == 'dock' ? '' : 'ys-hidden'}">
+                        <label class="control-label col-xs-12 col-sm-2">默认下单数</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <input id="c-buy_default" class="form-control" name="row[buy_default]" type="number" value="{$row.buy_default}">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">名称</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <input id="c-name" class="form-control" name="row[name]" type="text" value="{$row.name|default=''}">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group" id="attach-box">
+                        <label class="control-label col-xs-12 col-sm-2">附加选项</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <select id="c-attach_id" class="form-control selectpicker" name="row[attach_id]">
+                                <option value="0">请选择附加选项</option>
+                                {foreach name="attach" item="vo"}
+                                <option value="{$vo.id}" {if condition="$vo.id == $row.attach_id"}selected{/if}>{$vo.name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group ys-stock {:$row.goods_type == 'manual' ? '' : 'ys-hidden'}">
+                        <label class="control-label col-xs-12 col-sm-2">库存</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <input id="c-stock" class="form-control" name="row[stock]" type="number" value="{:$row.goods_type == 'manual' ? $row.stock : ''}" placeholder="手动发货的商品也需要库存限制">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">封面图</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="input-group">
+                                <input id="c-images" class="form-control" size="50" name="row[images]" type="text" value="{$row.images|default=''}">
+                                <div class="input-group-addon no-border no-padding">
+                                    <span><button type="button" id="faupload-images" class="btn btn-danger faupload" data-input-id="c-images" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp" data-multiple="true" data-preview-id="p-images"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                                    <span><button type="button" id="fachoose-images" class="btn btn-primary fachoose" data-input-id="c-images" data-mimetype="image/*" data-multiple="true"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                                </div>
+                                <span class="msg-box n-right" for="c-images"></span>
+                            </div>
+                            <ul class="row list-inline faupload-preview" id="p-images"></ul>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="tab-pane fade" id="price">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">零售价</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <input id="c-price" class="form-control" step="0.01" name="row[price]" type="number" placeholder="" value="{$row.price}">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">代理价格</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <dl class="fieldlist" data-name="row[grade_price]" data-template="user_grade_tpl">
+                                    <dd>
+                                        <ins>等级</ins>
+                                        <ins>价格</ins>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;" class="btn btn-sm btn-success btn-append hide"><i class="fa fa-plus"></i> 追加</a>
+                                    </dd>
+                                    <textarea name="row[grade_price]" class="form-control hide" cols="30" rows="5">{$grade}</textarea>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">成本价</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <input id="c-buy_price" value="{$row.buy_price}" class="form-control" step="0.01" name="row[buy_price]" type="number" placeholder="成本价仅作为系统统计利润时需要">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="two">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-2">排序</label>
+                                <div class="col-xs-12 col-sm-8">
+                                    <input id="c-sort" class="form-control" step="1" name="row[sort]" type="number" value="{:$row.sort == 0 ? '' : $row.sort}" placeholder="数值越大越靠前">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-2">销量</label>
+                                <div class="col-xs-12 col-sm-8">
+                                    <input id="c-sales" class="form-control" step="1" name="row[sales]" type="number" value="{:$row.sales == 0 ? '' : $row.sales}" placeholder="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-2">单IP单日限购</label>
+                                <div class="col-xs-12 col-sm-8">
+                                    <input id="c-quota" class="form-control" step="1" name="row[quota]" type="number" value="{:$row.quota == 0 ? '' : $row.quota}" placeholder="留空或者为0时则不限制">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-2">详情</label>
+                                <div class="col-xs-12 col-sm-8">
+                                    <textarea id="c-details" class="form-control editor" rows="5" name="row[details]" style="height: 200px;">{$row.details|default=''}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-2">购买后提示</label>
+                                <div class="col-xs-12 col-sm-8">
+                                    <textarea id="c-buy_msg" class="form-control editor" rows="5" name="row[buy_msg]" style="height: 200px;">{$row.buy_msg|default=''}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="three">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-2">弹窗内容</label>
+                                <div class="col-xs-12 col-sm-8">
+                                    <textarea id="c-eject" class="form-control editor" rows="5" name="row[eject]" style="height: 200px;">{$row.eject}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">确定</button>
+            <button type="reset" class="btn btn-default btn-embossed">重置</button>
+        </div>
+    </div>
+</form>
+<!--定义模板-->
+<script type="text/html" id="user_grade_tpl">
+    <dd class="form-inline">
+        <input type="hidden" name="row[<%=name%>][<%=index%>][grade_id]" class="form-control" value="<%=row['grade_id']%>" size="10">
+        <input type="text" name="row[<%=name%>][<%=index%>][name]" disabled readonly class="form-control" value="<%=row['name']%>" size="10">
+        <input type="number" name="row[<%=name%>][<%=index%>][price]" class="form-control" value="<%=row['price']%>" style="min-width: 300px;" placeholder="默认继承代理等级处的折扣设置">
+    </dd>
+</script>

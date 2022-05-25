@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="{$config.language}">
+    <head>
+        <!-- 加载样式及META信息 -->
+        {include file="common/meta" /}
+        <style>
+            @media (max-width: 767px){
+                .main-sidebar, .left-side{
+                    top: 0!important;
+                }
+            }
+        </style>
+    </head>
+    <body class="hold-transition {$Think.config.fastadmin.adminskin|default='skin-black-green'} sidebar-mini fixed {:$Think.config.fastadmin.multipletab?'multipletab':''} {:$Think.config.fastadmin.multiplenav?'multiplenav':''}" id="tabs">
+
+        <div class="wrapper">
+
+            <!-- 头部区域 -->
+            <header id="header" class="main-header">
+                {include file='common/header' /}
+            </header>
+
+            <!-- 左侧菜单栏 -->
+            <aside class="main-sidebar">
+                {include file='common/menu' /}
+            </aside>
+
+            <!-- 主体内容区域 -->
+            <div class="content-wrapper tab-content tab-addtabs">
+                <div role="tabpanel" class="tab-pane" id="con_1">
+                    <iframe src="/{$entry}/dashboard?addtabs=1" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling-x="no" scrolling-y="auto" allowtransparency="yes"></iframe>
+                </div>
+            </div>
+
+            <!-- 底部链接,默认隐藏 -->
+            <footer class="main-footer hide">
+                <div class="pull-right hidden-xs">
+                </div>
+                <strong>Copyright &copy; 2017-2020 <a href="__PUBLIC__">后台管理系统</a>.</strong> All rights reserved.
+            </footer>
+
+            <!-- 右侧控制栏 -->
+            <div class="control-sidebar-bg"></div>
+            {include file="common/control" /}
+        </div>
+
+        <!-- 加载JS脚本 -->
+        {include file="common/script" /}
+    </body>
+</html>

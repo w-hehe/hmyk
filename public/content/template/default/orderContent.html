@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!--    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">-->
+    <title>{:empty($title) ? '' : $title . ' - '}{$site.shop_title}</title>
+    <meta name="Keywords" content="{$site.shop_title}">
+    <meta name="Description" content="{$site.shop_title}">
+    <link rel="stylesheet" type="text/css" href="/content/template/default/css/layui.css?v={$template_version}" />
+    <link rel="stylesheet" href="/content/template/default/css/main.css?v={$template_version}">
+    <link rel="shortcut icon" href="/favicon.ico" />
+    {:doAction('home_head')}
+    <style>
+        .header .header-box .query a{
+            max-width: 45%;
+        }
+
+    </style>
+</head>
+<body>
+<div id="" class="layui-layer-content">
+    <table class="table table-condensed table-hover layui-table" id="orderItem">
+        <tbody>
+            <tr>
+                <td colspan="6" style="text-align:center" class="orderTitle"><b>订单基本信息</b></td>
+            </tr>
+
+            <tr>
+                <td class="info orderTitle">订单编号</td>
+                <td colspan="5" class="orderContent">{$order.order_no}</td>
+            </tr>
+
+            <tr>
+                <td class="info orderTitle">商品名称</td>
+                <td colspan="5" class="orderContent"><a target="_blank" href="{:url('/goods/' . $goods.id)}">{$goods.name}</a></td>
+            </tr>
+            <tr>
+                <td class="info orderTitle">订单金额</td>
+                <td colspan="5" class="orderContent">{$order.money}元</td>
+            </tr>
+            <tr>
+                <td class="info orderTitle">购买时间</td>
+                <td colspan="5">{:date('Y-m-d H:i:s', $order.paytime)}</td>
+            </tr>
+            {if condition="$params"}
+            <tr>
+                <td class="info orderTitle">下单信息</td>
+                <td colspan="5" class="orderContent">
+                    {volist name="$params" id="vo"}
+                    {$vo.title}：{$vo.value} <br>
+                    {/volist}
+                </td>
+            </tr>
+            {/if}
+            {if condition="$remote_order"}
+            <tr>
+                <td class="info orderTitle">订单状态</td>
+                <td colspan="5" class="orderContent">
+                    <span class="layui-badge layui-bg-green">{$remote_order.status}</span>
+                </td>
+            </tr>
+            {/if}
+            {if condition="$kami"}
+            <tr>
+                <td colspan="6" style="text-align:center" class="orderTitle"><b>以下是你的卡密信息</b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="text-align:center" class="orderContent">{$kami}<br></td>
+            </tr>
+            {/if}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+
+
+{php}
+die;
+{/php}
+
+

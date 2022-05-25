@@ -1,0 +1,69 @@
+
+.login-page main{
+    background: #fff;
+    background-size: 100% auto;
+
+}
+.login-page .logo h1{
+    font-size: .82rem;
+    padding-left: .3rem;
+}
+.logo{
+    height: 2rem;
+    margin: 1.2rem auto 1rem auto;
+    text-align: center;
+}
+.logo img{
+    width: 5.3rem;
+}
+.login-form {
+    padding-left: .6rem;
+    padding-right: .6rem;
+}
+.login-form .bui-list{
+    border-top: none;
+    margin-bottom: .7rem;
+}
+.login-form > .bui-btn{
+    margin-bottom: .3rem;
+}
+.login-form .bui-btn-text{
+    margin-bottom: .2rem;
+}
+.bui-list>[class*=bui-btn]:last-child {
+}
+.login-form .bui-label{
+    width: 0.5rem;
+    margin-right: .2rem;
+}
+.login-form .icon-face,
+.login-form .icon-lock{
+    font-size: 0.48rem;
+}
+.login-form .bui-input {
+    height: .6rem;
+    background: none;
+}
+.login-form .bui-btn-text{
+    text-align: center;
+    color: #666666;
+    font-size: 0.3rem;
+}
+.copyright{
+    font-size: 0.17rem;
+    color: #999999;
+    width: 100%;
+    text-align: center;
+    background-color: #ffffff;
+    padding-bottom: 0.25rem;
+}
+
+.icon-eye:before {
+    content: "\e680"
+}
+.icon-eye.active:before {
+    content: "\e67f"
+}
+.bui-list>[class*=bui-btn]:last-child{
+    border-bottom: 1px solid #eee;
+}

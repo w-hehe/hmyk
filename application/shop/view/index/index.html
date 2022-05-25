@@ -1,0 +1,497 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>{$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/base.css"/>
+    <script src="/assets/shop/dist/uaredirect.js"></script>
+    {include file="common/meta" /}
+
+    <style>
+        .bui-slide .bui-slide-head {
+            bottom: 0;
+        }
+
+        .slide-nav {
+            margin-bottom: .2rem;
+            background-color: #ffffff;
+        }
+
+        .slide-nav .bui-btn {
+            border: 0;
+        }
+
+        .slide-nav .icons-round {
+            width: 0.88rem;
+            height: 0.88rem;
+            line-height: 0.88rem;
+            text-align: center;
+            border-radius: .2rem;
+            margin: 0.2rem auto;
+        }
+
+        .slide-nav .icons-round i {
+            font-size: 0.54rem;
+            color: #fff;
+            margin: 0;
+        }
+
+        .slide-nav .span1 {
+            margin-bottom: 0.1rem;
+        }
+
+        .slide-nav .bui-slide-head {
+            text-align: center;
+            background: #fff;
+            width: 100%;
+            bottom: .1rem;
+        }
+
+        /* 顶部滚动按钮 */
+        .index-nav {
+            background-color: #ffffff;
+            padding-top: 0.1rem;
+        }
+
+        .index-nav .span1 {
+            font-size: 0.2rem;
+        }
+
+        .btn-blue {
+            background-color: #00a5e2;
+        }
+
+        .btn-red {
+            background-color: #f57070;
+        }
+
+        .btn-orange {
+            background-color: #ffb33e;
+        }
+
+        .btn-green {
+            background-color: #6cc96c;
+        }
+
+        .btn-thinblue {
+            background-color: #6cc96c;
+        }
+
+        .bui-slide .bui-slide-head ul li {
+            background-color: #d9d9d9;
+        }
+
+        .slide-nav .bui-fluid-space [class*=span] {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        /* 最新课程滚动 */
+        .newcourse-panel {
+            margin-top: 0;
+            margin-bottom: .2rem;
+        }
+
+        .newcourse-panel .bui-panel-head {
+            border-bottom: 0;
+        }
+
+        .slide-focus {
+            background-color: #ffffff;
+            overflow: visible !important;
+        }
+
+        .slide-focus .bui-slide-main li {
+            padding: 0 0.2rem 0.2rem;
+        }
+
+        .slide-focus .bui-slide-head {
+            height: 0.2rem;
+
+            top: -0.7rem;
+            bottom: auto;
+            text-align: right;
+        }
+        body {
+            background: #f3f5f8;
+        }
+
+        .bui-panel .bui-panel-main {
+            overflow: unset;
+        }
+        .water{
+            width: 100%;
+            padding: 0 .2rem;
+        }
+        .water-left{
+            float: left;
+        }
+        .water-right{
+            float: right;
+        }
+        .water-left, .water-right{
+            width: calc(50% - 0.1rem);
+        }
+
+        .water > div > ul > li{
+            background-color: #fff;
+            margin-bottom: .2rem;
+            border-radius: 4px;
+        }
+        .water > div > ul > li img{
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            width: auto;
+            height: 3.6rem;
+            display: block;
+            margin: 0 auto;
+        }
+        .water > div > ul > li dt{
+            background: #ebebeb;
+        }
+        .water > div > ul > li dd.title{
+            padding: 0.1rem .15rem;
+            font-size: .3rem;
+            line-height: .4rem;
+            letter-spacing: .02rem;
+            color: #666;
+        }
+
+        .water > div > ul > li dd.price{
+            padding: 0 .15rem .1rem .15rem;
+            font-size: .25rem;
+            line-height: .4rem;
+            /*letter-spacing: .02rem;*/
+        }
+        dd .money{
+            color: #ff6d64;
+            font-size: .33rem;
+        }
+        dd .money .yen{
+            color: #FF7870;
+            font-size: .25rem;
+        }
+        dd .soles{
+            /*font-size: .25rem;*/
+            color: #777;
+            /*float: right;*/
+        }
+        .load{
+            text-align: center;
+            color: #888;
+            clear: both;
+        }
+        .bui-slide .bui-slide-title{
+            margin: 0 0.2rem 0.2rem;
+        }
+
+        .part-title{
+            position: relative;
+            padding: .2rem 0 .2rem .24rem;
+            font-size: .32rem;
+            color: #000;
+            line-height: 1;
+            margin-top: .1rem;
+        }
+        .part-title:after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            left: 0;
+            top: .18rem;
+            bottom: .18rem;
+            background-image: linear-gradient(144deg, #b3b3b3 0%, #333 100%);
+        }
+
+    </style>
+
+</head>
+
+<body>
+<div class="bui-page bui-box-vertical">
+    <header class="bui-bar">
+        <div class="bui-bar">
+            <div class="bui-bar-left">
+            </div>
+            <div class="bui-bar-main">{$site.shop_pet_name}</div>
+            <div class="bui-bar-right">
+            </div>
+        </div>
+    </header>
+    <main class="bui-scroll" id="scroll">
+
+<!--        <div id="slideNote" class="bui-slide bui-slide-notice"></div>-->
+
+        <!-- 头部图片轮播 -->
+        <div id="slide" class="bui-slide slide-nav" style="display: none;">
+            <div id="slidemain" class="bui-slide-main">
+                <ul>
+                    <li>
+                        <ul class="index-nav bui-fluid-space">
+                            <li class="bui-btn bui-box-vertical span3">
+                                <div class="icons-round btn-blue">
+                                    <i class="icon">&#xe67b;</i>
+                                </div>
+                                <div class="span1">优惠券</div>
+                            </li>
+                            <li class="bui-btn bui-box-vertical span3">
+                                <div class="icons-round btn-red">
+                                    <i class="icon">&#xe658;</i>
+                                </div>
+                                <div class="span1">在线充值</div>
+                            </li>
+                            <li class="bui-btn bui-box-vertical span3">
+                                <div class="icons-round btn-orange">
+                                    <i class="icon">&#xe665;</i>
+                                </div>
+                                <div class="span1">积分兑换</div>
+                            </li>
+                            <li class="bui-btn bui-box-vertical span3">
+                                <div class="icons-round btn-green">
+                                    <i class="icon">&#xe62a;</i>
+                                </div>
+                                <div class="span1">商务合作</div>
+                            </li>
+                            <!--<li class="bui-btn bui-box-vertical span3">
+                                <div class="icons-round btn-green">
+                                    <i class="icon">&#xe62d;</i>
+                                </div>
+                                <div class="span1">问卷调查</div>
+                            </li>
+                            <li class="bui-btn bui-box-vertical span3">
+                                <div class="icons-round btn-orange">
+                                    <i class="icon">&#xe633;</i>
+                                </div>
+                                <div class="span1">平台故障</div>
+                            </li>
+                            <li class="bui-btn bui-box-vertical span3">
+                                <div class="icons-round btn-thinblue">
+                                    <i class="icon">&#xe662;</i>
+                                </div>
+                                <div class="span1">服务号</div>
+                            </li>
+                            <li class="bui-btn bui-box-vertical span3">
+                                <div class="icons-round btn-blue">
+                                    <i class="icon">&#xe631;</i>
+                                </div>
+                                <div class="span1">应用市场</div>
+                            </li>-->
+                        </ul>
+
+                    </li>
+                    <!--<li>
+                        <ul class="index-nav bui-fluid">
+                            <li class="bui-btn bui-box-vertical span3">
+                                <div class="icons-round btn-blue">
+                                    <i class="icon">&#xe67b;</i>
+                                </div>
+                                <div class="span1">客服大学</div>
+                            </li>
+                            <li class="bui-btn bui-box-vertical span3">
+                                <div class="icons-round btn-red">
+                                    <i class="icon">&#xe658;</i>
+                                </div>
+                                <div class="span1">休假管理</div>
+                            </li>
+
+                        </ul>
+                    </li>-->
+                </ul>
+            </div>
+            <!--<div class="bui-slide-head">
+                <ul>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>-->
+        </div>
+
+        <!--最新资讯-->
+        <div class="bui-panel newcourse-panel" style="display: none;">
+            <div class="bui-panel-head">最新资讯</div>
+            <div class="bui-panel-main">
+                <div id="slide1" class="bui-slide slide-focus"></div>
+            </div>
+        </div>
+
+        <div class="part-title">最新商品</div>
+
+        <!--瀑布流-->
+        <div class="water">
+            <div class="water-left">
+                <ul></ul>
+            </div>
+            <div class="water-right">
+                <ul></ul>
+            </div>
+            <p class="load">正在加载...</p>
+        </div>
+
+
+
+    </main>
+    <footer>
+        {include file="common/footer2" /}
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/jquery.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+
+<script src="/assets/shop/js/base.js"></script>
+<script>
+
+
+    /*var uiSlide = bui.slide({
+        id: "#slideNote",
+        height: 100,
+        autoplay: true,
+        loop: true,
+        swipe: false,
+        data: [
+            {
+                title: "网站处于内测阶段，但仍可以正常使用！",
+                url: "{:url('neice')}"
+            },
+            {
+                title: "点击查看网站公告",
+                url: "{:url('neice')}"
+            }],
+        template: function(data) {
+            // 自定义模板时,需要自己渲染完整结构
+            var html = "";
+            html += `<div class="bui-slide-main"><ul>`
+            data.forEach(function(item, i) {
+                html += `<li href="${item.url}">
+                <div class="notice-item">
+                    <div class="span1">${item.title||""}</div>
+                </div>
+            </li>`
+            })
+            html += `</ul></div>`
+
+            return html;
+        },
+        direction: "y"
+    })*/
+
+    // 焦点图初始化
+    var uiSlideFocus = bui.slide({
+        id: "#slide1",
+        height: 300,
+        autoplay: true,
+        loop: true,
+        data: [
+            {volist name="information" id="vo"}
+            {
+                title: "{$vo.title}",
+                image: "{$vo.cover}",
+                url: "{:url('information/detail', ['id' => $vo.id])}"
+            },
+            {/volist}
+        ],
+        autopage: true
+    });
+
+    var offset = 0;
+    var limit = 10;
+    var sort = 'id';
+    var order = 'desc';
+    var load = true;
+    var img = new Image();
+    function getList(){
+        if(load == false){
+            return;
+        }
+        load = false;
+        $('.load').html('正在加载...');
+        $('.load').show();
+        var data = {offset: offset, limit: limit, sort: sort, order: order};
+        $.get("", data, function(e){
+            var data = e.data;
+            if(data.length == 0 && offset == 0){
+                $('.load').html('暂时没有任何商品');
+                return;
+            }
+            if(data.length == 0 && offset > 0){
+                $('.load').html('没有更多了~');
+                return;
+            }
+            for(var i = 0; i < data.length; i++){
+                var water_left_height = $('.water-left').height();
+                var water_right_height = $('.water-right').height();
+                img.src = data[i].cover;
+                img.onload = pubu(data[i], water_left_height, water_right_height);
+
+            }
+
+            if(data.length < limit && offset > 0){
+                $('.load').html('没有更多了~');
+                return;
+            }else{
+                load = true;
+                $('.load').hide();
+            }
+
+        }, "json");
+    }
+
+    function pubu(info, water_left_height, water_right_height){
+
+        if(info.id > 0){
+            var li = `<li>
+                            <a href="/shop/goods/detail/id/${info.id}">
+                                <dl>
+                                    <dt>
+                                        <img src="${info.cover}" onerror="javascript:this.src='/assets/shop/images/loading.jpg'" alt="">
+                                    </dt>
+                                    <dd class="title">${info.name}</dd>
+                                    <dd class="price">
+                                        <span class="money"><span class="yen">&yen;</span> ${info.price}</span>
+                                        <span class="soles">${info.sales}人付款</span>
+                                    </dd>
+                                </dl>
+                            </a>
+                        </li>`;
+
+            if(water_left_height == water_right_height){
+                $('.water-left ul').append(li);
+            }else if(water_left_height > water_right_height){
+                $('.water-right ul').append(li);
+            }else if(water_left_height < water_right_height){
+                $('.water-left ul').append(li);
+            }
+        }
+
+        offset++;
+    }
+
+    getList();
+
+    // 初始化
+    var uiScroll = bui.scroll({
+        id: "#scroll",
+        children: ".bui-list",
+        page:1,
+        pageSize:10,
+        onLoad: getList
+    })
+
+
+
+
+    // 菜单初始化
+    var uiSlideNav = bui.slide({
+        id: "#slide",
+        height: 200,
+    });
+
+
+
+</script>
+</body>
+
+</html>

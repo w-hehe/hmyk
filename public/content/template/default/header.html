@@ -1,0 +1,153 @@
+{php}
+$template = get_config();
+
+{/php}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{:empty($title) ? '' : $title . ' - '}{$site.shop_title}</title>
+    <meta name="Keywords" content="{$site.shop_title}">
+    <meta name="Description" content="{$site.shop_title}">
+    <link rel="stylesheet" type="text/css" href="/content/template/default/css/layui.css?v={$template_version}" />
+    <link rel="stylesheet" href="/content/template/default/css/main.css?v={$template_version}">
+    <link rel="shortcut icon" href="{$site.ico}" />
+    <script src="/assets/shop/dist/jquery.js?v={$template_version}"></script>
+    {:doAction('home_head')}
+    <style>
+        .header .header-box .query a{
+            max-width: 45%;
+        }
+    </style>
+
+    <style>
+        .header{
+            height: 60px;
+        }
+        .header .logo{
+            height: 60px;
+            float: left;
+        }
+        .layui-nav{
+            background: transparent;
+        }
+        .header .logo a{
+            font-size: 50px;
+            color: #FFF;
+            line-height: 60px;
+        }
+
+        .header .nav{
+            float: right;
+        }
+        .mobile-icon{
+            display: none;
+            color: #161209;
+            padding-right: 20px;
+        }
+
+        .layui-nav .layui-nav-item a{
+            color: #555;
+        }
+        .layui-nav .layui-nav-item.layui-this a{
+            color: #161209;
+        }
+        .layui-nav .layui-nav-item a:hover{
+            color: #161209;
+        }
+
+        /* 演示元素 */
+        .main{
+            margin-top: 20px;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .header .logo{
+                text-align: left;
+            }
+            .header .nav{
+                display: none;
+                width: 100%;
+                position: absolute;
+                z-index: 99;
+                top: 62px;
+            }
+            .layui-nav{
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                background: #fff;
+                width: 100%;
+                padding: 0 0 0 0;
+                box-shadow: 0 0 0.6rem 0 #d0d0d0;
+            }
+            .layui-nav .layui-nav-item a{
+                font-weight: 500;
+                color: #563d7c;
+            }
+            .layui-nav .layui-nav-item{
+                line-height: 40px;
+            }
+            .layui-nav .layui-this{
+                background: #f9f9f9;
+            }
+
+            .header .nav li{
+                width: 100%;
+            }
+            .mobile-icon{
+                display: block;
+                font-size: 25px;
+                float: right;
+                margin-top: 15px;
+            }
+            .layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+                height: 0px;
+            }
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="header" id="top">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div class="logo">
+                <a href="/" >
+                    <img src="{$template['logo']}" alt="" style="max-height: 50px;">
+                </a>
+            </div>
+            <i class="layui-icon layui-icon-shrink-right mobile-icon"></i>
+            <div class="nav">
+                <ul class="layui-nav">
+                    <li class="layui-nav-item {:isset($navi) && $navi=='home' ? 'layui-this' : ''}"><a href="/">网站首页</a></li>
+                    <li class="layui-nav-item {:isset($navi) && $navi=='look_order' ? 'layui-this' : ''}"><a href="{:url('/order')}">查看订单</a></li>
+                    <li class="layui-nav-item"><a href="{:url('/complain')}">投诉订单</a></li>
+                    {if condition="$site.login == 1 && $user == null"}
+                    <li class="layui-nav-item"><a href="{:url('/login')}">登录</a></li>
+                    {/if}
+                    {if condition="$user"}
+                    <li class="layui-nav-item"><a href="{:url('/user')}">个人中心</a></li>
+                    {/if}
+                    <span class="layui-nav-bar"></span>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="content">
+
+        {if condition="isset($page) && $page == 'index' && !empty($template.notice)"}
+        <div class="main">
+            <div class="layui-row">
+                <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+                    <div class="main-box" id="notice" style="padding: 10px 20px;">
+                        {$template['notice']}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/if}
+

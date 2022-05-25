@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>提交订单 - {$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css" />
+    <link rel="stylesheet" href="/assets/shop/css/base.css" />
+    <link rel="stylesheet" href="/assets/shop/css/user-index.css" />
+
+    <style>
+
+        .bui-bar-main {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .div-a {
+            float: left;
+            width: 45%;
+            text-align: center;
+            /*margin-top: 7px;*/
+            line-height: 50px;
+            text-align: right;
+        }
+
+        .div-a a {
+            display: block;
+            color: #141414;
+            font-size: 11px;
+        }
+
+        .div-a em {
+            display: block;
+            height: 20px;
+            width: 20px;
+            margin: 0 auto;
+            -webkit-background-size: cover;
+            background-size: cover;
+        }
+
+        footer .btn {
+            float: right;
+            width: 50%;
+            margin-top: 7px;
+            margin-right: 5%;
+        }
+
+        footer .btn .a2a {
+            width: 98%;
+            background: -moz-linear-gradient(left, #333 0, #666 100%);
+            background: -webkit-linear-gradient(left, #333 0, #666 100%);
+            background: -o-linear-gradient(left, #333 0, #666 100%);
+            background: -ms-linear-gradient(left, #333 0, #666 100%);
+            background: linear-gradient(to left, #333 0, #666 100%);
+            border-radius: 1.5rem;
+        }
+
+        footer .btn .a2a {
+            float: right;
+            width: 90%;
+            font-size: .25rem;
+        }
+
+        footer .btn a {
+            float: left;
+            height: 33px;
+            line-height: 33px;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        footer {
+            height: 50px;
+            border-top: 1px solid #ddd;
+        }
+        .bui-thumbnail img{
+            height: 1.2rem;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+            float: unset;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">提交订单</div>
+            <div class="bui-bar-right"></div>
+        </div>
+    </header>
+    <main>
+
+        <ul class="bui-list">
+            <li class="bui-btn bui-box">
+                <div class="bui-thumbnail">
+                    <img src="{$info.cover}" onerror="javascript:this.src='/assets/shop/images/loading.jpg'" alt="">
+                </div>
+                <div class="span1">
+                    <h3 class="item-title">{$info.name}</h3>
+<!--                    <p class="item-text">${el.address}</p>-->
+<!--                    <p class="item-text">${el.distance}公里</p>-->
+                </div>
+                <span class="price" style="color: #ff6161;">￥{$info.price}</span>
+            </li>
+            <li class="bui-btn bui-box clearactive">
+                <label class="bui-label">购买数量:</label>
+                <div class="span1"></div>
+                <div class="bui-value">
+                    <div id="uiNumber" class="bui-number"></div>
+                </div>
+            </li>
+            <li class="bui-btn bui-box clearactive">
+                <label class="bui-label">支付方式:</label>
+                <div class="span1"></div>
+                <div class="bui-value">
+                    <label style="display: inline;" class="yuepay">
+                        <input type="radio" checked class="bui-radio focus-fixed" name="pay_type" value="0">余额
+                    </label>
+                    <label style="display: inline; color: #999;" class="alipay">
+                        <input type="radio" class="bui-radio focus-fixed" name="pay_type" value="1">支付宝
+                    </label>
+                </div>
+            </li>
+        </ul>
+
+    </main>
+    <footer>
+        <div class="div-a">
+            合计：<span style="color: #ff6161;">￥</span><span id="total" style="color: #ff6161;">{:sprintf("%.2f", $info.price * $goods_num)}</span>
+        </div>
+        <!--<div class="div-a" id="open_fullimg_btn">
+            <a href="javascript:;" class="collect"><em class="ico" style="background-image: url(http://pt.duoip.cc/addons/tiger_newhu/template/mobile/tbgoods/style88/images/f7738e6b959cf5fed3b139f8388716f4_44x44.png)"></em><span>分享</span></a>
+        </div>-->
+        <div class="btn">
+            <a href="javascript:;" class="js-pop2 a2a" id="sub-order">提交订单</a>
+        </div>
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/bui/js/zepto.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+<script src="/assets/shop/dist/uaredirect.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+<!-- 必须引入该文件，用于展示统计代码、创建游客 -->
+<script src="/assets/shop/js/common.js"></script>
+{include file="content/template/default/common.html" /}
+<script>
+
+    var goods_id = {$info.id};
+
+    var price = {$info.price};
+
+    var number = {$goods_num};
+
+    var uiNumber = bui.number({
+        id: '#uiNumber',
+        min: 1,
+        value: number,
+        onChange:function(){
+            number = uiNumber.value();
+            $('#goods_num').val(number);
+            var total = price * number;
+            total = total.toFixed(2);
+            $('#total').html(total);
+        }
+    });
+
+
+    $('#sub-order').click(function(){
+        var pay_type = $('input[name="pay_type"]:checked').val();
+        location.href = "/shop/buy/pay/goods_id/" + goods_id + "/goods_num/" + number + "/pay_type/" + pay_type + "/order_id/{$order_id}";
+    })
+
+    /*$('.alipay').click(function(){
+        hint("该商品暂不支持支付宝付款");
+    })*/
+
+    $('.alipay_azf').click(function(){
+        hint("该商品暂不支持支付宝付款");
+    })
+
+    $('.min-alipay').click(function(){
+        hint("1元以下的商品不支持支付宝付款");
+    })
+
+
+
+</script>
+</body>
+
+</html>

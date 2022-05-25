@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>账户余额 - {$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/base.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/user-index.css"/>
+
+    <style>
+        .header.bui-bar, .header .bui-bar, header.bui-bar, header .bui-bar {
+            background: #1678FF;
+        }
+
+        a.setting-btn {
+            position: absolute;
+            right: 20px;
+            top: 13px;
+        }
+
+        a.setting-btn img {
+            width: .45rem;
+        }
+
+        .personal-header {
+            background: #1678FF;
+            padding-top: .5rem;
+            padding-bottom: 1.1rem;
+            content: '';
+            width: 160%;
+            position: absolute;
+            left: -30%;
+            border-radius: 0 0 50% 50%;
+        }
+
+
+        .personal-header p {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 0.1rem;
+        }
+
+        .personal-header .name {
+            font-size: 0.3rem;
+            color: #B6D7FF;
+        }
+
+        .personal-header .grade {
+            font-size: 0.6rem;
+        }
+
+        .menu {
+            background: #fff;
+            margin: 0 .2rem;
+            position: relative;
+            top: 2rem;
+            border-radius: .1rem;
+            padding: .3rem 0;
+        }
+
+        .bui-nav-icon .bui-btn {
+            padding-top: 0;
+            padding-bottom: 0;
+            border-right: 1px solid #eee;
+        }
+        [class*=bui-btn].active, [class*=bui-btn]:active{
+            background: none;
+        }
+        .hot-buy ul li{
+            background-color: #fff;
+            margin-bottom: .2rem;
+            border-radius: 4px;
+        }
+        .hot-buy{
+            padding: 0 .2rem;
+        }
+        .hot-buy .title{
+            padding: 0.1rem .15rem;
+            font-size: .25rem;
+            line-height: .4rem;
+            letter-spacing: .02rem;
+            color: #666;
+        }
+        .hot-buy .price{
+            padding: 0 .15rem .1rem .15rem;
+            font-size: .25rem;
+            line-height: .4rem;
+        }
+        .hot-buy .money{
+            color: #ff6d64;
+            font-size: .33rem;
+        }
+        .hot-buy .soles{
+            font-size: .25rem;
+            color: #777;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">账户余额</div>
+            <div class="bui-bar-right">
+                <!--<a href="{:url('setting')}" class="setting-btn">
+                    <img src="/assets/shop/images/setting.png" />
+                </a>-->
+            </div>
+        </div>
+    </header>
+    <main>
+
+        <div class="personal-header">
+            <p class="name">总金额(元)</p>
+            <p class="grade">{$user.money}</p>
+        </div>
+        <div class="menu">
+            <ul class="bui-nav-icon bui-fluid-3">
+                <li class="bui-btn" id="cashout">
+                    <div class="item-title"> 提现</div>
+                    <div class="item-text"> 转出申请</div>
+                </li>
+                <li class="bui-btn" id="recharge">
+                    <div class="item-title"> 充值</div>
+                    <div class="item-text"> 快速到账</div>
+                </li>
+                <li class="bui-btn" id="bill" style="border-right: none;">
+                    <div class="item-title"> 账单</div>
+                    <div class="item-text"> 余额明细</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="part-title" style="margin-top: 2.3rem; padding-left: .22rem; margin-bottom: .3rem;">热卖商品</div>
+        <div style="" class="hot-buy water">
+            <div>
+                <ul>
+                    {volist name="hot_buy" id="vo" key="key"}
+                    <li style="width: calc(50% - .1rem); {:$key % 2 == 0 ? 'float: right;' : 'float: left;'}">
+                        <a href="/shop/goods/detail/id/{$vo.id}">
+                            <dl>
+                                <dt>
+                                    <img src="{$vo.cover}" onerror="javascript:this.src='/assets/shop/images/loading.jpg'" alt="">
+                                </dt>
+                                <dd class="title">{$vo.name}{$key}</dd>
+                                <dd class="price">
+                                    <span class="money"><span class="yen">&yen;</span> {$vo.price}</span>
+                                    <span class="soles">{$vo.sales}人付款</span>
+                                </dd>
+                            </dl>
+                        </a>
+                    </li>
+                    {/volist}
+                </ul>
+            </div>
+
+        </div>
+
+    </main>
+    <footer>
+
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/bui/js/zepto.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+<script src="/assets/shop/dist/uaredirect.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+<script>
+
+    $('#recharge').click(function(){
+        location.href = "{:url('recharge')}";
+    })
+
+    $('#bill').click(function(){
+        location.href = "{:url('bill')}";
+    })
+
+    $('#cashout').click(function(){
+        location.href = "{:url('cashout')}";
+    })
+
+</script>
+</body>
+
+</html>

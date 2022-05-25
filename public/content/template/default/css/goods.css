@@ -1,0 +1,70 @@
+.no-stock{
+    text-align: center;
+    border: initial;
+    color: #fff;
+    display: inline-block;
+    width: 170px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 45px;
+    border-radius: 100px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    box-shadow: 0 5px 6px 0 rgb(73 105 230 / 22%);
+    background-image: linear-gradient(135deg, #656565 10%, #c1c1c1 100%)
+}
+.btn{
+    border: 1px solid transparent;
+    line-height: 1.5;
+    border-radius: .25rem;
+}
+.btn.btn-outline-secondary{
+    color: #6c757d;
+    background-color: transparent;
+    background-image: none;
+    border-color: #ced4da;
+    cursor: pointer;
+    width: 40px;
+}
+.order-number{
+    display: inline-block;
+    width: 3rem;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    float: left;
+    border-left: none;
+    border-right: none;
+}
+.input-group-prepend, .input-group-append{
+    display: inline-block;
+    float: left;
+    font-size: 24px;
+}
+.order-number-box{
+    display: inline-block;
+}
+.add .btn{
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
+.sub .btn{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.buy button{
+    cursor: pointer;
+}
+.intro img{
+    max-width: 100%;
+}
+.layui-layer-content{
+    height: unset!important;
+}

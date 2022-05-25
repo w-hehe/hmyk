@@ -1,0 +1,162 @@
+<!-- 左侧菜单栏 -->
+<section class="sidebar">
+
+
+    <!-- 移动端一级菜单 -->
+    <div class="mobilenav visible-xs">
+
+    </div>
+
+    <style>
+        .nav-header{
+            font-size: .9rem;
+            padding: 1rem 1.5rem!important;
+            background-color: inherit;
+            color: #efefef;
+        }
+        .main-sidebar, .left-side{
+            bottom: 0;
+        }
+        .slimScrollDiv{
+            height: 100% !important;
+        }
+        .sidebar{
+            height: 100% !important;
+            padding-bottom: 0;
+        }
+    </style>
+
+    <!--如果想始终显示子菜单,则给ul加上show-submenu类即可,当multiplenav开启的情况下默认为展开-->
+    <ul class="sidebar-menu {if $Think.config.fastadmin.multiplenav}show-submenu{/if}">
+        <li class="nav-header">系统管理</li>
+        <li class="active">
+            <a href="/{$entry}/dashboard?ref=addtabs" addtabs="1" url="/{$entry}/dashboard" py="kzt" pinyin="kongzhitai">
+                <i class="fa fa-dashboard fa-fw"></i>
+                <span>控制台</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="">
+            <a href="/{$entry}/general/config?ref=addtabs" addtabs="2" url="/{$entry}/general/config" py="jcpz" pinyin="jichupeizhi">
+                <i class="fa fa-cog fa-fw"></i>
+                <span>基础配置</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="">
+            <a href="/{$entry}/general/profile?ref=addtabs" addtabs="3" url="/{$entry}/general/profile" py="grzl" pinyin="gerenziliao">
+                <i class="fa fa-file-image-o fa-fw"></i>
+                <span>个人资料</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="">
+            <a href="/{$entry}/general/attachment?ref=addtabs" addtabs="4" url="/{$entry}/general/attachment" py="fjgl" pinyin="fujianguanli">
+                <i class="fa fa-file-image-o fa-fw"></i>
+                <span>附件管理</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="nav-header">用户管理</li>
+        <li class="">
+            <a href="/{$entry}/user/user?ref=addtabs" addtabs="5" url="/{$entry}/user/user" py="yhlb" pinyin="yonghuliebiao">
+                <i class="fa fa-user fa-fw"></i>
+                <span>用户列表</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="">
+            <a href="/{$entry}/user_grade?ref=addtabs" addtabs="16" url="/{$entry}/user_grade" py="dldj" pinyin="dailidengji">
+                <i class="fa fa-user fa-fw"></i>
+                <span>代理等级</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="nav-header">商品管理</li>
+        <li class="">
+            <a href="/{$entry}/category?ref=addtabs" addtabs="6" url="/{$entry}/category" py="spfl" pinyin="shangpinfenlei">
+                <i class="fa fa-leaf fa-fw"></i>
+                <span>商品分类</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="">
+            <a href="/{$entry}/goods/index?ref=addtabs" addtabs="7" url="/{$entry}/goods/index" py="splb" pinyin="shangpinliebiao">
+                <i class="fa fa-list-ul fa-fw"></i>
+                <span>商品列表</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="">
+            <a href="/{$entry}/attach?ref=addtabs" addtabs="8" url="/{$entry}/attach" py="fjxx" pinyin="fujianxuanxiang">
+                <i class="fa fa-bookmark fa-fw"></i>
+                <span>附加选项</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="nav-header">财务管理</li>
+        <li class="">
+            <a href="/{$entry}/pay?ref=addtabs" addtabs="9" url="/{$entry}/pay" py="zfpz" pinyin="zhifupeizhi">
+                <i class="fa fa-server fa-fw"></i>
+                <span>支付配置</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="">
+            <a href="/{$entry}/order?ref=addtabs" addtabs="10" url="/{$entry}/order" py="ddgl" pinyin="dingdanguanli">
+                <i class="fa fa-reorder fa-fw"></i>
+                <span>订单管理</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+
+        <li class="">
+            <a href="/{$entry}/coupon?ref=addtabs" addtabs="15" url="/{$entry}/coupon" py="yhq" pinyin="youhuiquan">
+                <i class="fa fa-reorder fa-fw"></i>
+                <span>优惠券</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+
+        <li class="">
+            <a href="/{$entry}/complain?ref=addtabs" addtabs="17" url="/{$entry}/complain" py="ddts" pinyin="dingdantousu">
+                <i class="fa fa-user fa-fw"></i>
+                <span>订单投诉</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="nav-header">网站扩展</li>
+        <li class="">
+            <a href="/{$entry}/template?ref=addtabs" addtabs="11" url="/{$entry}/template" py="mbgl" pinyin="mubanguanli">
+                <i class="fa fa-list-alt fa-fw"></i>
+                <span>模板管理</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="">
+            <a href="/{$entry}/plugin?ref=addtabs" addtabs="12" url="/{$entry}/plugin" py="cjgl" pinyin="chajianguanli">
+                <i class="fa fa-plug fa-fw"></i>
+                <span>插件管理</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <li class="nav-header">货源管理</li>
+        <li class="">
+            <a href="/{$entry}/docking/docking_site?ref=addtabs" addtabs="13" url="/{$entry}/docking/docking_site" py="djzd" pinyin="duijiezhandian">
+                <i class="fa fa-sitemap fa-fw"></i>
+                <span>对接站点</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>
+        <!--<li class="">
+            <a href="/{$entry}/docking/increase?ref=addtabs" addtabs="14" url="/{$entry}/docking/increase" py="zfpz" pinyin="jiajiamuban">
+                <i class="fa fa-usd fa-fw"></i>
+                <span>加价模板</span>
+                <span class="pull-right-container"> </span>
+            </a>
+        </li>-->
+    </ul>
+
+
+
+</section>

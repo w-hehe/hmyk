@@ -1,0 +1,84 @@
+.water > div > ul > li img{
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    width: auto;
+    height: 3.6rem;
+    display: block;
+    margin: 0 auto;
+}
+.water > div > ul > li dt {
+    background: #ebebeb;
+}
+.water > div > ul > li dd.title{
+    padding: .1rem .15rem 0 .15rem;
+    font-size: .3rem;
+    line-height: .4rem;
+    letter-spacing: .02rem;
+    color: #666;
+}
+
+
+.goods-none {
+    text-align: center;
+    padding-top: 0.3rem;
+}
+.goods-none span {
+    font-size: 1.5rem;
+}
+
+.bui-hint-bottom{
+    bottom: 2rem;
+    right: unset;
+    background: rgba(0,0,0,0.6);
+    padding: .1rem .2rem;
+    font-size: 0.25rem;
+    border-radius: 3px;
+}
+.bui-nav>.active>a {
+    color: #39a4ff;
+    background: #fff;
+}
+.bui-loading-block .bui-loading-text{
+    margin-top: .1rem;
+    overflow: unset;
+
+}
+.bui-loading-inline .bui-loading-text{
+    line-height: 1px!important;
+}
+
+a:link, a:visited, a:hover, a:active{
+    color: #b1b1b1;
+}
+.bui-nav>.active>a {
+    color: #151414;
+    background: #fff;
+}
+
+.header.bui-bar, .header .bui-bar, header.bui-bar, header .bui-bar {
+    background-image: url(/assets/shop/images/cjkz2329.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.bui-slide .bui-slide-head ul li.active {
+    background-color: #666;
+}
+.primary{
+    background-color: #5d5d5d;
+}
+[class*=bui-btn].primary{
+    border-color: #afafaf;
+}
+[class*=bui-btn].primary:active{
+    background-color: #2d2d2d;
+    border-color: #aaa;
+}
+.bui-tab .bui-nav .active{
+    color: #333;
+}
+.bui-nav>[class*=bui-btn].active:after{
+    background: #333;
+}
+

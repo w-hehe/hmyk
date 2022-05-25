@@ -1,0 +1,64 @@
+<style>
+    .input-notice{
+        color: #4e73df;
+        margin-top: 5px;
+        display: block;
+    }
+</style>
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Name')}</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-name" class="form-control" name="row[name]" type="text" value="{$row.name|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-type" class="control-label col-xs-12 col-sm-2">{:__('加价方式')}</label>
+        <div class="col-xs-12 col-sm-8">
+
+            <select id="c-type" data-rule="required" class="form-control selectpicker" name="row[type]">
+                {volist name="$type" id="vo"}
+                <option value="{$vo.value}" {if condition="$vo.value == $row.type"}selected{/if}>{$vo.name}</option>
+                {/volist}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">加价</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-value" class="form-control" name="row[value]" type="number" value="{$row.value|htmlentities}">
+            <span class="input-notice">跟随对接站加价：对接站于上次价格上调多少，本站则在对接站价格的基础上上调同样的金额，所以无需填写加价值</span>
+            <span class="input-notice">固定金额加价：对接站价格 + 固定金额 = 商品最新出售价格</span>
+            <span class="input-notice">百分比加价：如填写10，则加价计算方式为：对接站价格 + 对接站价格 x 10%</span>
+            <span class="input-notice">以上计算方式除了保证售卖商品不会出现亏损的情况，同时保留了各代理级别的价格差异</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-effect" class="control-label col-xs-12 col-sm-2">{:__('模板生效场景')}</label>
+        <div class="col-xs-12 col-sm-8">
+
+            <select id="c-effect" data-rule="required" class="form-control selectpicker" name="row[effect]">
+                {volist name="$effect" id="vo"}
+                <option value="{$vo.value}" {if condition="$vo.value == $row.effect"}selected{/if}>{$vo.name}</option>
+                {/volist}
+            </select>
+            <span class="input-notice">固定金额和百分比加价方式在对接站价格变动场景时，只有变动价格相对上次更新价格呈增长时才会生效</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('价格检测过期时间')}</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-expire" class="form-control" name="row[expire]" type="number" value="{$row.expire|htmlentities}">
+            <span class="input-notice">以分钟为单位，最小值为1，设为10代表用户购买某件商品时，检测的商品最新价格缓存10分钟，则10分钟内任何用户购买相同商品，不再检测价格</span>
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

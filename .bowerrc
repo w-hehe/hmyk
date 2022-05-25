@@ -1,0 +1,10 @@
+{
+  "directory": "public/assets/libs",
+  "ignoredDependencies": [
+    "es6-promise",
+    "file-saver",
+    "html2canvas",
+    "jspdf",
+    "jspdf-autotable"
+  ]
+}

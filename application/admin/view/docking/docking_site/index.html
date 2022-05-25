@@ -1,0 +1,62 @@
+<style>
+    .btn-juse{
+        background-color: #00bcd4;
+        color: #fff;
+    }
+    .btn-juse:hover{
+        color: #fff;
+        background-color: #009db1;
+    }
+
+    #poster > a{
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 3px;
+        color: #fff;
+        margin-left: 10px;
+        background: linear-gradient(180deg,#3498db,#59b3a1);
+        margin-bottom: 12px;
+    }
+    #poster > a:hover{
+        color: #fff;
+        background: linear-gradient(180deg,#59b3a1,#3498db);
+    }
+</style>
+<div class="panel panel-default panel-intro">
+    <div class="panel-heading">
+        <div class="panel-lead">
+            <em>对接站点</em>
+            加载商品列表以及选择同步商品的速度，取决于您的服务器访问对接站点的速度。
+            因网络原因，加载商品列表以及同步商品有时会出现错误提示，重试即可。
+        </div>
+        <div id="poster">
+            {volist name="$poster.poster" id="vo"}
+            <a href="{$vo.url}" target="_blank">{$vo.remark}</a>
+            {/volist}
+        </div>
+
+    </div>
+
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        <a href="javascript:;" class="btn btn-primary btn-refresh" title="{:__('Refresh')}" ><i class="fa fa-refresh"></i> </a>
+                        <a href="javascript:;" class="btn btn-success btn-add {:$auth->check('docking/docking_site/add')?'':'hide'}" title="{:__('Add')}" ><i class="fa fa-plus"></i> {:__('Add')}</a>
+                        <a href="javascript:;" class="btn btn-success btn-edit btn-disabled disabled {:$auth->check('docking/docking_site/edit')?'':'hide'}" title="{:__('Edit')}" ><i class="fa fa-pencil"></i> {:__('Edit')}</a>
+                        <a href="javascript:;" class="btn btn-danger btn-del btn-disabled disabled {:$auth->check('docking/docking_site/del')?'':'hide'}" title="{:__('Delete')}" ><i class="fa fa-trash"></i> {:__('Delete')}</a>
+
+
+                    </div>
+                    <table id="table" class="table table-striped table-bordered table-hover table-nowrap"
+                           data-operate-edit="{:$auth->check('docking/docking_site/edit')}"
+                           data-operate-del="{:$auth->check('docking/docking_site/del')}"
+                           width="100%">
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

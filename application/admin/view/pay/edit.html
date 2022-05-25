@@ -1,0 +1,228 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    {if condition="$row.type == 'alipay'"}
+    <div class="alert alert-warning-light">
+        温馨提示：<br>当您开启pc网站支付时，则pc端用户支付时将直接跳转到支付宝官方pc网站支付页面，不会展示当面付二维码
+    </div>
+    <div class="alert alert-dismissable alert-info" style="line-height: 100%; text-align: center;">
+        官方支付宝：<a href="https://b.alipay.com/" target="_blank" style="text-decoration: none;">https://b.alipay.com/</a>
+    </div>
+    {/if}
+    {if condition="$row.type == 'yfpay'"}
+    <div class="alert alert-dismissable alert-info" style="line-height: 100%; text-align: center;">
+        云付天下已暂停运营
+    </div>
+    {/if}
+
+    {if condition="$row.type == 'jpay'"}
+    <div class="alert alert-dismissable alert-info" style="line-height: 100%; text-align: center;">
+        捷支付已暂停运营
+    </div>
+    {/if}
+
+
+
+    {if condition="$row.type == 'wxpay'"}
+    <div class="alert alert-dismissable alert-info" style="line-height: 100%; text-align: center;">
+        官方微信：<a href="https://pay.weixin.qq.com/" target="_blank" style="text-decoration: none;">https://pay.weixin.qq.com/</a> 当前仅支持微信navite支付
+    </div>
+    {/if}
+
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Name')}</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-name" disabled class="form-control" name="row[name]" type="text" value="{$row.name|htmlentities}">
+        </div>
+    </div>
+    {if condition="$row.type == 'codepay'"}
+    <input id="c-type" class="form-control" name="row[type]" type="hidden" value="codepay">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">接口地址</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-gateway_url" data-rule="required" class="form-control" name="row[gateway_url]" type="text" value="{$info.gateway_url|default=''|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('码支付ID')}</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-codepay_id" data-rule="required" class="form-control" name="row[codepay_id]" type="text" value="{$info.codepay_id|default=''|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('通信密钥')}</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-codepay_key" data-rule="required" class="form-control" name="row[codepay_key]" type="text" value="{$info.codepay_key|default=''|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('支付类型')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="checkbox">
+                <label><input name="row[wxpay]" type="checkbox" value="1" {if condition="isset($info.wxpay)"}checked{/if}>微信支付</label>
+                <label><input name="row[alipay]" type="checkbox" value="1" {if condition="isset($info.alipay)"}checked{/if}>支付宝支付</label>
+                <label><input name="row[qqpay]" type="checkbox" value="1" {if condition="isset($info.qqpay)"}checked{/if}>QQ支付</label>
+            </div>
+        </div>
+    </div>
+
+    {elseif condition="$row.type == 'vpay'"}
+
+    <input id="c-type" class="form-control" name="row[type]" type="hidden" value="vpay">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('接口地址')}</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-gateway_url" data-rule="required" class="form-control" name="row[gateway_url]" type="text" value="{$info.gateway_url|default=''|htmlentities}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('通讯密钥')}</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-secret_key" data-rule="required" class="form-control" name="row[secret_key]" type="text" value="{$info.secret_key|default=''|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('支付类型')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="checkbox">
+                <label><input name="row[alipay]" type="checkbox" value="1" {if condition="isset($info.alipay)"}checked{/if}>支付宝支付</label>
+                <label><input name="row[wxpay]" type="checkbox" value="1" {if condition="isset($info.wxpay)"}checked{/if}>微信支付</label>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    {elseif condition="$row.type == 'yfpay'"}
+
+
+    <input id="c-type" class="form-control" name="row[type]" type="hidden" value="alipay">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">APPID</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-app_id" data-rule="required" class="form-control" name="row[app_id]" type="text" value="{$info.app_id|default=''|htmlentities}">
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">密钥</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-app_key" data-rule="required" class="form-control" name="row[app_key]" type="text" value="{$info.app_key|default=''|htmlentities}">
+
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('支付类型')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="checkbox">
+                <label><input name="row[wxpay]" type="checkbox" value="1" {if condition="isset($info.wxpay)"}checked{/if}>微信支付</label>
+                <label><input name="row[alipay]" type="checkbox" value="1" {if condition="isset($info.alipay)"}checked{/if}>支付宝支付</label>
+            </div>
+        </div>
+    </div>
+    {elseif condition="$row.type == 'wxpay'"}
+
+
+    <input id="c-type" class="form-control" name="row[type]" type="hidden" value="alipay">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">APPID</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-appid" data-rule="required" class="form-control" name="row[appid]" type="text" value="{$info.appid|default=''|htmlentities}">
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">商户号</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-mchid" data-rule="required" class="form-control" name="row[mchid]" type="text" value="{$info.mchid|default=''|htmlentities}">
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">APIV3密钥</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-aesKey" data-rule="required" class="form-control" name="row[aesKey]" type="text" value="{$info.aesKey|default=''|htmlentities}">
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">证书序列号</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-serial_no" data-rule="required" class="form-control" name="row[serial_no]" type="text" value="{$info.serial_no|default=''|htmlentities}">
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('证书')}</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-cert" data-rule="required" class="form-control" rows="6" name="row[cert]">{$info.cert|default=''|htmlentities}</textarea>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('私钥')}</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-private_key" data-rule="required" class="form-control" rows="6" name="row[private_key]">{$info.private_key|default=''|htmlentities}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group hide">
+        <label class="control-label col-xs-12 col-sm-2">{:__('支付类型')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="checkbox">
+                <label><input name="row[wxpay]" type="checkbox" value="1"checked>微信支付</label>
+            </div>
+        </div>
+    </div>
+    {elseif condition="$row.type == 'jpay'"}
+
+
+    <input id="c-type" class="form-control" name="row[type]" type="hidden" value="alipay">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">AppID</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-appid" data-rule="required" class="form-control" name="row[appid]" type="text" value="{$info.appid|default=''|htmlentities}">
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">AppToken</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-apptoken" data-rule="required" class="form-control" name="row[apptoken]" type="text" value="{$info.apptoken|default=''|htmlentities}">
+
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('支付类型')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="checkbox">
+                <label><input name="row[wxpay]" type="checkbox" value="1" {if condition="isset($info.wxpay)"}checked{/if}>微信支付</label>
+                <label><input name="row[alipay]" type="checkbox" value="1" {if condition="isset($info.alipay)"}checked{/if}>支付宝支付</label>
+            </div>
+        </div>
+    </div>
+    {/if}
+
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

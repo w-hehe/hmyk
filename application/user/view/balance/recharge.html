@@ -1,0 +1,51 @@
+{extend name="base"/}
+{block name="head"}
+<style>
+    .msg{
+        font-weight: bold;
+        margin-left: 20px;
+        font-size: 14px;
+    }
+    .error-msg{
+        color: #cb2a39;
+    }
+    .success-msg{
+        color: #28a745;
+    }
+</style>
+
+{/block}
+{block name="main"}
+<div class="my-3 p-3 bg-white rounded shadow-sm" style="width: 100%;overflow:auto;">
+    <form method="get" action="">
+        <div class="form-group">
+            <label for="nickname">充值金额</label>
+            <input type="number" class="form-control" id="nickname" value="" name="money" placeholder="">
+            <small class="form-text text-muted"></small>
+        </div>
+        <div class="form-group">
+            {if condition="$pay_list.alipay"}
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="pay_type" id="alipay" value="alipay" required>
+                <label class="form-check-label" for="alipay">支付宝</label>
+            </div>
+            {/if}
+            {if condition="$pay_list.wxpay"}
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="pay_type" id="wxpay" value="wxpay" required>
+                <label class="form-check-label" for="wxpay">微信</label>
+            </div>
+            {/if}
+            {if condition="$pay_list.qqpay"}
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="pay_type" id="qqpay" value="qqpay" required>
+                <label class="form-check-label" for="qqpay">QQ</label>
+            </div>
+            {/if}
+        </div>
+        <button type="submit" class="btn btn-primary">去支付</button>
+
+
+    </form>
+</div>
+{/block}

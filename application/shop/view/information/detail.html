@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>最新资讯 - {$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css" />
+    <link rel="stylesheet" href="/assets/shop/css/base.css" />
+    <link rel="stylesheet" href="/assets/shop/css/user-index.css" />
+
+    <style>
+
+        .bui-article p{
+            text-indent: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">最新资讯</div>
+            <div class="bui-bar-right"></div>
+        </div>
+    </header>
+    <main>
+
+        <article id="panel" class="bui-article">
+            <h1>{$info.title}</h1>
+            <div class="article-info bui-box">
+                <span class="article-from">红盟云商</span>
+                <div class="span1"> <i class="icon-time"> {$info.createtime}</i></div>
+<!--                <i class="icon-comment"> 42</i>-->
+<!--                <i class="icon-eye"> 142</i>-->
+            </div>
+            <section>
+                {$info.content | default="<span>嗨呀，QAQ 消息内容丢失了~</span>"}
+            </section>
+        </article>
+
+    </main>
+    <footer>
+        {include file="common/footer" /}
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/bui/js/zepto.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+<script>
+
+
+
+
+
+
+</script>
+</body>
+
+</html>

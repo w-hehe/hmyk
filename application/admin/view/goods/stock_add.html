@@ -1,0 +1,50 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="panel panel-default panel-intro" style="margin-bottom: 15px;">
+        <div class="panel-heading">
+            <div class="panel-lead">
+                <em>温馨提示</em>
+                添加库存时请尽量按照提示要求填写
+                <br>
+                {if condition="$goods_info.goods_type == 'alone'"}
+                每行填写一个卡密
+                {elseif condition="$goods_info.goods_type == 'fixed'"}
+                当前商品为重复卡密，您只需要填写一个卡密，即可重复使用，但同时你也需要手动填写库存数量
+                {elseif condition="$goods_info.goods_type == 2"}
+                每行填写一组账号密码，格式为：账号123456密码123456
+                {elseif condition="$goods_info.goods_type == 3"}
+                您可以一次性选择多张图片进行上传
+                {/if}
+            </div>
+        </div>
+    </div>
+    {if condition="$goods_info.goods_type == 'fixed'"}
+    <div class="form-group" id="stock" style="">
+        <label class="control-label col-xs-12 col-sm-2">{:__('库存')}</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-stock" class="form-control" name="row[stock]" type="number" value="{:$cdk ? $cdk.num : 100}">
+        </div>
+    </div>
+    {/if}
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">卡密</label>
+
+        {if condition="$goods_info.goods_type == 'fixed'"}
+
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-kami" class="form-control" name="row[kami]" type="text" value="{:$cdk ? $cdk.cdk : ''}">
+        </div>
+        {else /}
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-kami" class="form-control " rows="15" name="row[kami]"></textarea>
+        </div>
+        {/if}
+    </div>
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

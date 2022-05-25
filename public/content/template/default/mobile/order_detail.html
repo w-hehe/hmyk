@@ -1,0 +1,127 @@
+<!doctype html>
+<html data-dpr="1" style="font-size: 36px;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{:empty($title) ? '' : $title . ' - '}{$site.shop_title}</title>
+    <link rel="shortcut icon" href="{$site.ico}" />
+    <link rel="stylesheet" href="/content/template/default/mobile/css/order_detail.css?v={$template_version}">
+    {:doAction('home_head')}
+</head>
+<body>
+
+<div id="order_details" class="Router order-detail" style="min-height: 17.0667rem; overflow: unset;">
+    <div id="hides" style="background: rgb(42, 98, 255);">
+        <div class="wrap_hide imgSize lan">
+            <div class="hide_left_box" onclick="javascript:history.go(-1);">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAABgFBMVEX///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8P5Yj7AAAAf3RSTlMASB7L0gEDQjJ11DkE3fU7OAJzRAXnLu3XNzow8dDaeS/Y3ODy49sx+Bje1fRw2f4Ggy18Rkxq7OXKTm32aagPNntW4mUb7h1JHxdx6syXZhR3QBJkKfC9SiRFV+Ru4Svfcj901kf6erU1+z7Epn5Bf+uF04Z2s2gz0ZglkF0RRUKWswAAAY5JREFUeF7d0tVXQkEQx/FRuRcQFUEFFRW7u7C7u7u7u2v/dQ8cz8x95Le+ePy+f87s7C79xboX64c9mjbQpVSBc0zLZharcJephOfOV5Fu5zTmJqqfnPhctmoBtS6xS9ugTRarmkHbkyO2F7QZ1WKDqM0TO4vua7FO1KYzrfEamHWJPRr3YNYttrTKxOy5vFFlewJmr/PZFqI2pZxtVrMJ2gKxnQZmD4vEThPWSJrsOwDapgm2LX2oDbHtD5bFRtXoIEVqG1Lc8klrXFRNXnjLwtav9Joiwx5SmvlppkJpRz6lH9X/Bs+3atscMjLTNK3NTkSNFv1kb4yJspVVCrfWwrh8ndBSNlhXbsLavsU6qcqA9Y7oXQ+q94pF75uodleLdiag2nXAuiOYiuqMeNalx7WoPrWxPmuAtUN0TQN88kC24q7gW8u16BsT1T6LrjPg2TaLJjSfRd/BOvde9AN88kC86EcT1SUVjDschOaQ2c8E98LaywD/qUUu0qjkNYLfTNLp/cOvbJ9f9P/6BmNzuVa1ptNJAAAAAElFTkSuQmCC" class="hide_left">
+            </div>
+            订单详情
+        </div>
+        <a class="litte" style="color: #fff; text-decoration: none;" href="{:url('/complain')}">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyMjYzNzUwMDUwM0IxMUU5OUI1MUJGQjkzMUVFNzkxRSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoyMjYzNzUwMTUwM0IxMUU5OUI1MUJGQjkzMUVFNzkxRSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjIyNjM3NEZFNTAzQjExRTk5QjUxQkZCOTMxRUU3OTFFIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjIyNjM3NEZGNTAzQjExRTk5QjUxQkZCOTMxRUU3OTFFIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+xIZOGQAAAoNJREFUeNq8lz1oFEEUx3cvl2jQJNz5EaNFxKiFCoqVGMSIIjZWWgniF2hhJQTERtHCJmBjo7WIFoKgtoLaqMGEBBRBhQMJasIFQz4lyWX9jbyBx3J7O3u78cGPmWV25j/z9r2ZWT8IAi+BFWA77IGt0AoTMAgDUIKK00hG2IEiXIG3QbTNwEM45jKmi+hx6K8iNAFlmKvS9lgmGzmuH+PqXuhTz+/gPnyBaXHrSlgPR+AyrJB3P8JpGErq6lOhVVyDQox39sF71acEHUlcvQXGpPMi9DrGgqEdXirx667Cxv23VcebCUS1eEn6j8JaF+E8vJFOX6G1DmHDVTX5i+H2XI1cNfYKJr367BmMSf1AuLGa8CZol/qgV799hk9S73QRblD1H146+yXl6nBDHo7CSXn+A12q3U8pvCjlZrgned9sJmSE78DOiI5phXMqbi6FVzwn9e/wQWa31+4vXjY2C6+hEQ7CVF6dJrfgAWyQ7a4lA0HrsedwXjxgor0nr4LpJ8xLQMx72dq4rNqu3s8pd66Ssi0U2VlYs6o3RaXTf7HlFg5chANVBss9gZyKvN9SlmFJ6lkF2bSqT9k8toP3wCh0qEBLu4HYVN0lF8QG2ScWzBE1oI6v8dCt40adR6LlqRprEmbtGW1cPaNmWAzN+AysS5m/1lpUWhXMbWMblUPiliXBuP+E8AguqK3VTG6/5GNFLnffIo7QohxCbeqTNv2Lpxpu2gjD4pon0AWd8AIW5C5mqMgVtw8aXT9D3Au7YUh9p3JQ27pdheM2kGHolru1+VVZE/N+0T2z3SN0B5yFkYjVjsincBrPT/jTZuwwnJOztSK5aQLnLvS7DvJXgAEA9mo60DE31v0AAAAASUVORK5CYII=">
+            我要投诉
+        </a>
+
+    </div>
+    <div class="car_s" style="font-size: 12px;">
+        <div class="car_s_ord">
+            <span>订单金额</span>
+            <span>{$order.money}元（{$remote_order.status}）</span>
+            <span>
+                <a href="{:url('/goods/' . $goods.id)}" style="text-decoration: none; color: #fb2e4b;">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAYhGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDUgNzkuMTYzNDk5LCAyMDE4LzA4LzEzLTE2OjQwOjIyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIiB4bWxuczpleGlmPSJodHRwOi8vbnMuYWRvYmUuY29tL2V4aWYvMS4wLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDE5LTA5LTEwVDE4OjA2OjMwKzA4OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDE5LTEwLTMwVDE4OjM2OjE1KzA4OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAxOS0xMC0zMFQxODozNjoxNSswODowMCIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NmY0OGRkY2QtOTcxZC1hNDQzLWJiNjEtMGNhMjhmMGY3NzkwIiB4bXBNTTpEb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6YTkzYWQ2M2QtZjE1Ny1jMTQwLWI5MzYtMzg2NWMyMmU1MmRhIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6NmM3NTM0NjEtNTAzZi01YjRkLThkNTYtMTIxOTYxZWU5NzM4IiB0aWZmOk9yaWVudGF0aW9uPSIxIiB0aWZmOlhSZXNvbHV0aW9uPSI3MjAwMDAvMTAwMDAiIHRpZmY6WVJlc29sdXRpb249IjcyMDAwMC8xMDAwMCIgdGlmZjpSZXNvbHV0aW9uVW5pdD0iMiIgZXhpZjpDb2xvclNwYWNlPSI2NTUzNSIgZXhpZjpQaXhlbFhEaW1lbnNpb249IjYwIiBleGlmOlBpeGVsWURpbWVuc2lvbj0iNjAiPiA8cGhvdG9zaG9wOkRvY3VtZW50QW5jZXN0b3JzPiA8cmRmOkJhZz4gPHJkZjpsaT4wNEE2NDg4M0Q2RTg5MkY2Q0FEM0UzM0FFM0FDQkM0NDwvcmRmOmxpPiA8cmRmOmxpPjA4MkMwMzM0QkRBQTBBODQ0MDQ0QUZENkI1RDhDQjBBPC9yZGY6bGk+IDxyZGY6bGk+Mzc1QTQ2QjQ2RDRBQzNCQjJFRUQxM0NFOUM5NzQwMDA8L3JkZjpsaT4gPHJkZjpsaT40NkY3QjEyNDc2MzZDRkI5REIwMjM3RjY2RjcyQkIwMjwvcmRmOmxpPiA8cmRmOmxpPjVDNENCN0QyNkI3QTIyMEJGNDQyMjE3MkY5N0IxRENDPC9yZGY6bGk+IDxyZGY6bGk+NkJEMkVFODMwMjgyNDVCOUM4RkNGOURBQ0E2NTg5MDM8L3JkZjpsaT4gPHJkZjpsaT42RUI4MDk1MUJDMzVFNTY1RkI3NEYxQkE1REMxMkExQTwvcmRmOmxpPiA8cmRmOmxpPjc5NzVBQzhGNTM1MzVCNDIyRDMzOENGNjBGNDk0QzU0PC9yZGY6bGk+IDxyZGY6bGk+ODIzNUI5REU4ODc3ODExNkE5MkI0QkZCMUQyRjI5Qjc8L3JkZjpsaT4gPHJkZjpsaT44ODczNEQ4RDAzMTc0OERFMTRGNzU5RDE0RDA1RjUyNDwvcmRmOmxpPiA8cmRmOmxpPjhDQkNEMDkxOTFEMDMxMzMxQUNCNTJBQzcyNjM0NkU3PC9yZGY6bGk+IDxyZGY6bGk+OTdERkRGQkVEM0NBMzRBODQ3RDY3NzA5RjNCQkFCNDI8L3JkZjpsaT4gPHJkZjpsaT5BNERGRTg5MjNEOUZFRjkzQ0MzODdCNjlGNDA2RTkzNzwvcmRmOmxpPiA8cmRmOmxpPkIzNDc1QzE2MzYyQzRCRDIxMTc5OTI4NUM1MERGQTgxPC9yZGY6bGk+IDxyZGY6bGk+QjQ0MTQ1NEU0RDZBQ0FBRjY0MzMyQjEzNTBCRDczRjA8L3JkZjpsaT4gPHJkZjpsaT5CQ0U1RUVBMjdEMDgwMUY3MTc1REI0MTg3QzRFRjEyOTwvcmRmOmxpPiA8cmRmOmxpPkJFRDVERkZDRjQyMDA4QUEyMTZENTQ0RUYzODAwMTczPC9yZGY6bGk+IDxyZGY6bGk+Q0VGMDAyMkIyRjdBODk3QkQxNDc3OUM0OEE2RDE2N0M8L3JkZjpsaT4gPHJkZjpsaT5DRkM4MDNDQUY0RTQxNTJGOEYxRUM1MzAzQ0ZEMEQ4NjwvcmRmOmxpPiA8cmRmOmxpPkQwMUY1OUJDOTIzRjI4MkIwNDBBMUFERUI2NkE5MENCPC9yZGY6bGk+IDxyZGY6bGk+RDQ4MEMwMkEzODkzNkNDREM1OTYyMUU1RDgyRDA4RDI8L3JkZjpsaT4gPHJkZjpsaT5EQjlENjdDOEM4MzRBMzE3RkE2QzVGQjA0NDRBMDNFNDwvcmRmOmxpPiA8cmRmOmxpPkU0QUI2QURGNkRCNjU1NEREODJCMjA3MTY4OTQ1QzM2PC9yZGY6bGk+IDxyZGY6bGk+RUZFQjZBNzFFMTJCMEVEOUE1MkQ3NTgwRjg0MkI3QkU8L3JkZjpsaT4gPHJkZjpsaT5hZG9iZTpkb2NpZDpwaG90b3Nob3A6MDRmMjY2ZWEtYzE4Ny05MTQxLWJlNTYtYzc3NjdjNzliNzllPC9yZGY6bGk+IDxyZGY6bGk+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjA3Njk3NjNlLWFiNDQtMTk0Ny05ODQ4LWQ5OGEyZmRlNDNmOTwvcmRmOmxpPiA8cmRmOmxpPmFkb2JlOmRvY2lkOnBob3Rvc2hvcDowOWQ1YmJiNy00YTQ1LTkxNGUtOTVlNi0zOGYzNzNkNDBhMjc8L3JkZjpsaT4gPHJkZjpsaT5hZG9iZTpkb2NpZDpwaG90b3Nob3A6MjMzMDI1NDgtMjIyOC0yMDQwLTg5Y2YtYjBhOGY1NDA4YmVlPC9yZGY6bGk+IDxyZGY6bGk+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjI0ZjJlZjJlLTM5NzQtZmY0Yy04OTQ2LWExZWJhYzc3YzI1NTwvcmRmOmxpPiA8cmRmOmxpPmFkb2JlOmRvY2lkOnBob3Rvc2hvcDozMWU0OWVhMy1iNTk0LWE4NGMtYWIxNi1lN2YzMDhlZGI3NGI8L3JkZjpsaT4gPHJkZjpsaT5hZG9iZTpkb2NpZDpwaG90b3Nob3A6MzhjNzNlOTktMWIwMC03YTQ0LThiYmMtYTQyMTM4MDc1OTcwPC9yZGY6bGk+IDxyZGY6bGk+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjNjOWZlMjYwLTA4MWItMzI0Ni1hMjZiLTJkOTQ0MzEwYTU0YTwvcmRmOmxpPiA8cmRmOmxpPmFkb2JlOmRvY2lkOnBob3Rvc2hvcDo0MDQ0ZTgzZC0xYmExLTJjNDUtYTYxNi1mMzM1YjYyNzQ1OGQ8L3JkZjpsaT4gPHJkZjpsaT5hZG9iZTpkb2NpZDpwaG90b3Nob3A6NDE3OWMzY2EtZGMxNS1kMzQ1LWJkNTYtYzdlZTJhMjA3YmRkPC9yZGY6bGk+IDxyZGY6bGk+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjRiYzJjZTExLTgwYzEtNmQ0NC1hOGIxLWI1ZGYwYjRiNjk3MDwvcmRmOmxpPiA8cmRmOmxpPmFkb2JlOmRvY2lkOnBob3Rvc2hvcDo0ZTA4YzIyYy02ZjkxLTU5NDktYjZmOS0yNDNkNjVkYTNjYjg8L3JkZjpsaT4gPHJkZjpsaT5hZG9iZTpkb2NpZDpwaG90b3Nob3A6NTRkMjA2OGUtMDAyYS1kNTQwLWEyMGQtZTE4NzdmYzVmMTA0PC9yZGY6bGk+IDxyZGY6bGk+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjViNjNlMGRmLTE4ZDktMTE3Yi1iMjU5LWUwNDc0ZWJmYmJmZTwvcmRmOmxpPiA8cmRmOmxpPmFkb2JlOmRvY2lkOnBob3Rvc2hvcDo2MjEyZDgyNS00ZGE2LTg2NDQtYWM2NS0zNmEwNTc2MDk3M2Q8L3JkZjpsaT4gPHJkZjpsaT5hZG9iZTpkb2NpZDpwaG90b3Nob3A6NmEyZjViMGYtMzQxYi1mMzQ5LWEzYjMtYzk5YjZjMjYzYzI4PC9yZGY6bGk+IDxyZGY6bGk+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjc5ZGIwMjIwLTgyZmEtMGE0NS1iZTZmLWU2NmVhN2M3ZmJkOTwvcmRmOmxpPiA8cmRmOmxpPmFkb2JlOmRvY2lkOnBob3Rvc2hvcDo3YmU1ZTIxMS1iMzYzLWM1NDItYTFkOC03NmExNDJhZjczMjk8L3JkZjpsaT4gPHJkZjpsaT5hZG9iZTpkb2NpZDpwaG90b3Nob3A6N2Q5Yzc0YzYtNjFlNy0wODQ1LWE4MWQtZGNkN2U1NDg5N2Q0PC9yZGY6bGk+IDxyZGY6bGk+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjljZTJiNzQ2LTA4NWQtMTFlNy1hOGI4LTliNjc5MTkxZDIyNjwvcmRmOmxpPiA8cmRmOmxpPmFkb2JlOmRvY2lkOnBob3Rvc2hvcDpjMWRjNTUyOS04YzhiLTM3NDUtYjg3Zi1mNDNhMGYxODIzZGM8L3JkZjpsaT4gPHJkZjpsaT5hZG9iZTpkb2NpZDpwaG90b3Nob3A6YzU4NzZmNzctOWZkNi02NDQzLWI0YmYtMGM1MjgwODBiMzIzPC9yZGY6bGk+IDxyZGY6bGk+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOmNmOTc5NzUwLTRlOTQtODA0ZC04YzBmLTQyYjY2ZWVjYjQzZTwvcmRmOmxpPiA8cmRmOmxpPmFkb2JlOmRvY2lkOnBob3Rvc2hvcDpmYjg1OWM5Ni1kNTZhLWYwNDgtOTAzZi05YWE5YWNkY2ZlMGI8L3JkZjpsaT4gPHJkZjpsaT54bXAuZGlkOjA3NGMzZWRkLTQ5NTUtZDM0NC04NjZlLTJjOTAxNDZmMmU5YjwvcmRmOmxpPiA8cmRmOmxpPnhtcC5kaWQ6NDdjODZlYjItNWUxOS0wMDQ0LTgxYmItNDU3ODA5NmQ1NGM0PC9yZGY6bGk+IDxyZGY6bGk+eG1wLmRpZDo1MmVlNGZhMi01ODQ4LWM0NDktYTA3ZC1hNDBiZWMwM2ViYzE8L3JkZjpsaT4gPHJkZjpsaT54bXAuZGlkOjZjNzUzNDYxLTUwM2YtNWI0ZC04ZDU2LTEyMTk2MWVlOTczODwvcmRmOmxpPiA8cmRmOmxpPnhtcC5kaWQ6NmQyNWJhNTUtNzBkMC1jNjQwLWJlOTAtYjgwOGJjNDFiZmQ2PC9yZGY6bGk+IDxyZGY6bGk+eG1wLmRpZDo4QjNGMTg4MURFMUUxMUU2QTlFOEFBNjgzRDkwMUJBMDwvcmRmOmxpPiA8cmRmOmxpPnhtcC5kaWQ6YjQ4MTg0YzctZDAxOS04MjQ4LTg3MTEtMTdhYWM0MmQzMDk3PC9yZGY6bGk+IDxyZGY6bGk+eG1wLmRpZDplNDk3NTkyMi1jMDEwLTdkNDEtYWE2Yi1lNWNlYTE1MjA5ZDY8L3JkZjpsaT4gPC9yZGY6QmFnPiA8L3Bob3Rvc2hvcDpEb2N1bWVudEFuY2VzdG9ycz4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo2Yzc1MzQ2MS01MDNmLTViNGQtOGQ1Ni0xMjE5NjFlZTk3MzgiIHN0RXZ0OndoZW49IjIwMTktMDktMTBUMTg6MDY6MzArMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cykiLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjY4NGViMDNiLWFjM2MtMDg0YS1iNzIzLWZkYWYyZWIyZGU4NyIgc3RFdnQ6d2hlbj0iMjAxOS0wOS0xMFQxODoxOTo1NiswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgc3RFdnQ6Y2hhbmdlZD0iLyIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6ZGEwMWQwNDEtZjJlYi00ZDQwLTkyZWUtNGM4NTE0M2RhMTY0IiBzdEV2dDp3aGVuPSIyMDE5LTEwLTMwVDE4OjM2OjE1KzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249ImNvbnZlcnRlZCIgc3RFdnQ6cGFyYW1ldGVycz0iZnJvbSBhcHBsaWNhdGlvbi92bmQuYWRvYmUucGhvdG9zaG9wIHRvIGltYWdlL3BuZyIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iZGVyaXZlZCIgc3RFdnQ6cGFyYW1ldGVycz0iY29udmVydGVkIGZyb20gYXBwbGljYXRpb24vdm5kLmFkb2JlLnBob3Rvc2hvcCB0byBpbWFnZS9wbmciLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjZmNDhkZGNkLTk3MWQtYTQ0My1iYjYxLTBjYTI4ZjBmNzc5MCIgc3RFdnQ6d2hlbj0iMjAxOS0xMC0zMFQxODozNjoxNSswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpkYTAxZDA0MS1mMmViLTRkNDAtOTJlZS00Yzg1MTQzZGExNjQiIHN0UmVmOmRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDozMWU0OWVhMy1iNTk0LWE4NGMtYWIxNi1lN2YzMDhlZGI3NGIiIHN0UmVmOm9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo2Yzc1MzQ2MS01MDNmLTViNGQtOGQ1Ni0xMjE5NjFlZTk3MzgiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRm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">
+                再次购买
+                </a>
+            </span>
+        </div>
+        <div class="order_info_box">
+            <div class="order_info_leng">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAMAAAA4a6b0AAAA4VBMVEUqYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv9Cpo8eAAAASnRSTlMAqNVD+NQDh/HrDfeDAvLs/IjY9tb1rIyBlznB4MU/43Fa17XuTeXw9OhgPSt/VZhUlHiuPNx8lWVrc4sHZOGNrYT76RDn+e+880nBfo0AAADLSURBVHhefcvXTsMAEAXRG+PYgHsCSei99957n///IGwTKzisOA9XK41Wpen1JVXmF7Y1sMOeKvssqnSY+X54wlzo/whXmMnv7FJtbChhotl07vOpzLbySZ81ScMS8E95Y9kxpK5a2FaVsDZi2Ei1iSxbaJRx1exGxY79LQf07HIEx2aZgky1cnp2rtwFdFUvV3BdftxoqNw24K4HvoaL1AF4kFH0CE/6XWLU1+lq4KX4eY28gnJeX+QlqM174JY+YrcSuKDPGMuX8w2NBzNZhH98nAAAAABJRU5ErkJggg==">
+                <span>付款时间：{:date('Y-m-d H:i:s', $order.pay_time)}</span>
+            </div>
+            <div class="order_info_leng">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAVBAMAAACqMuMoAAAAGFBMVEUqYv8qYv8qYv8qYv8qYv8qYv8qYv8qYv+hujomAAAAB3RSTlMAqFebZN8gMkmWQQAAAC1JREFUeF5jKEcG6DxBBMDLw28KAwJQzGMqLy9E8JjLy0sQPNby8jKybcDrBwAeojiVpyhNWAAAAABJRU5ErkJggg==">
+                <span>订单编号：{$order.order_no}</span>
+            </div>
+        </div>
+        <div class="div_no_pay" style="display: none;">此订单未支付,如您已支付请联系平台客服咨询</div>
+    </div>
+    {if condition="$params"}
+    <div class="car_s_tow">
+        {volist name="$params" id="vo"}
+        <div class="kahao">
+            <div class="kahao_imgbox">
+                <span>{$vo.title}</span>
+            </div>
+            <div style="overflow-wrap: break-word;">{$vo.value} </div>
+        </div>
+        {/volist}
+    </div>
+    {/if}
+    {if condition="$kami"}
+    <div class="car_s_hide">
+        <div style="display: inline-block;">您购买的卡密</div>
+        <div class="btn_box">
+            <span id="copy" class="copy">复制</span>
+            <span id="export">导出</span>
+        </div>
+    </div>
+    <div class="car_s_tow">
+
+        {volist name="$kami" id="vo" key="index"}
+        <div class="kahao">
+            <div class="kahao_imgbox">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAZAQMAAABqwb7SAAAABlBMVEUvdf////+8FEFwAAAAEElEQVR4XmPAD5h/oBPUBABP6gPtfu60NwAAAABJRU5ErkJggg==">
+                <span>第{$index}张</span>
+            </div>
+            <div style="overflow-wrap: break-word;">{$vo.content}</div>
+        </div>
+        {/volist}
+    </div>
+    {/if}
+    {if condition="$goods.buy_msg"}
+    <div class="car_s_hide">温馨提示</div>
+    <div class="car_s_tow" style="font-size: 12px; padding: 10px 5%; width: 84%;">
+        {$goods.buy_msg}
+    </div>
+    {/if}
+</div>
+<textarea id="kami-value" style="display: none;">{volist name="$kami" id="vo"}{$vo.content . "\\r\\n"}{/volist}</textarea>
+<script src="/assets/shop/dist/jquery.js?v={$template_version}"></script>
+<script src="/content/template/default/js/layui.js?v={$template_version}"></script>
+<script src="/assets/shop/dist/clipboard.min.js"></script>
+<script src="/content/template/default/js/main.js?v={$template_version}"></script>
+<script>
+
+    // document.write('<script src="/assets/shop/dist/clipboard.min.js"><\/script>');
+
+    window.onload = function () {
+        var kami = $('#kami-value').html();
+        var clipboard = new Clipboard('#copy', {
+            text: function () {
+                return kami;
+            }
+        });
+        clipboard.on('success', function (e) {
+            layer.msg("复制成功");
+        });
+
+        clipboard.on('error', function (e) {
+            layer.msg("复制失败");
+            console.log(e);
+        });
+
+        $('#export').click(function(){
+            location.href = "/shop/order/exportCdk/order_no/{$order.order_no}";
+        })
+
+
+    }
+
+</script>
+
+</body>
+</html>

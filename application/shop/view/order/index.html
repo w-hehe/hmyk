@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>订单中心 - {$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <script src="/assets/shop/dist/uaredirect.js"></script>
+
+
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css" />
+    <link rel="stylesheet" href="/assets/shop/css/base.css" />
+    <link rel="stylesheet" href="/assets/shop/css/user-index.css" />
+
+
+    <style>
+
+        .bui-nav>[class*=bui-btn].active:after {
+            width: .4rem;
+            margin: 0 auto;
+        }
+        .shop{
+            padding: 10px;margin: 10px; margin-bottom: 0; min-height: 100px; background: #fff; border-radius: 5px;
+        }
+        .shop h2{
+            font-size: 16px; font-weight: bold;
+        }
+        .shop h2 span{
+            font-weight: normal; color: #f90; font-size: .3rem;float: right;
+        }
+        .order{
+            margin-top: .2rem;
+        }
+        .order img{
+            height: 100%;
+        }
+        .order .bui-box{
+            padding: 0; border: none; -webkit-box-align:start;
+        }
+        .order .bui-box .bui-thumbnail{
+            height: 2rem;
+        }
+        .order .item-title{
+            font-size: .3rem; line-height: .47rem;overflow: hidden;
+            word-break: break-all;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;-webkit-line-clamp:4;
+        }
+        .order .price{
+            text-align: right; margin-top: .2rem;
+        }
+        .shop .total{
+            text-align: right; margin-top: .2rem;
+        }
+        .btn-list{
+            margin-top: .2rem;
+            text-align: right;
+        }
+        .btn-list .bui-btn{
+            display: inline-block;
+            border-radius: 0.5rem;
+            color: #82848a;
+            padding-left: .4rem;
+            padding-right: .4rem;
+        }
+        .bui-scroll .bui-scroll-main{
+            background: unset;
+        }
+        [class*=bui-btn].active, [class*=bui-btn]:active{
+            background-color: unset;
+        }
+
+        /*body{
+            max-width: 500px;
+        }*/
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">订单中心</div>
+            <div class="bui-bar-right"></div>
+        </div>
+    </header>
+    <main>
+
+        <div id="uiTab" class="bui-tab bui-box-vertical">
+            <div class="bui-tab-head">
+                <ul class="bui-nav">
+                    <li class="bui-btn">全部</li>
+                    <li class="bui-btn">待付款</li>
+                    <li class="bui-btn">代发货</li>
+                    <li class="bui-btn">待收货</li>
+                    <li class="bui-btn">已完成</li>
+                </ul>
+            </div>
+            <div class="bui-tab-main">
+                <ul>
+                    <li {if condition="$type != 'all'"}style="display: none;"{/if}>
+                        <div id="all" class="bui-scroll">
+                            <div class="bui-scroll-head"></div>
+                            <div class="bui-scroll-main">
+                                <div class="bui-list bui-list-thumbnail">
+                                </div>
+                            </div>
+                            <div class="bui-scroll-foot"></div>
+                        </div>
+                    </li>
+                    <li {if condition="$type != 'dfk'"}style="display: none;"{/if}>
+                        <div id="dfk" class="bui-scroll">
+                            <div class="bui-scroll-head"></div>
+                            <div class="bui-scroll-main">
+                                <div class="bui-list bui-list-thumbnail">
+                                </div>
+                            </div>
+                            <div class="bui-scroll-foot"></div>
+                        </div>
+                    </li>
+                    <li {if condition="$type != 'dfh'"}style="display: none;"{/if}>
+                        <div id="dfh" class="bui-scroll">
+                            <div class="bui-scroll-head"></div>
+                            <div class="bui-scroll-main">
+                                <div class="bui-list bui-list-thumbnail">
+                                </div>
+                            </div>
+                            <div class="bui-scroll-foot"></div>
+                        </div>
+                    </li>
+                    <li {if condition="$type != 'dsh'"}style="display: none;"{/if}>
+                        <div id="dsh" class="bui-scroll">
+                            <div class="bui-scroll-head"></div>
+                            <div class="bui-scroll-main">
+                                <div class="bui-list bui-list-thumbnail">
+                                </div>
+                            </div>
+                            <div class="bui-scroll-foot"></div>
+                        </div>
+                    </li>
+                    <li {if condition="$type != 'ywc'"}style="display: none;"{/if}>
+                        <div id="ywc" class="bui-scroll">
+                            <div class="bui-scroll-head"></div>
+                            <div class="bui-scroll-main">
+                                <div class="bui-list bui-list-thumbnail">
+                                </div>
+                            </div>
+                            <div class="bui-scroll-foot"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+    <footer>
+
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/jquery.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+<script>
+
+
+
+    var uiList_ywc = bui.list({
+        id: "ywc",
+        url: "{:url('index', ['type' => 'ywc'])}",
+        pageSize: 6, // 当pageSize 小于返回的数据大小的时候,则认为是最后一页,接口返回的数据最好能返回空数组,而不是null
+        data: {},
+        //如果分页的字段名不一样,通过field重新定义
+        field: {
+            page: "page",
+            size: "pageSize",
+            data: "data"
+        },
+        template: function(data) {
+            // console.log(data)
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="shop">
+                            <h2>{$site.shop_pet_name}货源站<span style="color: #52c41a;">交易完成</span></h2>
+                            <div class="order">
+                                <a href="/shop/goods/detail/id/${el.goods_id}">
+                                    <div class="bui-btn bui-box" data-goods="${el.goods_id}">
+                                        <div class="bui-thumbnail"><img src="${el.goods_cover}" onerror="javascript:this.src='/assets/shop/images/loading.jpg'" alt=""></div>
+                                        <div class="span1">
+                                            <h3 class="item-title">${el.goods_name}</h3>
+                                        </div>
+                                        <span class="price">￥${el.goods_money}<br />x${el.goods_num}</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="total">共${el.goods_num}件商品 合计：￥${el.money}</div>
+                            <div class="btn-list">
+                                <div class="bui-btn mini look-kami-btn" data-id="${el.id}">查看卡密</div>
+                            </div>
+                        </div>`;
+            });
+            return html;
+        }
+    })
+
+    var uiList_dsh = bui.list({
+        id: "dsh",
+        url: "{:url('index', ['type' => 'dsh'])}",
+        pageSize: 6, // 当pageSize 小于返回的数据大小的时候,则认为是最后一页,接口返回的数据最好能返回空数组,而不是null
+        data: {},
+        //如果分页的字段名不一样,通过field重新定义
+        field: {
+            page: "page",
+            size: "pageSize",
+            data: "data"
+        },
+        template: function(data) {
+            // console.log(data)
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="shop">
+                            <h2>{$site.shop_pet_name}货源站<span style="">待收货</span></h2>
+                            <div class="order">
+                                <a href="/shop/goods/detail/id/${el.goods_id}">
+                                    <div class="bui-btn bui-box" data-goods="${el.goods_id}">
+                                        <div class="bui-thumbnail"><img src="${el.goods_cover}" onerror="javascript:this.src='/assets/shop/images/loading.jpg'" alt=""></div>
+                                        <div class="span1">
+                                            <h3 class="item-title">${el.goods_name}</h3>
+                                        </div>
+                                        <span class="price">￥${el.goods_money}<br />x${el.goods_num}</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="total">共${el.goods_num}件商品 合计：￥${el.money}</div>
+                            <div class="btn-list">
+                                <div class="bui-btn mini look-kami-btn" data-id="${el.id}">查看卡密</div>
+                                <div class="bui-btn mini shouhuo-btn" style="margin-left: .2rem;" data-id="${el.id}">确认收货</div>
+                            </div>
+                        </div>`;
+            });
+            return html;
+        }
+    })
+
+    var uiList_dfh = bui.list({
+        id: "dfh",
+        url: "{:url('index', ['type' => 'dfh'])}",
+        pageSize: 6, // 当pageSize 小于返回的数据大小的时候,则认为是最后一页,接口返回的数据最好能返回空数组,而不是null
+        data: {},
+        //如果分页的字段名不一样,通过field重新定义
+        field: {
+            page: "page",
+            size: "pageSize",
+            data: "data"
+        },
+        template: function(data) {
+            // console.log(data)
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="shop">
+                            <h2>{$site.shop_pet_name}货源站<span style="">代发货</span></h2>
+                            <div class="order">
+                                <a href="/shop/goods/detail/id/${el.goods_id}">
+                                    <div class="bui-btn bui-box" data-goods="${el.goods_id}">
+                                        <div class="bui-thumbnail"><img src="${el.goods_cover}" onerror="javascript:this.src='/assets/shop/images/loading.jpg'" alt=""></div>
+                                        <div class="span1">
+                                            <h3 class="item-title">${el.goods_name}</h3>
+                                        </div>
+                                        <span class="price">￥${el.goods_money}<br />x${el.goods_num}</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="total">共${el.goods_num}件商品 合计：￥${el.money}</div>
+                            <div class="btn-list">
+<!--                                <div class="bui-btn mini">确认收货</div>-->
+                            </div>
+                        </div>`;
+            });
+            return html;
+        }
+    })
+
+    var uiList_dfk = bui.list({
+        id: "dfk",
+        url: "{:url('index', ['type' => 'dfk'])}",
+        pageSize: 6, // 当pageSize 小于返回的数据大小的时候,则认为是最后一页,接口返回的数据最好能返回空数组,而不是null
+        data: {},
+        //如果分页的字段名不一样,通过field重新定义
+        field: {
+            page: "page",
+            size: "pageSize",
+            data: "data"
+        },
+        template: function(data) {
+            // console.log(data)
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="shop">
+                            <h2>{$site.shop_pet_name}货源站<span style="">待付款</span></h2>
+                            <div class="order">
+                                <a href="/shop/goods/detail/id/${el.goods_id}">
+                                    <div class="bui-btn bui-box" data-goods="${el.goods_id}">
+                                        <div class="bui-thumbnail"><img src="${el.goods_cover}" onerror="javascript:this.src='/assets/shop/images/loading.jpg'" alt=""></div>
+                                        <div class="span1">
+                                            <h3 class="item-title">${el.goods_name}</h3>
+                                        </div>
+                                        <span class="price">￥${el.goods_money}<br />x${el.goods_num}</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="total">共${el.goods_num}件商品 合计：￥${el.money}</div>
+                            <div class="btn-list">
+                                <div class="bui-btn mini buy-btn" data-order="${el.id}" data-id="${el.goods_id}" data-num="${el.goods_num}">去付款</div>
+                                <div class="bui-btn mini del-btn" data-id="${el.id}">删除订单</div>
+                            </div>
+                        </div>`;
+            });
+            return html;
+        }
+    })
+
+    var uiList_all = bui.list({
+        id: "all",
+        url: "{:url('index', ['type' => 'all'])}",
+        pageSize: 6, // 当pageSize 小于返回的数据大小的时候,则认为是最后一页,接口返回的数据最好能返回空数组,而不是null
+        data: {},
+        //如果分页的字段名不一样,通过field重新定义
+        field: {
+            page: "page",
+            size: "pageSize",
+            data: "data"
+        },
+        template: function(data) {
+            // console.log(data)
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="shop">
+                            <h2>{$site.shop_pet_name}货源站<span style="color: ${el.s_color}">${el.s}</span></h2>
+                            <div class="order">
+                                <a href="/shop/goods/detail/id/${el.goods_id}">
+                                    <div class="bui-btn bui-box" data-goods="${el.goods_id}">
+                                        <div class="bui-thumbnail"><img src="${el.goods_cover}" onerror="javascript:this.src='/assets/shop/images/loading.jpg'" alt=""></div>
+                                        <div class="span1">
+                                            <h3 class="item-title">${el.goods_name}</h3>
+                                        </div>
+                                        <span class="price">￥${el.goods_money}<br />x${el.goods_num}</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="total">共${el.goods_num}件商品 合计：￥${el.money}</div>
+                            <div class="btn-list">`;
+
+                if(el.status == 1){
+                    html += `<div class="bui-btn mini look-kami-btn" data-id="${el.id}">查看卡密</div>`;
+                    html += `<div class="bui-btn mini shouhuo-btn" style="margin-left: .2rem;" data-id="${el.id}">确认收货</div>`;
+                }else if(el.status == 9){
+                    if(el.goods_type == 0){
+                        html += `<div class="bui-btn mini look-kami-btn" data-id="${el.id}">查看卡密</div>`
+                    }
+                }else if(el.status == -1){
+                    html+= `<div class="bui-btn mini buy-btn" data-order="${el.id}" data-id="${el.goods_id}" data-num="${el.goods_num}">去付款</div>`;
+                    html += `<div class="bui-btn mini del-btn" data-id="${el.id}">删除订单</div>`;
+                }
+                html += `</div></div>`;
+
+
+            });
+            return html;
+        }
+    })
+
+    $("body").on("click", ".look-kami-btn", function(){
+        var order_id = $(this).data('id');
+        location.href = "/shop/order/kami/order_id/" + order_id;
+    })
+
+    $("body").on("click", ".buy-btn", function(){
+        var goods_id = $(this).data('id');
+        var goods_num = $(this).data('num');
+        var order_id = $(this).data('order');
+        location.href = "/shop/buy/detail/order_id/" + order_id;
+    })
+
+    $("body").on("click", ".shouhuo-btn", function(){
+        var order_id = $(this).data('id');
+        console.log(order_id);
+        $.post("{:url('/shop/order/shouhuo')}", {"order_id":order_id}, function(e){
+            location.reload();
+        }, "json");
+
+    })
+    $("body").on("click", ".del-btn", function(){
+        var order_id = $(this).data('id');
+        console.log(order_id);
+        $.post("{:url('/shop/order/del')}", {"order_id":order_id}, function(e){
+            location.reload();
+        }, "json");
+
+    })
+
+    var width = equipment == 'pc' ? '550' : 'auto';
+
+    var uiTab = bui.tab({
+        id: "#uiTab",
+        index: {$index}, //默认显示第几个
+        width: width
+    });
+
+
+
+</script>
+</body>
+
+</html>

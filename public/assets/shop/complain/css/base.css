@@ -1,0 +1,175 @@
+/*
+*  author: AUI
+*  base.css
+*  http://azenui.com/
+*  http://a-ui.cn/
+*/
+::-webkit-scrollbar {
+    display: none;
+}
+
+::-moz-placeholder {
+    color: #aaa;
+}
+
+::-webkit-input-placeholder {
+    color: #aaa;
+}
+
+:-ms-input-placeholder {
+    color: #aaa;
+}
+
+::selection {
+    background: #111;
+    color: #fff;
+    font-weight: bold
+}
+
+html {
+    color: #333;
+}
+
+body {
+    min-width: 1200px;
+}
+
+html,body {
+    margin: 0;
+    height: 100%;
+    font-family: "Myriad Set Pro","Helvetica Neue",Helvetica,Arial,Verdana,sans-serif;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+hr {
+    height: 1px;
+    background: #ccc;
+    width: 100%;
+    border: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+}
+
+img {
+    border: 0;
+}
+
+body {
+    background: #eee;
+    color: #666;
+    font: 12px/150% Arial,Verdana, "microsoft yahei";
+}
+
+html, body, div, dl, dt, dd, ol, ul, li, h1, h2, h3, h4, h5, h6, p, blockquote, pre, button, fieldset, form, input, legend, textarea, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+article,aside,details,figcaption,figure,footer,header,main,menu,nav,section,summary {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+audio,canvas,progress,video {
+    display: inline-block;
+    vertical-align: baseline;
+}
+
+a {
+    text-decoration: none;
+    color: #08acee;
+}
+
+a:active,a:hover {
+    outline: 0;
+}
+
+button {
+    outline: 0;
+}
+
+mark {
+    color: #000;
+    background: #ff0;
+}
+
+small {
+    font-size: 80%;
+}
+
+img {
+    border: 0;
+}
+
+button,input,optgroup,select,textarea {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    outline: none;
+}
+
+li {
+    list-style: none;
+}
+
+i {
+    font-style: normal;
+}
+
+a {
+    color: #666;
+}
+
+a:hover {
+    color: #eee;
+}
+
+em {
+    font-style: normal;
+}
+
+h2, h3 {
+    font-family: "microsoft yahei";
+    font-weight: 100;
+}
+
+table tr:nth-child(odd) {
+    background: #F4F4F4;
+}
+
+table td:nth-child(even) {
+    color: #F36140;
+}
+
+table tr:nth-child(2) {
+    background: #fff;
+    color: #888;
+}
+
+table.aui-tab-data tr {
+    background: #fff;
+}
+
+table.aui-tab-data tr:nth-child(odd) {
+    background-color: #F5F5F5;
+}
+
+table.aui-tab-data tr th {
+    padding: 10px;
+}
+
+table.aui-tab-data tr td {
+    padding: 10px;
+}

@@ -1,0 +1,87 @@
+{extend name="base"/}
+{block name="main"}
+<style>
+    #userinfo{
+        border-bottom-left-radius: 0!important;
+        border-bottom-right-radius: 0!important;
+    }
+</style>
+<div id="userinfo" class="d-flex align-items-center p-3 text-white-50 bg-purple rounded shadow-sm" style="margin-top: 20px;">
+    <a href="{:url('/user_info')}">
+        <img class="mr-3" src="/assets/img/avatar.png" alt="" width="48" height="48" style="border-radius: 3px;">
+    </a>
+
+    <div class="lh-100" style="padding-top: 5px;">
+        <h6 class="mb-0 text-white lh-100">{:empty($user.nickname) ? $user.email : $user.nickname}</h6>
+        <small>等级：{:empty($user.grade_name) ? '普通用户' : $user.grade_name}</small>
+        <small style="margin-left: 10px;">余额：{$user.money}元</small>
+    </div>
+</div>
+
+<style>
+    .s-my-counts {
+        overflow: hidden;
+        border: 1px solid #e4eaee;
+        margin-bottom: 23px;
+        font-size: 12px;
+        color: #4b4b4b;
+        position: relative;
+        z-index: 3;
+        border-top: 0;
+    }
+    .s-content {
+        zoom: 1;
+    }
+    .s-content {
+        background: #fff;
+    }
+    .s-my-counts ul {
+        height: 52px;
+        overflow: hidden;
+    }
+    ol, ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .s-my-counts li {
+        *margin-left: -1px;
+        width: 20%;
+        float: left;
+    }
+    .s-my-counts a {
+        zoom: 1;
+        padding: 17px 0;
+        vertical-align: middle;
+        display: block;
+        color: #4b4b4b;
+        text-align: center;
+    }
+    .s-my-counts span {
+        margin-left: -1px;
+        height: 18px;
+        line-height: 18px;
+        display: block;
+        border-left: 1px solid #e4eaee;
+    }
+    .s-my-counts em {
+        margin-left: 4px;
+        color: #f40;
+    }
+    em, i {
+        font-style: normal;
+    }
+</style>
+
+<!--<div class="s-my-counts s-content">
+    <ul>
+        <li><a href=""><span>所有订单</span></a></li>
+        <li><a href=""><span>待付款<em></em></span></a></li>
+        <li><a href=""><span>待发货<em>2</em></span></a></li>
+        <li><a href=""><span>已发货<em>4</em></span></a></li>
+        <li><a href=""><span>已完成</span></a></li>
+    </ul>
+</div>-->
+
+
+{/block}

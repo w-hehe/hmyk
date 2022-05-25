@@ -1,0 +1,63 @@
+{extend name="base"/}
+{block name="main"}
+
+<style>
+    #cmp{
+        height: 50px;
+    }
+    @media (max-width: 750px){
+
+        #cmp{
+            height: 139px;
+        }
+    }
+
+</style>
+
+<main role="main" class="container">
+
+
+
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <h6 class="border-bottom border-gray pb-2 mb-0" id="cmp">
+            <span style="font-size: 16px; line-height: 35px; padding-left: 4px;">
+                投诉记录
+            </span>
+            <form class="form-inline" style="float: right;">
+                <div class="form-group mb-2">
+                    <input type="text" class="form-control" id="name" name="name" value="" placeholder="请输入您的称呼">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="number" class="form-control" id="qq" name="qq" placeholder="请输入您的联系QQ">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">查找历史投诉</button>
+            </form>
+
+            <a href="{:url('/complain')}" type="submit" class="btn btn-sm btn-primary mb-2 ml-2">我要投诉</a>
+        </h6>
+        {if condition="$list"}
+        {volist name="list" id="vo"}
+        <div class="media text-muted pt-3">
+            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <strong class="text-gray-dark">订单号：{$vo.out_trade_no}</strong>
+                    <a href="{:url('/complain')}?complain_id={$vo.complain_id}">查看详情({$vo.status})</a>
+                </div>
+                <strong class="text-gray-dark">投诉时间：{:date('Y-m-d H:i:s', $vo.create_time)}</strong>
+                <span class="d-block">投诉内容{$vo.details}</span>
+            </div>
+        </div>
+        {/volist}
+        <small class="d-block text-right mt-3">
+            共查找到{:count($list)}条结果
+        </small>
+        {else /}
+        <small class="d-block text-center mt-3">
+            {:$search ? '未查找到相关信息' : '请填入相关信息查找您的往期投诉'}
+        </small>
+        {/if}
+    </div>
+</main>
+
+
+{/block}

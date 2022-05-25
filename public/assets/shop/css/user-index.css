@@ -1,0 +1,127 @@
+body{
+    background: #f8f8f8;
+}
+.wrap-user-header{
+    background-image:linear-gradient(to right ,#922e63,#731852,#6c2474,#29104a);
+}
+
+.user-pic{
+    border-top:none;
+}
+.user-pic .user-btn{
+    padding:.3rem;
+    border-bottom:none;
+    background-color: transparent;
+}
+.user-pic .thumbnail{
+    width:1rem;
+    height:1rem;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.user-pic .pic{
+    width: 100%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+.user-pic .item-title{
+    padding-top:.1rem;
+    color:#fff;
+    margin-bottom: .15rem;
+}
+.user-pic .user-btn .item-text{
+    padding-top:.02rem;
+    margin-bottom:.05rem;
+    color:#fff;
+    font-size:.18rem;
+}
+.user-pic .user-btn .account-address{
+    text-align:right;
+    font-size:.16rem;
+    color:#fff;
+}
+.user-pic .user-btn .account-address a{
+    color:#fff;
+}
+.user-pic .user-btn .user-right{
+    font-size:.16rem;
+}
+
+.user-nav{
+    background-color:rgba(0,0,0,0.1);
+}
+.user-nav .bui-btn{
+    padding-top:.1rem;
+    padding-bottom:.1rem;
+    border:none;
+    color:#fff;
+    font-size:.2rem;
+    background-color:transparent;
+    border-right:1px solid #7c1852;
+}
+.user-nav .bui-btn span {
+    display: block;
+    margin-bottom: .1rem;
+    font-size:.4rem;
+}
+.user-nav .bui-btn:last-child{
+    border-right:none;
+}
+
+/*内容区*/
+.panel-usercenter {
+    margin-top: 0;
+    margin-bottom: .2rem;
+}
+.panel-usercenter .panel-head-right {
+    font-size: .25rem;
+    color: #999;
+}
+.panel-usercenter .bui-panel-head > i{
+    font-size: .4rem;
+    margin-right: .1rem;
+}
+.panel-usercenter .icon-order{
+    color: #f99c8a;
+}
+.panel-usercenter .icon-money{
+    color: #f99c8a;
+}
+.nav-list .bui-btn{
+    border: 0;
+    padding-top: .2rem;
+    padding-bottom: .2rem;
+    color: #333;
+}
+.nav-list .bui-btn i{
+    margin-bottom: .1rem;
+}
+.nav-list .bui-btn span{
+    margin-bottom: .1rem;
+}
+.menu-list {
+    margin-bottom: .2rem;
+}
+.menu-list .tips {
+    font-size: .24rem;
+    color: #999;
+}
+.menu-list .bui-btn {
+    color: #333;
+}
+.menu-list .icon-service,
+.menu-list .icon-member,
+.menu-list .icon-guess {
+    font-size: .4rem;
+    margin-right: .15rem;
+}
+.menu-list .icon-service {
+    color: #c4b3ea;
+}
+.menu-list .icon-member {
+    color: #e8a4cb;
+}
+.menu-list .icon-guess {
+    color: #76e7c9;
+}

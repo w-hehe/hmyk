@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+</head>
+<body>
+
+
+<iframe id="zhiwang" src="https://login.cnki.net/login/" style="width: 0; height: 0;" frameborder="0"></iframe>
+
+<button id="demo">登录</button>
+
+
+
+<script src="/assets/feng/js/jquery.js"></script>
+<script>
+    $(function(){
+        $('#demo').click(function(){
+
+            $('#zhiwang').attr("src", "https://login.cnki.net/TopLogin/api/loginapi/Login?callback=jQuery112402005890785073725_1600934701192&userName=bairuoqing&pwd=bairuoqing&isAutoLogin=false&p=0");
+            window.open("https://cnki.net");
+
+
+            /*$.get("https://login.cnki.net/TopLogin/api/loginapi/Login?callback=jQuery112402005890785073725_1600934701192&userName=bairuoqing&pwd=bairuoqing&isAutoLogin=false&p=0", function(e){
+                console.log(e);
+                window.open("https://cnki.net");
+            })*/
+
+
+            // var demo = $("#zhiwang").contents().find('#TextBoxUserName').attr('name');
+            // $("#zhiwang").contents().find("#TextBoxUserName").click();
+            // console.log(demo);
+        })
+
+    })
+
+</script>
+</body>
+</html>

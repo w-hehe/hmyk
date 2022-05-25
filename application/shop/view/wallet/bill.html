@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>账单 - {$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/base.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/user-index.css"/>
+    {include file="common/meta" /}
+
+    <style>
+
+
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">账单</div>
+            <div class="bui-bar-right">
+                <!--<a href="{:url('setting')}" class="setting-btn">
+                    <img src="/assets/shop/images/setting.png" />
+                </a>-->
+            </div>
+        </div>
+    </header>
+    <main>
+
+        {if condition="$is_bill"}
+        <div id="scrollList" class="bui-scroll">
+            <div class="bui-scroll-head"></div>
+            <div class="bui-scroll-main">
+                <ul class="bui-list bui-list-thumbnail">
+                </ul>
+            </div>
+            <div class="bui-scroll-foot"></div>
+        </div>
+        {else /}
+        <div class="goods-none" style="">
+            <br />
+            <span class="iconfont iconmeiyoushuju"></span><br /><br />
+            <p>您还没有账单记录~</p>
+        </div>
+        {/if}
+
+    </main>
+    <footer>
+
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/bui/js/zepto.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+<script src="/assets/shop/dist/uaredirect.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+{if condition="$is_bill"}
+<script>
+
+    var uiList = bui.list({
+        id: "#scrollList",
+        url: "{:url('')}",
+        pageSize: 10, // 当pageSize 小于返回的数据大小的时候,则认为是最后一页,接口返回的数据最好能返回空数组,而不是null
+        data: {},
+        //如果分页的字段名不一样,通过field重新定义
+        field: {
+            page: "page",
+            size: "pageSize",
+            data: "data"
+        },
+        callback: function(e) {
+            var id = e.currentTarget.getAttribute('data-id');
+            // location.href = "/shop/notice/detail/id/" + id;
+            // e.target 为你当前点击的元素
+            // e.currentTarget 为你当前点击的handle 整行
+        },
+        template: function(data) {
+
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<li class="bui-btn" data-id="${el.id}">
+                            <h3 class="item-title">${el.description}`;
+
+                if(el.type == 'consume' || el.type == 'system'){
+                    html += `<span class="item-text" style="float: right; font-size: .3rem;">${el.value}</span>`;
+                }else if(el.type == 'cashout'){
+                    if(el.status == 0){
+                        html += `&nbsp;&nbsp;<span class="item-text">审核中</span>`;
+                    }else if(el.status == 1){
+                        html += `&nbsp;&nbsp;<span class="item-text" style="color: #4c9a25;">提现成功</span>`;
+                    }
+                    html += `<span class="item-text" style="float: right; font-size: .3rem;">-${el.money}</span>`;
+                }else if(el.type == 'recharge'){
+                    html += `<span class="item-text" style="float: right; font-size: .3rem;">+${el.money}</span>`;
+                }
+
+
+                html += `</h3><p class="item-text">${el.createtime}</p></li>`
+            });
+
+            return html;
+        },
+        onBeforeRefresh: function() {
+            //刷新前
+            console.log("开始刷新")
+        },
+
+        onBeforeLoad: function() {
+            //加载前
+            console.log("开始加载")
+        },
+        onRefresh: function() {
+            // 刷新后执行
+            console.log("刷新完成")
+        },
+        onLoad: function(data) {
+            // 加载后执行
+            console.log("加载完成")
+        }
+    })
+
+</script>
+{/if}
+</body>
+
+</html>

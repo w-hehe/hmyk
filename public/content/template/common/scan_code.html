@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta name="apple-mobile-web-app-capable" content="no"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="format-detection" content="telephone=no,email=no"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>扫码支付</title>
+    <link rel="shortcut icon" href="{$site.ico}" />
+    <link href="/content/template/common/css/wechat_pay.css" rel="stylesheet" media="screen">
+    <script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="body">
+    <h1 class="mod-title">请使用[{$pay_type}]扫码支付</h1>
+
+    <div class="mod-ct">
+        <div class="order">
+        </div>
+        <div class="amount" id="money">￥ {$data.money}</div>
+        <div class="qrcode-img-wrapper" data-role="qrPayImgWrapper">
+            <div data-role="qrPayImg" class="qrcode-img-area">
+                <div class="ui-loading qrcode-loading" data-role="qrPayImgLoading" style="display: none;">加载中</div>
+                <div style="position: relative;display: inline-block;">
+                    {if condition="$img"}
+                    <img  id='show_qrcode' alt="加载中..." src="{$qr_code}" width="210" height="210" style="display: block;">
+                    {else /}
+                    <div id="qrcode" width="210" height="210" style="display: block;padding: 20px;"></div>
+                    {/if}
+
+                </div>
+            </div>
+            {if condition="$pay_type == '支付宝' && $is_mobile"}
+            <a onclick="openAlipay()" class="btn-open-app">打开支付宝APP继续付款</a>
+            {/if}
+
+        </div>
+        <div class="time-item">
+            <div class="time-item" id="msg"><h1></h1> </div>
+            <strong id="hour_show">0时</strong>
+            <strong id="minute_show">0分</strong>
+            <strong id="second_show">0秒</strong>
+        </div>
+
+        <div class="tip">
+            <div class="ico-scan"></div>
+            <div class="tip-text">
+                <p>请使用{$pay_type}扫一扫</p>
+                <p>扫描二维码完成支付</p>
+            </div>
+        </div>
+
+        <div class="detail" id="orderDetail">
+            <dl class="detail-ct" id="desc" style="display: block;">
+                {if condition="$cmd == 'order'"}
+                <dt>商品名称：</dt>
+                <dd>{$goods.name}</dd>
+                {/if}
+                <dt>订单金额：</dt>
+                <dd>&yen; {$data.money}</dd>
+                <dt>订单编号：</dt>
+                <dd>{$data.out_trade_no}</dd>
+                <dt>创建时间：</dt>
+                <dd>{:date('Y-m-d H:i:s', $data.create_time)}</dd>
+            </dl>
+
+            <!--<a href="javascript:void(0)" class="arrow"><i class="ico-arrow"></i></a>-->
+        </div>
+
+        <div class="tip-text">
+        </div>
+
+
+    </div>
+
+
+</div>
+
+<script>
+    var user_data={"outTime":60*10}
+</script>
+<!--注意下面加载顺序 顺序错乱会影响业务-->
+
+<!--[if lt IE 8]><script src="static/js/json3.min.js"></script><![endif]-->
+<script src="/content/template/common/js/codepay_util.js"></script>
+<script src="/content/template/default/js/jquery.qrcode.min.js?v={$template_version}"></script>
+<script type="text/javascript">
+
+    {if condition="!$img"}
+            //使用canvas生成
+    $('#qrcode').qrcode({
+        render: "canvas",
+        text: "{$qr_code}",
+        width: 180,
+        height: 180,
+    })
+        {if condition="$pay_type == '支付宝' && $is_mobile"}
+            // openAlipay();
+        {/if}
+    {/if}
+
+    function openAlipay(){
+        location.href = 'alipays://platformapi/startapp?appId=20000067&url=' + encodeURIComponent("{$qr_code}");
+    }
+
+
+</script>
+{if condition="$cmd == 'order'"}
+<script>
+    function uscenter(){
+        window.location.href = "/order.html?order_no={$data.out_trade_no}";
+    }
+    function oderquery() {
+        var date = new Date();
+        var timer = date.getTime().toString();
+        $.ajax({
+            url: "{:url('/getorderstatus/' . $data.out_trade_no)}",
+            type: "GET",
+            dataType: "json",
+            success: function(res) {
+                if(res.code == 400){
+                    $('#qrcode').html('支付超时，请重新提交订单')
+                }else if(res.code==200) { //订单状态为0表示支付成功
+                    setTimeout('uscenter()', 100);
+                } else {
+                    setTimeout('oderquery()', 2000);
+                }
+            },
+            error: function() {
+                // setTimeout('oderquery()', 2000);
+            }
+        });
+
+    }
+</script>
+{else /}
+<script>
+    function oderquery() {
+        var date = new Date();
+        var timer = date.getTime().toString();
+        $.ajax({
+            url: "{:url('/get_recharge_status/' . $data.out_trade_no)}",
+            type: "GET",
+            dataType: "json",
+            success: function(res) {
+                if(res.code == 400){
+                    $('#qrcode').html('支付超时，请重新提交订单')
+                }else if(res.code==200) { //订单状态为0表示支付成功
+                    setTimeout('uscenter()', 100);
+                } else {
+                    setTimeout('oderquery()', 2000);
+                }
+            },
+            error: function() {
+                // setTimeout('oderquery()', 2000);
+            }
+        });
+
+    }
+    function uscenter(){
+        window.location.href = "/user.html";
+    }
+</script>
+{/if}
+<script>
+    $(function() {
+        setTimeout('oderquery()', 800);
+    });
+</script>
+</body>
+</html>

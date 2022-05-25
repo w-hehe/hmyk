@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>{$goods.name} - {$site.shop_title}</title>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/assets/shop/dist/bui/css/bui.css"/>
+    <link rel="stylesheet" href="/assets/shop/css/base.css"/>
+
+    <style>
+
+        .bui-bar-main {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .div-a {
+            float: left;
+            width: 12.66666667%;
+            text-align: center;
+            margin-top: 7px;
+        }
+
+        .div-a a {
+            display: block;
+            color: #141414;
+            font-size: 11px;
+        }
+
+        .div-a em {
+            display: block;
+            height: 20px;
+            width: 20px;
+            margin: 0 auto;
+            -webkit-background-size: cover;
+            background-size: cover;
+        }
+
+        footer .btn {
+            float: right;
+            width: 50%;
+            margin-top: 7px;
+            margin-right: 5%;
+        }
+
+        footer .btn .a2a {
+            width: 98%;
+            background: -moz-linear-gradient(left, #333 0, #666 100%);
+            background: -webkit-linear-gradient(left, #333 0, #666 100%);
+            background: -o-linear-gradient(left, #333 0, #666 100%);
+            background: -ms-linear-gradient(left, #333 0, #666 100%);
+            background: linear-gradient(to left, #333 0, #666 100%);
+            border-radius: 1.5rem;
+        }
+
+        footer .btn .a2a {
+            float: right;
+            width: 90%;
+            font-size: .25rem;
+        }
+
+        footer .btn a {
+            float: left;
+            height: 33px;
+            line-height: 33px;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        footer {
+            height: 50px;
+            border-top: 1px solid #ddd;
+        }
+
+        .bui-slide .bui-slide-head ul li.active {
+            border-radius: 0;
+            height: 4px;
+            background-color: #fff;
+        }
+
+        .goods-name {
+            font-size: .33rem;
+        }
+
+        .goods-price {
+            color: #ff7272;
+            font-size: .33rem;
+        }
+
+        body {
+            background-color: #f8f8f8;
+        }
+        .part-title{
+            position: relative;
+            padding: .2rem 0 .2rem .24rem;
+            font-size: .32rem;
+            color: #000;
+            line-height: 1;
+            margin-top: .1rem;
+            background: #fff;
+        }
+        .part-title:after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            left: 0;
+            top: .18rem;
+            bottom: .18rem;
+            background-image: linear-gradient(144deg, #b3b3b3 0%, #333 100%);
+        }
+        .goods-details p{
+            margin-top: 0!important;
+            margin-bottom: 0!important;
+        }
+        .bui-slide-img img{
+            height: 5.5rem;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="bui-page bui-box-vertical">
+    <header>
+        <div class="bui-bar">
+            <div class="bui-bar-left btn-back">
+                <a class="bui-btn"><i class="icon-back"></i></a>
+            </div>
+            <div class="bui-bar-main">商品详情</div>
+            <div class="bui-bar-right"></div>
+        </div>
+    </header>
+    <main>
+
+        <div id="slide" class="bui-slide bui-slide-skin01"></div>
+        <div style="padding: 6px 10px 10px 10px; background: #fff;">
+            <h1 class="goods-name">{$goods.name}</h1>
+            <p style=" margin-top: .1rem;">
+                <span class="goods-price">&yen; {$goods.price}</span>
+                <span></span>
+            </p>
+            <p style="font-size: .25rem; height: .25rem;">
+                <span style="float:left;">库存：{$goods.stock}</span>
+                <span style="float:right;">销量：{$goods.sales}</span>
+            </p>
+        </div>
+
+        <div style="font-size: .25rem; padding: 0 10px; background: #fff; height: .6rem;margin-top: 8px; line-height: .6rem;">
+            <ul style="width: 100%; text-align: center;">
+                <li style="float: left;width: 25%;list-style: none;">
+                    <img src="/assets/shop/images/duigou.png" width="12" height="12">&nbsp;正品保障
+                </li>
+                <li style="float: left;width: 25%;list-style: none;">
+                    <img src="/assets/shop/images/duigou.png" width="12" height="12">&nbsp;一手货源
+                </li>
+                <li style="float: left;width: 25%;list-style: none;">
+                    <img src="/assets/shop/images/duigou.png" width="12" height="12">&nbsp;信誉保证
+                </li>
+                <li style="float: right;width: 25%;list-style: none;">
+                    <img src="/assets/shop/images/duigou.png" width="12" height="12">&nbsp;售后无忧
+                </li>
+            </ul>
+        </div>
+
+        <div class="part-title">
+            商品详情
+        </div>
+        <div class="goods-details" style="padding: 10px;">
+            {$goods.details}
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="div-a" style="margin-left: .2rem;">
+            <a href="{:url('index/index')}">
+                <em class="ico"
+                    style="background-image: url(http://pt.duoip.cc/addons/tiger_newhu/template/mobile/tbgoods/style88/images/yi1.png)"></em><span>首页</span>
+            </a>
+        </div>
+        <div class="div-a" style="margin-left: .1rem;">
+            <a href="{:url('service/index')}">
+                <em class="ico" style="background-image: url(http://pt.duoip.cc/attachment/images/3/2020/09/kefuhui.png)"></em><span>客服</span>
+            </a>
+        </div>
+        <!--<div class="div-a" id="open_fullimg_btn">
+            <a href="javascript:;" class="collect"><em class="ico" style="background-image: url(http://pt.duoip.cc/addons/tiger_newhu/template/mobile/tbgoods/style88/images/f7738e6b959cf5fed3b139f8388716f4_44x44.png)"></em><span>分享</span></a>
+        </div>-->
+        <div class="btn">
+            <a href="javascript:;" class="js-pop2 a2a buy" data-pinzhu="0">立即购买</a>
+        </div>
+
+    </footer>
+</div>
+
+<script src="/assets/shop/dist/jquery.js"></script>
+<script src="/assets/shop/dist/bui/js/bui.js"></script>
+
+<script src="/assets/shop/dist/uaredirect.js"></script>
+<script src="/assets/shop/js/base.js"></script>
+<script>
+
+    $('.buy').click(function(){
+        location.href = "{:url('buy/detail', ['goods_id' => $goods.id])}"
+    })
+
+    var width = equipment == 'pc' ? '550' : 'auto';
+    var uiSlide = bui.slide({
+        id: "#slide",
+        height: 'auto',
+        autopage: true,
+        data: [
+            {volist name="goods.images" id="vo"}
+            {
+                image: "{$vo}",
+            },
+            {/volist}
+        ],
+        loop: true,
+        width: width
+    })
+
+    $(function(){
+
+        $(".bui-slide-img img").attr('onerror', "javascript:this.src=\'/assets/shop/images/loading.jpg\'");
+
+    })
+
+
+
+</script>
+</body>
+
+</html>
