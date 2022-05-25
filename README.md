@@ -53,7 +53,7 @@ USDT支付
 
 在使用中有任何问题，请使用以下联系方式联系我们
 
-红盟云卡反馈建议专区：https://www.ysxue.cc/hmyk/13.html
+红盟云卡反馈建议专区：[https://www.ysxue.net/issues.html](https://blog.ysxue.net/issues.html)
 
 
 ## 截图展示
