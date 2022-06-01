@@ -82,7 +82,7 @@
         {/volist}
     </div>
     {/if}
-    {if condition="$goods.buy_msg"}
+    {if condition="$goods.buy_msg && $order.status != 'wait-pay'""}
     <div class="car_s_hide">温馨提示</div>
     <div class="car_s_tow" style="font-size: 12px; padding: 10px 5%; width: 84%;">
         {$goods.buy_msg}

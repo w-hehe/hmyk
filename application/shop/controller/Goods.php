@@ -32,13 +32,12 @@ class Goods extends Base {
         }
 
 //         echo '<pre>'; print_r($goods);die;
-        $order = db::name('order')->where(['uid' => $user['id']])->order('id desc')->find();
+
 
         $goods['eject'] = empty(strip_tags($goods['eject'])) ? null : $goods['eject'];
         $this->assign([
             'title' => $goods['name'],
             'goods' => $goods,
-            'order' => $order,
         ]);
 
 //        echo '<pre>'; print_r($goods);die;

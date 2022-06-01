@@ -93,7 +93,13 @@ class Base extends Controller {
             $this->template_name = $active_template[$this->equipment];
         }
 
-        $templateData = include_once(ROOT_PATH . 'public/content/template/' . $this->template_name . '/info.php');
+        $template_info_path = ROOT_PATH . 'public/content/template/' . $this->template_name . '/info.php';
+        if(file_exists($template_info_path)){
+            $templateData = include_once($template_info_path);
+        }else{
+            die("【{$this->template_name}】模板文件不存在");
+        }
+
 
         $this->template_version = $templateData['version'];
 

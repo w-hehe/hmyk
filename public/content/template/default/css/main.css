@@ -233,6 +233,7 @@ a {
     border-radius: 6px;
     padding-top: 14px;
     padding-bottom: 13px;
+    word-break: break-all;
 }
 
 .main-box:after {

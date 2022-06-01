@@ -13,7 +13,7 @@ return [
     'register' => '1',
     'statistics' => '',
     'diy_name' => '商品购买',
-    'buy_account' => '0',
+    'buy_account' => '1',
     'buy_password' => '0',
     'tip_account' => '',
     'tip_password' => '游客查询订单时的凭证',

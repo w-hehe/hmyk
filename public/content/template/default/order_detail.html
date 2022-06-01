@@ -39,7 +39,7 @@
                             {/if}
                         </div>
                     </div>
-                    {if condition="$goods.buy_msg"}
+                    {if condition="$goods.buy_msg && $order.status != 'wait-pay'"}
                     <div class="de_fu">
                         {$goods.buy_msg}
                     </div>

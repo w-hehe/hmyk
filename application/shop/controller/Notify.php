@@ -127,6 +127,7 @@ class Notify extends Controller {
      * 回调通知
      */
     public function index(){
+        // db::name('test')->insert(['content' => 1, 'createtime' => date('Y-m-d H:i:s', $this->timestamp)]);
 
         $timestamp = time(); //时间戳
         $receive_type = $this->request->param('receive_type'); //接收回调报文的方式

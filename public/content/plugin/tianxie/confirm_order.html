@@ -1,0 +1,281 @@
+{extend name="content/template/tianxie/base.html"/}
+{block name="head"}
+<style>
+
+    .goods-box{
+        display: grid;
+        grid-template-columns: 80px calc(100% - 100px);
+        grid-column-gap: 18px;
+        grid-row-gap: 12px;
+        margin-bottom: 15px;
+    }
+    .order-number-box{
+        display: grid;
+        grid-template-columns: 77px 40px 100px 40px;
+    }
+    .goods-name{
+        font-size: 16px;
+        font-weight: bold;
+        color: #555;
+    }
+    .goods-img{
+        text-align: center;
+    }
+    .goods-img img{
+        max-width: 80px;
+    }
+    .goods-cover{
+    }
+    .goods-param{
+        margin-top: 10px;
+    }
+    .btn-decrement, .btn-increment{
+        width: 100%;
+        border: 1px solid #ced4da;
+    }
+    #orderNumber{
+        border-radius: 0;
+    }
+    .breadcrumb{
+        background: #f8f9fa;
+        padding-bottom: 0;
+        padding-left: 0;
+    }
+    .entry{
+        margin-top: 0;
+    }
+    .goods-write{
+        /*margin-left: 87px;*/
+    }
+    .pay-type{
+        display: flex;
+        justify-content: center;
+        text-align: center;
+
+    }
+    .pay-type div{
+        width: 100px;
+    }
+    .pay-btn{
+        background: #448bff linear-gradient(45deg,#448bff,#44e9ff);
+        color: #fff;
+        font-size: 1rem;
+        line-height: 1;
+        font-weight: 700;
+        letter-spacing: 0;
+        border: unset;
+        border-radius: 5px;
+        height: 40px;
+        width: 137px;
+    }
+    @media (max-width: 992px){
+        .goods-box{
+            /*display: block;*/
+            margin-top: 0;
+            border-radius: 0;
+        }
+        .breadcrumb{
+            padding-left: 10px;
+        }
+        .goods-write{
+            margin-left: 0;
+        }
+    }
+
+    @media (min-width: 992px){
+        .bt-mn-box, .bt-mn{
+            display: none!important;
+        }
+
+    }
+
+    @media (max-width: 768px){
+        label.input{
+            width: calc(100% - 82px);
+        }
+        label.input input{
+            width: 100%;
+        }
+        .pay-btn{
+            float: unset!important;
+            margin: 0 auto!important;
+            display: block!important;
+            margin-top: 10px!important;
+            width: 150px;
+            padding: 6px 30px
+        }
+    }
+
+
+</style>
+{/block}
+{block name="main"}
+{php}
+if($goods['real_price'] > 0){
+$pay_list = pay_list(); //获取可支付列表
+}
+{/php}
+
+<form action="{:url('/pay')}" method="post">
+    <div class="bok">
+        <div class="goods-box" >
+            <div class="goods-cover">
+                <div class="layui-col-md4 layui-col-sm12">
+                    <div class="goods-img">
+                        <img class="viewer-pictures" src="{$goods.cover}" onerror="javascript:this.src='/assets/img/none.jpg';" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="goods-param">
+                <input type="hidden" name="goods_id" value="{$goods.id}">
+                <div class="layui-col-md8 layui-col-sm12">
+                    <div class="goods-msg">
+                        <div class="goods-name"><span>{$goods.name}</span></div>
+                        <div class="price">
+                            商品单价：
+                            <span class="price-sign">￥</span>
+                            <span class="price-num">{$goods.real_price}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="goods-write">
+            {if condition="$goods.real_price > 0 && $options.coupon == 1"}
+            <div class="entry">
+                <span class="l-msg">优惠券：</span>
+                <label class="input">
+                    <input type="text" maxlength="50" name="coupon">
+                </label>
+            </div>
+            {/if}
+            <div class="entry notSelection" style="margin-bottom: 10px;">
+                <div class="input-group order-number-box">
+                    <div class="l-msg" style="line-height: 35px;">购买数量：</div>
+                    <div class="input-group-prepend sub">
+                        <button class="btn btn-decrement btn-outline-secondary" type="button">-</button>
+                    </div>
+                    <div>
+                        <input type="text" id="orderNumber" name="buy_num" style="text-align: center" class="form-control order-number" required="" value="{$buy_num}">
+                    </div>
+
+                    <div class="input-group-append add">
+                        <button class="btn btn-increment btn-outline-secondary" type="button">+</button>
+                    </div>
+                </div>
+            </div>
+            {if condition="$site.buy_account == 1"}
+            <div class="entry">
+                <span class="l-msg">下单账号：</span>
+                <label class="input">
+                    <input type="text" maxlength="50" name="account" required placeholder="{$site.tip_account}" value="{$order.account|default=''}">
+                </label>
+            </div>
+            {/if}
+            {if condition="$site.buy_password == 1"}
+            <div class="entry">
+                <span class="l-msg">查询密码：</span>
+                <label class="input">
+                    <input type="text" maxlength="20" name="password" required placeholder="{$site.tip_password}" value="{$order.password|default=''}">
+                </label>
+            </div>
+            {/if}
+
+
+            <!--附加数据-->
+            {if condition="isset($goods.attach)"}
+            {volist name="goods.attach" id="vo"}
+            <div class="entry">
+                <span class="l-msg">{$vo.title}：</span>
+                <label class="input">
+                    <input type="text" name="{$vo.name}" required placeholder="{$vo.placeholder}">
+                </label>
+            </div>
+            {/volist}
+            {/if}
+
+            <!--对接商品订单参数-->
+            {if condition="isset($goods.inputs)"}
+            {volist name="goods.inputs" id="vo"}
+            <div class="entry">
+                <span class="l-msg">{$vo.title}：</span>
+                <label class="input">
+                    <input type="text" name="{$vo.name}" required placeholder="{$vo.placeholder}">
+                </label>
+            </div>
+            {/volist}
+            {/if}
+        </div>
+
+    </div>
+    {if condition="$goods.real_price > 0"}
+    {php}$pay_num = 0;{/php}
+    <div class="bok">
+
+        <div class="pay-type">
+            {if condition="$pay_list.alipay == true"}
+            {php}$pay_num++;{/php}
+            <div class="custom-control custom-radio">
+                <input value="alipay" type="radio" id="alipay" name="pay_type" {:$pay_num == 1 ? 'checked' : ''} class="custom-control-input">
+                <label class="custom-control-label" for="alipay">支付宝支付</label>
+            </div>
+            {/if}
+            {if condition="$pay_list.wxpay == true"}
+            {php}$pay_num++;{/php}
+            <div class="custom-control custom-radio">
+                <input value="wxpay" type="radio" id="wxpay" name="pay_type" {:$pay_num == 1 ? 'checked' : ''} class="custom-control-input">
+                <label class="custom-control-label" for="wxpay">微信支付</label>
+            </div>
+            {/if}
+            {if condition="$pay_list.qqpay == true"}
+            {php}$pay_num++;{/php}
+            <div class="custom-control custom-radio">
+                <input value="qqpay" type="radio" id="qqpay" name="pay_type" {:$pay_num == 1 ? 'checked' : ''} class="custom-control-input">
+                <label class="custom-control-label" for="qqpay">QQ支付</label>
+            </div>
+            {/if}
+        </div>
+        {if condition="$pay_num == 0"}
+        <p style="color: #666; padding: 0; margin: 0; text-align: center;">暂未提供任何支付方式</p>
+        {/if}
+    </div>
+    {if condition="$pay_num > 0"}
+    <button type="submit" class="btn btn-primary pay-btn" style="float: right; margin-top: 10px;">提交支付</button>
+    {/if}
+    {else /}
+    <button type="submit" class="btn btn-primary pay-btn" style="float: right; margin-top: 10px;">完成购买</button>
+    {/if}
+</form>
+
+
+
+<script>
+
+    window.onload = function(){
+        $('.pay-btn').click(function(){
+            $('#buy-btn').click();
+        })
+    }
+
+    $('.input-group-prepend').click(function(){
+
+        var num = $('#orderNumber').val();
+        if(num <= 1) return;
+        num--;
+        $('#orderNumber').val(num);
+
+    })
+
+    $('.input-group-append').click(function(){
+
+        var num = $('#orderNumber').val();
+        num++;
+        $('#orderNumber').val(num);
+
+    })
+
+
+</script>
+
+{/block}

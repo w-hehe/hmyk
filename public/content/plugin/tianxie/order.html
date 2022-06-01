@@ -1,0 +1,190 @@
+{extend name="content/template/tianxie/base.html"/}
+{block name="head"}
+<style>
+    .bok{
+        padding: 0;
+        padding-top: 10px;
+    }
+    .list-group-item{
+        border-left: unset;
+        border-top: unset;
+        border-right: unset;
+    }
+    .nav-tabs{
+        padding: 0 10px;
+    }
+
+    .goods-box{
+        display: grid;
+        grid-template-columns: 80px calc(100% - 100px);
+        grid-column-gap: 18px;
+        grid-row-gap: 12px;
+    }
+
+    .goods-name{
+        font-size: 16px;
+        font-weight: bold;
+        color: #555;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+    .goods-img{
+        text-align: center;
+    }
+    .goods-img img{
+        max-width: 80px;
+    }
+    .goods-cover{
+    }
+    .goods-param{
+        margin-top: 10px;
+    }
+
+    .list-group{
+        padding: 10px 20px;
+    }
+    .pagination{
+        text-align: center;
+        margin: 0 auto;
+        margin-top: 20px;
+    }
+    .pagination li{
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+    .pagination li a, .pagination li span{
+        padding: 5px 15px;
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+    .pay-btn{
+        background: #448bff linear-gradient(45deg,#448bff,#44e9ff);
+        color: #fff;
+        font-size: 1rem;
+        line-height: 1;
+        font-weight: 700;
+        letter-spacing: 0;
+        border: unset;
+        border-radius: 5px;
+        height: 40px;
+        width: 137px;
+    }
+    .none-order{
+        font-size: 21px; color: #9d9d9d; width: 265px;
+        margin: 0 auto;background-image: linear-gradient(0deg,#cce7ff 50%,transparent 50%);
+        white-space: nowrap;
+        text-align: center;
+        letter-spacing: 3px;
+    }
+</style>
+{/block}
+{block name="main"}
+{php}
+$data = _order_list();
+{/php}
+<div class="bok">
+    <ul class="nav nav-tabs">
+
+        <li class="nav-item">
+            <a class="nav-link {:empty($search_type) ? 'active' : ''}" href="{:url('/order')}">{:$user ? '我的订单' : '浏览器缓存'}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {:$search_type == 'voucher' ? 'active' : ''}" href="{:url('/order')}?search_type=voucher">凭证查询</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {:$search_type == 'orderno' ? 'active' : ''}" href="{:url('/order')}?search_type=orderno">订单号查询</a>
+        </li>
+    </ul>
+    <div class="list-group" id="list">
+        {if condition="$data == 'voucher'"}
+        <form class="layui-form" action="" method="get">
+            <input type="hidden" name="search_type" value="voucher">
+            <div class="entry">
+                <span class="l-msg">下单账号：</span>
+                <label class="input">
+                    <input type="text" maxlength="50" name="account" required placeholder="请输入下单账号" value="{$order.account|default=''}">
+                </label>
+            </div>
+            {if condition="$site.buy_password == 1"}
+            <div class="entry">
+                <span class="l-msg">查单密码：</span>
+                <label class="input">
+                    <input type="text" maxlength="50" name="password" placeholder="请输入查单密码" value="{$order.account|default=''}">
+                </label>
+            </div>
+            {/if}
+            <div class="entry">
+                <span class="l-msg"></span>
+                <label class="input">
+                    <button type="submit" class="btn btn-primary pay-btn" style="float: right; margin-top: 10px;">立即查询</button>
+                </label>
+            </div>
+        </form>
+        {/if}
+        {if condition="$data == 'orderno'"}
+        <form class="layui-form" action="" method="get">
+            <input type="hidden" name="search_type" value="orderno">
+            <div class="entry">
+                <span class="l-msg">订单号：</span>
+                <label class="input">
+                    <input type="text" maxlength="50" name="orderno" required placeholder="请输入订单号" value="{$order.account|default=''}">
+                </label>
+            </div>
+            <div class="entry">
+                <span class="l-msg"></span>
+                <label class="input">
+                    <button type="submit" class="btn btn-primary pay-btn" style="float: right; margin-top: 10px;">立即查询</button>
+                </label>
+            </div>
+        </form>
+        {/if}
+        {if condition="isset($data.data)"}
+        {if condition="$data.list"}
+        {volist name="$data.list" id="vo"}
+        <div class="order-list">
+            <div style="padding: 10px 0;">
+                <div>订单编号：{$vo.order_no}</div>
+            </div>
+            <div class="goods-box">
+                <div class="goods-cover">
+                    <div class="layui-col-md4 layui-col-sm12">
+                        <div class="goods-img">
+                            <img class="viewer-pictures" src="/assets/img/none.jpg" onerror="javascript:this.src='/assets/img/none.jpg';" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="goods-param">
+                    <input type="hidden" name="goods_id" value="1">
+                    <div class="layui-col-md8 layui-col-sm12">
+                        <div class="goods-msg">
+                            <div class="goods-name"><span>{$vo.goods_name}</span></div>
+                            <div class="price">
+                                订单金额：
+                                <span class="price-sign">￥</span>
+                                <span class="price-num">{$vo.money}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="goods-write" style="text-align: right;">
+                <span style="float:left; line-height: 38px;">2022-03-11 15:46:50 购买了{$vo.buy_num}件商品</span>
+                <a href="/order.html?order_no={$vo.order_no}{:empty($search_content) ? '' : '&search_content=' . $search_content}" type="button" class="btn btn-primary">订单详情</a>
+            </div>
+        </div>
+        {/volist}
+        {$data.page}
+        {else /}
+        <p class="none-order">没有订单</p>
+        {/if}
+        {/if}
+    </div>
+</div>
+
+{/block}
+
+

@@ -132,7 +132,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'echarts'
             var lineChart = Echarts.init(document.getElementById('lineChart'), 'walden');
             var option = {
                 title: {
-                    text: '订单趋势图'
+                    text: '订单统计'
                 },
                 tooltip: {
                     trigger: 'axis'
@@ -154,26 +154,26 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'echarts'
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                    data: JSON.parse($('#sts-order-date').html())
                 },
                 yAxis: {
                     type: 'value'
                 },
                 series: [
                     {
-                        name: '今日',
+                        name: '成交额',
                         type: 'line',
                         color: '#4FA8F9',
                         areaStyle: {
                             color:'#E5F2FE'
                         },
-                        data: [120, 160, 101, 134, 90, 230, 210]
+                        data: JSON.parse($('#sts-order-sales-money').html())
                     },
                     {
-                        name: '昨日',
+                        name: '订单量',
                         type: 'line',
                         color: '#B9DCFD',
-                        data: [100, 120, 120, 50, 100, 150, 140]
+                        data: JSON.parse($('#sts-order-order-count').html())
                     }
                 ]
             };

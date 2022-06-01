@@ -172,7 +172,7 @@ if($goods['real_price'] > 0) $pay_list = pay_list(); //获取可支付列表
                             </div>
                             {/volist}
                             {/if}
-                            <link rel="stylesheet" href="//at.alicdn.com/t/font_3260237_qadwdelj6nj.css">
+
                             <style>
                                 .pay-type-btn{
                                     background-color: #9f9f9f;
@@ -195,13 +195,13 @@ if($goods['real_price'] > 0) $pay_list = pay_list(); //获取可支付列表
                                     background-color: #ed6161;
                                 }
                                 .pay-type-btn-moneypay.active{
-                                    background-color: #3f51b5;
+                                    background-color: #e78a02;
                                 }
                                 .pay-type-btn-apple_pay.active{
                                     background-color: #ff065e;
                                 }
                                 .pay-type-btn-card.active{
-                                    background-color: #0f9bce;
+                                    background-color: #009688;
                                 }
                             </style>
                             {if condition="$goods.real_price > 0"}
@@ -240,14 +240,14 @@ if($goods['real_price'] > 0) $pay_list = pay_list(); //获取可支付列表
                                         {if condition="$pay_list.card == true"}
                                         {php}$pay = true; $pay_num++; $pay_type = $pay_num == 1 && $pay_type == ""  ? 'card' : $pay_type;{/php}
                                         <span data-type="card" class="pay-type-btn pay-type-btn-card {:$pay_num == 1 ? 'active' : ''}">
-                                            <i class="iconfont icon-qq1"></i>
+                                            <i class="iconfont icon-card"></i>
                                             &nbsp;Card
                                         </span>
                                         {/if}
                                         {if condition="$user"}
                                         {php}$pay = true; $pay_num++; $pay_type = $pay_num == 1 && $pay_type == ""  ? 'moneypay' : $pay_type;{/php}
                                         <span data-type="moneypay" class="pay-type-btn pay-type-btn-moneypay {:$pay_num == 1 ? 'active' : ''}">
-                                            <i class="iconfont icon-qq1"></i>
+                                            <i class="iconfont icon-yue"></i>
                                             &nbsp;余额支付
                                         </span>
                                         {/if}

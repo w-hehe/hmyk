@@ -152,8 +152,11 @@ class Plugin extends Backend {
         if($path == 'default_socket_timeout'){
             return json(['code' => 400, 'msg' => '下载插件连接超时，请重试！']);
         }
-
+        
+        if(!class_exists("\ZipArchive")) return json(['code' => 400, 'msg' => '您的PHP缺少ZipArchive扩展，你可以尝试安装编译版的PHP解决这个问题！']);
+        
         $zip = new \ZipArchive();
+        
 
         if($info['type'] == 'template'){
             $toPath = ROOT_PATH . 'public/content/template';

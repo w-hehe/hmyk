@@ -18,11 +18,11 @@ return [
     // 服务器地址
     'hostname'        => Env::get('database.hostname', '127.0.0.1'),
     // 数据库名
-    'database'        => Env::get('database.database', 'www_hmyk_com'),
+    'database'        => Env::get('database.database', 'test_hmy3_cc'),
     // 用户名
-    'username'        => Env::get('database.username', 'www_hmyk_com'),
+    'username'        => Env::get('database.username', 'test_hmy3_cc'),
     // 密码
-    'password'        => Env::get('database.password', '5rrDrEr5hGSdKedd'),
+    'password'        => Env::get('database.password', 'YNaK3YFDDpmR67R2'),
     // 端口
     'hostport'        => Env::get('database.hostport', ''),
     // 连接dsn

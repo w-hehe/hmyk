@@ -1,0 +1,179 @@
+.order_details_top, .order_details_top .buj_after {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+
+.order_details_top {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.order_details_top .buj_after .order_details_left {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.order_details_top .buj_after .order_details_left div:first-child {
+    font-size: 20px;
+    font-weight: 800;
+    color: #545454;
+    height: 42px;
+}
+
+.order_details_top .buj_after .order_details_left div {
+    height: 38px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #545454;
+    letter-spacing: 1px;
+}
+
+.order_details_top .buj_after .order_details_left div img {
+    vertical-align: middle;
+    margin-right: 20px;
+}
+
+.order_details_top .buj_after .order_details_right {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+}
+
+.order_details_top .buj_after .order_details_right .pay_tips {
+    color: #545454;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.order_details_top .buj_after .order_details_right .pay_tips span {
+    display: inline-block;
+    font-size: 42px;
+    font-weight: 600;
+}
+
+.order_details_top .buj_after .order_details_right .out_btn {
+    display: inline-block;
+    width: 140px;
+    height: 40px;
+    border: 1px solid #2a62ff;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #2a62ff;
+    text-align: center;
+    line-height: 40px;
+    margin-left: 24px;
+    cursor: pointer;
+    margin-top: 25px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.order_details_top .buj_after .order_details_right .out_btn:hover{
+    background: #f9f9f9;
+}
+
+.order_details_top .buj_after .order_details_right .copy {
+    -webkit-box-shadow: 0 1px 6px rgb(0 0 0 / 12%), 0 1px 4px rgb(0 0 0 / 12%);
+    box-shadow: 0 1px 6px rgb(0 0 0 / 12%), 0 1px 4px rgb(0 0 0 / 12%);
+    background: #2a62ff;
+    border-color: transparent;
+    color: #fcfcfc;
+}
+.order_details_top .buj_after .order_details_right .copy:hover{
+    background: #0e4bfa;
+}
+
+.order_details_top .buj_after .order_details_right .pay_tips span {
+    display: inline-block;
+    font-size: 42px;
+    font-weight: 600;
+}
+
+.order_details_top .de_fu {
+    display: block;
+    width: 100%;
+    padding: 10px 30px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 16px;
+    text-align: left;
+    color: #999;
+    letter-spacing: 1px;
+    background: #f6f6f6;
+    margin: 5px auto 0px;
+    line-height: 30px;
+}
+
+.order_details_top .de_fu p {
+    word-break: break-all;
+}
+
+.order_details_top .de_fu .de_span {
+    font-size: 14px;
+    font-weight: 700;
+}
+.km_tit {
+    font-size: 20px;
+    font-weight: 800;
+    color: #545454;
+    height: 42px;
+    display: block;
+    margin-left: 32px;
+    padding-bottom: 10px;
+    width: 95%;
+    border-bottom: 2px solid #f4f7fe;
+    margin-top: 25px;
+}
+.details_ite {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    font-size: 17px;
+    font-weight: 400;
+    color: #a2a9ba;
+    line-height: 30px;
+    padding: 20px 50px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    letter-spacing: 1px;
+    position: relative;
+}
+.details_ite div:first-child {
+    width: 100px;
+}
+.details_ite div:nth-child(2), #card_details .order_details_new .details_ite div:nth-child(3) {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    word-break: break-all;
+}
+.details_ite div img {
+    vertical-align: middle;
+    margin-right: 8px;
+    margin-top: -3px;
+}
+.details_ite div p:nth-child(2) {
+    display: inline-block;
+}

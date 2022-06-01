@@ -21,26 +21,14 @@ class Dashboard extends Backend {
      * 查看
      */
     public function index() {
-        $seventtime = \fast\Date::unixtime('day', -7);
-        $paylist = $createlist = [];
-        for ($i = 0; $i < 7; $i++) {
-            $day = date("Y-m-d", $seventtime + ($i * 86400));
-            $createlist[$day] = mt_rand(20, 200);
-            $paylist[$day] = mt_rand(1, mt_rand(1, $createlist[$day]));
-        }
-        $addonComposerCfg = ROOT_PATH . '/vendor/karsonzhang/fastadmin-addons/composer.json';
-        Config::parse($addonComposerCfg, "json", "composer");
-//        db::startTrans();
 
-
-        $today_register = db::name("user")->whereTime('createtime', 'today')->where("`tourist` IS NULL")->field('id, createtime')->count();
+        $today_register = db::name("user")->whereTime('createtime', 'today')->where("`tourist` IS NULL")->field('id')->count();
         //分类总数
         $category_total = db::name("category")->field("id")->where(['status' => 'normal'])->count();
         //商品总数
-        $goods_where = [
-            'deletetime' => ['exp', db::raw('is null')]
-        ];
-        $goods_total = db::name('goods')->field('id')->where($goods_where)->count();
+        $goods_total = db::name('goods')->field('id')->whereNull('deletetime')->count();
+        //用户总数
+        $user_total = db::name('user')->field('id')->count();
         //今日订单数量
         $today_order_result = db::name("order")->whereTime('create_time', 'today')->where("status != 'yiguoqi' and status != 'wait-pay'")->field("id, status, goods_money, money, buy_num, remote_money")->select();
         $today_order = count($today_order_result);
@@ -51,7 +39,7 @@ class Dashboard extends Backend {
         //今日盈利金额
         $today_order_profit = 0;
         foreach ($today_order_result as $val) {
-            if ($val["status"] == 'daifahuo') {
+            if ($val["status"] == 'wait-send') {
                 $today_wait_order++;
             }
             $today_order_money += $val["money"];
@@ -60,21 +48,59 @@ class Dashboard extends Backend {
 
         //商品销量top10
         $goods_list = db::name("goods")->where('sales > 0')->order("sales desc")->limit(10)->select();
-        foreach ($goods_list as &$val) {
+        foreach ($goods_list as $key => $val) {
             $images = explode(",", $val["images"]);
-            $val["cover"] = $images[0];
+            $goods_list[$key]["cover"] = $images[0];
         }
+//        echo '<pre>'; print_r($goods_list);die;
 
         //用户消费top10
         $user_list = User::withCount('order')->where("consume > 0")->order('consume desc')->limit(10)->select();
-
-//        db::commit();
 
         $poster = false;
         if(Cache::has('poster_dashboard')){
             $poster = Cache::get('poster_dashboard')['data'];
         }
+        $prefix = Config::get('database.prefix');
+        $start_time = strtotime(date('Y-m-d 23:59:59', $this->timestamp)) - (3600*24*15);
+//        echo date('Y-m-d H:i:s', $start_time);die;
+        $sql = "select FROM_UNIXTIME(`pay_time`,'%Y-%m-%d') date, count(id) order_count, sum(money) sales_money from {$prefix}order where pay_time > {$start_time} group by date;";
+        $result = db::query($sql);
+        $sts_order = [];
+        for($i = 0; $i < 15; $i++){
+            $date = date('Y-m-d', ($start_time + 1) + (3600*24*$i));
+            $sts_order['date'][$i] = $date;
+            $sts_order['order_count'][$i] = 0;
+            $sts_order['sales_money'][$i] = '0.00';
+            foreach($result as $val){
+                if($val['date'] == $date){
+                    $sts_order['order_count'][$i] = $val['order_count'];
+                    $sts_order['sales_money'][$i] = $val['sales_money'];
+                }
+            }
+        }
 
+        $this->view->assign([
+            'sts_order' => $sts_order,
+            'upgrade' => $this->upgrade(),
+            'poster' => $poster,
+            "options" => $this->options,
+            "today_register" => $today_register,
+            "category_total" => $category_total,
+            "today_order" => $today_order,
+            "today_wait_order" => $today_wait_order,
+            "today_order_money" => $today_order_money,
+            "today_order_profit" => $today_order_profit,
+            "goods_list" => $goods_list,
+            "user_list" => $user_list,
+            'goods_total' => $goods_total,
+            'user_total' => $user_total
+        ]);
+
+        return $this->view->fetch();
+    }
+
+    public function upgrade(){
         $url = HMURL . "api/upgrade/check_upgrade";
         $params = [
             "type" => "shop",
@@ -91,31 +117,14 @@ class Dashboard extends Backend {
             }
         }
 
-        if($result && $result['code'] == 200){
+        if($result && $result['code'] == 200 && $this->options['version'] < $result['data']['version']){
             $upgrade = [
                 'version' => $result['data']['version'],
             ];
         }else{
             $upgrade = [];
         }
-
-
-        $this->view->assign([
-            'upgrade' => $upgrade,
-            'poster' => $poster,
-            "options" => $this->options,
-            "today_register" => $today_register,
-            "category_total" => $category_total,
-            "today_order" => $today_order,
-            "today_wait_order" => $today_wait_order,
-            "today_order_money" => $today_order_money,
-            "today_order_profit" => $today_order_profit,
-            "goods_list" => $goods_list,
-            "user_list" => $user_list,
-            'goods_total' => $goods_total,
-        ]);
-
-        return $this->view->fetch();
+        return $upgrade;
     }
 
 

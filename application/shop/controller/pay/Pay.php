@@ -109,12 +109,14 @@ class Pay extends Base {
         $inputs = [];
 
 //        echo '<pre>'; print_r($goods);die;
+        $order = db::name('order')->where(['uid' => $user['id']])->order('id desc')->find();
         $this->assign([
             'post' => $post,
             'attach' => $attach,
             'goods' => $goods,
             'inputs' => $inputs,
-            'buy_num' => $buy_num
+            'buy_num' => $buy_num,
+            'order' => $order
         ]);
 
         return view($this->template_path . "confirm_order.html");

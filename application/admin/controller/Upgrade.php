@@ -52,12 +52,12 @@ class Upgrade extends Backend {
          * 下载更新包到本地并赋值文件路径变量
          */
         $path = file_exists($dir . $filename) ? $dir . $filename : $this->download_file($file_url, $dir, $filename);
+        
+        if(!class_exists("\ZipArchive")) return json(['code' => 400, 'msg' => '您的PHP缺少ZipArchive扩展，你可以尝试安装编译版的PHP解决这个问题！']);
 
-        try {
-            $zip = new \ZipArchive();
-        }catch (\Exception $e){
-            return json(["code" => 400, "msg" => $e->getMessage()]);
-        }
+        $zip = new \ZipArchive();
+
+        
 
 
         //打开压缩包

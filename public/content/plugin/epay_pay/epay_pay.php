@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: 易支付
-Version: 1.1
+Version: 1.2
 Plugin URL:
 Description: 支持市面上大多数易支付
 Author: 云商学院
-Author URL: https://www.ysxue.cc/
+Author URL: https://www.ysxue.net/
 */
 
 
@@ -14,7 +14,7 @@ use app\common\controller\Hm;
 !defined('ROOT_PATH') && exit('access deined!');
 
 
-function pay($order, $goods, $pay_type) {
+function pay($order, $goods, $pay_type, $cmd='order') {
     $plugin_path = ROOT_PATH . "public/content/plugin/epay_pay/";
 
     $info = file_get_contents("{$plugin_path}epay_pay_setting.json");
@@ -26,12 +26,20 @@ function pay($order, $goods, $pay_type) {
         $host = 'http://' . $_SERVER['HTTP_HOST'] . '/';
     }
 
+    if($cmd == 'order'){
+        $notify_url = $host . 'notify/get/notify/' . $order['order_no'];
+        $return_url = $host . 'notify/get/return/' . $order['order_no'];
+    }else{
+        $notify_url = $host . 'recharge_notify/get/notify/' . $order['order_no'];
+        $return_url = $host . 'user.html';
+    }
+
     $data = [
         "pid"         => $info['appid'],//商户ID
         "type"       => $pay_type,//支付方式
         "out_trade_no"     => $order['order_no'], //商户订单号
-        "notify_url" => $host . 'notify/get/notify/' . $order['order_no'],//异步通知地址
-        "return_url" => $host . 'notify/get/return/' . $order['order_no'],//同步通知地址
+        "notify_url" => $notify_url,//异步通知地址
+        "return_url" => $return_url,//同步通知地址
         "name" => $goods['name'], //商品名称
         "money"      => $order['money'],//订单金额
     ];

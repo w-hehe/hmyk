@@ -43,15 +43,28 @@ function pay($order, $goods, $pay_type, $cmd='order') {
         $return_url = $host . 'user.html';
         $quit_url = $host . "user/recharge.html"; //用户取消付款返回商户网站的地址
     }
+    
+    // echo $notify_url;die;
+
+    $notify_url = $notify_url;
+    $return_url = $return_url;
+    $quit_url = $quit_url;
+    
+    
 
     $data = [
         'app_id' => $info['app_id'], //应用id
         'format' => 'JSON', //返回数据类型
-        'charset' => 'UTF-8', 'sign_type' => 'RSA2', //加密方式
+        'charset' => 'UTF-8',
+        'sign_type' => 'RSA2', //加密方式
         'timestamp' => date('Y-m-d H:i:s', time()), //发送请求的时间
         'version' => '1.0', //api版本
         'notify_url' => $notify_url, //支付完成后的异步回调通知
     ];
+    
+    
+    
+    
     $biz_content = [
         'subject' => $goods['name'], //商品名称
         'out_trade_no' => $order['order_no'], //商户订单号
@@ -85,18 +98,29 @@ function pay($order, $goods, $pay_type, $cmd='order') {
     }else{
         die('官方支付宝支付插件未开启合适的支付方式！请联系管理员处理');
     }
+    
+    
+    // echo '<pre>'; print_r($data);die;
+    
 
     $data['biz_content'] = json_encode($biz_content); //请求参数的集合
     $data['sign'] = getAlipaySign($data, ['private_key' => $info['private_key']]);
 
     $gateway_url = "https://openapi.alipay.com/gateway.do"; //支付宝支付网关
+
+    // echo '<pre>'; print_r($data);die;
+
     if($sub_type == 'sub'){
         // 发起wap支付或pc支付
         Hm::submitForm($gateway_url, $data);
     }else{ //当面付
-        $result = hmCurl($gateway_url, http_build_query($data), true);
-        $result = json_decode($result, true);
+        $resultStr = hmCurl($gateway_url, http_build_query($data), true);
+        $result = json_decode($resultStr, true);
 
+        if(json_last_error() == 5){
+            $resultStr = iconv('UTF-8', 'UTF-8//IGNORE', utf8_encode($resultStr));
+            $result = json_decode($resultStr, true);
+        }
         if (empty($result)){
             die("支付请求失败，请重试");
         }
@@ -112,6 +136,9 @@ function pay($order, $goods, $pay_type, $cmd='order') {
             header("location: /aliprecreate.html?out_trade_no=" . $order['order_no'] . "&cmd={$cmd}");
             die;
         } else{
+            if($result['code'] == 40003 && $result['sub_code'] == 'isv.app-unbind-partner'){
+                echo '无效应用或应用未绑定商户';die;
+            }
             echo '<pre>'; print_r($result);die;
         }
     }
