@@ -1,10 +1,5 @@
-<style>
-    .main-sidebar, .left-side{
-        top: -36px;
-        z-index: 999;
-    }
-</style>
-{:doAction('adm_head')}
+
+
 <!-- 顶部通栏样式 -->
 <nav class="navbar navbar-static-top">
 
@@ -16,27 +11,50 @@
         </a>
 
         <!--如果不想在顶部显示角标,则给ul加上disable-top-badge类即可-->
-        <ul class="nav nav-tabs nav-addtabs disable-top-badge hidden-xs" role="tablist"></ul>
+        <ul class="nav nav-tabs nav-addtabs disable-top-badge hidden-xs" role="tablist">
+            {$navlist}
+        </ul>
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-                <li>
-                    <a href="__PUBLIC__" target="_blank"><i class="fa fa-home" style="font-size:14px;"></i> <span>网站首页</span></a>
+
+                <li class="hidden-xs">
+                    <a href="__PUBLIC__" target="_blank"><i class="fa fa-home" style="font-size:14px;"></i> {:__('Home')}</a>
                 </li>
+
                 <!-- 清除缓存 -->
-                <li>
+                <li class="hidden-xs">
                     <a href="javascript:;" data-toggle="dropdown" title="{:__('Wipe cache')}">
-                        <i class="fa fa-trash"></i>  <span>清除缓存</span>
+                        <i class="fa fa-trash"></i> {:__('Wipe cache')}
                     </a>
                     <ul class="dropdown-menu wipecache">
-                        <li><a href="javascript:;" data-type="all"><i class="fa fa-trash"></i> {:__('Wipe all cache')}</a></li>
+                        <li><a href="javascript:;" data-type="all"><i class="fa fa-trash fa-fw"></i> {:__('Wipe all cache')}</a></li>
                         <li class="divider"></li>
-                        <li><a href="javascript:;" data-type="content"><i class="fa fa-file-text"></i> {:__('Wipe content cache')}</a></li>
-                        <li><a href="javascript:;" data-type="template"><i class="fa fa-file-image-o"></i> {:__('Wipe template cache')}</a></li>
-                        <li><a href="javascript:;" data-type="addons"><i class="fa fa-rocket"></i> {:__('Wipe addons cache')}</a></li>
+                        <li><a href="javascript:;" data-type="content"><i class="fa fa-file-text fa-fw"></i> {:__('Wipe content cache')}
+                        <span data-toggle="tooltip" data-title="清空网站缓存的数据"><i class="fa fa-info-circle"></i></span>
+                        </a></li>
+                        <!--<li><a href="javascript:;" data-type="template"><i class="fa fa-file-image-o fa-fw"></i> {:__('Wipe template cache')}</a></li>-->
+                        <!--<li><a href="javascript:;" data-type="addons"><i class="fa fa-rocket fa-fw"></i> {:__('Wipe addons cache')}</a></li>-->
+                        <li><a href="javascript:;" data-type="browser"><i class="fa fa-chrome fa-fw"></i> {:__('Wipe browser cache')}
+                            <span data-toggle="tooltip" data-title="清空浏览器缓存的静态文件"><i class="fa fa-info-circle"></i></span>
+                        </a></li>
                     </ul>
                 </li>
 
+                <!-- 多语言列表 -->
+                {if $Think.config.lang_switch_on}
+                <li class="hidden-xs">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-language"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="{$config['language']=='zh-cn'?'active':''}">
+                            <a href="?ref=addtabs&lang=zh-cn">简体中文</a>
+                        </li>
+                        <li class="{$config['language']=='en'?'active':''}">
+                            <a href="?ref=addtabs&lang=en">English</a>
+                        </li>
+                    </ul>
+                </li>
+                {/if}
 
                 <!-- 全屏按钮 -->
                 <li class="hidden-xs">
@@ -58,6 +76,16 @@
                                 {$admin.nickname|htmlentities}
                                 <small>{$admin.logintime|date="Y-m-d H:i:s",###}</small>
                             </p>
+                        </li>
+                        <li class="user-body">
+                            <div class="visible-xs">
+                                <div class="pull-left">
+                                    <a href="__PUBLIC__" target="_blank"><i class="fa fa-home" style="font-size:14px;"></i> {:__('Home')}</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="javascript:;" data-type="all" class="wipecache"><i class="fa fa-trash fa-fw"></i> {:__('Wipe all cache')}</a>
+                                </div>
+                            </div>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">

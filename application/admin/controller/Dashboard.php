@@ -47,7 +47,7 @@ class Dashboard extends Backend {
         }
 
         //商品销量top10
-        $goods_list = db::name("goods")->where('sales > 0')->order("sales desc")->limit(10)->select();
+        $goods_list = db::name("goods")->where('sales > 0')->order(["sales" => "desc"])->limit(10)->select();
         foreach ($goods_list as $key => $val) {
             $images = explode(",", $val["images"]);
             $goods_list[$key]["cover"] = $images[0];
@@ -55,7 +55,7 @@ class Dashboard extends Backend {
 //        echo '<pre>'; print_r($goods_list);die;
 
         //用户消费top10
-        $user_list = User::withCount('order')->where("consume > 0")->order('consume desc')->limit(10)->select();
+        $user_list = User::withCount('order')->where("consume > 0")->order(['consume' => 'desc'])->limit(10)->select();
 
         $poster = false;
         if(Cache::has('poster_dashboard')){
@@ -65,6 +65,7 @@ class Dashboard extends Backend {
         $start_time = strtotime(date('Y-m-d 23:59:59', $this->timestamp)) - (3600*24*15);
 //        echo date('Y-m-d H:i:s', $start_time);die;
         $sql = "select FROM_UNIXTIME(`pay_time`,'%Y-%m-%d') date, count(id) order_count, sum(money) sales_money from {$prefix}order where pay_time > {$start_time} group by date;";
+        
         $result = db::query($sql);
         $sts_order = [];
         for($i = 0; $i < 15; $i++){

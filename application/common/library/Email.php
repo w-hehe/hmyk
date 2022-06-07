@@ -7,7 +7,8 @@ use Tx\Mailer;
 use Tx\Mailer\Exceptions\CodeException;
 use Tx\Mailer\Exceptions\SendException;
 
-class Email {
+class Email
+{
 
     /**
      * 单例对象
@@ -17,7 +18,7 @@ class Email {
     /**
      * phpmailer对象
      */
-    protected $mail = [];
+    protected $mail = null;
 
     /**
      * 错误内容
@@ -39,7 +40,8 @@ class Email {
      * @param array $options 参数
      * @return Email
      */
-    public static function instance($options = []) {
+    public static function instance($options = [])
+    {
         if (is_null(self::$instance)) {
             self::$instance = new static($options);
         }
@@ -51,7 +53,8 @@ class Email {
      * 构造函数
      * @param array $options
      */
-    public function __construct($options = []) {
+    public function __construct($options = [])
+    {
         if ($config = Config::get('site')) {
             $this->options = array_merge($this->options, $config);
         }
@@ -59,7 +62,6 @@ class Email {
         $secureArr = [0 => '', 1 => 'tls', 2 => 'ssl'];
         $secure = isset($secureArr[$this->options['mail_verify_type']]) ? $secureArr[$this->options['mail_verify_type']] : '';
 
-//        var_dump($secure);die;
         if(empty($secure) && ($this->options['mail_smtp_port'] == 465 || $this->options['mail_smtp_port'] == 587)){
             $this->options['mail_smtp_port'] = 25;
         }elseif($secure == 'ssl'){
@@ -67,9 +69,6 @@ class Email {
         }elseif($secure == 'tls'){
             $this->options['mail_smtp_port'] = 587;
         }
-
-
-
 
         $logger = isset($this->options['debug']) && $this->options['debug'] ? new Log : null;
         $this->mail = new Mailer($logger);
@@ -85,7 +84,8 @@ class Email {
      * @param string $subject 邮件主题
      * @return $this
      */
-    public function subject($subject) {
+    public function subject($subject)
+    {
         $this->mail->setSubject($subject);
         return $this;
     }
@@ -93,10 +93,11 @@ class Email {
     /**
      * 设置发件人
      * @param string $email 发件人邮箱
-     * @param string $name 发件人名称
+     * @param string $name  发件人名称
      * @return $this
      */
-    public function from($email, $name = '') {
+    public function from($email, $name = '')
+    {
         $this->mail->setFrom($name, $email);
         return $this;
     }
@@ -106,7 +107,8 @@ class Email {
      * @param mixed $email 收件人,多个收件人以,进行分隔
      * @return $this
      */
-    public function to($email) {
+    public function to($email)
+    {
         $emailArr = $this->buildAddress($email);
         foreach ($emailArr as $address => $name) {
             $this->mail->addTo($name, $address);
@@ -117,28 +119,30 @@ class Email {
 
     /**
      * 设置抄送
-     * @param mixed $email 收件人,多个收件人以,进行分隔
-     * @param string $name 收件人名称
+     * @param mixed  $email 收件人,多个收件人以,进行分隔
+     * @param string $name  收件人名称
      * @return Email
      */
-    public function cc($email, $name = '') {
+    public function cc($email, $name = '')
+    {
         $emailArr = $this->buildAddress($email);
         if (count($emailArr) == 1 && $name) {
             $emailArr[key($emailArr)] = $name;
         }
         foreach ($emailArr as $address => $name) {
-            $this->mail->addCC($address, $name);
+            $this->mail->addCC($name, $address);
         }
         return $this;
     }
 
     /**
      * 设置密送
-     * @param mixed $email 收件人,多个收件人以,进行分隔
-     * @param string $name 收件人名称
+     * @param mixed  $email 收件人,多个收件人以,进行分隔
+     * @param string $name  收件人名称
      * @return Email
      */
-    public function bcc($email, $name = '') {
+    public function bcc($email, $name = '')
+    {
         $emailArr = $this->buildAddress($email);
         if (count($emailArr) == 1 && $name) {
             $emailArr[key($emailArr)] = $name;
@@ -151,11 +155,12 @@ class Email {
 
     /**
      * 设置邮件正文
-     * @param string $body 邮件下方
+     * @param string  $body   邮件下方
      * @param boolean $ishtml 是否HTML格式
      * @return $this
      */
-    public function message($body, $ishtml = true) {
+    public function message($body, $ishtml = true)
+    {
         $this->mail->setBody($body);
         return $this;
     }
@@ -166,7 +171,8 @@ class Email {
      * @param string $name 附件名称
      * @return Email
      */
-    public function attachment($path, $name = '') {
+    public function attachment($path, $name = '')
+    {
         $this->mail->addAttachment($name, $path);
         return $this;
     }
@@ -176,7 +182,8 @@ class Email {
      * @param mixed $emails Email数据
      * @return array
      */
-    protected function buildAddress($emails) {
+    protected function buildAddress($emails)
+    {
         if (!is_array($emails)) {
             $emails = array_flip(explode(',', str_replace(";", ",", $emails)));
             foreach ($emails as $key => $value) {
@@ -190,7 +197,8 @@ class Email {
      * 获取最后产生的错误
      * @return string
      */
-    public function getError() {
+    public function getError()
+    {
         return $this->error;
     }
 
@@ -198,7 +206,8 @@ class Email {
      * 设置错误
      * @param string $error 信息信息
      */
-    protected function setError($error) {
+    protected function setError($error)
+    {
         $this->error = $error;
     }
 
@@ -208,7 +217,6 @@ class Email {
      */
     public function send() {
         $result = false;
-//        if (in_array($this->options['mail_type'], [1, 2])) {
         try {
             $result = $this->mail->send();
         } catch (SendException $e) {
@@ -224,10 +232,6 @@ class Email {
         }
 
         $this->setError($result ? '' : $this->getError());
-//        } else {
-//            //邮件功能已关闭
-//            $this->setError(__('Mail already closed'));
-//        }
         return $result;
     }
 

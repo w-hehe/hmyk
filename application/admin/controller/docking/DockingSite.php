@@ -29,16 +29,7 @@ class DockingSite extends Backend {
         parent::_initialize();
         $this->model = new \app\admin\model\docking\DockingSite;
 
-        $type = [
-            [
-                'name' => '亿乐社区', 'value' => 'yile',
-            ], [
-                'name' => '卡卡云', 'value' => 'kky',
-            ], [
-                'name' => '时空云', 'value' => 'space',
-            ]
 
-        ];
 
         $where = [
             'type' => 'goods',
@@ -49,7 +40,6 @@ class DockingSite extends Backend {
             'category' => $category, 'attach' => $attach
         ]);
 
-        $this->assign('type', $type);
 
     }
 

@@ -127,16 +127,6 @@ class Session
     }
 
     /**
-     * 获取session_id
-     */
-    public static function getId(){
-        if (PHP_SESSION_ACTIVE != session_status()) {
-            session_start();
-        }
-        return session_id();
-    }
-
-    /**
      * session设置
      * @param string        $name session名称
      * @param mixed         $value session值

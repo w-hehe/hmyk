@@ -1,9 +1,9 @@
 {
-  "name": "layui-layer",
+  "name": "layer-src",
   "realname": "layer",
-  "version": "3.1.5",
+  "version": "3.5.3",
   "mobile": "2.0.0",
-  "description": "Web弹层组件",
+  "description": "Web 通用弹出层组件",
   "main": "src/layer.js",
   "license": "MIT",
   "scripts": {

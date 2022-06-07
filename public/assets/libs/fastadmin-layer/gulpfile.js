@@ -33,7 +33,3 @@ var task = {
 exports.layer = task.layer;
 exports.mobile = task.mobile;
 exports.default = series(task.layer, task.mobile);
-
-
-
-

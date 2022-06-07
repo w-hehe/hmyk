@@ -23,7 +23,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             $("form.sidebar-form").on("blur", "input[name=q]", function () {
                 searchResult.addClass("hide");
             }).on("focus", "input[name=q]", function () {
-                if ($("a", searchResult).size() > 0) {
+                if ($("a", searchResult).length > 0) {
                     searchResult.removeClass("hide");
                 }
             }).on("keyup", "input[name=q]", function () {
@@ -56,7 +56,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             $(document).on("click fa.event.toggleitem", ".sidebar-menu li > a", function (e) {
                 var nextul = $(this).next("ul");
                 if (nextul.length == 0 && (!$(this).parent("li").hasClass("treeview") || ($("body").hasClass("multiplenav") && $(this).parent().parent().hasClass("sidebar-menu")))) {
-                    $(".sidebar-menu li").removeClass("active");
+                    $(".sidebar-menu li").not($(this).parents("li")).removeClass("active");
                 }
                 //当外部触发隐藏的a时,触发父辈a的事件
                 if (!$(this).closest("ul").is(":visible")) {
@@ -65,7 +65,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
 
                 var visible = nextul.is(":visible");
-                if (!visible) {
+                if (nextul.length == 0) {
                     $(this).parents("li").addClass("active");
                 } else {
                 }
@@ -73,7 +73,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             });
 
             //清除缓存
-            $(document).on('click', "ul.wipecache li a", function () {
+            $(document).on('click', "ul.wipecache li a,a.wipecache", function () {
                 $.ajax({
                     url: 'ajax/wipecache',
                     dataType: 'json',
@@ -108,7 +108,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             });
 
-            var multiplenav = $("#secondnav").size() > 0 ? true : false;
+            var multiplenav = $("body").hasClass("multiplenav") > 0 ? true : false;
             var firstnav = $("#firstnav .nav-addtabs");
             var nav = multiplenav ? $("#secondnav .nav-addtabs") : firstnav;
 
@@ -125,6 +125,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                         firstnav.html(data.navlist);
                     }
                     $("li[role='presentation'].active a", nav).trigger('click');
+                    $(window).trigger("resize");
                     return false;
                 }, function () {
                     return false;
@@ -208,7 +209,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             //绑定tabs事件,如果需要点击强制刷新iframe,则请将iframeForceRefresh置为true,iframeForceRefreshTable只强制刷新表格
             nav.addtabs({iframeHeight: "100%", iframeForceRefresh: false, iframeForceRefreshTable: true, nav: nav});
 
-            if ($("ul.sidebar-menu li.active a").size() > 0) {
+            if ($("ul.sidebar-menu li.active a").length > 0) {
                 $("ul.sidebar-menu li.active a").trigger("click");
             } else {
                 if (multiplenav) {
@@ -222,10 +223,10 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             if (Config.referer) {
                 if (Config.referer === $(addtabs).attr("url")) {
                     var active = $("ul.sidebar-menu li a[addtabs=" + $(addtabs).attr("addtabs") + "]");
-                    if (multiplenav && active.size() == 0) {
+                    if (multiplenav && active.length == 0) {
                         active = $("ul li a[addtabs='" + $(addtabs).attr("addtabs") + "']");
                     }
-                    if (active.size() > 0) {
+                    if (active.length > 0) {
                         active.trigger("click");
                     } else {
                         $(addtabs).appendTo(document.body).addClass("hide").trigger("click");
@@ -235,6 +236,13 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                     Backend.api.addtabs(Config.referer);
                 }
             }
+
+            var createCookie = function (name, value) {
+                var date = new Date();
+                date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
+                var path = Config.moduleurl;
+                document.cookie = encodeURIComponent(Config.cookie.prefix + name) + "=" + encodeURIComponent(value) + "; path=" + path + "; expires=" + date.toGMTString();
+            };
 
             var my_skins = [
                 "skin-blue",
@@ -256,9 +264,35 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 "skin-black-yellow",
                 "skin-black-pink",
             ];
-            setup();
 
-            function change_layout(cls) {
+            // 皮肤切换
+            $("[data-skin]").on('click', function (e) {
+                var skin = $(this).data('skin');
+                if (!$("body").hasClass(skin)) {
+                    $("body").removeClass(my_skins.join(' ')).addClass(skin);
+                    var cssfile = Config.site.cdnurl + "/assets/css/skins/" + skin + ".css";
+                    $('head').append('<link rel="stylesheet" href="' + cssfile + '" type="text/css" />');
+                    $(".skin-list li.active").removeClass("active");
+                    $(".skin-list li a[data-skin='" + skin + "']").parent().addClass("active");
+                    createCookie('adminskin', skin);
+                }
+                return false;
+            });
+
+            // 收起菜单栏切换
+            $("[data-layout='sidebar-collapse']").on('click', function () {
+                $(".sidebar-toggle").trigger("click");
+            });
+
+            // 切换子菜单显示和菜单小图标的显示
+            $("[data-menu='show-submenu']").on('click', function () {
+                createCookie('show_submenu', $(this).prop("checked") ? 1 : 0);
+                location.reload();
+            });
+
+            // 右侧控制栏切换
+            $("[data-controlsidebar]").on('click', function () {
+                var cls = $(this).data('controlsidebar');
                 $("body").toggleClass(cls);
                 AdminLTE.layout.fixSidebar();
                 //Fix the problem with right sidebar and layout boxed
@@ -270,92 +304,79 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
                 AdminLTE.controlSidebar._fix($(".control-sidebar-bg"));
                 AdminLTE.controlSidebar._fix($(".control-sidebar"));
+                var slide = !AdminLTE.options.controlSidebarOptions.slide;
+                AdminLTE.options.controlSidebarOptions.slide = slide;
+                if (!slide)
+                    $('.control-sidebar').removeClass('control-sidebar-open');
+            });
+
+            // 右侧控制栏背景切换
+            $("[data-sidebarskin='toggle']").on('click', function () {
+                var sidebar = $(".control-sidebar");
+                if (sidebar.hasClass("control-sidebar-dark")) {
+                    sidebar.removeClass("control-sidebar-dark")
+                    sidebar.addClass("control-sidebar-light")
+                } else {
+                    sidebar.removeClass("control-sidebar-light")
+                    sidebar.addClass("control-sidebar-dark")
+                }
+            });
+
+            // 菜单栏展开或收起
+            $("[data-enable='expandOnHover']").on('click', function () {
+                $.AdminLTE.options.sidebarExpandOnHover = $(this).prop("checked") ? 1 : 0;
+                localStorage.setItem('sidebarExpandOnHover', $.AdminLTE.options.sidebarExpandOnHover);
+                AdminLTE.pushMenu.expandOnHover();
+                $.AdminLTE.layout.fixSidebar();
+            });
+
+            // 切换菜单栏
+            $(document).on("click", ".sidebar-toggle", function () {
+                var value = $("body").hasClass("sidebar-collapse") ? 1 : 0;
+                setTimeout(function () {
+                    $(window).trigger("resize");
+                }, 300);
+                createCookie('sidebar_collapse', value);
+            });
+
+            // 切换多级菜单
+            $(document).on("click", "[data-config='multiplenav']", function () {
+                var value = $(this).prop("checked") ? 1 : 0;
+                createCookie('multiplenav', value);
+                location.reload();
+            });
+
+            // 切换多选项卡
+            $(document).on("click", "[data-config='multipletab']", function () {
+                var value = $(this).prop("checked") ? 1 : 0;
+                $("body").toggleClass("multipletab", value);
+                createCookie('multipletab', value);
+            });
+
+            // 重设选项
+            if ($('body').hasClass('fixed')) {
+                $("[data-layout='fixed']").attr('checked', 'checked');
+            }
+            if ($('body').hasClass('layout-boxed')) {
+                $("[data-layout='layout-boxed']").attr('checked', 'checked');
+            }
+            if ($('body').hasClass('sidebar-collapse')) {
+                $("[data-layout='sidebar-collapse']").attr('checked', 'checked');
+            }
+            if ($('ul.sidebar-menu').hasClass('show-submenu')) {
+                $("[data-menu='show-submenu']").attr('checked', 'checked');
             }
 
-            function change_skin(cls) {
-                if (!$("body").hasClass(cls)) {
-                    $("body").removeClass(my_skins.join(' ')).addClass(cls);
-                    localStorage.setItem('skin', cls);
-                    var cssfile = Config.site.cdnurl + "/assets/css/skins/" + cls + ".css";
-                    $('head').append('<link rel="stylesheet" href="' + cssfile + '" type="text/css" />');
-                }
-                return false;
+            var sidebarExpandOnHover = localStorage.getItem('sidebarExpandOnHover');
+            if (sidebarExpandOnHover == '1') {
+                $("[data-enable='expandOnHover']").trigger("click");
             }
 
-            function setup() {
-                var tmp = localStorage.getItem('skin');
-                if (tmp && $.inArray(tmp, my_skins) != -1)
-                    change_skin(tmp);
-
-                // 皮肤切换
-                $("[data-skin]").on('click', function (e) {
-                    if ($(this).hasClass('knob'))
-                        return;
-                    e.preventDefault();
-                    change_skin($(this).data('skin'));
-                });
-
-                // 布局切换
-                $("[data-layout]").on('click', function () {
-                    change_layout($(this).data('layout'));
-                });
-
-                // 切换子菜单显示和菜单小图标的显示
-                $("[data-menu]").on('click', function () {
-                    if ($(this).data("menu") == 'show-submenu') {
-                        $("ul.sidebar-menu").toggleClass("show-submenu");
-                    } else {
-                        nav.toggleClass("disable-top-badge");
-                    }
-                });
-
-                // 右侧控制栏切换
-                $("[data-controlsidebar]").on('click', function () {
-                    change_layout($(this).data('controlsidebar'));
-                    var slide = !AdminLTE.options.controlSidebarOptions.slide;
-                    AdminLTE.options.controlSidebarOptions.slide = slide;
-                    if (!slide)
-                        $('.control-sidebar').removeClass('control-sidebar-open');
-                });
-
-                // 右侧控制栏背景切换
-                $("[data-sidebarskin='toggle']").on('click', function () {
-                    var sidebar = $(".control-sidebar");
-                    if (sidebar.hasClass("control-sidebar-dark")) {
-                        sidebar.removeClass("control-sidebar-dark")
-                        sidebar.addClass("control-sidebar-light")
-                    } else {
-                        sidebar.removeClass("control-sidebar-light")
-                        sidebar.addClass("control-sidebar-dark")
-                    }
-                });
-
-                // 菜单栏展开或收起
-                $("[data-enable='expandOnHover']").on('click', function () {
-                    $(this).attr('disabled', true);
-                    AdminLTE.pushMenu.expandOnHover();
-                    if (!$('body').hasClass('sidebar-collapse'))
-                        $("[data-layout='sidebar-collapse']").click();
-                });
-
-                // 重设选项
-                if ($('body').hasClass('fixed')) {
-                    $("[data-layout='fixed']").attr('checked', 'checked');
+            $.each(my_skins, function (i, j) {
+                if ($("body").hasClass(j)) {
+                    $(".skin-list li a[data-skin='" + j + "']").parent().addClass("active");
                 }
-                if ($('body').hasClass('layout-boxed')) {
-                    $("[data-layout='layout-boxed']").attr('checked', 'checked');
-                }
-                if ($('body').hasClass('sidebar-collapse')) {
-                    $("[data-layout='sidebar-collapse']").attr('checked', 'checked');
-                }
-                if ($('ul.sidebar-menu').hasClass('show-submenu')) {
-                    $("[data-menu='show-submenu']").attr('checked', 'checked');
-                }
-                if (nav.hasClass('disable-top-badge')) {
-                    $("[data-menu='disable-top-badge']").attr('checked', 'checked');
-                }
-
-            }
+            });
 
             $(window).resize();
 
@@ -389,11 +410,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                     avatar: data.avatar
                 }));
                 location.href = Backend.api.fixurl(data.url);
-            }, function (data, e) {
-                console.log(e)
-                if(e.data.admin_error_login == 3){
-                    location.reload();
-                }
+            }, function (data) {
                 $("input[name=captcha]").next(".input-group-addon").find("img").trigger("click");
             });
         }

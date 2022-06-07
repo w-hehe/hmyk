@@ -7,7 +7,7 @@ use think\Config;
 /**
  * @website https://github.com/calinrada/php-apidoc
  * @author  Calin Rada <rada.calin@gmail.com>
- * @author  Karson <karsonzhang@163.com>
+ * @author  Karson <karson@fastadmin.net>
  */
 class Builder
 {
@@ -43,9 +43,11 @@ class Builder
                 continue;
             }
             Extractor::getClassMethodAnnotations($class);
+            //Extractor::getClassPropertyValues($class);
         }
         $allClassAnnotation = Extractor::getAllClassAnnotations();
         $allClassMethodAnnotation = Extractor::getAllClassMethodAnnotations();
+        //$allClassPropertyValue = Extractor::getAllClassPropertyValues();
 
 //        foreach ($allClassMethodAnnotation as $className => &$methods) {
 //            foreach ($methods as &$method) {
@@ -68,11 +70,11 @@ class Builder
         $headerslist = array();
         foreach ($docs['ApiHeaders'] as $params) {
             $tr = array(
-                'name'        => $params['name'],
-                'type'        => $params['type'],
-                'sample'      => isset($params['sample']) ? $params['sample'] : '',
-                'required'    => isset($params['required']) ? $params['required'] : false,
-                'description' => isset($params['description']) ? $params['description'] : '',
+                'name'        => $params['name'] ?? '',
+                'type'        => $params['type'] ?? 'string',
+                'sample'      => $params['sample'] ?? '',
+                'required'    => $params['required'] ?? false,
+                'description' => $params['description'] ?? '',
             );
             $headerslist[] = $tr;
         }
@@ -90,10 +92,10 @@ class Builder
         foreach ($docs['ApiParams'] as $params) {
             $tr = array(
                 'name'        => $params['name'],
-                'type'        => isset($params['type']) ? $params['type'] : 'string',
-                'sample'      => isset($params['sample']) ? $params['sample'] : '',
-                'required'    => isset($params['required']) ? $params['required'] : true,
-                'description' => isset($params['description']) ? $params['description'] : '',
+                'type'        => $params['type'] ?? 'string',
+                'sample'      => $params['sample'] ?? '',
+                'required'    => $params['required'] ?? true,
+                'description' => $params['description'] ?? '',
             );
             $paramslist[] = $tr;
         }
@@ -110,11 +112,11 @@ class Builder
         $headerslist = array();
         foreach ($docs['ApiReturnHeaders'] as $params) {
             $tr = array(
-                'name'        => $params['name'],
+                'name'        => $params['name'] ?? '',
                 'type'        => 'string',
-                'sample'      => isset($params['sample']) ? $params['sample'] : '',
+                'sample'      => $params['sample'] ?? '',
                 'required'    => isset($params['required']) && $params['required'] ? 'Yes' : 'No',
-                'description' => isset($params['description']) ? $params['description'] : '',
+                'description' => $params['description'] ?? '',
             );
             $headerslist[] = $tr;
         }
@@ -131,10 +133,10 @@ class Builder
         $paramslist = array();
         foreach ($st_params['ApiReturnParams'] as $params) {
             $tr = array(
-                'name'        => $params['name'],
-                'type'        => isset($params['type']) ? $params['type'] : 'string',
-                'sample'      => isset($params['sample']) ? $params['sample'] : '',
-                'description' => isset($params['description']) ? $params['description'] : '',
+                'name'        => $params['name'] ?? '',
+                'type'        => $params['type'] ?? 'string',
+                'sample'      => $params['sample'] ?? '',
+                'description' => $params['description'] ?? '',
             );
             $paramslist[] = $tr;
         }
@@ -162,10 +164,16 @@ class Builder
         list($allClassAnnotations, $allClassMethodAnnotations) = $this->extractAnnotations();
 
         $sectorArr = [];
-        foreach ($allClassAnnotations as $index => $allClassAnnotation) {
+        foreach ($allClassAnnotations as $index => &$allClassAnnotation) {
+            // 如果设置隐藏，则不显示在文档
+            if (isset($allClassAnnotation['ApiInternal'])) {
+                continue;
+            }
             $sector = isset($allClassAnnotation['ApiSector']) ? $allClassAnnotation['ApiSector'][0] : $allClassAnnotation['ApiTitle'][0];
             $sectorArr[$sector] = isset($allClassAnnotation['ApiWeigh']) ? $allClassAnnotation['ApiWeigh'][0] : 0;
         }
+        unset($allClassAnnotation);
+
         arsort($sectorArr);
         $routes = include_once CONF_PATH . 'route.php';
         $subdomain = false;
@@ -175,7 +183,7 @@ class Builder
         $counter = 0;
         $section = null;
         $weigh = 0;
-        $docslist = [];
+        $docsList = [];
         foreach ($allClassMethodAnnotations as $class => $methods) {
             foreach ($methods as $name => $docs) {
                 if (isset($docs['ApiSector'][0])) {
@@ -190,28 +198,30 @@ class Builder
                 if ($subdomain) {
                     $route = substr($route, 4);
                 }
-                $docslist[$section][$class . $name] = [
+                $docsList[$section][$name] = [
                     'id'                => $counter,
                     'method'            => is_array($docs['ApiMethod'][0]) ? $docs['ApiMethod'][0]['data'] : $docs['ApiMethod'][0],
-                    'method_label'      => $this->generateBadgeForMethod($docs),
+                    'methodLabel'       => $this->generateBadgeForMethod($docs),
                     'section'           => $section,
                     'route'             => $route,
                     'title'             => is_array($docs['ApiTitle'][0]) ? $docs['ApiTitle'][0]['data'] : $docs['ApiTitle'][0],
                     'summary'           => is_array($docs['ApiSummary'][0]) ? $docs['ApiSummary'][0]['data'] : $docs['ApiSummary'][0],
-                    'body'              => isset($docs['ApiBody'][0]) ? is_array($docs['ApiBody'][0]) ? $docs['ApiBody'][0]['data'] : $docs['ApiBody'][0] : '',
-                    'headerslist'       => $this->generateHeadersTemplate($docs),
-                    'paramslist'        => $this->generateParamsTemplate($docs),
-                    'returnheaderslist' => $this->generateReturnHeadersTemplate($docs),
-                    'returnparamslist'  => $this->generateReturnParamsTemplate($docs),
+                    'body'              => isset($docs['ApiBody'][0]) ? (is_array($docs['ApiBody'][0]) ? $docs['ApiBody'][0]['data'] : $docs['ApiBody'][0]) : '',
+                    'headersList'       => $this->generateHeadersTemplate($docs),
+                    'paramsList'        => $this->generateParamsTemplate($docs),
+                    'returnHeadersList' => $this->generateReturnHeadersTemplate($docs),
+                    'returnParamsList'  => $this->generateReturnParamsTemplate($docs),
                     'weigh'             => is_array($docs['ApiWeigh'][0]) ? $docs['ApiWeigh'][0]['data'] : $docs['ApiWeigh'][0],
-                    'return'            => isset($docs['ApiReturn']) ? is_array($docs['ApiReturn'][0]) ? $docs['ApiReturn'][0]['data'] : $docs['ApiReturn'][0] : '',
+                    'return'            => isset($docs['ApiReturn']) ? (is_array($docs['ApiReturn'][0]) ? $docs['ApiReturn'][0]['data'] : $docs['ApiReturn'][0]) : '',
+                    'needLogin'         => $docs['ApiPermissionLogin'][0],
+                    'needRight'         => $docs['ApiPermissionRight'][0],
                 ];
                 $counter++;
             }
         }
 
         //重建排序
-        foreach ($docslist as $index => &$methods) {
+        foreach ($docsList as $index => &$methods) {
             $methodSectorArr = [];
             foreach ($methods as $name => $method) {
                 $methodSectorArr[$name] = isset($method['weigh']) ? $method['weigh'] : 0;
@@ -219,9 +229,8 @@ class Builder
             arsort($methodSectorArr);
             $methods = array_merge(array_flip(array_keys($methodSectorArr)), $methods);
         }
-        $docslist = array_merge(array_flip(array_keys($sectorArr)), $docslist);
-        $docslist = array_filter($docslist , function($v) {return is_array($v) ; }) ;
-        return $docslist;
+        $docsList = array_merge(array_flip(array_keys($sectorArr)), $docsList);
+        return $docsList;
     }
 
     public function getView()
@@ -237,8 +246,8 @@ class Builder
      */
     public function render($template, $vars = [])
     {
-        $docslist = $this->parse();
+        $docsList = $this->parse();
 
-        return $this->view->display(file_get_contents($template), array_merge($vars, ['docslist' => $docslist]));
+        return $this->view->display(file_get_contents($template), array_merge($vars, ['docsList' => $docsList]));
     }
 }

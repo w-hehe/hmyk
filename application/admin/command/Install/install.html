@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>在线安装红盟云卡系统</title>
+    <title>在线安装程序</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
     <meta name="renderer" content="webkit">
 
@@ -31,7 +31,7 @@
         }
 
         a {
-            color: #18bc9c;
+            color: #4e73df;
             text-decoration: none;
         }
 
@@ -51,7 +51,6 @@
             margin-bottom: 0;
             margin-top: 0;
         }
-
 
 
         .form-group {
@@ -79,7 +78,7 @@
         }
 
         .form-field input:focus {
-            border-color: #18bc9c;
+            border-color: #4e73df;
             background: #fff;
             color: #444;
             outline: none;
@@ -153,14 +152,15 @@
             color: #e21a1a;
             border-radius: 3px;
         }
-
     </style>
 </head>
 
 <body>
 <div class="container">
     <div>
+
         <form method="post">
+
             {if $errInfo}
             <div class="error">
                 {$errInfo}
@@ -169,63 +169,66 @@
             <div id="error" style="display:none"></div>
             <div id="success" style="display:none"></div>
             <div id="warmtips" style="display:none"></div>
-            <h3 class="title-desc">数据库配置</h3>
+
             <div class="form-group">
                 <div class="form-field">
-                    <label>MySQL数据库地址</label>
+                    <label>{:__('Mysql Hostname')}</label>
                     <input type="text" name="mysqlHostname" value="127.0.0.1" required="">
                 </div>
 
                 <div class="form-field">
-                    <label>MySQL数据库名称</label>
+                    <label>{:__('Mysql Database')}</label>
                     <input type="text" name="mysqlDatabase" value="" required="">
                 </div>
 
                 <div class="form-field">
-                    <label>MySQL用户名</label>
+                    <label>{:__('Mysql Username')}</label>
                     <input type="text" name="mysqlUsername" value="root" required="">
                 </div>
 
                 <div class="form-field">
-                    <label>MySQL密码</label>
+                    <label>{:__('Mysql Password')}</label>
                     <input type="password" name="mysqlPassword">
                 </div>
 
                 <div class="form-field">
-                    <label>MySQL数据表前缀</label>
+                    <label>{:__('Mysql Prefix')}</label>
                     <input type="text" name="mysqlPrefix" value="hm_">
                 </div>
 
                 <div class="form-field">
-                    <label>MySQL端口号</label>
+                    <label>{:__('Mysql Hostport')}</label>
                     <input type="number" name="mysqlHostport" value="3306">
                 </div>
             </div>
-            <h3 class="title-desc">管理员配置</h3>
+
             <div class="form-group">
+                <div class="form-field">
+                    <label>{:__('Admin Username')}</label>
+                    <input name="adminUsername" value="admin" required=""/>
+                </div>
 
                 <div class="form-field">
-                    <label>管理员账号</label>
-                    <input name="adminUsername" type="text" value="admin" required=""/>
+                    <label>{:__('Admin Email')}</label>
+                    <input name="adminEmail" value="admin@admin.com" required="">
                 </div>
+
                 <div class="form-field">
-                    <label>管理员邮箱</label>
-                    <input name="adminEmail" type="email" value="" required="">
-                </div>
-                <div class="form-field">
-                    <label>管理员密码</label>
+                    <label>{:__('Admin Password')}</label>
                     <input type="password" name="adminPassword" required="">
                 </div>
+
                 <div class="form-field">
-                    <label>确认密码</label>
+                    <label>{:__('Repeat Password')}</label>
                     <input type="password" name="adminPasswordConfirmation" required="">
                 </div>
             </div>
 
 
+
             <div class="form-buttons">
                 <!--@formatter:off-->
-                <button type="submit" {:$errInfo?'disabled':''}>立即安装</button>
+                <button type="submit" {:$errInfo?'disabled':''}>{:__('Install now')}</button>
                 <!--@formatter:on-->
             </div>
         </form>
@@ -255,17 +258,16 @@
                                 var data = ret.data;
                                 $error.hide();
                                 $(".form-group", form).remove();
-                                $('.title-desc').remove();
                                 $button.remove();
                                 $("#success").text(ret.msg).show();
 
                                 $buttons = $(".form-buttons", form);
-                                $("<a class='btn' href='./'>访问首页</a>").appendTo($buttons);
+                                $("<a class='btn' href='./' target='_blank'>{:__('Home')}</a>").appendTo($buttons);
 
                                 if (typeof data.adminName !== 'undefined') {
                                     var url = location.href.replace(/install\.php/, data.adminName);
                                     $("#warmtips").html("{:__('Security tips')}" + '<a href="' + url + '">' + url + '</a>').show();
-                                    $('<a class="btn" href="' + url + '" id="btn-admin" style="background:#18bc9c">' + "进入后台" + '</a>').appendTo($buttons);
+                                    $('<a class="btn" href="' + url + '" id="btn-admin" style="background:#4e73df" target="_blank">' + "{:__('Dashboard')}" + '</a>').appendTo($buttons);
                                 }
                                 localStorage.setItem("fastep", "installed");
                             } else {

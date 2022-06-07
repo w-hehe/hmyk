@@ -5,6 +5,7 @@ namespace app\api\controller;
 use app\common\controller\Api;
 use app\common\library\Ems as Emslib;
 use app\common\model\User;
+use think\Hook;
 
 /**
  * 邮箱验证码接口
@@ -17,27 +18,19 @@ class Ems extends Api
     public function _initialize()
     {
         parent::_initialize();
-        \think\Hook::add('ems_send', function ($params) {
-            $obj = \app\common\library\Email::instance();
-            $result = $obj
-                ->to($params->email)
-                ->subject('验证码')
-                ->message("你的验证码是：" . $params->code)
-                ->send();
-            return $result;
-        });
     }
 
     /**
      * 发送验证码
      *
+     * @ApiMethod (POST)
      * @param string $email 邮箱
      * @param string $event 事件名称
      */
     public function send()
     {
-        $email = $this->request->request("email");
-        $event = $this->request->request("event");
+        $email = $this->request->post("email");
+        $event = $this->request->post("event");
         $event = $event ? $event : 'register';
 
         $last = Emslib::get($email, $event);
@@ -68,16 +61,17 @@ class Ems extends Api
     /**
      * 检测验证码
      *
+     * @ApiMethod (POST)
      * @param string $email   邮箱
      * @param string $event   事件名称
      * @param string $captcha 验证码
      */
     public function check()
     {
-        $email = $this->request->request("email");
-        $event = $this->request->request("event");
+        $email = $this->request->post("email");
+        $event = $this->request->post("event");
         $event = $event ? $event : 'register';
-        $captcha = $this->request->request("captcha");
+        $captcha = $this->request->post("captcha");
 
         if ($event) {
             $userinfo = User::getByEmail($email);

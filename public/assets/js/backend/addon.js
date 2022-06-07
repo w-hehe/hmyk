@@ -17,16 +17,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             // 弹窗自适应宽高
             var area = Fast.config.openArea != undefined ? Fast.config.openArea : [$(window).width() > 800 ? '800px' : '95%', $(window).height() > 600 ? '600px' : '95%'];
 
-            table.on('load-success.bs.table', function (e, json) {
-                if (json && typeof json.category != 'undefined' && $(".nav-category li").size() == 2) {
-                    $.each(json.category, function (i, j) {
-                        $("<li><a href='javascript:;' data-id='" + j.id + "'>" + j.name + "</a></li>").insertBefore($(".nav-category li:last"));
-                    });
-                }
-            });
-            table.on('load-error.bs.table', function (e, status, res) {
-                if (status == 404 && $(".btn-switch.active").data("type") != "local") {
-                    Layer.confirm(__('Store now available tips'), {
+            var switch_local = function () {
+                if ($(".btn-switch.active").data("type") != "local") {
+                    Layer.confirm(__('Store not available tips'), {
                         title: __('Warmtips'),
                         btn: [__('Switch to the local'), __('Try to reload')]
                     }, function (index) {
@@ -40,6 +33,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     });
                     return false;
                 }
+            };
+            table.on('load-success.bs.table', function (e, json) {
+                if (json && typeof json.category != 'undefined' && $(".nav-category li").length == 2) {
+                    $.each(json.category, function (i, j) {
+                        $("<li><a href='javascript:;' data-id='" + j.id + "'>" + j.name + "</a></li>").insertBefore($(".nav-category li:last"));
+                    });
+                }
+                if (typeof json.rows === 'undefined' && typeof json.code != 'undefined') {
+                    switch_local();
+                }
+            });
+            table.on('load-error.bs.table', function (e, status, res) {
+                console.log(e, status, res);
+                switch_local();
             });
             table.on('post-body.bs.table', function (e, settings, json, xhr) {
                 var parenttable = table.closest('.bootstrap-table');
@@ -76,11 +83,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
+                pageSize: 50,
                 queryParams: function (params) {
                     var userinfo = Controller.api.userinfo.get();
                     $.extend(params, {
                         uid: userinfo ? userinfo.id : '',
                         token: userinfo ? userinfo.token : '',
+                        domain: Config.domain,
                         version: Config.faversion
                     });
                     return params;
@@ -143,7 +152,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         {
                             field: 'id',
                             title: __('Operate'),
-                            align: 'center',
                             table: table,
                             formatter: Controller.api.formatter.operate,
                             align: 'right'
@@ -167,7 +175,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 commonSearch: true,
                 searchFormVisible: true,
                 searchFormTemplate: 'searchformtpl',
-                pageSize: 50,
             });
 
             // 为表格绑定事件
@@ -177,9 +184,53 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             require(['upload'], function (Upload) {
                 Upload.api.upload("#faupload-addon", function (data, ret) {
                     Config['addons'][data.addon.name] = data.addon;
-                    Toastr.success(ret.msg);
-                    operate(data.addon.name, 'enable', false);
+                    var addon = data.addon;
+                    var testdata = data.addon.testdata;
+                    operate(data.addon.name, 'enable', false, function (data, ret) {
+                        Layer.alert(__('Offline installed tips') + (testdata ? __('Testdata tips') : ""), {
+                            btn: testdata ? [__('Import testdata'), __('Skip testdata')] : [__('OK')],
+                            title: __('Warning'),
+                            yes: function (index) {
+                                if (testdata) {
+                                    Fast.api.ajax({
+                                        url: 'addon/testdata',
+                                        data: {
+                                            name: addon.name,
+                                            version: addon.version,
+                                            faversion: Config.faversion
+                                        }
+                                    }, function (data, ret) {
+                                        Layer.close(index);
+                                    });
+                                } else {
+                                    Layer.close(index);
+                                }
+                            },
+                            icon: 1
+                        });
+                    });
                     return false;
+                }, function (data, ret) {
+                    if (ret.msg && ret.msg.match(/(login|登录)/g)) {
+                        return Layer.alert(ret.msg, {
+                            title: __('Warning'),
+                            btn: [__('Login now')],
+                            yes: function (index, layero) {
+                                $(".btn-userinfo").trigger("click");
+                            }
+                        });
+                    }
+                });
+
+                // 检测是否登录
+                $(document).on("mousedown", "#faupload-addon", function (e) {
+                    var userinfo = Controller.api.userinfo.get();
+                    var uid = userinfo ? userinfo.id : 0;
+
+                    if (parseInt(uid) === 0) {
+                        $(".btn-userinfo").trigger("click");
+                        return false;
+                    }
                 });
             });
 
@@ -187,7 +238,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             $(document).on("click", ".btn-addonindex", function () {
                 if ($(this).attr("href") == 'javascript:;') {
                     Layer.msg(__('Not installed tips'), {icon: 7});
-                } else if ($(this).closest(".operate").find("a.btn-enable").size() > 0) {
+                } else if ($(this).closest(".operate").find("a.btn-enable").length > 0) {
                     Layer.msg(__('Not enabled tips'), {icon: 7});
                     return false;
                 }
@@ -198,9 +249,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 $(".btn-switch").removeClass("active");
                 $(this).addClass("active");
                 $("form.form-commonsearch input[name='type']").val($(this).data("type"));
+                var method = $(this).data("type") == 'local' ? 'hideColumn' : 'showColumn';
+                table.bootstrapTable(method, 'price');
+                table.bootstrapTable(method, 'downloads');
                 table.bootstrapTable('refresh', {url: ($(this).data("url") ? $(this).data("url") : $.fn.bootstrapTable.defaults.extend.index_url), pageNumber: 1});
                 return false;
             });
+
+            // 切换分类
             $(document).on("click", ".nav-category li a", function () {
                 $(".nav-category li").removeClass("active");
                 $(this).parent().addClass("active");
@@ -230,7 +286,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             });
 
             // 会员信息
-            $(document).on("click", ".btn-userinfo", function () {
+            $(document).on("click", ".btn-userinfo", function (e, name, version) {
                 var that = this;
                 var area = [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '400px' : '95%'];
                 var userinfo = Controller.api.userinfo.get();
@@ -245,16 +301,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         yes: function (index, layero) {
                             Fast.api.ajax({
                                 url: Config.api_url + '/user/login',
-                                dataType: 'jsonp',
+                                type: 'post',
                                 data: {
                                     account: $("#inputAccount", layero).val(),
                                     password: $("#inputPassword", layero).val(),
-                                    _method: 'POST'
+                                    version: Config.faversion,
                                 }
                             }, function (data, ret) {
                                 Controller.api.userinfo.set(data);
                                 Layer.closeAll();
-                                Layer.alert(ret.msg);
+                                Layer.alert(ret.msg, {title: __('Warning'), icon: 1});
+                                return false;
                             }, function (data, ret) {
                             });
                         },
@@ -262,16 +319,26 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             return false;
                         },
                         success: function (layero, index) {
-                            $(".layui-layer-btn1", layero).prop("href", "http://www.fastadmin.net/user/register.html").prop("target", "_blank");
+                            this.checkEnterKey = function (event) {
+                                if (event.keyCode === 13) {
+                                    $(".layui-layer-btn0").trigger("click");
+                                    return false;
+                                }
+                            };
+                            $(document).on('keydown', this.checkEnterKey);
+                            $(".layui-layer-btn1", layero).prop("href", "https://www.fastadmin.net/user/register.html").prop("target", "_blank");
+                        },
+                        end: function () {
+                            $(document).off('keydown', this.checkEnterKey);
                         }
                     });
                 } else {
                     Fast.api.ajax({
                         url: Config.api_url + '/user/index',
-                        dataType: 'jsonp',
                         data: {
-                            user_id: userinfo.id,
+                            uid: userinfo.id,
                             token: userinfo.token,
+                            version: Config.faversion,
                         }
                     }, function (data) {
                         Layer.open({
@@ -279,20 +346,19 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             area: area,
                             title: __('Userinfo'),
                             resize: false,
-                            btn: [__('Logout'), __('Cancel')],
+                            btn: [__('Logout'), __('Close')],
                             yes: function () {
                                 Fast.api.ajax({
                                     url: Config.api_url + '/user/logout',
-                                    dataType: 'jsonp',
-                                    data: {uid: userinfo.id, token: userinfo.token}
+                                    data: {uid: userinfo.id, token: userinfo.token, version: Config.faversion}
                                 }, function (data, ret) {
                                     Controller.api.userinfo.set(null);
                                     Layer.closeAll();
-                                    Layer.alert(ret.msg);
+                                    Layer.alert(ret.msg, {title: __('Warning'), icon: 0});
                                 }, function (data, ret) {
                                     Controller.api.userinfo.set(null);
                                     Layer.closeAll();
-                                    Layer.alert(ret.msg);
+                                    Layer.alert(ret.msg, {title: __('Warning'), icon: 0});
                                 });
                             }
                         });
@@ -304,6 +370,28 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     });
 
                 }
+            });
+
+            //刷新授权
+            $(document).on("click", ".btn-authorization", function () {
+                var userinfo = Controller.api.userinfo.get();
+                if (!userinfo) {
+                    $(".btn-userinfo").trigger("click");
+                    return false;
+                }
+                Layer.confirm(__('Are you sure you want to refresh authorization?'), {icon: 3, title: __('Warmtips')}, function () {
+                    Fast.api.ajax({
+                        url: 'addon/authorization',
+                        data: {
+                            uid: userinfo.id,
+                            token: userinfo.token
+                        }
+                    }, function (data, ret) {
+                        $(".btn-refresh").trigger("click");
+                        Layer.closeAll();
+                    });
+                });
+                return false;
             });
 
             var install = function (name, version, force) {
@@ -323,30 +411,35 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 }, function (data, ret) {
                     Layer.closeAll();
                     Config['addons'][data.addon.name] = ret.data.addon;
-                    Layer.alert(__('Online installed tips'), {
-                        btn: [__('OK')],
-                        title: __('Warning'),
-                        icon: 1
-                    });
-                    Controller.api.refresh(table, name);
-                }, function (data, ret) {
-                    //如果是需要购买的插件则弹出二维码提示
-                    if (ret && ret.code === -1) {
-                        //扫码支付
-                        Layer.open({
-                            content: Template("paytpl", ret.data),
-                            shade: 0.8,
-                            area: area,
-                            skin: 'layui-layer-msg layui-layer-pay',
-                            title: false,
-                            closeBtn: true,
-                            btn: false,
-                            resize: false,
-                            end: function () {
-                                Layer.alert(__('Pay tips'));
-                            }
+                    operate(data.addon.name, 'enable', false, function () {
+                        Layer.alert(__('Online installed tips') + (data.addon.testdata ? __('Testdata tips') : ""), {
+                            btn: data.addon.testdata ? [__('Import testdata'), __('Skip testdata')] : [__('OK')],
+                            title: __('Warning'),
+                            yes: function (index) {
+                                if (data.addon.testdata) {
+                                    Fast.api.ajax({
+                                        url: 'addon/testdata',
+                                        data: {
+                                            name: name,
+                                            uid: uid,
+                                            token: token,
+                                            version: version,
+                                            faversion: Config.faversion
+                                        }
+                                    }, function (data, ret) {
+                                        Layer.close(index);
+                                    });
+                                } else {
+                                    Layer.close(index);
+                                }
+                            },
+                            icon: 1
                         });
-                    } else if (ret && ret.code === -2) {
+                        Controller.api.refresh(table, name);
+                    });
+                }, function (data, ret) {
+                    var area = Fast.config.openArea != undefined ? Fast.config.openArea : [$(window).width() > 650 ? '650px' : '95%', $(window).height() > 710 ? '710px' : '95%'];
+                    if (ret && ret.code === -2) {
                         //如果登录已经超时,重新提醒登录
                         if (uid && uid != ret.data.uid) {
                             Controller.api.userinfo.set(null);
@@ -356,7 +449,31 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         top.Fast.api.open(ret.data.payurl, __('Pay now'), {
                             area: area,
                             end: function () {
-                                top.Layer.alert(__('Pay tips'));
+                                Fast.api.ajax({
+                                    url: 'addon/isbuy',
+                                    data: {
+                                        name: name,
+                                        force: force ? 1 : 0,
+                                        uid: uid,
+                                        token: token,
+                                        version: version,
+                                        faversion: Config.faversion
+                                    }
+                                }, function () {
+                                    top.Layer.alert(__('Pay successful tips'), {
+                                        btn: [__('Continue installation')],
+                                        title: __('Warning'),
+                                        icon: 1,
+                                        yes: function (index) {
+                                            top.Layer.close(index);
+                                            install(name, version);
+                                        }
+                                    });
+                                    return false;
+                                }, function () {
+                                    console.log(__('Canceled'));
+                                    return false;
+                                });
                             }
                         });
                     } else if (ret && ret.code === -3) {
@@ -376,7 +493,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         });
 
                     } else {
-                        Layer.alert(ret.msg);
+                        Layer.alert(ret.msg, {title: __('Warning'), icon: 0});
                     }
                     return false;
                 });
@@ -408,13 +525,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         });
 
                     } else {
-                        Layer.alert(ret.msg);
+                        Layer.alert(ret.msg, {title: __('Warning'), icon: 0});
                     }
                     return false;
                 });
             };
 
-            var operate = function (name, action, force) {
+            var operate = function (name, action, force, success) {
                 Fast.api.ajax({
                     url: 'addon/state',
                     data: {name: name, action: action, force: force ? 1 : 0}
@@ -422,6 +539,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     var addon = Config['addons'][name];
                     addon.state = action === 'enable' ? 1 : 0;
                     Layer.closeAll();
+                    if (typeof success === 'function') {
+                        success(data, ret);
+                    }
                     Controller.api.refresh(table, name);
                 }, function (data, ret) {
                     if (ret && ret.code === -3) {
@@ -436,12 +556,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
                             },
                             yes: function () {
-                                operate(name, action, true);
+                                operate(name, action, true, success);
                             }
                         });
 
                     } else {
-                        Layer.alert(ret.msg);
+                        Layer.alert(ret.msg, {title: __('Warning'), icon: 0});
                     }
                     return false;
                 });
@@ -459,7 +579,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     Layer.closeAll();
                     Controller.api.refresh(table, name);
                 }, function (data, ret) {
-                    Layer.alert(ret.msg);
+                    Layer.alert(ret.msg, {title: __('Warning')});
                     return false;
                 });
             };
@@ -478,7 +598,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         title: __('Warning'),
                         btn: [__('Login now')],
                         yes: function (index, layero) {
-                            $(".btn-userinfo").trigger("click");
+                            $(".btn-userinfo").trigger("click", name, version);
                         },
                         btn2: function () {
                             install(name, version, false);
@@ -523,7 +643,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 }
                 var version = $(this).data("version");
 
-                Layer.confirm(__('Upgrade tips', Config['addons'][name].title), function () {
+                Layer.confirm(__('Upgrade tips', Config['addons'][name].title), function (index, layero) {
                     upgrade(name, version);
                 });
             });
@@ -551,11 +671,28 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             Controller.api.bindevent();
         },
         config: function () {
+            $(document).on("click", ".nav-group li a[data-toggle='tab']", function () {
+                if ($(this).attr("href") == "#all") {
+                    $(".tab-pane").addClass("active in");
+                }
+                return;
+                var type = $(this).attr("href").substring(1);
+                if (type == 'all') {
+                    $(".table-config tr").show();
+                } else {
+                    $(".table-config tr").hide();
+                    $(".table-config tr[data-group='" + type + "']").show();
+                }
+            });
+
             Controller.api.bindevent();
         },
         api: {
             formatter: {
                 title: function (value, row, index) {
+                    if ($(".btn-switch.active").data("type") == "local") {
+                        // return value;
+                    }
                     var title = '<a class="title" href="' + row.url + '" data-toggle="tooltip" title="' + __('View addon home page') + '" target="_blank">' + value + '</a>';
                     if (row.screenshots && row.screenshots.length > 0) {
                         title += ' <a href="javascript:;" data-index="' + index + '" class="view-screenshots text-success" title="' + __('View addon screenshots') + '" data-toggle="tooltip"><i class="fa fa-image"></i></a>';
@@ -615,10 +752,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             refresh: function (table, name) {
                 //刷新左侧边栏
                 Fast.api.refreshmenu();
+                //刷新插件JS缓存
+                Fast.api.ajax({url: require.toUrl('addons.js'), loading: false}, function () {
+                    return false;
+                }, function () {
+                    return false;
+                });
 
                 //刷新行数据
                 if ($(".operate[data-name='" + name + "']").length > 0) {
-                    var index = $(".operate[data-name='" + name + "']").closest("tr[data-index]").data("index");
+                    var tr = $(".operate[data-name='" + name + "']").closest("tr[data-index]");
+                    var index = tr.data("index");
                     var row = Table.api.getrowbyindex(table, index);
                     row.addon = typeof Config['addons'][name] !== 'undefined' ? Config['addons'][name] : undefined;
                     table.bootstrapTable("updateRow", {index: index, row: row});

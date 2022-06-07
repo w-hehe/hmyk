@@ -1,227 +1,231 @@
-<link href="/assets/css/dashboard.css" rel="stylesheet" />
+<!--<link href="/assets/css/dashboard.css" rel="stylesheet" />-->
 {:doAction('admin_dashboard_head')}
+<style>
+    .row-advert p{
+        margin-bottom: 0;
+    }
+</style>
 
 <div class="panel-default panel-intro">
     {:doAction('admin_dashboard_upgrade')}
-    <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple" href="">
-        <div class="flex items-center set-a">
+    
+    
+    <div class="alert" role="alert" style="background: #4e73df; color: #fff; font-weight: bold;">
+        <div class="flex items-center set-a" style="display: inline-block;">
             <span id="init-version">
                 系统版本 v<span id="version">{$options.version}</span>&nbsp;&nbsp;
                 <a href="javascript:;" id="check-update">检测更新</a>
             </span>
         </div>
+        <span style="width: 100px; float: right;"><a href="https://blog.ysxue.net/2.html" target="_blank">更新记录 →</a></span>
+    </div>
+    
+    <div class="row" style="margin-top:15px;" id="statistics">
 
-        <span style="width: 100px; text-align: right;"><a href="https://blog.ysxue.net/2.html" target="_blank">更新记录 →</a></span>
+        <div class="col-lg-12">
+        </div>
+        <div class="col-xs-6 col-md-3">
+            <div class="panel bg-blue-gradient no-border">
+                <div class="panel-body">
+                    <div class="panel-content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h1 class="no-margins">{$user_total}</h1>
+                                <div class="font-bold"><i class="fa fa-magic"></i>
+                                    <small>用户总数</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h1 class="no-margins">{$today_register}</h1>
+                                <div class="font-bold"><i class="fa fa-magic"></i>
+                                    <small>今日注册</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+            <div class="panel bg-teal-gradient no-border">
+                <div class="panel-body">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h1 class="no-margins">{$category_total}</h1>
+                                <div class="font-bold"><i class="fa fa-database"></i>
+                                    <small>分类数量</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h1 class="no-margins">{$goods_total}</h1>
+                                <div class="font-bold"><i class="fa fa-filter"></i>
+                                    <small>商品数量</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-md-3">
+            <div class="panel bg-purple-gradient no-border">
+                <div class="panel-body">
+                    <div class="ibox-content">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h1 class="no-margins">{$today_order}</h1>
+                                <div class="font-bold"><i class="fa fa-files-o"></i>
+                                    <small>今日订单</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h1 class="no-margins">{$today_wait_order}</h1>
+                                <div class="font-bold"><i class="fa fa-filter"></i>
+                                    <small>待处理订单</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+            <div class="panel bg-green-gradient no-border">
+                <div class="panel-body">
+                    <div class="ibox-content">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h1 class="no-margins">{$today_order_money}</h1>
+                                <div class="font-bold"><i class="fa fa-picture-o"></i>
+                                    <small>今日成交金额</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h1 class="no-margins">{$today_order_profit}</h1>
+                                <div class="font-bold"><i class="fa fa-filter"></i>
+                                    <small>今日利润</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-        <!-- Card -->
-        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-            <div class="flex items-center" style="width: 50%;">
-                <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
-                    <i class="fa fa-users fa-fw w-5 h-5" style="font-size: 16px;" fill="currentColor" viewBox="0 0 20 20"></i>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">用户总数</p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{$user_total}</p>
-                </div>
-            </div>
-            <div class="flex items-center" style="width: 50%;">
-                <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
-                    <i class="fa fa-user fa-fw w-5 h-5" style="font-size: 18px;" fill="currentColor" viewBox="0 0 20 20"></i>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">今日注册</p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{$today_register}</p>
-                </div>
-            </div>
+   
+    <div class="row row-advert" id="poster-box" data-exists="{:$poster ? 'true' : 'false'}">
+        <div class="col-xs-12 col-md-6">
+            <table class="table table-striped table-bordered" style="background: #fff;">
+                <thead>
+                    <tr>
+                        <th class="px-3 py-3">联盟推广<a href="{:$poster ? $poster.poster_url : 'javascript:;'}" id="poster_url" target="_blank" style="float: right;">我要推广</a></th>
+                    </tr>
+                </thead>
+                <tbody class="" id="poster-list">
+                    {if condition="$poster"}
+                    {volist name="$poster.poster" id="vo"}
+                    <tr>
+                        <td class="px-4 py-2">
+                            <a href="{$vo.url}" target="_blank">
+                                {$vo.content}
+                            </a>
+                        </td>
+                    </tr>
+                    {/volist}
+                    {/if}
+                </tbody>
+            </table>
         </div>
-        <!-- Card -->
-        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-            <div class="flex items-center" style="width: 50%;">
-                <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
-                    <i class="fa fa-leaf fa-fw w-5 h-5" style="font-size: 18px;" fill="currentColor" viewBox="0 0 20 20"></i>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">分类数量</p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{$category_total}</p>
-                </div>
-            </div>
-            <div class="flex items-center" style="width: 50%;">
-                <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
-                    <i class="fa fa-list-ul fa-fw w-5 h-5" style="font-size: 18px;" fill="currentColor" viewBox="0 0 20 20"></i>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">商品数量</p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{$goods_total}</p>
-                </div>
-            </div>
-        </div>
-        <!-- Card -->
-        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-            <div class="flex items-center" style="width: 50%;">
-                <div class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
-                    <i class="fa fa-reorder fa-fw w-5 h-5" style="font-size: 18px;" fill="currentColor" viewBox="0 0 20 20"></i>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">今日订单</p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{$today_order}</p>
-                </div>
-            </div>
-            <div class="flex items-center" style="width: 50%;">
-                <div class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
-                    <i class="fa fa-reorder fa-fw w-5 h-5" style="font-size: 18px;" fill="currentColor" viewBox="0 0 20 20"></i>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">待处理订单</p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{$today_wait_order}</p>
-                </div>
-            </div>
-        </div>
-        <!-- Card -->
-        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-            <div class="flex items-center" style="width: 50%;">
-                <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
-                    <i class="fa fa-shopping-cart fa-fw w-5 h-5" style="font-size: 18px;" fill="currentColor" viewBox="0 0 20 20"></i>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">今日成交金额</p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{$today_order_money}</p>
-                </div>
-            </div>
-            <div class="flex items-center" style="width: 50%;">
-                <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
-                    <i class="fa fa-diamond fa-fw w-5 h-5" style="font-size: 18px;" fill="currentColor" viewBox="0 0 20 20"></i>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">今日利润</p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{$today_order_profit}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-2" style="margin-top: 20px;" id="poster-box" data-exists="{:$poster ? 'true' : 'false'}">
-        <div class="w-full overflow-hidden rounded-lg shadow-xs">
-            <div class="flex">
-                <div class="w-full overflow-x-auto">
-                    <table class="w-full" style="line-height: 150%;">
-                        <thead>
-                        <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">联盟推广<a href="{:$poster ? $poster.poster_url : 'javascript:;'}" id="poster_url" target="_blank" style="float: right;">我要推广</a></th>
+        <div class="col-xs-12 col-md-6">
+            <table class="table table-striped table-bordered" style="background: #fff;">
+                    <thead>
+                        <tr>
+                            <th class="px-3 py-3">官方公告<a href="https://blog.ysxue.net/" target="_blank" style="float: right;">官方网站</a></th>
                         </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800" id="poster-list">
-                            {if condition="$poster"}
-                            {volist name="$poster.poster" id="vo"}
-                            <tr class="text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3">
-                                    <a href="{$vo.url}" target="_blank">
-                                        {$vo.content}
-                                    </a>
-                                </td>
-                            </tr>
-                            {/volist}
-                            {/if}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="w-full overflow-hidden rounded-lg shadow-xs">
-            <div class="flex">
-                <div class="w-full overflow-x-auto">
-                    <table class="w-full" style="line-height: 150%;">
-                        <thead>
-                        <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">官方公告<a href="https://blog.ysxue.net/" target="_blank" style="float: right;">官方网站</a></th>
+                    </thead>
+                    <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800" id="notice-list">
+                        {if condition="$poster"}
+                        {volist name="$poster.notice" id="vo"}
+                        <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-2">
+                                <a href="{$vo.url}" target="_blank">
+                                    {$vo.content}
+                                </a>
+                            </td>
                         </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800" id="notice-list">
-                            {if condition="$poster"}
-                            {volist name="$poster.notice" id="vo"}
-                            <tr class="text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3">
-                                    <a href="{$vo.url}" target="_blank">
-                                        {$vo.content}
-                                    </a>
-                                </td>
-                            </tr>
-                            {/volist}
-                            {/if}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        {/volist}
+                        {/if}
+                    </tbody>
+                </table>
         </div>
     </div>
-    <div style="background: #fff; padding: 10px;">
+
+    
+    <div class="row " style="margin-bottom: 20px;">
         <div style="display: none;">
             <textarea id="sts-order-date">{:json_encode($sts_order.date)}</textarea>
             <textarea id="sts-order-order-count">{:json_encode($sts_order.order_count)}</textarea>
             <textarea id="sts-order-sales-money">{:json_encode($sts_order.sales_money)}</textarea>
         </div>
-
-        <div id="lineChart" style="width: 100%;height:400px;"></div>
+        <div class="col-md-12">
+            <div id="lineChart" style="width: 100%;height:400px; background: #fff; padding: 10px;"></div>
+        </div>
+        
     </div>
 
 
-
-    <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-2" style="margin-top: 20px;">
-        <div class="w-full overflow-hidden rounded-lg shadow-xs">
-            <div class="flex">
-                <div class="w-full overflow-x-auto">
-                    <table class="w-full whitespace-no-wrap">
-                        <thead>
-                        <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">商品销量Top10</th>
-                            <th class="px-4 py-3">商品名称</th>
-                            <th class="px-4 py-3">销售额</th>
-                            <th class="px-4 py-3">销量</th>
-                        </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                        {volist name="$goods_list" id="vo" key="key"}
-                        <tr class="text-gray-700 dark:text-gray-400">
-                            <td class="px-4 py-3">{$key}</td>
-                            <td class="px-4 py-3">{:substrCn($vo.name, 28)}</td>
-                            <td class="px-4 py-3">&yen; {$vo.sales_money}</td>
-                            <td class="px-4 py-3">{$vo.sales}</td>
-                        </tr>
-                        {/volist}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <table class="table table-striped table-bordered" style="background: #fff;">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-3">商品销量Top10</th>
+                        <th class="px-4 py-3">商品名称</th>
+                        <th class="px-4 py-3">销售额</th>
+                        <th class="px-4 py-3">销量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="$goods_list" id="vo" key="key"}
+                    <tr class="text-gray-700 dark:text-gray-400">
+                        <td class="px-4 py-2">{$key}</td>
+                        <td class="px-4 py-2">{:substrCn($vo.name, 28)}</td>
+                        <td class="px-4 py-2">&yen; {$vo.sales_money}</td>
+                        <td class="px-4 py-2">{$vo.sales}</td>
+                    </tr>
+                    {/volist}
+                </tbody>
+            </table>
         </div>
-
-        <div class="w-full overflow-hidden rounded-lg shadow-xs">
-            <div class="flex">
-                <div class="w-full overflow-x-auto">
-                    <table class="w-full whitespace-no-wrap">
-                        <thead>
-                        <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">用户消费Top10 (不统计游客)</th>
-                            <th class="px-4 py-3">用户账号</th>
-                            <th class="px-4 py-3">订单数量</th>
-                            <th class="px-4 py-3">消费金额</th>
-                        </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                        {volist name="user_list" id="vo" key="key"}
-                        <tr class="text-gray-700 dark:text-gray-400">
-                            <td class="px-4 py-3">{$key}</td>
-                            <td class="px-4 py-3">{$vo.nickname}</td>
-                            <td class="px-4 py-3">{$vo.order_count}</td>
-                            <td class="px-4 py-3">&yen; {$vo.consume}</td>
-                        </tr>
-                        {/volist}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="col-xs-12 col-md-6">
+            <table class="table table-striped table-bordered" style="background: #fff;">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-3">用户消费Top10 (不统计游客)</th>
+                        <th class="px-4 py-3">用户账号</th>
+                        <th class="px-4 py-3">订单数量</th>
+                        <th class="px-4 py-3">消费金额</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="user_list" id="vo" key="key"}
+                    <tr class="text-gray-700 dark:text-gray-400">
+                        <td class="px-4 py-2">{$key}</td>
+                        <td class="px-4 py-2">{$vo.nickname}</td>
+                        <td class="px-4 py-2">{$vo.order_count}</td>
+                        <td class="px-4 py-2">&yen; {$vo.consume}</td>
+                    </tr>
+                    {/volist}
+                </tbody>
+            </table>
         </div>
     </div>
+
 </div>
 <span id="upgrade" data-upgrade="{:isset($upgrade.version) ? $upgrade.version : 0}"></span>
 

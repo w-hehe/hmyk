@@ -5,7 +5,6 @@ namespace app\common\controller;
 use app\admin\library\Auth;
 use think\Config;
 use think\Controller;
-use think\Db;
 use think\Hook;
 use think\Lang;
 use think\Loader;
@@ -13,12 +12,13 @@ use think\Model;
 use think\Session;
 use fast\Tree;
 use think\Validate;
+use think\Db;
 
 /**
  * 后台控制器基类
  */
-class Backend extends Controller {
-
+class Backend extends Controller
+{
 
     /**
      * 无需登录的方法,同时也就不需要鉴权了
@@ -109,15 +109,12 @@ class Backend extends Controller {
      * 表示注释或字段名
      */
     protected $importHeadType = 'comment';
-
-
-    protected $options = [];
-
+    
+    
     public $timestamp = null;
-
-    public $entry = 'admin';
-
-    public $site = [];
+    
+    public $options = [];
+    
 
     /**
      * 引入后台控制器的traits
@@ -125,12 +122,11 @@ class Backend extends Controller {
     use \app\admin\library\traits\Backend;
 
     public function _initialize() {
-
-        if($_SERVER['PHP_SELF'] != '/index.php'){
-            $this->entry = explode('/', trim($_SERVER['PHP_SELF'], '/'))[0];
-        }
-//        echo $this->entry;die;
+        
         $this->timestamp = time();
+        $options = db::name('options')->select();
+        foreach($options as $val) $this->options[$val['option_name']] = $val['option_content'];
+        
         $modulename = $this->request->module();
         $controllername = Loader::parseName($this->request->controller());
         $actionname = strtolower($this->request->action());
@@ -146,24 +142,34 @@ class Backend extends Controller {
         // 定义是否AJAX请求
         !defined('IS_AJAX') && define('IS_AJAX', $this->request->isAjax());
 
+        // 检测IP是否允许
+        check_ip_allowed();
+
         $this->auth = Auth::instance();
-//        $this->auth->check();
+
         // 设置当前请求的URI
         $this->auth->setRequestUri($path);
         // 检测是否需要验证登录
         if (!$this->auth->match($this->noNeedLogin)) {
-
             //检测是否登录
             if (!$this->auth->isLogin()) {
+                Hook::listen('admin_nologin', $this);
                 $url = Session::get('referer');
                 $url = $url ? $url : $this->request->url();
-                if ($url == '/') {
+                if (in_array($this->request->pathinfo(), ['/', 'index/index'])) {
                     $this->redirect('index/login', [], 302, ['referer' => $url]);
                     exit;
                 }
-                $this->redirect('index/login', [], 302, ['referer' => $url]);
+                $this->error(__('Please login first'), url('index/login', ['url' => $url]));
             }
-
+            // 判断是否需要验证权限
+            if (!$this->auth->match($this->noNeedRight)) {
+                // 判断控制器和方法是否有对应权限
+                if (!$this->auth->check($path)) {
+                    Hook::listen('admin_nopermission', $this);
+                    $this->error(__('You have no permission'), '');
+                }
+            }
         }
 
         // 非选项卡时重定向
@@ -195,9 +201,10 @@ class Backend extends Controller {
         }
 
         // 语言检测
-        $lang = strip_tags($this->request->langset());
+        $lang = $this->request->langset();
+        $lang = preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang) ? $lang : 'zh-cn';
 
-        $this->site = Config::get("site");
+        $site = Config::get("site");
 
         $upload = \app\common\model\Config::upload();
 
@@ -206,7 +213,15 @@ class Backend extends Controller {
 
         // 配置信息
         $config = [
-            'site' => array_intersect_key($this->site, array_flip(['name', 'indexurl', 'cdnurl', 'version', 'timezone', 'languages'])), 'upload' => $upload, 'modulename' => $modulename, 'controllername' => $controllername, 'actionname' => $actionname, 'jsname' => 'backend/' . str_replace('.', '/', $controllername), 'moduleurl' => rtrim(url("/{$modulename}", '', false), '/'), 'language' => $lang, 'referer' => Session::get("referer")
+            'site'           => array_intersect_key($site, array_flip(['name', 'indexurl', 'cdnurl', 'version', 'timezone', 'languages'])),
+            'upload'         => $upload,
+            'modulename'     => $modulename,
+            'controllername' => $controllername,
+            'actionname'     => $actionname,
+            'jsname'         => 'backend/' . str_replace('.', '/', $controllername),
+            'moduleurl'      => rtrim(url("/{$modulename}", '', false), '/'),
+            'language'       => $lang,
+            'referer'        => Session::get("referer")
         ];
         $config = array_merge($config, Config::get("view_replace_str"));
 
@@ -216,28 +231,19 @@ class Backend extends Controller {
         Hook::listen("config_init", $config);
         //加载当前控制器语言包
         $this->loadlang($controllername);
+        //渲染站点配置
+        $this->assign('site', $site);
+        //渲染配置信息
+        $this->assign('config', $config);
         //渲染权限对象
         $this->assign('auth', $this->auth);
         //渲染管理员对象
         $this->assign('admin', Session::get('admin'));
-
-        $options = db::name('options')->select();
-
-        foreach($options as $val){
-            $this->options[$val['option_name']] = $val['option_content'];
-        }
-
-        $config['site']['version'] = $this->options['version'];
-        $this->site['version'] = $this->options['version'];
-
+        
         $this->assign([
-            'options' => $this->options,
-            'site' => $this->site,
-            'config' => $config,
-            'entry' => $this->entry
+            'options' => $this->options
         ]);
-
-
+        
         //执行插件
         $active_plugins = $this->options['active_plugin'];
         $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
@@ -248,34 +254,39 @@ class Backend extends Controller {
                 }
             }
         }
-
     }
 
     /**
      * 加载语言文件
      * @param string $name
      */
-    protected function loadlang($name) {
+    protected function loadlang($name)
+    {
         $name = Loader::parseName($name);
-        Lang::load(APP_PATH . $this->request->module() . '/lang/' . $this->request->langset() . '/' . str_replace('.', '/', $name) . '.php');
+        $name = preg_match("/^([a-zA-Z0-9_\.\/]+)\$/i", $name) ? $name : 'index';
+        $lang = $this->request->langset();
+        $lang = preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang) ? $lang : 'zh-cn';
+        Lang::load(APP_PATH . $this->request->module() . '/lang/' . $lang . '/' . str_replace('.', '/', $name) . '.php');
     }
 
     /**
      * 渲染配置信息
-     * @param mixed $name 键名或数组
+     * @param mixed $name  键名或数组
      * @param mixed $value 值
      */
-    protected function assignconfig($name, $value = '') {
+    protected function assignconfig($name, $value = '')
+    {
         $this->view->config = array_merge($this->view->config ? $this->view->config : [], is_array($name) ? $name : [$name => $value]);
     }
 
     /**
      * 生成查询所需要的条件,排序方式
-     * @param mixed $searchfields 快速查询的字段
+     * @param mixed   $searchfields   快速查询的字段
      * @param boolean $relationSearch 是否关联查询
      * @return array
      */
-    protected function buildparams($searchfields = null, $relationSearch = null) {
+    protected function buildparams($searchfields = null, $relationSearch = null)
+    {
         $searchfields = is_null($searchfields) ? $this->searchFields : $searchfields;
         $relationSearch = is_null($relationSearch) ? $this->relationSearch : $relationSearch;
         $search = $this->request->get("search", '');
@@ -381,7 +392,9 @@ class Backend extends Controller {
                 case 'BETWEEN':
                 case 'NOT BETWEEN':
                     $arr = array_slice(explode(',', $v), 0, 2);
-                    if (stripos($v, ',') === false || !array_filter($arr)) {
+                    if (stripos($v, ',') === false || !array_filter($arr, function ($v) {
+                            return $v != '' && $v !== false && $v !== null;
+                        })) {
                         continue 2;
                     }
                     //当出现一边为空时改变操作符
@@ -453,7 +466,8 @@ class Backend extends Controller {
      * 禁用数据限制时返回的是null
      * @return mixed
      */
-    protected function getDataLimitAdminIds() {
+    protected function getDataLimitAdminIds()
+    {
         if (!$this->dataLimit) {
             return null;
         }
@@ -474,7 +488,8 @@ class Backend extends Controller {
      * 这里示例了所有的参数，所以比较复杂，实现上自己实现只需简单的几行即可
      *
      */
-    protected function selectpage() {
+    protected function selectpage()
+    {
         //设置过滤方法
         $this->request->filter(['trim', 'strip_tags', 'htmlspecialchars']);
 
@@ -559,6 +574,11 @@ class Backend extends Controller {
             //如果有primaryvalue,说明当前是初始化传值,按照选择顺序排序
             if ($primaryvalue !== null && preg_match("/^[a-z0-9_\-]+$/i", $primarykey)) {
                 $primaryvalue = array_unique(is_array($primaryvalue) ? $primaryvalue : explode(',', $primaryvalue));
+                //修复自定义data-primary-key为字符串内容时，给排序字段添加上引号
+                $primaryvalue = array_map(function ($value) {
+                    return '\'' . $value . '\'';
+                }, $primaryvalue);
+
                 $primaryvalue = implode(',', $primaryvalue);
 
                 $this->model->orderRaw("FIELD(`{$primarykey}`, {$primaryvalue})");
@@ -566,13 +586,16 @@ class Backend extends Controller {
                 $this->model->order($order);
             }
 
-            $datalist = $this->model->where($where)->page($page, $pagesize)->select();
+            $datalist = $this->model->where($where)
+                ->page($page, $pagesize)
+                ->select();
 
             foreach ($datalist as $index => $item) {
                 unset($item['password'], $item['salt']);
                 if ($this->selectpageFields == '*') {
                     $result = [
-                        $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '', $field => isset($item[$field]) ? $item[$field] : '',
+                        $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '',
+                        $field      => isset($item[$field]) ? $item[$field] : '',
                     ];
                 } else {
                     $result = array_intersect_key(($item instanceof Model ? $item->toArray() : (array)$item), array_flip($fields));
@@ -599,7 +622,8 @@ class Backend extends Controller {
     /**
      * 刷新Token
      */
-    protected function token() {
+    protected function token()
+    {
         $token = $this->request->param('__token__');
 
         //验证Token

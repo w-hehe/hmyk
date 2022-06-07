@@ -31,6 +31,9 @@ class Index extends Base {
             'keyword' => $keyword,
             'navi' => 'home'
         ]);
+        
+        
+        
         return view($this->template_path . "index.html");
     }
 

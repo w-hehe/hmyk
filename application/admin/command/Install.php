@@ -15,7 +15,8 @@ use think\Lang;
 use think\Request;
 use think\View;
 
-class Install extends Command {
+class Install extends Command
+{
     protected $model = null;
     /**
      * @var \think\View 视图类实例
@@ -27,15 +28,26 @@ class Install extends Command {
      */
     protected $request;
 
-    protected function configure() {
+    protected function configure()
+    {
         $config = Config::get('database');
-        $this->setName('install')->addOption('hostname', 'a', Option::VALUE_OPTIONAL, 'mysql hostname', $config['hostname'])->addOption('hostport', 'o', Option::VALUE_OPTIONAL, 'mysql hostport', $config['hostport'])->addOption('database', 'd', Option::VALUE_OPTIONAL, 'mysql database', $config['database'])->addOption('prefix', 'r', Option::VALUE_OPTIONAL, 'table prefix', $config['prefix'])->addOption('username', 'u', Option::VALUE_OPTIONAL, 'mysql username', $config['username'])->addOption('password', 'p', Option::VALUE_OPTIONAL, 'mysql password', $config['password'])->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override', false)->setDescription('New installation of FastAdmin');
+        $this
+            ->setName('install')
+            ->addOption('hostname', 'a', Option::VALUE_OPTIONAL, 'mysql hostname', $config['hostname'])
+            ->addOption('hostport', 'o', Option::VALUE_OPTIONAL, 'mysql hostport', $config['hostport'])
+            ->addOption('database', 'd', Option::VALUE_OPTIONAL, 'mysql database', $config['database'])
+            ->addOption('prefix', 'r', Option::VALUE_OPTIONAL, 'table prefix', $config['prefix'])
+            ->addOption('username', 'u', Option::VALUE_OPTIONAL, 'mysql username', $config['username'])
+            ->addOption('password', 'p', Option::VALUE_OPTIONAL, 'mysql password', $config['password'])
+            ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override', false)
+            ->setDescription('New installation of FastAdmin');
     }
 
     /**
      * 命令行安装
      */
-    protected function execute(Input $input, Output $output) {
+    protected function execute(Input $input, Output $output)
+    {
         define('INSTALL_PATH', APP_PATH . 'admin' . DS . 'command' . DS . 'Install' . DS);
         // 覆盖安装
         $force = $input->getOption('force');
@@ -54,8 +66,9 @@ class Install extends Command {
         $adminUsername = 'admin';
         $adminPassword = Random::alnum(10);
         $adminEmail = 'admin@admin.com';
+        $siteName = __('My Website');
 
-        $adminName = $this->installation($hostname, $hostport, $database, $username, $password, $prefix, $adminUsername, $adminPassword, $adminEmail);
+        $adminName = $this->installation($hostname, $hostport, $database, $username, $password, $prefix, $adminUsername, $adminPassword, $adminEmail, $siteName);
         if ($adminName) {
             $output->highlight("Admin url:http://www.yoursite.com/{$adminName}");
         }
@@ -71,21 +84,24 @@ class Install extends Command {
     /**
      * PC端安装
      */
-    public function index() {
+    public function index()
+    {
         $this->view = View::instance(Config::get('template'), Config::get('view_replace_str'));
         $this->request = Request::instance();
 
         define('INSTALL_PATH', APP_PATH . 'admin' . DS . 'command' . DS . 'Install' . DS);
-        $langSet = strtolower($this->request->langset());
-        if (!$langSet || in_array($langSet, ['zh-cn', 'zh-hans-cn'])) {
+
+        $lang = $this->request->langset();
+        $lang = preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang) ? $lang : 'zh-cn';
+
+        if (!$lang || in_array($lang, ['zh-cn', 'zh-hans-cn'])) {
             Lang::load(INSTALL_PATH . 'zh-cn.php');
         }
 
         $installLockFile = INSTALL_PATH . "install.lock";
 
         if (is_file($installLockFile)) {
-            echo "当前已经安装成功，如果需要重新安装，请手动移除【application/admin/command/Install/install.lock】文件<br><br>";
-            echo "<a href='/'>返回首页</a>";
+            echo __('The system has been installed. If you need to reinstall, please remove %s first', 'install.lock');
             exit;
         }
         $output = function ($code, $msg, $url = null, $data = null) {
@@ -108,6 +124,7 @@ class Install extends Command {
             $adminPassword = $this->request->post('adminPassword', '');
             $adminPasswordConfirmation = $this->request->post('adminPasswordConfirmation', '');
             $adminEmail = $this->request->post('adminEmail', 'admin@admin.com');
+            $siteName = $this->request->post('siteName', __('My Website'));
 
             if ($adminPassword !== $adminPasswordConfirmation) {
                 return $output(0, __('The two passwords you entered did not match'));
@@ -115,11 +132,15 @@ class Install extends Command {
 
             $adminName = '';
             try {
-                $adminName = $this->installation($mysqlHostname, $mysqlHostport, $mysqlDatabase, $mysqlUsername, $mysqlPassword, $mysqlPrefix, $adminUsername, $adminPassword, $adminEmail);
+                $adminName = $this->installation($mysqlHostname, $mysqlHostport, $mysqlDatabase, $mysqlUsername, $mysqlPassword, $mysqlPrefix, $adminUsername, $adminPassword, $adminEmail, $siteName);
             } catch (\PDOException $e) {
                 throw new Exception($e->getMessage());
             } catch (\Exception $e) {
+                if(strstr($e->getMessage(), 'using password: NO') || strstr($e->getMessage(), 'using password: YES')){
+                    return $output(0, 'MySQL密码错误');
+                }
                 return $output(0, $e->getMessage());
+//                return $output(0, $e->getMessage() . ' -- ' . $e->getLine() . ' -- ' . $e->getFile());
             }
             return $output(1, __('Install Successed'), null, ['adminName' => $adminName]);
         }
@@ -135,7 +156,8 @@ class Install extends Command {
     /**
      * 执行安装
      */
-    protected function installation($mysqlHostname, $mysqlHostport, $mysqlDatabase, $mysqlUsername, $mysqlPassword, $mysqlPrefix, $adminUsername, $adminPassword, $adminEmail = null) {
+    protected function installation($mysqlHostname, $mysqlHostport, $mysqlDatabase, $mysqlUsername, $mysqlPassword, $mysqlPrefix, $adminUsername, $adminPassword, $adminEmail = null, $siteName = null)
+    {
         $this->checkenv();
 
         if ($mysqlDatabase == '') {
@@ -148,6 +170,9 @@ class Install extends Command {
             throw new Exception(__('Please input correct password'));
         }
 
+        if ($siteName == '' || preg_match("/fast" . "admin/i", $siteName)) {
+            throw new Exception(__('Please input correct website'));
+        }
 
         $sql = file_get_contents(INSTALL_PATH . 'hmyk.sql');
 
@@ -162,7 +187,13 @@ class Install extends Command {
 
             // 连接install命令中指定的数据库
             $instance = Db::connect([
-                'type' => "{$config['type']}", 'hostname' => "{$mysqlHostname}", 'hostport' => "{$mysqlHostport}", 'database' => "{$mysqlDatabase}", 'username' => "{$mysqlUsername}", 'password' => "{$mysqlPassword}", 'prefix' => "{$mysqlPrefix}",
+                'type'     => "{$config['type']}",
+                'hostname' => "{$mysqlHostname}",
+                'hostport' => "{$mysqlHostport}",
+                'database' => "{$mysqlDatabase}",
+                'username' => "{$mysqlUsername}",
+                'password' => "{$mysqlPassword}",
+                'prefix'   => "{$mysqlPrefix}",
             ]);
 
             // 查询一次SQL,判断连接是否正常
@@ -171,19 +202,14 @@ class Install extends Command {
             // 调用原生PDO对象进行批量查询
             $instance->getPdo()->exec($sql);
         } catch (\PDOException $e) {
-            if(strstr($e->getMessage(), '(using password: YES)')){
-                throw new Exception('数据库连接失败，数据库密码错误');
-            }else{
-                throw new Exception($e->getMessage());
-            }
-
+            throw new Exception($e->getMessage());
         }
         // 后台入口文件
         $adminFile = ROOT_PATH . 'public' . DS . 'admin.php';
 
         // 数据库配置文件
         $dbConfigFile = APP_PATH . 'database.php';
-        $config = @file_get_contents($dbConfigFile);
+        $dbConfigText = @file_get_contents($dbConfigFile);
         $callback = function ($matches) use ($mysqlHostname, $mysqlHostport, $mysqlUsername, $mysqlPassword, $mysqlDatabase, $mysqlPrefix) {
             $field = "mysql" . ucfirst($matches[1]);
             $replace = $$field;
@@ -192,53 +218,101 @@ class Install extends Command {
             }
             return "'{$matches[1]}'{$matches[2]}=>{$matches[3]}Env::get('database.{$matches[1]}', '{$replace}'),";
         };
-        $config = preg_replace_callback("/'(hostname|database|username|password|hostport|prefix)'(\s+)=>(\s+)Env::get\((.*)\)\,/", $callback, $config);
+        $dbConfigText = preg_replace_callback("/'(hostname|database|username|password|hostport|prefix)'(\s+)=>(\s+)Env::get\((.*)\)\,/", $callback, $dbConfigText);
 
         // 检测能否成功写入数据库配置
-        $result = @file_put_contents($dbConfigFile, $config);
+        $result = @file_put_contents($dbConfigFile, $dbConfigText);
         if (!$result) {
-            throw new Exception(__('文件权限不足，请给站点目录循环设置755权限！ %s', 'application/database.php'));
+            throw new Exception(__('The current permissions are insufficient to write the file %s', 'application/database.php'));
         }
 
+        // 设置新的Token随机密钥key
+        $oldTokenKey = config('token.key');
+        $newTokenKey = \fast\Random::alnum(32);
+        $coreConfigFile = CONF_PATH . 'config.php';
+        $coreConfigText = @file_get_contents($coreConfigFile);
+        $coreConfigText = preg_replace("/'key'(\s+)=>(\s+)'{$oldTokenKey}'/", "'key'\$1=>\$2'{$newTokenKey}'", $coreConfigText);
+
+        $result = @file_put_contents($coreConfigFile, $coreConfigText);
+        if (!$result) {
+            throw new Exception(__('The current permissions are insufficient to write the file %s', 'application/config.php'));
+        }
+
+        $avatar = request()->domain() . '/assets/img/avatar.png';
         // 变更默认管理员密码
         $adminPassword = $adminPassword ? $adminPassword : Random::alnum(8);
         $adminEmail = $adminEmail ? $adminEmail : "admin@admin.com";
         $newSalt = substr(md5(uniqid(true)), 0, 6);
         $newPassword = md5(md5($adminPassword) . $newSalt);
-        $data = ['username' => $adminUsername, 'email' => $adminEmail, 'password' => $newPassword, 'salt' => $newSalt];
+        $data = ['username' => $adminUsername, 'email' => $adminEmail, 'avatar' => $avatar, 'password' => $newPassword, 'salt' => $newSalt];
         $instance->name('admin')->where('username', 'admin')->update($data);
 
+        // 修改后台入口
+        $adminName = 'admin.php';
+        /*if (is_file($adminFile)) {
+            $adminName = Random::alpha(10) . '.php';
+            rename($adminFile, ROOT_PATH . 'public' . DS . $adminName);
+        }*/
+
+        //修改站点名称
+        if ($siteName != config('site.name')) {
+            $instance->name('config')->where('name', 'name')->update(['value' => $siteName]);
+            $siteConfigFile = CONF_PATH . 'extra' . DS . 'site.php';
+            $siteConfig = include $siteConfigFile;
+            $configList = $instance->name("config")->select();
+            foreach ($configList as $k => $value) {
+                if (in_array($value['type'], ['selects', 'checkbox', 'images', 'files'])) {
+                    $value['value'] = is_array($value['value']) ? $value['value'] : explode(',', $value['value']);
+                }
+                if ($value['type'] == 'array') {
+                    $value['value'] = (array)json_decode($value['value'], true);
+                }
+                $siteConfig[$value['name']] = $value['value'];
+            }
+            $siteConfig['name'] = $siteName;
+            file_put_contents($siteConfigFile, '<?php' . "\n\nreturn " . var_export_short($siteConfig) . ";\n");
+        }
 
         $installLockFile = INSTALL_PATH . "install.lock";
         //检测能否成功写入lock文件
         $result = @file_put_contents($installLockFile, 1);
         if (!$result) {
-            throw new Exception(__('文件权限不足，请给站点目录循环设置755权限！ %s', 'application/admin/command/Install/install.lock'));
+            throw new Exception(__('The current permissions are insufficient to write the file %s', 'application/admin/command/Install/install.lock'));
         }
 
-        return 'admin';
+        try {
+            //删除安装脚本
+            @unlink(ROOT_PATH . 'public' . DS . 'install.php');
+        } catch (\Exception $e) {
+
+        }
+
+        return $adminName;
     }
 
     /**
      * 检测环境
      */
-    protected function checkenv() {
+    protected function checkenv()
+    {
         // 检测目录是否存在
         $checkDirs = [
-            'thinkphp', 'vendor', 'public' . DS . 'assets' . DS . 'libs'
+            'thinkphp',
+            'vendor',
+            'public' . DS . 'assets' . DS . 'libs'
         ];
 
         //数据库配置文件
         $dbConfigFile = APP_PATH . 'database.php';
 
-        if (version_compare(PHP_VERSION, '7.4.0', '<')) {
-            throw new Exception("当前【PHP " . PHP_VERSION . "】版本过低，请使用【PHP 7.4】版本");
+        if (version_compare(PHP_VERSION, '7.1.0', '<')) {
+            throw new Exception(__("The current version %s is too low, please use PHP 7.1 or higher", PHP_VERSION));
         }
         if (!extension_loaded("PDO")) {
             throw new Exception(__("PDO is not currently installed and cannot be installed"));
         }
         if (!is_really_writable($dbConfigFile)) {
-            throw new Exception(__('文件权限不足，请给站点目录循环设置755权限！'));
+            throw new Exception(__('The current permissions are insufficient to write the configuration file application/database.php'));
         }
         foreach ($checkDirs as $k => $v) {
             if (!is_dir(ROOT_PATH . $v)) {

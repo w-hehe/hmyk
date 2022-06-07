@@ -4,7 +4,7 @@
  * @author: pppscn <35696959@qq.com>
  * @update 2017-05-07 <https://gitee.com/pp/fastadmin>
  *
- * @author: Karson <karsonzhang@163.com>
+ * @author: Karson <karson@fastadmin.net>
  * @update 2018-04-05 <https://gitee.com/karson/fastadmin>
  */
 
@@ -40,6 +40,7 @@
         // 重置搜索
         form.on("click", "button[type=reset]", function (event) {
             form[0].reset();
+
             setTimeout(function () {
                 that.onCommonSearch();
             }, 0);
@@ -179,11 +180,11 @@
             var name = $(this).data("name");
             var sym = $(this).is("select") ? $("option:selected", this).val() : $(this).val().toUpperCase();
             var obj = $("[name='" + name + "']", that.$commonsearch);
-            if (obj.size() == 0)
+            if (obj.length == 0)
                 return true;
             var vObjCol = ColumnsForSearch[i];
             var process = !that.options.searchFormTemplate && vObjCol && typeof vObjCol.process == 'function' ? vObjCol.process : null;
-            if (obj.size() > 1) {
+            if (obj.length > 1) {
                 if (/BETWEEN$/.test(sym)) {
                     var value_begin = $.trim($("[name='" + name + "']:first", that.$commonsearch).val()),
                         value_end = $.trim($("[name='" + name + "']:last", that.$commonsearch).val());
@@ -314,7 +315,7 @@
             html.push(sprintf('<i class="%s %s"></i>', that.options.iconsPrefix, that.options.icons.commonSearchIcon))
             html.push('</button></div>');
         }
-        if (that.$toolbar.find(".pull-right").size() > 0) {
+        if (that.$toolbar.find(".pull-right").length > 0) {
             $(html.join('')).insertBefore(that.$toolbar.find(".pull-right:first"));
         } else {
             that.$toolbar.append(html.join(''));
@@ -329,13 +330,19 @@
         });
 
         that.$container.on("click", "." + that.options.searchClass, function () {
-            var obj = $("form [name='" + $(this).data("field") + "']", that.$commonsearch);
-            if (obj.size() > 0) {
-                var value = $(this).data("value");
+            var value = $(this).data("value");
+            var field = $(this).data("field");
+            var ul = that.$container.closest(".panel-intro").find("ul[data-field='" + field + "']");
+            if (ul.length > 0) {
+                $('li a[data-value="' + value + '"][data-toggle="tab"]', ul).trigger('click');
+                return;
+            }
+            var obj = $("form [name='" + field + "']", that.$commonsearch);
+            if (obj.length > 0) {
                 if (obj.is("select")) {
                     $("option[value='" + value + "']", obj).prop("selected", true);
-                } else if (obj.size() > 1) {
-                    $("form [name='" + $(this).data("field") + "'][value='" + value + "']", that.$commonsearch).prop("checked", true);
+                } else if (obj.length > 1) {
+                    $("form [name='" + field + "'][value='" + value + "']", that.$commonsearch).prop("checked", true);
                 } else {
                     obj.val(value + "");
                 }

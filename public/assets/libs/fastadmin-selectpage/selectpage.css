@@ -155,7 +155,6 @@ div.sp_result_area.shadowUp {
 
 .sp_results > li {
     height: auto !important;
-    line-height: 1;
     margin: 0;
     overflow: hidden;
     padding: 5px 8px;
@@ -166,7 +165,6 @@ div.sp_result_area.shadowUp {
     color: black;
     cursor: pointer;
     text-overflow: ellipsis;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .sp_results > li.sp_message_box {
@@ -312,6 +310,7 @@ ul.sp_element_box > li {
     float: left;
     position: relative;
     box-sizing: content-box;
+    z-index: 1;
 }
 
 ul.sp_element_box li.full_width {

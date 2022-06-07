@@ -95,6 +95,9 @@ class Api
         //跨域请求检测
         check_cors_request();
 
+        // 检测IP是否允许
+        check_ip_allowed();
+
         //移除HTML标签
         $this->request->filter('trim,strip_tags,htmlspecialchars');
 
@@ -150,7 +153,10 @@ class Api
     protected function loadlang($name)
     {
         $name = Loader::parseName($name);
-        Lang::load(APP_PATH . $this->request->module() . '/lang/' . $this->request->langset() . '/' . str_replace('.', '/', $name) . '.php');
+        $name = preg_match("/^([a-zA-Z0-9_\.\/]+)\$/i", $name) ? $name : 'index';
+        $lang = $this->request->langset();
+        $lang = preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang) ? $lang : 'zh-cn';
+        Lang::load(APP_PATH . $this->request->module() . '/lang/' . $lang . '/' . str_replace('.', '/', $name) . '.php');
     }
 
     /**

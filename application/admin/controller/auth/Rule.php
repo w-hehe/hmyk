@@ -13,7 +13,8 @@ use think\Cache;
  * @icon   fa fa-list
  * @remark 规则通常对应一个控制器的方法,同时左侧的菜单栏数据也从规则中体现,通常建议通过控制台进行生成规则节点
  */
-class Rule extends Backend {
+class Rule extends Backend
+{
 
     /**
      * @var \app\admin\model\AuthRule
@@ -22,11 +23,15 @@ class Rule extends Backend {
     protected $rulelist = [];
     protected $multiFields = 'ismenu,status';
 
-    public function _initialize() {
+    public function _initialize()
+    {
         parent::_initialize();
+        if (!$this->auth->isSuperAdmin()) {
+            $this->error(__('Access is allowed only to the super management group'));
+        }
         $this->model = model('AuthRule');
         // 必须将结果集转换为数组
-        $ruleList = collection($this->model->field('condition,remark,createtime,updatetime', true)->order('weigh DESC,id ASC')->select())->toArray();
+        $ruleList = \think\Db::name("auth_rule")->field('type,condition,remark,createtime,updatetime', true)->order('weigh DESC,id ASC')->select();
         foreach ($ruleList as $k => &$v) {
             $v['title'] = __($v['title']);
         }
@@ -39,20 +44,22 @@ class Rule extends Backend {
                 continue;
             }
             $ruledata[$v['id']] = $v['title'];
+            unset($v['spacer']);
         }
         unset($v);
         $this->view->assign('ruledata', $ruledata);
+        $this->view->assign("menutypeList", $this->model->getMenutypeList());
     }
 
     /**
      * 查看
      */
-    public function index() {
+    public function index()
+    {
         if ($this->request->isAjax()) {
             $list = $this->rulelist;
             $total = count($this->rulelist);
-
-            $result = ["total" => $total, "rows" => $list];
+            $result = array("total" => $total, "rows" => $list);
 
             return json($result);
         }
@@ -62,7 +69,8 @@ class Rule extends Backend {
     /**
      * 添加
      */
-    public function add() {
+    public function add()
+    {
         if ($this->request->isPost()) {
             $this->token();
             $params = $this->request->post("row/a", [], 'strip_tags');
@@ -85,7 +93,8 @@ class Rule extends Backend {
     /**
      * 编辑
      */
-    public function edit($ids = null) {
+    public function edit($ids = null)
+    {
         $row = $this->model->get(['id' => $ids]);
         if (!$row) {
             $this->error(__('No Results were found'));
@@ -97,6 +106,9 @@ class Rule extends Backend {
                 if (!$params['ismenu'] && !$params['pid']) {
                     $this->error(__('The non-menu rule must have parent'));
                 }
+                if ($params['pid'] == $row['id']) {
+                    $this->error(__('Can not change the parent to self'));
+                }
                 if ($params['pid'] != $row['pid']) {
                     $childrenIds = Tree::instance()->init(collection(AuthRule::select())->toArray())->getChildrenIds($row['id']);
                     if (in_array($params['pid'], $childrenIds)) {
@@ -106,7 +118,7 @@ class Rule extends Backend {
                 //这里需要针对name做唯一验证
                 $ruleValidate = \think\Loader::validate('AuthRule');
                 $ruleValidate->rule([
-                    'name' => 'require|format|unique:AuthRule,name,' . $row->id,
+                    'name' => 'require|unique:AuthRule,name,' . $row->id,
                 ]);
                 $result = $row->validate()->save($params);
                 if ($result === false) {
@@ -124,7 +136,8 @@ class Rule extends Backend {
     /**
      * 删除
      */
-    public function del($ids = "") {
+    public function del($ids = "")
+    {
         if (!$this->request->isPost()) {
             $this->error(__("Invalid parameters"));
         }

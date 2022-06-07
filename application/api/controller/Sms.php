@@ -18,13 +18,14 @@ class Sms extends Api
     /**
      * 发送验证码
      *
+     * @ApiMethod (POST)
      * @param string $mobile 手机号
      * @param string $event 事件名称
      */
     public function send()
     {
-        $mobile = $this->request->request("mobile");
-        $event = $this->request->request("event");
+        $mobile = $this->request->post("mobile");
+        $event = $this->request->post("event");
         $event = $event ? $event : 'register';
 
         if (!$mobile || !\think\Validate::regex($mobile, "^1\d{10}$")) {
@@ -65,16 +66,17 @@ class Sms extends Api
     /**
      * 检测验证码
      *
+     * @ApiMethod (POST)
      * @param string $mobile 手机号
      * @param string $event 事件名称
      * @param string $captcha 验证码
      */
     public function check()
     {
-        $mobile = $this->request->request("mobile");
-        $event = $this->request->request("event");
+        $mobile = $this->request->post("mobile");
+        $event = $this->request->post("event");
         $event = $event ? $event : 'register';
-        $captcha = $this->request->request("captcha");
+        $captcha = $this->request->post("captcha");
 
         if (!$mobile || !\think\Validate::regex($mobile, "^1\d{10}$")) {
             $this->error(__('手机号不正确'));

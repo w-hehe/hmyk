@@ -169,8 +169,8 @@
                 this.$tableBody.css("height", "100%");
                 this.$fixedColumns && this.$fixedColumns.show();
                 this.$fixedColumnsRight && this.$fixedColumnsRight.show();
-                this.$fixedHeaderRight.scrollLeft(this.$tableBody.find('table').width());
-                this.$fixedBodyRight.scrollLeft(this.$tableBody.find('table').width());
+                this.$fixedHeaderRight && this.$fixedHeaderRight.scrollLeft(this.$tableBody.find('table').width());
+                this.$fixedBodyRight && this.$fixedBodyRight.scrollLeft(this.$tableBody.find('table').width());
             }
         }
         if (!that.fixedColumnsSupported()) {
@@ -180,11 +180,11 @@
             this.initFixedColumnsHeader();
         } else if (arguments[0] === 'scroll-body') {
             if (this.needFixedColumns && this.options.fixedNumber) {
-                this.$fixedBody.scrollTop(this.$tableBody.scrollTop());
+                this.$fixedBody && this.$fixedBody.scrollTop(this.$tableBody.scrollTop());
             }
 
             if (this.needFixedColumns && this.options.fixedRightNumber) {
-                this.$fixedBodyRight.scrollTop(this.$tableBody.scrollTop());
+                this.$fixedBodyRight && this.$fixedBodyRight.scrollTop(this.$tableBody.scrollTop());
             }
         } else if (arguments[0] === 'load-success') {
             this.hideLoading();
@@ -292,11 +292,13 @@
             if (typeof that.options.height !== 'undefined') paginationHeight = 0;
             var height = that.$tableContainer.outerHeight(true) - scrollHeight - paginationHeight + 1;
             $fixedColumns.css({
-                height: height
+                height: height,
+                "min-height": "calc(100% - " + (paginationHeight + scrollHeight) + "px)"
             });
-
             $fixedBody.css({
-                height: height - $fixedHeader.height()
+                height: height - $fixedHeader.height(),
+                "min-height": "calc(100% - " + $fixedHeader.height() + "px)",
+                overflow: "hidden"
             });
 
             return $fixedBody;
@@ -382,6 +384,17 @@
                 //给鼠标滑轮绑定事件
                 updateScroll(e, that.$fixedBody[0]);
             });
+            //给固定表格的checkbox绑定事件
+            this.$fixedBody.find('input[name="' + this.options.selectItemName + '"]').off("click").on('click', function (e) {
+                e.stopImmediatePropagation();
+                var index = $(e.target).data("index");
+                $(that.$selectItem[index]).trigger("click");
+            });
+            //绑定TD点击事件
+            this.$fixedBody.find('> table > tbody > tr[data-index] > td').off('click dblclick').on('click dblclick', function (e) {
+                var index = $(this).closest("tr[data-index]").data("index");
+                $(that.$selectItem[index]).closest("tr[data-index]").find(">td:eq(" + $(this).index() + ")").trigger("click");
+            });
         }
         //给原本表格绑定scroll事件
         $('div.fixed-table-body').off('scroll'); //给所有的body解绑 scroll
@@ -413,10 +426,15 @@
                 updateScroll(e, that.$fixedBodyRight[0]);
             });
             //给固定表格的checkbox绑定事件
-            this.$fixedBody && this.$fixedBody.find('input[name="' + this.options.selectItemName + '"]').off("click").on('click', function (e) {
+            this.$fixedBodyRight.find('input[name="' + this.options.selectItemName + '"]').off("click").on('click', function (e) {
                 e.stopImmediatePropagation();
                 var index = $(e.target).data("index");
                 $(that.$selectItem[index]).trigger("click");
+            });
+            //绑定TD点击事件
+            this.$fixedBodyRight.find('> table > tbody > tr[data-index] > td').off('click dblclick').on('click dblclick', function (e) {
+                var index = $(this).closest("tr[data-index]").data("index");
+                $(that.$selectItem[index]).closest("tr[data-index]").find(">td:eq(" + $(this).index() + ")").trigger("click");
             });
         }
 

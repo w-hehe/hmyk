@@ -17,12 +17,12 @@ use think\exception\ClassNotFoundException;
  * Class Log
  * @package think
  *
- * @method void log($msg) static 记录一般日志
- * @method void error($msg) static 记录错误日志
- * @method void info($msg) static 记录一般信息日志
- * @method void sql($msg) static 记录 SQL 查询日志
- * @method void notice($msg) static 记录提示日志
- * @method void alert($msg) static 记录报警日志
+ * @method static void log($msg) 记录一般日志
+ * @method static void error($msg) 记录错误日志
+ * @method static void info($msg) 记录一般信息日志
+ * @method static void sql($msg) 记录 SQL 查询日志
+ * @method static void notice($msg) 记录提示日志
+ * @method static void alert($msg) 记录报警日志
  */
 class Log
 {

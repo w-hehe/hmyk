@@ -113,7 +113,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'echarts'
                 $.get("upgrade/checkUpgrade", function(e){
                     _this.html('检测更新');
                     if(e.code == 400){ //暂无更新
-                        Toastr.success(e.msg);
+                        Layer.alert(e.msg);
                     }else if(e.code == 200){ //发现新版本
                         $('.upgrade-text').html("发现新版本v，老版本即刻停止维护，建议您立即更新！");
                         upgradeModel(e.data.version);

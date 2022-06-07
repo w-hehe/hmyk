@@ -71,6 +71,14 @@ class Auth
     }
 
     /**
+     * 兼容调用user模型的属性
+     */
+    public function __isset($name)
+    {
+        return isset($this->_user) ? isset($this->_user->$name) : false;
+    }
+
+    /**
      * 根据Token初始化
      *
      * @param string $token Token
@@ -219,9 +227,7 @@ class Auth
         }
 
         //直接登录会员
-        $this->direct($user->id);
-
-        return true;
+        return $this->direct($user->id);
     }
 
     /**
@@ -456,7 +462,7 @@ class Auth
             // 删除会员
             User::destroy($user_id);
             // 删除会员指定的所有Token
-//            Token::clear($user_id);
+            Token::clear($user_id);
 
             Hook::listen("user_delete_successed", $user);
             Db::commit();
@@ -550,7 +556,7 @@ class Auth
     /**
      * 设置错误信息
      *
-     * @param $error 错误信息
+     * @param string $error 错误信息
      * @return Auth
      */
     public function setError($error)

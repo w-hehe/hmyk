@@ -19,9 +19,34 @@ class Attachment extends Model
         'thumb_style'
     ];
 
+    protected static function init()
+    {
+        // 如果已经上传该资源，则不再记录
+        self::beforeInsert(function ($model) {
+            if (self::where('url', '=', $model['url'])->where('storage', $model['storage'])->find()) {
+                return false;
+            }
+        });
+        self::beforeWrite(function ($row) {
+            if (isset($row['category']) && $row['category'] == 'unclassed') {
+                $row['category'] = '';
+            }
+        });
+    }
+
     public function setUploadtimeAttr($value)
     {
         return is_numeric($value) ? $value : strtotime($value);
+    }
+
+    public function getCategoryAttr($value)
+    {
+        return $value == '' ? 'unclassed' : $value;
+    }
+
+    public function setCategoryAttr($value)
+    {
+        return $value == 'unclassed' ? '' : $value;
     }
 
     /**
@@ -40,6 +65,10 @@ class Attachment extends Model
         return '';
     }
 
+    /**
+     * 获取Mimetype列表
+     * @return array
+     */
     public static function getMimetypeList()
     {
         $data = [
@@ -53,13 +82,17 @@ class Attachment extends Model
         return $data;
     }
 
-    protected static function init()
+    /**
+     * 获取定义的附件类别列表
+     * @return array
+     */
+    public static function getCategoryList()
     {
-        // 如果已经上传该资源，则不再记录
-        self::beforeInsert(function ($model) {
-            if (self::where('url', '=', $model['url'])->where('storage', $model['storage'])->find()) {
-                return false;
-            }
-        });
+        $data = config('site.attachmentcategory') ?? [];
+        foreach ($data as $index => &$datum) {
+            $datum = __($datum);
+        }
+        $data['unclassed'] = __('Unclassed');
+        return $data;
     }
 }

@@ -17,7 +17,25 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                 }
             });
 
+            var table = $("#table");
 
+            // 初始化表格
+            table.bootstrapTable({
+                url: $.fn.bootstrapTable.defaults.extend.index_url,
+                columns: [
+                    [
+                        {field: 'id', title: 'ID'},
+                        {field: 'title', title: __('Title')},
+                        {field: 'url', title: __('Url'), align: 'left', formatter: Table.api.formatter.url},
+                        {field: 'ip', title: __('ip'), formatter:Table.api.formatter.search},
+                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                    ]
+                ],
+                commonSearch: false
+            });
+
+            // 为表格绑定事件
+            Table.api.bindevent(table);//当内容渲染完成后
 
             // 给上传按钮添加上传成功事件
             $("#faupload-avatar").data("upload-success", function (data) {

@@ -1,7 +1,7 @@
 {
   "name": "fastadmin-citypicker",
   "description": "A simple jQuery plugin for picking provinces, cities and districts of China.",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "main": "dist/city-picker.js",
   "license": "MIT",
   "repository": "karsonzhang/fastadmin-citypicker",

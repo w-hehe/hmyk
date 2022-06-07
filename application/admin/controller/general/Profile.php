@@ -16,6 +16,8 @@ use think\Validate;
 class Profile extends Backend
 {
 
+    protected $searchFields = 'id,title';
+
     /**
      * 查看
      */
@@ -57,7 +59,7 @@ class Profile extends Backend
                 $this->error(__("Please input correct email"));
             }
             if (isset($params['password'])) {
-                if (!Validate::is($params['password'], "/^[\S]{6,16}$/")) {
+                if (!Validate::is($params['password'], "/^[\S]{6,30}$/")) {
                     $this->error(__("Please input correct password"));
                 }
                 $params['salt'] = Random::alnum();

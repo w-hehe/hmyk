@@ -29,7 +29,35 @@ class Index extends Backend {
     /**
      * 后台首页
      */
-    public function index() {
+    public function index()
+    {
+        $cookieArr = ['adminskin' => "/^skin\-([a-z\-]+)\$/i", 'multiplenav' => "/^(0|1)\$/", 'multipletab' => "/^(0|1)\$/", 'show_submenu' => "/^(0|1)\$/"];
+        foreach ($cookieArr as $key => $regex) {
+            $cookieValue = $this->request->cookie($key);
+            if (!is_null($cookieValue) && preg_match($regex, $cookieValue)) {
+                config('fastadmin.' . $key, $cookieValue);
+            }
+        }
+        //左侧菜单
+        list($menulist, $navlist, $fixedmenu, $referermenu) = $this->auth->getSidebar([
+            /*'dashboard' => 'hot',
+            'addon'     => ['new', 'red', 'badge'],
+            'auth/rule' => __('Menu'),
+            'general'   => ['new', 'purple'],*/
+        ], 'dashboard');
+        $action = $this->request->request('action');
+        if ($this->request->isPost()) {
+            if ($action == 'refreshmenu') {
+                $this->success('', null, ['menulist' => $menulist, 'navlist' => $navlist]);
+            }
+        }
+        // echo '<pre>'; print_r($navlist);die;
+        $this->assignconfig('cookie', ['prefix' => config('cookie.prefix')]);
+        $this->view->assign('menulist', $menulist);
+        $this->view->assign('navlist', $navlist);
+        $this->view->assign('fixedmenu', $fixedmenu);
+        $this->view->assign('referermenu', $referermenu);
+        $this->view->assign('title', __('Home'));
         return $this->view->fetch();
     }
 

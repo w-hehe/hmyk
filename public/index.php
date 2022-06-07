@@ -16,9 +16,9 @@
 define('APP_PATH', __DIR__ . '/../application/');
 
 // 判断PHP版本
-if(PHP_VERSION > '7.4.9' || PHP_VERSION < '7.4.0'){
+/*if(PHP_VERSION > '7.4.9' || PHP_VERSION < '7.4.0'){
     die('请使用【PHP7.4】版本进行安装');
-}
+}*/
 
 
 // 判断是否安装

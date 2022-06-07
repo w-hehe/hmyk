@@ -112,10 +112,10 @@ class Tree
             if (!isset($value['id'])) {
                 continue;
             }
-            if ($value[$this->pidname] == $myid) {
+            if ((string)$value[$this->pidname] == (string)$myid) {
                 $newarr[] = $value;
                 $newarr = array_merge($newarr, $this->getChildren($value['id']));
-            } elseif ($withself && $value['id'] == $myid) {
+            } elseif ($withself && (string)$value['id'] == (string)$myid) {
                 $newarr[] = $value;
             }
         }
@@ -322,11 +322,11 @@ class Tree
                 $childlist = strtr($childlist, array('@class' => $childdata ? 'last' : ''));
                 $value = array(
                     '@childlist' => $childlist,
-                    '@url'       => $childdata || !isset($value['@url']) ? "javascript:;" : url($value['@url']),
+                    '@url'       => $childdata || !isset($value['@url']) ? "javascript:;" : $value['@url'],
                     '@addtabs'   => $childdata || !isset($value['@url']) ? "" : (stripos($value['@url'], "?") !== false ? "&" : "?") . "ref=addtabs",
                     '@caret'     => ($childdata && (!isset($value['@badge']) || !$value['@badge']) ? '<i class="fa fa-angle-left"></i>' : ''),
                     '@badge'     => isset($value['@badge']) ? $value['@badge'] : '',
-                    '@class'     => ($selected ? ' active' : '') . ($disabled ? ' disabled' : '') . ($childdata ? ' treeview' : ''),
+                    '@class'     => ($selected ? ' active' : '') . ($disabled ? ' disabled' : '') . ($childdata ? ' treeview' . (config('fastadmin.show_submenu') ? ' treeview-open' : '') : ''),
                 );
                 $str .= strtr($nstr, $value);
             }

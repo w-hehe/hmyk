@@ -1,9 +1,9 @@
 /**
  * @preserve tableExport.jquery.plugin
  *
- * Version 1.10.20
+ * Version 1.10.26
  *
- * Copyright (c) 2015-2020 hhurz, https://github.com/hhurz/tableExport.jquery.plugin
+ * Copyright (c) 2015-2021 hhurz, https://github.com/hhurz/tableExport.jquery.plugin
  *
  * Based on https://github.com/kayalshri/tableExport.jquery.plugin
  *
@@ -105,13 +105,28 @@
       onTableExportEnd:    null,        // function() - called when export ends
       outputMode:          'file',      // 'file', 'string', 'base64' or 'window' (experimental)
       pdfmake: {
-        enabled:           false,       // true: use pdfmake instead of jspdf and jspdf-autotable (experimental)
+        enabled:           false,       // true: Use pdfmake as pdf producer instead of jspdf and jspdf-autotable
         docDefinition: {
+          pageSize:        'A4',        // 4A0,2A0,A{0-10},B{0-10},C{0-10},RA{0-4},SRA{0-4},EXECUTIVE,FOLIO,LEGAL,LETTER,TABLOID
           pageOrientation: 'portrait',  // 'portrait' or 'landscape'
+          styles: {
+            header: {
+              background:  '#34495E',
+              color:       '#FFFFFF',
+              bold:        true,
+              alignment:   'center',
+              fillColor:   '#34495E'
+            },
+            alternateRow: {
+              fillColor:   '#f5f5f5'
+            }
+          },
           defaultStyle: {
-            font:          'Roboto'     // Default font is 'Roboto' (contained in vfs_fonts.js)
-          }                             // For an arabic font include mirza_fonts.js instead of vfs_fonts.js
-        },                              // For a chinese font include either gbsn00lp_fonts.js or ZCOOLXiaoWei_fonts.js instead instead of vfs_fonts.js
+            color:         '#000000',
+            fontSize:      8,
+            font:          'Roboto'     // Default font is 'Roboto' which needs vfs_fonts.js to be included
+          }                             // To export arabic characters include mirza_fonts.js _instead_ of vfs_fonts.js
+        },                              // For a chinese font include either gbsn00lp_fonts.js or ZCOOLXiaoWei_fonts.js _instead_ of vfs_fonts.js
         fonts: {}
       },
       preserve: {
@@ -914,74 +929,107 @@
         // pdf output using pdfmake
         // https://github.com/bpampuch/pdfmake
 
-        var widths = [];
-        var body = [];
-        rowIndex = 0;
+        var docDefinition = {
+          content: []
+        };
+
+        $.extend(true, docDefinition, defaults.pdfmake.docDefinition);
+
         ranges = [];
 
-        /**
-         * @return {number}
-         */
-        var CollectPdfmakeData = function ($rows, colselector, length) {
-          var rlength = 0;
+        $(el).filter(function () {
+          return isVisible($(this));
+        }).each(function () {
+          var $table = $(this);
 
-          $($rows).each(function () {
-            var r = [];
+          var widths = [];
+          var body = [];
+          rowIndex = 0;
 
-            ForEachVisibleCell(this, colselector, rowIndex, length,
-              function (cell, row, col) {
-                if (typeof cell !== 'undefined' && cell !== null) {
+          /**
+           * @return {number}
+           */
+          var CollectPdfmakeData = function ($rows, colselector, length) {
+            var rlength = 0;
 
-                  var colspan = getColspan(cell);
-                  var rowspan = getRowspan(cell);
+            $($rows).each(function () {
+              var r = [];
 
-                  var cellValue = parseString(cell, row, col) || ' ';
+              ForEachVisibleCell(this, colselector, rowIndex, length,
+                function (cell, row, col) {
+                  var cellContent;
 
-                  if (colspan > 1 || rowspan > 1) {
-                    colspan = colspan || 1;
-                    rowspan = rowspan || 1;
-                    r.push({colSpan: colspan, rowSpan: rowspan, text: cellValue});
-                  } else
-                    r.push(cellValue);
-                } else
-                  r.push(' ');
-              });
+                  if (typeof cell !== 'undefined' && cell !== null) {
+                    var colspan = getColspan(cell);
+                    var rowspan = getRowspan(cell);
 
-            if (r.length)
-              body.push(r);
+                    cellContent = {text: parseString(cell, row, col) || ' '};
 
-            if (rlength < r.length)
-              rlength = r.length;
+                    if (colspan > 1 || rowspan > 1) {
+                      cellContent['colSpan'] = colspan || 1;
+                      cellContent['rowSpan'] = rowspan || 1;
+                    }
+                  }
+                  else
+                    cellContent = {text: ' '};
 
-            rowIndex++;
-          });
+                  if (colselector.indexOf('th') >= 0)
+                    cellContent['style'] = 'header';
 
-          return rlength;
-        };
+                  r.push(cellContent);
+                });
 
-        $hrows = collectHeadRows($(this));
+              if (r.length)
+                body.push(r);
 
-        var colcount = CollectPdfmakeData($hrows, 'th,td', $hrows.length);
+              if (rlength < r.length)
+                rlength = r.length;
 
-        for (var i = widths.length; i < colcount; i++)
-          widths.push('*');
+              rowIndex++;
+            });
 
-        // Data
-        $rows = collectRows($(this));
+            return rlength;
+          };
 
-        CollectPdfmakeData($rows, 'th,td', $hrows.length + $rows.length);
+          $hrows = collectHeadRows($table);
 
-        var docDefinition = {
-          content: [{
-            table: {
-              headerRows: $hrows.length,
-              widths: widths,
-              body: body
-            }
-          }]
-        };
+          var colcount = CollectPdfmakeData($hrows, 'th,td', $hrows.length);
 
-        if (typeof pdfMake !== 'undefined') {
+          for (var i = widths.length; i < colcount; i++)
+            widths.push('*');
+
+          // Data
+          $rows = collectRows($table);
+
+          colcount = CollectPdfmakeData($rows, 'td', $hrows.length + $rows.length);
+
+          for (var i = widths.length; i < colcount; i++)
+            widths.push('*');
+
+          docDefinition.content.push({ table: {
+                                          headerRows: $hrows.length ? $hrows.length : null,
+                                          widths: widths,
+                                          body: body
+                                        },
+                                        layout: {
+                                          layout: 'noBorders',
+                                          hLineStyle: function (i, node) { return 0; },
+                                          vLineWidth: function (i, node) { return 0; },
+                                          hLineColor: function (i, node) { return i < node.table.headerRows ?
+                                                        defaults.pdfmake.docDefinition.styles.header.background :
+                                                        defaults.pdfmake.docDefinition.styles.alternateRow.fillColor; },
+                                          vLineColor: function (i, node) { return i < node.table.headerRows ?
+                                                        defaults.pdfmake.docDefinition.styles.header.background :
+                                                        defaults.pdfmake.docDefinition.styles.alternateRow.fillColor; },
+                                          fillColor: function (rowIndex, node, columnIndex) { return (rowIndex % 2 === 0) ?
+                                                        defaults.pdfmake.docDefinition.styles.alternateRow.fillColor :
+                                                        null; }
+                                        },
+                                        pageBreak: docDefinition.content.length ? "before" : undefined
+                                     });
+        }); // ...for each table
+
+        if (typeof pdfMake !== 'undefined' && typeof pdfMake.createPdf !== 'undefined') {
 
           pdfMake.fonts = {
             Roboto: {
@@ -991,9 +1039,11 @@
               bolditalics: 'Roboto-MediumItalic.ttf'
             }
           };
-          
+
+          // pdfmake >= 0.2.0 - replace pdfMake.vfs with pdfMake.virtualfs
+
           if (pdfMake.vfs.hasOwnProperty ('Mirza-Regular.ttf')) {
-            defaults.pdfmake.docDefinition.defaultStyle.font = 'Mirza';
+            docDefinition.defaultStyle.font = 'Mirza';
             $.extend(true, pdfMake.fonts, {Mirza: {normal:      'Mirza-Regular.ttf',
                                                    bold:        'Mirza-Bold.ttf',
                                                    italics:     'Mirza-Medium.ttf',
@@ -1001,7 +1051,7 @@
                                                    }});
           }
           else if (pdfMake.vfs.hasOwnProperty ('gbsn00lp.ttf')) {
-            defaults.pdfmake.docDefinition.defaultStyle.font = 'gbsn00lp';
+            docDefinition.defaultStyle.font = 'gbsn00lp';
             $.extend(true, pdfMake.fonts, {gbsn00lp: {normal:      'gbsn00lp.ttf',
                                                       bold:        'gbsn00lp.ttf',
                                                       italics:     'gbsn00lp.ttf',
@@ -1009,7 +1059,7 @@
                                                       }});
           }
           else if (pdfMake.vfs.hasOwnProperty ('ZCOOLXiaoWei-Regular.ttf')) {
-            defaults.pdfmake.docDefinition.defaultStyle.font = 'ZCOOLXiaoWei';
+            docDefinition.defaultStyle.font = 'ZCOOLXiaoWei';
             $.extend(true, pdfMake.fonts, {ZCOOLXiaoWei: {normal:      'ZCOOLXiaoWei-Regular.ttf',
                                                           bold:        'ZCOOLXiaoWei-Regular.ttf',
                                                           italics:     'ZCOOLXiaoWei-Regular.ttf',
@@ -1017,14 +1067,15 @@
                                                           }});
           }
 
-          $.extend(true, docDefinition, defaults.pdfmake.docDefinition);
           $.extend(true, pdfMake.fonts, defaults.pdfmake.fonts);
 
-          if (typeof pdfMake.createPdf !== 'undefined') {
-            pdfMake.createPdf(docDefinition).getBuffer(function (buffer) {
-              saveToFile(buffer, defaults.fileName + '.pdf', 'application/pdf', '', '', false);
-            });
-          }
+          // pdfmake <= 0.1.71
+          pdfMake.createPdf(docDefinition).getBuffer(function (buffer) {
+            saveToFile(buffer, defaults.fileName + '.pdf', 'application/pdf', '', '', false);
+          });
+
+          // pdfmake >= 0.2.0 - replace above code with:
+          //pdfMake.createPdf(docDefinition).download(defaults.fileName);
         }
       } else if (defaults.jspdf.autotable === false) {
         // pdf output using jsPDF's core html support
@@ -1448,11 +1499,22 @@
 
     function GetColumnNames (table) {
       var result = [];
+      var maxCols = 0;
+      var row = 0;
+      var col = 0;
       $(table).find('thead').first().find('th').each(function (index, el) {
-        if ($(el).attr('data-field') !== undefined)
-          result[index] = $(el).attr('data-field');
-        else
-          result[index] = index.toString();
+        var hasDataField = $(el).attr('data-field') !== undefined;
+        if (typeof el.parentNode.rowIndex !== 'undefined' && row !== el.parentNode.rowIndex) {
+          row = el.parentNode.rowIndex;
+          col = 0;
+          maxCols = 0;
+        }
+        var colSpan = getColspan(el);
+        maxCols += (colSpan ? colSpan : 1);
+        while (col < maxCols) {
+          result[col] = (hasDataField ? $(el).attr('data-field') : col.toString());
+          col++;
+        }
       });
       return result;
     }
@@ -1528,50 +1590,59 @@
           isVisible($(tableRow))) {
 
           var $cells = findTableElements($(tableRow), selector);
-          var cellCount = 0;
+          var cellsCount = $cells.length;
+          var colCount = 0;
+          var colIndex = 0;
 
-          $cells.each(function (colIndex) {
+          $cells.each(function () {
             var $cell = $(this);
-            var c;
             var colspan = getColspan(this);
             var rowspan = getRowspan(this);
+            var c;
 
             // Skip ranges
             $.each(ranges, function () {
               var range = this;
-              if (rowIndex >= range.s.r && rowIndex <= range.e.r && cellCount >= range.s.c && cellCount <= range.e.c) {
-                for (c = 0; c <= range.e.c - range.s.c; ++c)
-                  cellcallback(null, rowIndex, cellCount++);
+              if (rowIndex > range.s.r && rowIndex <= range.e.r && colCount >= range.s.c && colCount <= range.e.c) {
+                for (c = 0; c <= range.e.c - range.s.c; ++c) {
+                  cellsCount++;
+                  colIndex++;
+                  cellcallback(null, rowIndex, colCount++);
+                }
               }
             });
 
-            if (isColumnIgnored($cell, $cells.length, colIndex) === false) {
-              // Handle Row Span
-              if (rowspan || colspan) {
-                rowspan = rowspan || 1;
-                colspan = colspan || 1;
-                ranges.push({
-                  s: {r: rowIndex, c: cellCount},
-                  e: {r: rowIndex + rowspan - 1, c: cellCount + colspan - 1}
-                });
-              }
-
-              // Handle Value
-              cellcallback(this, rowIndex, cellCount++);
+            // Handle span's
+            if (rowspan || colspan) {
+              rowspan = rowspan || 1;
+              colspan = colspan || 1;
+              ranges.push({
+                s: {r: rowIndex, c: colCount},
+                e: {r: rowIndex + rowspan - 1, c: colCount + colspan - 1}
+              });
             }
 
-            // Handle Colspan
-            if (colspan)
-              for (c = 0; c < colspan - 1; ++c)
-                cellcallback(null, rowIndex, cellCount++);
+            if (isColumnIgnored($cell, cellsCount, colIndex++) === false) {
+              // Handle value
+              cellcallback(this, rowIndex, colCount++);
+            }
+
+            // Handle colspan
+            if (colspan > 1) {
+              for (c = 0; c < colspan - 1; ++c) {
+                colIndex++;
+                cellcallback(null, rowIndex, colCount++);
+              }
+            }
           });
 
           // Skip ranges
           $.each(ranges, function () {
             var range = this;
-            if (rowIndex >= range.s.r && rowIndex <= range.e.r && cellCount >= range.s.c && cellCount <= range.e.c) {
-              for (c = 0; c <= range.e.c - range.s.c; ++c)
-                cellcallback(null, rowIndex, cellCount++);
+            if (rowIndex >= range.s.r && rowIndex <= range.e.r && colCount >= range.s.c && colCount <= range.e.c) {
+              for (c = 0; c <= range.e.c - range.s.c; ++c) {
+                cellcallback(null, rowIndex, colCount++);
+              }
             }
           });
         }
@@ -2231,8 +2302,8 @@
               $.inArray(_R - rows.length, defaults.ignoreRow) !== -1)) ||
             isVisible($(row)) === false) {
           continue;
-        } 
-        
+        }
+
         var elts = (row.children);
         var _CLength = 0;
         for (_C = 0; _C < elts.length; ++_C) {
@@ -2266,7 +2337,7 @@
           var v = parseString(elt, _R, _C + CSOffset, cellInfo);
           var o = {t: 's', v: v};
           var _t = '';
-          var cellFormat = $(elt).attr('data-tableexport-cellformat');
+          var cellFormat = $(elt).attr('data-tableexport-cellformat') || '';
 
           if (cellFormat !== '') {
             var ssfId = parseInt($(elt).attr('data-tableexport-xlsxformatid') || 0);
@@ -2295,7 +2366,13 @@
 
             if (v.length === 0)
               o.t = 'z';
-            else if (v.trim().length === 0 || _t === 's') {
+            else if (v.trim().length === 0) {
+            }
+            else if (_t === 's') {
+              if ($(elt).find('a').length) {
+                v = defaults.htmlHyperlink !== 'href' ? v : '';
+                o = {f: '=HYPERLINK("' + $(elt).find('a').attr('href') + (v.length ? '","' + v : '') + '")'};
+              }
             }
             else if (cellInfo.type === 'function')
               o = {f: v};
@@ -2303,10 +2380,6 @@
               o = {t: 'b', v: true};
             else if (v === 'FALSE')
               o = {t: 'b', v: false};
-            else if (_t === '' && $(elt).find('a').length) {
-              v = defaults.htmlHyperlink !== 'href' ? v : '';
-              o = {f: '=HYPERLINK("' + $(elt).find('a').attr('href') + (v.length ? '","' + v : '') + '")'};
-            }
             else if (_t === 'n' || isFinite(xlsxToNumber(v, defaults.numbers.output))) { // yes, defaults.numbers.output is right
               var vn = xlsxToNumber(v, defaults.numbers.output);
               if (ssfId === 0 && typeof defaults.mso.xslx.formatId.numbers !== 'function')

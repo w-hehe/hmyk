@@ -6,9 +6,9 @@ $debug = function_exists('config') ? config('app_debug') : false;
 $lang = [
     'An error occurred' => '发生错误',
     'Home' => '返回主页',
-    'Feedback' => '反馈错误',
+    'Previous Page' => '返回上一页',
     'The page you are looking for is temporarily unavailable' => '你所浏览的页面暂时无法访问',
-    'You can return to the previous page and try again' => '你可以返回上一页重试，或直接向我们反馈错误报告'
+    'You can return to the previous page and try again' => '你可以返回上一页重试'
 ];
 
 $langSet = '';
@@ -39,7 +39,7 @@ $langSet == 'en' && $lang = array_combine(array_keys($lang), array_keys($lang));
         article,aside,details,figcaption,figure,footer,header,hgroup,nav,section {display:block;}
         html {font-size:16px;line-height:24px;width:100%;height:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;overflow-y:scroll;overflow-x:hidden;}
         img {vertical-align:middle;max-width:100%;height:auto;border:0;-ms-interpolation-mode:bicubic;}
-        body {min-height:100%;background:#edf1f4;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",微软雅黑,Arial,sans-serif;}
+        body {min-height:100%;background:#f4f6f8;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",微软雅黑,Arial,sans-serif;}
         .clearfix {clear:both;zoom:1;}
         .clearfix:before,.clearfix:after {content:"\0020";display:block;height:0;visibility:hidden;}
         .clearfix:after {clear:both;}
@@ -82,7 +82,7 @@ $langSet == 'en' && $lang = array_combine(array_keys($lang), array_keys($lang));
         <img src="<?=$cdnurl?>/assets/img/error.svg" alt="" width="120"/>
     </div>
     <div class="subheader">
-        <?=$message?>
+        <?=$debug?$message:$lang['The page you are looking for is temporarily unavailable']?>
     </div>
     <div class="hr"></div>
     <div class="context">
@@ -94,7 +94,7 @@ $langSet == 'en' && $lang = array_combine(array_keys($lang), array_keys($lang));
     </div>
     <div class="buttons-container">
         <a href="<?=$publicurl?>"><?=$lang['Home']?></a>
-        <a href="<?=$publicurl?>"><?=$lang['Feedback']?></a>
+        <a href="javascript:" onclick="history.go(-1)"><?=$lang['Previous Page']?></a>
     </div>
 </div>
 </body>

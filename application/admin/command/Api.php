@@ -22,10 +22,11 @@ class Api extends Command
             ->addOption('output', 'o', Option::VALUE_OPTIONAL, 'output index file name', 'api.html')
             ->addOption('template', 'e', Option::VALUE_OPTIONAL, '', 'index.html')
             ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override general file', false)
-            ->addOption('title', 't', Option::VALUE_OPTIONAL, 'document title', '红盟云商')
-            ->addOption('author', 'a', Option::VALUE_OPTIONAL, 'document author', '红盟云商')
+            ->addOption('title', 't', Option::VALUE_OPTIONAL, 'document title', $site['name'] ?? '')
             ->addOption('class', 'c', Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'extend class', null)
             ->addOption('language', 'l', Option::VALUE_OPTIONAL, 'language', 'zh-cn')
+            ->addOption('addon', 'a', Option::VALUE_OPTIONAL, 'addon name', null)
+            ->addOption('controller', 'r', Option::VALUE_REQUIRED | Option::VALUE_IS_ARRAY, 'controller name', null)
             ->setDescription('Build Api document from controller');
     }
 
@@ -36,6 +37,10 @@ class Api extends Command
         $force = $input->getOption('force');
         $url = $input->getOption('url');
         $language = $input->getOption('language');
+        $template = $input->getOption('template');
+        if (!preg_match("/^([a-z0-9]+)\.html\$/i", $template)) {
+            throw new Exception('template file not correct');
+        }
         $language = $language ? $language : 'zh-cn';
         $langFile = $apiDir . 'lang' . DS . $language . '.php';
         if (!is_file($langFile)) {
@@ -50,7 +55,7 @@ class Api extends Command
         }
         // 模板文件
         $template_dir = $apiDir . 'template' . DS;
-        $template_file = $template_dir . $input->getOption('template');
+        $template_file = $template_dir . $template;
         if (!is_file($template_file)) {
             throw new Exception('template file not found');
         }
@@ -58,51 +63,62 @@ class Api extends Command
         $classes = $input->getOption('class');
         // 标题
         $title = $input->getOption('title');
-        // 作者
-        $author = $input->getOption('author');
         // 模块
         $module = $input->getOption('module');
+        // 插件
+        $addon = $input->getOption('addon');
 
-        $moduleDir = APP_PATH . $module . DS;
+        $moduleDir = $addonDir = '';
+        if ($addon) {
+            $addonInfo = get_addon_info($addon);
+            if (!$addonInfo) {
+                throw new Exception('addon not found');
+            }
+            $moduleDir = ADDON_PATH . $addon . DS;
+        } else {
+            $moduleDir = APP_PATH . $module . DS;
+        }
         if (!is_dir($moduleDir)) {
             throw new Exception('module not found');
         }
 
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            if (extension_loaded('Zend OPcache')) {
-                $configuration = opcache_get_configuration();
-                $directives = $configuration['directives'];
-                $configName = request()->isCli() ? 'opcache.enable_cli' : 'opcache.enable';
-                if (!$directives[$configName]) {
-                    throw new Exception("Please make sure {$configName} is turned on, Get help:https://forum.fastadmin.net/d/1321");
-                }
-            } else {
-                throw new Exception("Please make sure opcache already enabled, Get help:https://forum.fastadmin.net/d/1321");
-            }
+            throw new Exception("Requires PHP version 7.0 or newer");
         }
 
-        $controllerDir = $moduleDir . Config::get('url_controller_layer') . DS;
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($controllerDir),
-            \RecursiveIteratorIterator::LEAVES_ONLY
-        );
+        //控制器名
+        $controller = $input->getOption('controller') ?: [];
+        if (!$controller) {
+            $controllerDir = $moduleDir . Config::get('url_controller_layer') . DS;
+            $files = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($controllerDir),
+                \RecursiveIteratorIterator::LEAVES_ONLY
+            );
 
-        foreach ($files as $name => $file) {
-            if (!$file->isDir() && $file->getExtension() == 'php') {
-                $filePath = $file->getRealPath();
+            foreach ($files as $name => $file) {
+                if (!$file->isDir() && $file->getExtension() == 'php') {
+                    $filePath = $file->getRealPath();
+                    $classes[] = $this->get_class_from_file($filePath);
+                }
+            }
+        } else {
+            foreach ($controller as $index => $item) {
+                $filePath = $moduleDir . Config::get('url_controller_layer') . DS . $item . '.php';
                 $classes[] = $this->get_class_from_file($filePath);
             }
         }
+
         $classes = array_unique(array_filter($classes));
 
         $config = [
             'sitename'    => config('site.name'),
             'title'       => $title,
-            'author'      => $author,
+            'author'      => config('site.name'),
             'description' => '',
             'apiurl'      => $url,
             'language'    => $language,
         ];
+
         $builder = new Builder($classes);
         $content = $builder->render($template_file, ['config' => $config, 'lang' => $lang]);
 

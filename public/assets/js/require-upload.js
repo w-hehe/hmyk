@@ -27,7 +27,8 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             if ($(button).data("multiple") && inputObj.val() !== "") {
                                 urlArr.push(inputObj.val());
                             }
-                            urlArr.push(data.url);
+                            var url = Config.upload.fullmode ? Fast.api.cdnurl(data.url) : data.url;
+                            urlArr.push(url);
                             inputObj.val(urlArr.join(",")).trigger("change").trigger("validate");
                         }
                         //如果有回调函数
@@ -141,7 +142,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                         //上传URL
                         url = url ? url : Config.upload.uploadurl;
                         url = Fast.api.fixurl(url);
-                        var chunking = false, chunkSize = Config.upload.chunksize || 2097152;
+                        var chunking = false, chunkSize = Config.upload.chunksize || 2097152, timeout = Config.upload.timeout || 600000;
 
                         //最大可上传文件大小
                         maxsize = typeof maxsize !== "undefined" ? maxsize : Config.upload.maxsize;
@@ -169,9 +170,15 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                         }(maxsize));
 
                         var options = $(this).data() || {};
+                        options = $.extend(true, {}, options, $(this).data("upload-options") || {});
                         delete options.success;
                         delete options.url;
                         multipart = $.isArray(multipart) ? {} : multipart;
+                        var params = $(this).data("params") || {};
+                        var category = typeof params.category !== 'undefined' ? params.category : ($(this).data("category") || '');
+                        if (category) {
+                            // multipart.category = category;
+                        }
 
                         Upload.list[id] = new Dropzone(this, $.extend({
                             url: url,
@@ -198,6 +205,8 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             maxFilesize: maxFilesize,
                             acceptedFiles: mimetype,
                             maxFiles: (maxcount && parseInt(maxcount) > 1 ? maxcount : (multiple ? null : 1)),
+                            timeout: timeout,
+                            parallelUploads: 1,
                             previewsContainer: false,
                             dictDefaultMessage: __("Drop files here to upload"),
                             dictFallbackMessage: __("Your browser does not support drag'n'drop file uploads"),
@@ -216,10 +225,20 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                 $(">i", this.element).addClass("dz-message");
                                 this.options.elementHtml = $(this.element).html();
                             },
+                            sending: function (file, xhr, formData) {
+                                if (typeof file.category !== 'undefined') {
+                                    formData.append('category', file.category);
+                                }
+                            },
+                            addedfile: function (file) {
+                                var params = $(this.element).data("params") || {};
+                                var category = typeof params.category !== 'undefined' ? params.category : ($(this.element).data("category") || '');
+                                file.category = typeof category === 'function' ? category.call(this, file) : category;
+                            },
                             addedfiles: function (files) {
                                 if (this.options.maxFiles && (!this.options.maxFiles || this.options.maxFiles > 1) && this.options.inputId) {
                                     var inputObj = $("#" + this.options.inputId);
-                                    if (inputObj.size() > 0) {
+                                    if (inputObj.length > 0) {
                                         var value = $.trim(inputObj.val());
                                         var nums = value === '' ? 0 : value.split(/\,/).length;
                                         var remain = this.options.maxFiles - nums;
@@ -243,16 +262,19 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                 }
                             },
                             error: function (file, response, xhr) {
-                                var responseObj = $("<div>" + xhr.responseText + "</div>");
+                                var responseObj = $("<div>" + (xhr && typeof xhr.responseText !== 'undefined' ? xhr.responseText : response) + "</div>");
                                 responseObj.find("style, title, script").remove();
-                                var ret = {code: 0, data: null, msg: responseObj.text()};
+                                var msg = responseObj.text() || __('Network error');
+                                var ret = {code: 0, data: null, msg: msg};
                                 Upload.events.onUploadError(this, ret, file);
                             },
                             uploadprogress: function (file, progress, bytesSent) {
-
+                                if (file.upload.chunked) {
+                                    $(this.element).prop("disabled", true).html("<i class='fa fa-upload'></i> " + __('Upload') + Math.floor((file.upload.bytesSent / file.size) * 100) + "%");
+                                }
                             },
                             totaluploadprogress: function (progress, bytesSent) {
-                                if (this.getActiveFiles().length > 0) {
+                                if (this.getActiveFiles().length > 0 && !this.options.chunking) {
                                     $(this.element).prop("disabled", true).html("<i class='fa fa-upload'></i> " + __('Upload') + Math.floor(progress) + "%");
                                 }
                             },
@@ -267,13 +289,13 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                 var that = this;
                                 Fast.api.ajax({
                                     url: this.options.url,
-                                    data: {
+                                    data: $.extend({}, multipart, {
                                         action: 'merge',
                                         filesize: file.size,
                                         filename: file.name,
                                         chunkid: file.upload.uuid,
                                         chunkcount: file.upload.totalChunkCount,
-                                    }
+                                    })
                                 }, function (data, ret) {
                                     done(JSON.stringify(ret));
                                     return false;
@@ -343,10 +365,13 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                     }
                                     var suffix = /[\.]?([a-zA-Z0-9]+)$/.exec(j);
                                     suffix = suffix ? suffix[1] : 'file';
-                                    var data = {url: j, fullurl: Fast.api.cdnurl(j), data: $(that).data(), key: i, index: i, value: (json && typeof json[i] !== 'undefined' ? json[i] : null), suffix: suffix};
+                                    j = Config.upload.fullmode ? Fast.api.cdnurl(j) : j;
+                                    var value = (json && typeof json[i] !== 'undefined' ? json[i] : null);
+                                    var data = {url: j, fullurl: Fast.api.cdnurl(j), data: $(that).data(), key: i, index: i, value: value, row: value, suffix: suffix};
                                     var html = tpl ? Template(tpl, data) : Template.render(Upload.config.previewtpl, data);
                                     $("#" + preview_id).append(html);
                                 });
+                                refresh($("#" + preview_id).data("name"));
                             });
                             $("#" + input_id).trigger("change");
                         }

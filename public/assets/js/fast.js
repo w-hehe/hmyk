@@ -103,7 +103,8 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
             //获取修复后可访问的cdn链接
             cdnurl: function (url, domain) {
                 var rule = new RegExp("^((?:[a-z]+:)?\\/\\/|data:image\\/)", "i");
-                var url = rule.test(url) ? url : Config.upload.cdnurl + url;
+                var cdnurl = Config.upload.cdnurl;
+                url = rule.test(url) || (cdnurl && url.indexOf(cdnurl) === 0) ? url : cdnurl + url;
                 if (domain && !rule.test(url)) {
                     domain = typeof domain === 'string' ? domain : location.origin;
                     url = domain + url;
@@ -152,7 +153,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                             Fast.api.layerfooter(layero, index, that);
 
                             //绑定事件
-                            if (layerfooter.size() > 0) {
+                            if (layerfooter.length > 0) {
                                 // 监听窗口内的元素及属性变化
                                 // Firefox和Chrome早期版本中带有前缀
                                 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -185,9 +186,14 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                         }
                     }
                 }, options ? options : {});
-                if ($(window).width() < 480 || (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && top.$(".tab-pane.active").size() > 0)) {
-                    options.area = [top.$(".tab-pane.active").width() + "px", top.$(".tab-pane.active").height() + "px"];
-                    options.offset = [top.$(".tab-pane.active").scrollTop() + "px", "0px"];
+                if ($(window).width() < 480 || (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && top.$(".tab-pane.active").length > 0)) {
+                    if (top.$(".tab-pane.active").length > 0) {
+                        options.area = [top.$(".tab-pane.active").width() + "px", top.$(".tab-pane.active").height() + "px"];
+                        options.offset = [top.$(".tab-pane.active").scrollTop() + "px", "0px"];
+                    } else {
+                        options.area = [$(window).width() + "px", $(window).height() + "px"];
+                        options.offset = ["0px", "0px"];
+                    }
                 }
                 return Layer.open(options);
             },
@@ -205,11 +211,11 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
             layerfooter: function (layero, index, that) {
                 var frame = Layer.getChildFrame('html', index);
                 var layerfooter = frame.find(".layer-footer");
-                if (layerfooter.size() > 0) {
+                if (layerfooter.length > 0) {
                     $(".layui-layer-footer", layero).remove();
                     var footer = $("<div />").addClass('layui-layer-btn layui-layer-footer');
                     footer.html(layerfooter.html());
-                    if ($(".row", footer).size() === 0) {
+                    if ($(".row", footer).length === 0) {
                         $(">", footer).wrapAll("<div class='row'></div>");
                     }
                     footer.insertAfter(layero.find('.layui-layer-content'));
@@ -324,7 +330,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
             // 绑定ESC关闭窗口事件
             $(window).keyup(function (e) {
                 if (e.keyCode == 27) {
-                    if ($(".layui-layer").size() > 0) {
+                    if ($(".layui-layer").length > 0) {
                         var index = 0;
                         $(".layui-layer").each(function () {
                             index = Math.max(index, parseInt($(this).attr("times")));

@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 50726
  Source Host           : 127.0.0.1:3306
- Source Schema         : aaaaaaaaa
+ Source Schema         : fk_ss_com
 
  Target Server Type    : MySQL
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 01/06/2022 10:52:03
+ Date: 07/06/2022 15:07:17
 */
 
 SET NAMES utf8mb4;
@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS `hm_admin`;
 CREATE TABLE `hm_admin`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '用户名',
+  `mobile` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '手机号码',
   `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '昵称',
   `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '密码',
   `salt` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '密码盐',
@@ -43,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', 'admin', '46e2dddc91a283baf1fe258b44931c89', '2e1945', '/assets/img/avatar.png', '123456@qq.com', 0, 1654046211, '114.216.9.55', NULL, 1654046211, '41f3f56e-5ceb-457b-9554-8b387b2572f0', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', 'bfc53ce94bf2591da298ea868f639adb', 'a8a55f', '/assets/img/avatar.png', '10220739@qq.com', 0, 1654496390, '127.0.0.1', NULL, 1654568265, 'c2c6c18b-bff1-4023-935b-da8e5e703e8b', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_attach
@@ -84,12 +85,179 @@ CREATE TABLE `hm_attachment`  (
   `uploadtime` int(10) NULL DEFAULT NULL COMMENT '上传时间',
   `storage` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'local' COMMENT '存储位置',
   `sha1` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '文件 sha1编码',
+  `category` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '附件表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hm_attachment
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for hm_auth_group
+-- ----------------------------
+DROP TABLE IF EXISTS `hm_auth_group`;
+CREATE TABLE `hm_auth_group`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `pid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父组别',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '组名',
+  `rules` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '规则ID',
+  `createtime` bigint(16) NULL DEFAULT NULL COMMENT '创建时间',
+  `updatetime` bigint(16) NULL DEFAULT NULL COMMENT '更新时间',
+  `status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '状态',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '分组表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of hm_auth_group
+-- ----------------------------
+INSERT INTO `hm_auth_group` VALUES (1, 0, 'Admin group', '*', 1491635035, 1491635035, 'normal');
+INSERT INTO `hm_auth_group` VALUES (2, 1, 'Second group', '13,14,16,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,40,41,42,43,44,45,46,47,48,49,50,55,56,57,58,59,60,61,62,63,64,65,1,9,10,11,7,6,8,2,4,5', 1491635035, 1491635035, 'normal');
+
+-- ----------------------------
+-- Table structure for hm_auth_group_access
+-- ----------------------------
+DROP TABLE IF EXISTS `hm_auth_group_access`;
+CREATE TABLE `hm_auth_group_access`  (
+  `uid` int(10) UNSIGNED NOT NULL COMMENT '会员ID',
+  `group_id` int(10) UNSIGNED NOT NULL COMMENT '级别ID',
+  UNIQUE INDEX `uid_group_id`(`uid`, `group_id`) USING BTREE,
+  INDEX `uid`(`uid`) USING BTREE,
+  INDEX `group_id`(`group_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '权限分组表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of hm_auth_group_access
+-- ----------------------------
+INSERT INTO `hm_auth_group_access` VALUES (1, 1);
+
+-- ----------------------------
+-- Table structure for hm_auth_rule
+-- ----------------------------
+DROP TABLE IF EXISTS `hm_auth_rule`;
+CREATE TABLE `hm_auth_rule`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `type` enum('menu','file') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'file' COMMENT 'menu为菜单,file为权限节点',
+  `pid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父ID',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '规则名称',
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '规则名称',
+  `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '图标',
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '规则URL',
+  `condition` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '条件',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '备注',
+  `ismenu` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否为菜单',
+  `menutype` enum('addtabs','blank','dialog','ajax') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '菜单类型',
+  `extend` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '扩展属性',
+  `py` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '拼音首字母',
+  `pinyin` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '拼音',
+  `createtime` bigint(16) NULL DEFAULT NULL COMMENT '创建时间',
+  `updatetime` bigint(16) NULL DEFAULT NULL COMMENT '更新时间',
+  `weigh` int(10) NOT NULL DEFAULT 0 COMMENT '权重',
+  `status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '状态',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `name`(`name`) USING BTREE,
+  INDEX `pid`(`pid`) USING BTREE,
+  INDEX `weigh`(`weigh`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 98 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '节点表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of hm_auth_rule
+-- ----------------------------
+INSERT INTO `hm_auth_rule` VALUES (1, 'file', 0, 'dashboard', 'Dashboard', 'fa fa-dashboard', '', '', 'Dashboard tips', 1, NULL, '', 'kzt', 'kongzhitai', 1491635035, 1491635035, 143, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (2, 'file', 0, 'general', '系统配置', 'fa fa-cogs', '', '', '', 1, NULL, '', 'xtpz', 'xitongpeizhi', 1491635035, 1654157901, 137, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (3, 'file', 86, 'category', '商品分类', 'fa fa-leaf', '', '', 'Category tips', 1, NULL, '', 'spfl', 'shangpinfenlei', 1491635035, 1654157269, 119, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (4, 'file', 0, 'addon', 'Addon', 'fa fa-rocket', '', '', 'Addon tips', 1, NULL, '', 'cjgl', 'chajianguanli', 1491635035, 1491635035, 0, 'hidden');
+INSERT INTO `hm_auth_rule` VALUES (5, 'file', 0, 'auth', '管理员管理', 'fa fa-windows', '', '', '', 1, NULL, '', 'glygl', 'guanliyuanguanli', 1491635035, 1654483128, 99, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (6, 'file', 2, 'general/config', '基础配置', 'fa fa-cog', '', '', 'Config tips', 1, NULL, '', 'jcpz', 'jichupeizhi', 1491635035, 1654157911, 60, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (7, 'file', 2, 'general/attachment', 'Attachment', 'fa fa-file-image-o', '', '', 'Attachment tips', 1, NULL, '', 'fjgl', 'fujianguanli', 1491635035, 1491635035, 53, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (8, 'file', 2, 'general/profile', 'Profile', 'fa fa-user', '', '', '', 1, NULL, '', 'grzl', 'gerenziliao', 1491635035, 1491635035, 34, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (9, 'file', 5, 'auth/admin', 'Admin', 'fa fa-user', '', '', 'Admin tips', 1, NULL, '', 'glygl', 'guanliyuanguanli', 1491635035, 1491635035, 118, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (10, 'file', 5, 'auth/adminlog', 'Admin log', 'fa fa-list-alt', '', '', 'Admin log tips', 1, NULL, '', 'glyrz', 'guanliyuanrizhi', 1491635035, 1491635035, 113, 'hidden');
+INSERT INTO `hm_auth_rule` VALUES (11, 'file', 5, 'auth/group', 'Group', 'fa fa-group', '', '', 'Group tips', 1, NULL, '', 'jsz', 'juesezu', 1491635035, 1491635035, 109, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (12, 'file', 5, 'auth/rule', 'Rule', 'fa fa-bars', '', '', 'Rule tips', 1, NULL, '', 'cdgz', 'caidanguize', 1491635035, 1491635035, 104, 'hidden');
+INSERT INTO `hm_auth_rule` VALUES (13, 'file', 1, 'dashboard/index', 'View', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 136, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (14, 'file', 1, 'dashboard/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 135, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (15, 'file', 1, 'dashboard/del', 'Delete', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 133, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (16, 'file', 1, 'dashboard/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 134, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (17, 'file', 1, 'dashboard/multi', 'Multi', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 132, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (18, 'file', 6, 'general/config/index', 'View', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 52, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (19, 'file', 6, 'general/config/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 51, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (20, 'file', 6, 'general/config/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 50, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (21, 'file', 6, 'general/config/del', 'Delete', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 49, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (22, 'file', 6, 'general/config/multi', 'Multi', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 48, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (23, 'file', 7, 'general/attachment/index', 'View', 'fa fa-circle-o', '', '', 'Attachment tips', 0, NULL, '', '', '', 1491635035, 1491635035, 59, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (24, 'file', 7, 'general/attachment/select', 'Select attachment', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 58, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (25, 'file', 7, 'general/attachment/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 57, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (26, 'file', 7, 'general/attachment/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 56, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (27, 'file', 7, 'general/attachment/del', 'Delete', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 55, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (28, 'file', 7, 'general/attachment/multi', 'Multi', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 54, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (29, 'file', 8, 'general/profile/index', 'View', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 33, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (30, 'file', 8, 'general/profile/update', 'Update profile', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 32, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (31, 'file', 8, 'general/profile/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 31, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (32, 'file', 8, 'general/profile/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 30, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (33, 'file', 8, 'general/profile/del', 'Delete', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 29, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (34, 'file', 8, 'general/profile/multi', 'Multi', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 28, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (35, 'file', 3, 'category/index', 'View', 'fa fa-circle-o', '', '', 'Category tips', 0, NULL, '', '', '', 1491635035, 1491635035, 142, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (36, 'file', 3, 'category/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 141, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (37, 'file', 3, 'category/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 140, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (38, 'file', 3, 'category/del', 'Delete', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 139, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (39, 'file', 3, 'category/multi', 'Multi', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 138, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (40, 'file', 9, 'auth/admin/index', 'View', 'fa fa-circle-o', '', '', 'Admin tips', 0, NULL, '', '', '', 1491635035, 1491635035, 117, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (41, 'file', 9, 'auth/admin/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 116, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (42, 'file', 9, 'auth/admin/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 115, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (43, 'file', 9, 'auth/admin/del', 'Delete', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 114, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (44, 'file', 10, 'auth/adminlog/index', 'View', 'fa fa-circle-o', '', '', 'Admin log tips', 0, NULL, '', '', '', 1491635035, 1491635035, 112, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (45, 'file', 10, 'auth/adminlog/detail', 'Detail', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 111, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (46, 'file', 10, 'auth/adminlog/del', 'Delete', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 110, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (47, 'file', 11, 'auth/group/index', 'View', 'fa fa-circle-o', '', '', 'Group tips', 0, NULL, '', '', '', 1491635035, 1491635035, 108, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (48, 'file', 11, 'auth/group/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 107, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (49, 'file', 11, 'auth/group/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 106, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (50, 'file', 11, 'auth/group/del', 'Delete', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 105, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (51, 'file', 12, 'auth/rule/index', 'View', 'fa fa-circle-o', '', '', 'Rule tips', 0, NULL, '', '', '', 1491635035, 1491635035, 103, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (52, 'file', 12, 'auth/rule/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 102, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (53, 'file', 12, 'auth/rule/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 101, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (54, 'file', 12, 'auth/rule/del', 'Delete', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 100, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (55, 'file', 4, 'addon/index', 'View', 'fa fa-circle-o', '', '', 'Addon tips', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (56, 'file', 4, 'addon/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (57, 'file', 4, 'addon/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (58, 'file', 4, 'addon/del', 'Delete', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (59, 'file', 4, 'addon/downloaded', 'Local addon', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (60, 'file', 4, 'addon/state', 'Update state', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (63, 'file', 4, 'addon/config', 'Setting', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (64, 'file', 4, 'addon/refresh', 'Refresh', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (65, 'file', 4, 'addon/multi', 'Multi', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (66, 'file', 0, 'user', '用户管理', 'fa fa-user', '', '', '', 1, NULL, '', 'yhgl', 'yonghuguanli', 1491635035, 1654157711, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (67, 'file', 66, 'user/user', 'User list', 'fa fa-user', '', '', '', 1, NULL, '', 'yhlb', 'yonghuliebiao', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (68, 'file', 67, 'user/user/index', 'View', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (69, 'file', 67, 'user/user/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (70, 'file', 67, 'user/user/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (71, 'file', 67, 'user/user/del', 'Del', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (72, 'file', 67, 'user/user/multi', 'Multi', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (73, 'file', 66, 'user/group', '用户分组', 'fa fa-users', '', '', '', 1, NULL, '', 'yhfz', 'yonghufenzu', 1491635035, 1654156934, 0, 'hidden');
+INSERT INTO `hm_auth_rule` VALUES (74, 'file', 73, 'user/group/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (75, 'file', 73, 'user/group/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (76, 'file', 73, 'user/group/index', 'View', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (77, 'file', 73, 'user/group/del', 'Del', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (78, 'file', 73, 'user/group/multi', 'Multi', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (79, 'file', 66, 'user/rule', 'User rule', 'fa fa-circle-o', '', '', '', 1, NULL, '', 'hygz', 'huiyuanguize', 1491635035, 1491635035, 0, 'hidden');
+INSERT INTO `hm_auth_rule` VALUES (80, 'file', 79, 'user/rule/index', 'View', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (81, 'file', 79, 'user/rule/del', 'Del', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (82, 'file', 79, 'user/rule/add', 'Add', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (83, 'file', 79, 'user/rule/edit', 'Edit', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (84, 'file', 79, 'user/rule/multi', 'Multi', 'fa fa-circle-o', '', '', '', 0, NULL, '', '', '', 1491635035, 1491635035, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (85, 'file', 66, 'user_grade', '代理等级', 'fa fa-deviantart', '', '', '', 1, 'addtabs', '', 'dldj', 'dailidengji', 1654157017, 1654157017, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (86, 'file', 0, 'goods', '商品管理', 'fa fa-shopping-cart', '', '', '', 1, 'addtabs', '', 'spgl', 'shangpinguanli', 1654157078, 1654157413, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (87, 'file', 86, 'goods/index', '商品列表', 'fa fa-reorder', '', '', '', 1, 'addtabs', '', 'splb', 'shangpinliebiao', 1654157190, 1654157222, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (88, 'file', 86, 'attach', '附加选项', 'fa fa-angle-double-right', '', '', '', 1, 'addtabs', '', 'fjxx', 'fujiaxuanxiang', 1654157377, 1654157377, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (89, 'file', 0, 'finance', '财务管理', 'fa fa-trello', '', '', '', 1, 'addtabs', '', 'cwgl', 'caiwuguanli', 1654158358, 1654158358, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (90, 'file', 89, 'pay', '支付配置', 'fa fa-credit-card', '', '', '', 1, 'addtabs', '', 'zfpz', 'zhifupeizhi', 1654160403, 1654160793, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (91, 'file', 89, 'order', '订单管理', 'fa fa-reorder', '', '', '', 1, 'addtabs', '', 'ddgl', 'dingdanguanli', 1654160439, 1654160439, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (92, 'file', 89, 'coupon', '优惠券', 'fa fa-bookmark', '', '', '', 1, 'addtabs', '', 'yhq', 'youhuiquan', 1654160468, 1654160878, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (93, 'file', 89, 'complain', '订单投诉', 'fa fa-info-circle', '', '', '', 1, 'addtabs', '', 'ddts', 'dingdantousu', 1654160636, 1654160838, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (94, 'file', 0, 'extend', '网站扩展', 'fa fa-external-link', '', '', '', 1, 'addtabs', '', 'wzkz', 'wangzhankuozhan', 1654160994, 1654160994, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (95, 'file', 94, 'template', '模板管理', 'fa fa-desktop', '', '', '', 1, 'addtabs', '', 'mbgl', 'mubanguanli', 1654161028, 1654161028, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (96, 'file', 94, 'plugin', '插件管理', 'fa fa-plug', '', '', '', 1, 'addtabs', '', 'cjgl', 'chajianguanli', 1654161062, 1654161062, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (97, 'file', 86, 'docking/docking_site', '货源管理', 'fa fa-sitemap', '', '', '', 1, 'addtabs', '', 'hygl', 'huoyuanguanli', 1654161340, 1654493063, 0, 'normal');
 
 -- ----------------------------
 -- Table structure for hm_category
@@ -157,7 +325,7 @@ CREATE TABLE `hm_complain`  (
   `handel_time` int(10) NULL DEFAULT NULL COMMENT '处理时间',
   `complete_time` int(10) NULL DEFAULT NULL COMMENT '完成时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '投诉' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '投诉' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hm_complain
@@ -189,7 +357,7 @@ CREATE TABLE `hm_config`  (
 INSERT INTO `hm_config` VALUES (1, 'shop_title', 'basic', '网站标题', '', 'string', '红盟云卡 - 基于PHP + MySQL打造的商城建站系统', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (2, 'shop_pet_name', 'basic', '网站名称', '', 'string', '红盟云卡', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (3, 'beian', 'basic', 'Beian', '苏ICP备15000000号-1', 'string', '', '', '', '', NULL);
-INSERT INTO `hm_config` VALUES (4, 'version', 'basic', '后台静态文件版本', '如果静态资源有变动请重新配置该值', 'string', '1648775325', '', 'required', '', NULL);
+INSERT INTO `hm_config` VALUES (4, 'version', 'basic', '后台静态文件版本', '如果静态资源有变动请重新配置该值', 'string', '1654491902', '', 'required', '', NULL);
 INSERT INTO `hm_config` VALUES (5, 'min_cashout', 'money', '最低提现金额', '0则不限制金额', 'number', '0', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (6, 'max_cashout_num', 'money', '每日最多提现次数', '0则不限制次数', 'number', '3', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (7, 'cashout_charged', 'money', '提现手续费%', '按照百分比填写', 'number', '1', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
@@ -407,12 +575,12 @@ CREATE TABLE `hm_options`  (
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.0.6');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.1.0');
 INSERT INTO `hm_options` VALUES (2, 'user_total', '3');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');
 INSERT INTO `hm_options` VALUES (5, 'goods_total', '0');
-INSERT INTO `hm_options` VALUES (6, 'active_plugin', 'a:0:{}');
+INSERT INTO `hm_options` VALUES (6, 'active_plugin', 'a:1:{i:0;s:13:\"tips/tips.php\";}');
 INSERT INTO `hm_options` VALUES (7, 'active_template', 'a:2:{s:2:\"pc\";s:7:\"default\";s:6:\"mobile\";s:7:\"default\";}');
 INSERT INTO `hm_options` VALUES (8, 'stock_show', '[{\"less\":\"-1\",\"greater\":\"1\",\"content\":\"\\u552e\\u78d0\"},{\"less\":\"0\",\"greater\":\"11\",\"content\":\"\\u5c11\\u91cf\"},{\"less\":\"10\",\"greater\":\"1000000\",\"content\":\"\\u5145\\u8db3\"}]');
 INSERT INTO `hm_options` VALUES (9, 'stock_show_switch', '0');
@@ -430,8 +598,8 @@ CREATE TABLE `hm_order`  (
   `order_no` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `remote_order_no` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `uid` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '用户id',
-  `attach` varchar(800) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '附件内容',
-  `inputs` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '对接订单所需的数据',
+  `attach` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '附件内容',
+  `inputs` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '对接订单所需的数据',
   `goods_id` int(10) NULL DEFAULT 0 COMMENT '商品id',
   `buy_num` int(10) NULL DEFAULT 0 COMMENT '购买数量',
   `goods_money` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '商品单价',
@@ -487,7 +655,7 @@ CREATE TABLE `hm_recharge`  (
   `pay_plugin` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '充值订单' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '充值订单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hm_recharge

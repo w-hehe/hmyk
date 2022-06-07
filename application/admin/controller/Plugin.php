@@ -125,7 +125,7 @@ class Plugin extends Backend {
 //            echo $result;die;
             $result = json_decode($result, true);
             if(empty($result)){ //获取授权信息失败
-                return json(['code' => 400, 'msg' => '插件信息获取失败']);
+                return json(['code' => 400, 'msg' => '当前服务器无法连接该站点【' . YS . '】']);
             }
             if($result['code'] == 400){ //未授权
                 return json(['code' => 401, 'msg' => '需要授权码', 'data' => YS . "plugin.html?id={$result['data']}"]);
@@ -152,11 +152,11 @@ class Plugin extends Backend {
         if($path == 'default_socket_timeout'){
             return json(['code' => 400, 'msg' => '下载插件连接超时，请重试！']);
         }
-        
+
         if(!class_exists("\ZipArchive")) return json(['code' => 400, 'msg' => '您的PHP缺少ZipArchive扩展，你可以尝试安装编译版的PHP解决这个问题！']);
-        
+
         $zip = new \ZipArchive();
-        
+
 
         if($info['type'] == 'template'){
             $toPath = ROOT_PATH . 'public/content/template';

@@ -15,8 +15,6 @@ return [
     // +----------------------------------------------------------------------
     // | 应用设置
     // +----------------------------------------------------------------------
-
-
     // 应用命名空间
     'app_namespace'          => 'app',
     // 应用调试模式
@@ -49,15 +47,19 @@ return [
     'default_filter'         => '',
     // 默认语言
     'default_lang'           => 'zh-cn',
+    // 允许的语言列表
+    'allow_lang_list'        => ['zh-cn', 'en'],
     // 应用类库后缀
     'class_suffix'           => false,
     // 控制器类后缀
     'controller_suffix'      => false,
+    // 获取IP的变量
+    'http_agent_ip'          => 'REMOTE_ADDR',
     // +----------------------------------------------------------------------
     // | 模块设置
     // +----------------------------------------------------------------------
     // 默认模块名
-    'default_module'         => 'shop',
+    'default_module'         => 'index',
     // 禁止访问模块
     'deny_module_list'       => ['common'],
     // 默认控制器名
@@ -152,8 +154,8 @@ return [
     // 错误显示信息,非调试模式有效
     'error_message'          => '你所浏览的页面暂时无法访问',
     // 显示错误信息
-    'show_error_msg'         => true,
-    // 异常处理handle类 留空使用  \think\exception\Handle
+    'show_error_msg'         => false,
+    // 异常处理handle类 留空使用 \think\exception\Handle
     'exception_handle'       => '',
     // +----------------------------------------------------------------------
     // | 日志设置
@@ -194,7 +196,7 @@ return [
         // SESSION_ID的提交变量,解决flash上传跨域
         'var_session_id' => '',
         // SESSION 前缀
-        'prefix'         => 'hmyk_',
+        'prefix'         => 'think',
         // 驱动方式 支持redis memcache memcached
         'type'           => '',
         // 是否自动开启 SESSION
@@ -251,20 +253,35 @@ return [
         // 驱动方式
         'type'     => 'Mysql',
         // 缓存前缀
-        'key'      => 'i3d6o32wo8fvs1fvdpwens',
+        'key'      => 'SXUqQo7FcsHxwTZy8kJ4Av56jeNnGPzp',
         // 加密方式
         'hashalgo' => 'ripemd160',
         // 缓存有效期 0表示永久缓存
         'expire'   => 0,
     ],
-
     //FastAdmin配置
     'fastadmin'              => [
+        //是否开启前台会员中心
+        'usercenter'            => true,
+        //会员注册验证码类型email/mobile/wechat/text/false
+        'user_register_captcha' => 'text',
         //登录验证码
         'login_captcha'         => false,
+        //登录失败超过10次则1天后重试
+        'login_failure_retry'   => false,
         //是否同一账号同一时间只能在一个地方登录
         'login_unique'          => false,
-        //后台皮肤,为空时表示使用skin-black-green
+        //是否开启IP变动检测
+        'loginip_check'         => false,
+        //登录页默认背景图
+        'login_background'      => "",
+        //是否启用多级菜单导航
+        'multiplenav'           => false,
+        //是否开启多选项卡(仅在开启多级菜单时起作用)
+        'multipletab'           => true,
+        //是否默认展示子菜单
+        'show_submenu'          => false,
+        //后台皮肤,为空时表示使用skin-black-blue
         'adminskin'             => 'skin-blue',
         //后台是否启用面包屑
         'breadcrumb'            => false,
@@ -278,8 +295,9 @@ return [
         'addon_pure_mode'       => true,
         //允许跨域的域名,多个以,分隔
         'cors_request_domain'   => 'localhost,127.0.0.1',
-        //内核版本号
-        'version'               => '1.2.0.20201008_beta',
+        //版本号
+        'version'               => '1.3.4.20220530',
+        //API接口地址
         'api_url'               => 'https://api.fastadmin.net',
     ],
 ];

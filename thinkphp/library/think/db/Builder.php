@@ -386,7 +386,7 @@ abstract class Builder
                     $array[] = $key . ' ' . $exp . ' ' . $this->parseValue($item, $field);
                 }
                 $logic = isset($val[2]) ? $val[2] : 'AND';
-                $whereStr .= '(' . implode($array, ' ' . strtoupper($logic) . ' ') . ')';
+                $whereStr .= '(' . implode(' ' . strtoupper($logic) . ' ', $array) . ')';
             } else {
                 $whereStr .= $key . ' ' . $exp . ' ' . $this->parseValue($value, $field);
             }
@@ -541,12 +541,18 @@ abstract class Builder
      * @param array $options 查询条件
      * @return string
      */
-    protected function parseJoin($join, $options = [])
+    protected function parseJoin($join, & $options = [])
     {
         $joinStr = '';
         if (!empty($join)) {
             foreach ($join as $item) {
                 list($table, $type, $on) = $item;
+                if (is_array($table)) {
+                    $origin = key($table);
+                    if ($origin && $origin != $table[$origin]) {
+                        $options['alias'][$origin] = $table[$origin];
+                    }
+                }
                 $condition               = [];
                 foreach ((array) $on as $val) {
                     if ($val instanceof Expression) {
