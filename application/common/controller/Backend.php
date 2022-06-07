@@ -153,7 +153,6 @@ class Backend extends Controller
         if (!$this->auth->match($this->noNeedLogin)) {
             //检测是否登录
             if (!$this->auth->isLogin()) {
-                Hook::listen('admin_nologin', $this);
                 $url = Session::get('referer');
                 $url = $url ? $url : $this->request->url();
                 if (in_array($this->request->pathinfo(), ['/', 'index/index'])) {
@@ -166,8 +165,6 @@ class Backend extends Controller
             if (!$this->auth->match($this->noNeedRight)) {
                 // 判断控制器和方法是否有对应权限
                 if (!$this->auth->check($path)) {
-                    Hook::listen('admin_nopermission', $this);
-                    $this->error(__('You have no permission'), '');
                 }
             }
         }
