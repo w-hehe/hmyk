@@ -87,53 +87,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     text:'安装',
                                     click: function(data, row){
                                         var plugin_id = row.id;
-                                        var userinfo = Controller.api.userinfo.get();
-                                        var uid = userinfo ? userinfo.id : 0;
-                                        console.log(userinfo)
-                                        if (parseInt(uid) === 0) { //未登录
-                                            return Layer.alert(__('您需要登录【云商学院】账号才可以继续操作！'), {
-                                                title: __('温馨提示'),
-                                                btn: [__('立即登录')],
-                                                yes: function (index, layero) {
-                                                    var area = [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '350px' : '95%'];
-                                                    Layer.open({
-                                                        content: Template("logintpl", {}),
-                                                        zIndex: 99,
-                                                        area: area,
-                                                        title: '登录',
-                                                        resize: false,
-                                                        btn: ['登录', '取消'],
-                                                        yes: function (index, layero) {
-                                                            layer.load();
-                                                            var data = {
-                                                                email: $("#inputAccount", layero).val(),
-                                                                password: $("#inputPassword", layero).val(),
-                                                            };
-                                                            $.post("plugin/login", data, function(e){
-                                                                if(e.code == 400){
-                                                                    layer.closeAll('loading');
-                                                                    Toastr.error(e.msg);
-                                                                }else if(e.code == 200){
-                                                                    Controller.api.userinfo.set(e.data.user);
-                                                                    Layer.closeAll();
-                                                                    Toastr.success('登录成功');
-                                                                }
-                                                            }, "json");
-
-                                                        },
-                                                        btn2: function () {
-                                                            Layer.closeAll();
-                                                        }
-                                                    });
-
-                                                },
-                                                btn2: function () {
-                                                    alert('错误')
-                                                    // install(name, version, false);
-                                                }
-                                            });
-                                        }
-                                        install(plugin_id);
+                                        install(row);
                                     },
                                     hidden:function(row){
                                         if(row.install == true){
@@ -148,55 +102,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     icon: 'fa fa-wrench',
                                     text:'升级',
                                     click: function(data, row){
-                                        var plugin_id = row.id;
-                                        var userinfo = Controller.api.userinfo.get();
-
-                                        var uid = userinfo ? userinfo.id : 0;
-
-                                        if (parseInt(uid) === 0) { //未登录
-                                            return Layer.alert(__('您需要登录【云商学院】账号才可以继续操作！'), {
-                                                title: __('温馨提示'),
-                                                btn: [__('立即登录')],
-                                                yes: function (index, layero) {
-                                                    var area = [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '350px' : '95%'];
-                                                    Layer.open({
-                                                        content: Template("logintpl", {}),
-                                                        zIndex: 99,
-                                                        area: area,
-                                                        title: '登录',
-                                                        resize: false,
-                                                        btn: ['登录', '取消'],
-                                                        yes: function (index, layero) {
-                                                            layer.load();
-                                                            var data = {
-                                                                account: $("#inputAccount", layero).val(),
-                                                                password: $("#inputPassword", layero).val(),
-                                                            };
-                                                            $.post("plugin/login", data, function(e){
-                                                                if(e.code == 400){
-                                                                    layer.closeAll('loading');
-                                                                    Toastr.error(e.msg);
-                                                                }else if(e.code == 200){
-                                                                    Controller.api.userinfo.set(e.data);
-                                                                    Layer.closeAll();
-                                                                    Toastr.success('登录成功');
-                                                                }
-                                                            }, "json");
-
-                                                        },
-                                                        btn2: function () {
-                                                            Layer.closeAll();
-                                                        }
-                                                    });
-
-                                                },
-                                                btn2: function () {
-                                                    alert('错误')
-                                                    // install(name, version, false);
-                                                }
-                                            });
-                                        }
-                                        upgrade(plugin_id);
+                                        upgrade(row);
                                     },
                                     hidden:function(row){
                                         if(row.upgrade == false){
@@ -252,24 +158,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 $('.cjsc-type').css('display', 'inline-block');
             })
 
-            var install = function (plugin_id) {
+            var install = function (row) {
 
-                Layer.confirm(__('您确定要安装这个插件吗?'), {
+                Layer.confirm(__('您确定要安装这个插件吗? 如您想把其他域名的插件授权更换到当前域名下，请选择【更新授权】按钮。'), {
                     title: __('温馨提示'),
-                    btn: [__('确定'), __('取消')]
+                    btn: ['安装插件', '更新授权', '取消']
                 }, function (index) {
                     layer.close(index);
                     layer.load();
-                    var userinfo = Controller.api.userinfo.get();
-                    var uid = userinfo ? userinfo.id : 0;
-                    var token = userinfo ? userinfo.token : '';
-                    var expiretime = userinfo ? userinfo.expiretime : 0;
                     var url = 'plugin/install';
                     var data = {
-                        plugin_id: plugin_id,
-                        uid: uid,
-                        token: token,
-                        expiretime: expiretime
+                        plugin_id: row.id
                     };
                     $.post(url, data, function(e){
                         layer.closeAll();
@@ -277,131 +176,356 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             Toastr.success(e.msg);
                             table.bootstrapTable('refresh', {});
                         }else if(e.code == 401){ //需要授权码
-                            var buy_link = e.data;
-                            var area = [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '330px' : '95%'];
-                            /*var userinfo = Controller.api.userinfo.get();
-                            var uid = userinfo ? userinfo.id : 0;*/
+                            var area = [$(window).width() > 800 ? '600px' : '95%', $(window).height() > 600 ? '600px' : '95%'];
                             Layer.open({
-                                content: Template("authorize_tpl", {"href":buy_link}),
+                                content: Template("authorize_tpl", {"plugin_auth_id": e.data.plugin_auth_id,"qr_code": e.data.qr_code,"host": e.data.host,"out_trade_no": e.data.out_trade_no}),
                                 zIndex: 99,
                                 area: area,
-                                title: '请输入插件授权码',
+                                title: '付费插件 - ' + e.data.plugin_name,
                                 resize: false,
-                                btn: ['立即绑定', '取消'],
+                                btn: ['立即绑定', '取消支付'],
                                 yes: function (index, layero) {
-                                    layer.load();
+
                                     var data = {
-                                        user_id:uid,
-                                        plugin_id: plugin_id,
-                                        authorize_code: $("#inputAuthorize", layero).val(),
+                                        plugin_id: row.id,
+                                        question: $('#c-question').val(),
+                                        answer: $.trim($('#c-answer').val()),
+                                        plugin_auth_id: $('#plugin-auth-id').val(),
+                                        host: $.trim($('#c-host').val())
                                     };
+                                    console.log(data)
+                                    if(data.host == ''){
+                                        Toastr.error("请输入您要绑定的域名");
+                                        return;
+                                    }
+                                    if(data.question == ''){
+                                        Toastr.error("请选择密保问题");
+                                        return;
+                                    }
+                                    if(data.answer == ''){
+                                        Toastr.error("请输入密保答案");
+                                        return;
+                                    }
+
+                                    layer.load();
                                     $.post("plugin/bind_authorize", data, function(e){
-                                        if(e.code == 4001){
-                                            Layer.closeAll();
-                                            Controller.api.userinfo.set(null)
-                                            Toastr.error("您需要重新登录官网账号");
-                                        }else if(e.code == 400){
+                                        if(e.code == 400){
                                             layer.closeAll('loading');
                                             Toastr.error(e.msg);
                                         }else if(e.code == 200){
                                             Layer.closeAll();
-                                            Layer.alert(e.msg);
+                                            Layer.alert('该插件已授权给域名: ' + $.trim($('#c-host').val()) + ' 接下来可以使用该域名安装插件');
                                         }
                                     }, "json");
 
                                 },
                                 btn2: function () {
-                                    Layer.closeAll();
+
                                 }
                             });
+                        }else if(e.code == 4000){ //设置密保
+                            var area = [$(window).width() > 800 ? '600px' : '95%', $(window).height() > 600 ? '320px' : '95%'];
+                            Layer.open({
+                                content: Template("question_tpl", {host:e.data.host, plugin_auth_id:e.data.id}),
+                                zIndex: 99,
+                                area: area,
+                                title: '设置密保',
+                                resize: false,
+                                btn: ['立即绑定', '取消支付'],
+                                yes: function (index, layero) {
 
+                                    var data = {
+                                        plugin_auth_id: $('#question-plugin-auth-id').val(),
+                                        question: $('#c-question-question').val(),
+                                        answer: $.trim($('#c-question-answer').val()),
+                                        host: $.trim($('#c-question-host').val())
+                                    };
+                                    if(data.plugin_auth_id == ''){
+                                        Toastr.error("参数错误，请刷新页面后重试");
+                                        return;
+                                    }
+                                    if(data.host == ''){
+                                        Toastr.error("请输入您要绑定的域名");
+                                        return;
+                                    }
+                                    if(data.question == ''){
+                                        Toastr.error("请选择密保问题");
+                                        return;
+                                    }
+                                    if(data.answer == ''){
+                                        Toastr.error("请输入密保答案");
+                                        return;
+                                    }
 
+                                    layer.load();
+                                    $.post("plugin/bind_authorize", data, function(e){
+                                        if(e.code == 400){
+                                            layer.closeAll('loading');
+                                            Toastr.error(e.msg);
+                                        }else if(e.code == 200){
+                                            Layer.closeAll();
+                                            Layer.alert('该插件已授权给域名: ' + $.trim($('#c-question-host').val()) + ' 接下来可以使用该域名安装插件');
+                                        }
+                                    }, "json");
+
+                                },
+                                btn2: function () {
+
+                                }
+                            });
                         }else{
                             Toastr.error(e.msg);
                         }
                     }, "json");
 
+                }, function(){
+                    var area = [$(window).width() > 800 ? '600px' : '95%', $(window).height() > 600 ? '370px' : '95%'];
+                    Layer.open({
+                        content: Template("auth_tpl", {}),
+                        zIndex: 99,
+                        area: area,
+                        title: '更新授权 - ' + del_html_tags(row.name),
+                        resize: false,
+                        btn: ['更新授权', '取消'],
+                        yes: function (index, layero) {
+
+                            var data = {
+                                plugin_id: row.id,
+                                question: $('#c-auth-question').val(),
+                                answer: $.trim($('#c-auth-answer').val()),
+                                old_host: $.trim($('#c-auth-old-host').val()),
+                                host: $.trim($('#c-auth-host').val())
+                            };
+                            if(data.plugin_id == ''){
+                                Toastr.error("参数错误，请刷新页面后重试");
+                                return;
+                            }
+                            if(data.old_host == ''){
+                                Toastr.error("请输入旧的绑定的域名");
+                                return;
+                            }
+                            if(data.question == ''){
+                                Toastr.error("请选择密保问题");
+                                return;
+                            }
+                            if(data.answer == ''){
+                                Toastr.error("请输入密保答案");
+                                return;
+                            }
+                            if(data.host == ''){
+                                Toastr.error("请输入您要绑定的域名");
+                                return;
+                            }
+
+                            layer.load();
+                            $.post("plugin/update_auth", data, function(e){
+                                if(e.code == 400){
+                                    layer.closeAll('loading');
+                                    Toastr.error(e.msg);
+                                }else if(e.code == 200){
+                                    Layer.closeAll();
+                                    Layer.alert('该插件已授权给域名: ' + $.trim($('#c-auth-host').val()) + ' 接下来可以使用该域名安装插件。该插件授权剩余免费更换次数：' + e.data.surplus_change);
+                                }
+                            }, "json");
+
+                        },
+                        btn2: function () {
+
+                        }
+                    });
                 }, function (index) {
                     layer.close(index);
                 });
 
             };
 
-            var upgrade = function (plugin_id) {
+            var upgrade = function (row) {
 
-                Layer.confirm(__('您确定要升级这个插件吗? 如有配置的插件，升级后则需要重新配置插件信息，请知悉！'), {
+                Layer.confirm(__('您确定要升级这个插件吗? 如有配置的插件，升级后则需要重新配置插件信息，请知悉！<br>如您想把其他域名的插件授权更换到当前域名下，请选择【更新授权】按钮。'), {
                     title: __('温馨提示'),
-                    btn: [__('确定'), __('取消')]
+                    btn: ['升级插件', '更新授权', '取消']
                 }, function (index) {
                     layer.close(index);
                     layer.load();
-                    var userinfo = Controller.api.userinfo.get();
-                    var uid = userinfo ? userinfo.id : 0;
-                    var token = userinfo ? userinfo.token : '';
-                    var expiretime = userinfo ? userinfo.expiretime : 0;
                     var url = 'plugin/install';
                     var data = {
-                        plugin_id: plugin_id,
-                        uid: uid,
-                        token: token,
-                        expiretime: expiretime
+                        plugin_id: row.id
                     };
                     $.post(url, data, function(e){
                         layer.closeAll();
                         if(e.code == 200){
-                            Toastr.success('升级成功');
+                            Toastr.success(e.msg);
                             table.bootstrapTable('refresh', {});
                         }else if(e.code == 401){ //需要授权码
-                            var buy_link = e.data;
-                            var area = [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '330px' : '95%'];
-                            /*var userinfo = Controller.api.userinfo.get();
-                            var uid = userinfo ? userinfo.id : 0;*/
+                            var area = [$(window).width() > 800 ? '600px' : '95%', $(window).height() > 600 ? '600px' : '95%'];
                             Layer.open({
-                                content: Template("authorize_tpl", {"href":buy_link}),
+                                content: Template("authorize_tpl", {"plugin_auth_id": e.data.plugin_auth_id,"qr_code": e.data.qr_code,"host": e.data.host,"out_trade_no": e.data.out_trade_no}),
                                 zIndex: 99,
                                 area: area,
-                                title: '请输入插件授权码',
+                                title: '付费插件 - ' + e.data.plugin_name,
                                 resize: false,
-                                btn: ['立即绑定', '取消'],
+                                btn: ['立即绑定', '取消支付'],
                                 yes: function (index, layero) {
-                                    layer.load();
+
                                     var data = {
-                                        user_id:uid,
-                                        plugin_id: plugin_id,
-                                        authorize_code: $("#inputAuthorize", layero).val(),
+                                        plugin_id: row.id,
+                                        question: $('#c-question').val(),
+                                        answer: $.trim($('#c-answer').val()),
+                                        plugin_auth_id: $('#plugin-auth-id').val(),
+                                        host: $.trim($('#c-host').val())
                                     };
+                                    console.log(data)
+                                    if(data.host == ''){
+                                        Toastr.error("请输入您要绑定的域名");
+                                        return;
+                                    }
+                                    if(data.question == ''){
+                                        Toastr.error("请选择密保问题");
+                                        return;
+                                    }
+                                    if(data.answer == ''){
+                                        Toastr.error("请输入密保答案");
+                                        return;
+                                    }
+
+                                    layer.load();
                                     $.post("plugin/bind_authorize", data, function(e){
-                                        if(e.code == 4001){
-                                            Layer.closeAll();
-                                            Controller.api.userinfo.set(null)
-                                            Toastr.error("您需要重新登录官网账号");
-                                        }else if(e.code == 400){
+                                        if(e.code == 400){
                                             layer.closeAll('loading');
                                             Toastr.error(e.msg);
                                         }else if(e.code == 200){
                                             Layer.closeAll();
-                                            Layer.alert(e.msg);
+                                            Layer.alert('该插件已授权给域名: ' + $.trim($('#c-host').val()) + ' 接下来可以使用该域名安装插件');
                                         }
                                     }, "json");
 
                                 },
                                 btn2: function () {
-                                    Layer.closeAll();
+
                                 }
                             });
+                        }else if(e.code == 4000){ //设置密保
+                            var area = [$(window).width() > 800 ? '600px' : '95%', $(window).height() > 600 ? '320px' : '95%'];
+                            Layer.open({
+                                content: Template("question_tpl", {host:e.data.host, plugin_auth_id:e.data.id}),
+                                zIndex: 99,
+                                area: area,
+                                title: '设置密保',
+                                resize: false,
+                                btn: ['立即绑定', '取消支付'],
+                                yes: function (index, layero) {
 
+                                    var data = {
+                                        plugin_auth_id: $('#question-plugin-auth-id').val(),
+                                        question: $('#c-question-question').val(),
+                                        answer: $.trim($('#c-question-answer').val()),
+                                        host: $.trim($('#c-question-host').val())
+                                    };
+                                    if(data.plugin_auth_id == ''){
+                                        Toastr.error("参数错误，请刷新页面后重试");
+                                        return;
+                                    }
+                                    if(data.host == ''){
+                                        Toastr.error("请输入您要绑定的域名");
+                                        return;
+                                    }
+                                    if(data.question == ''){
+                                        Toastr.error("请选择密保问题");
+                                        return;
+                                    }
+                                    if(data.answer == ''){
+                                        Toastr.error("请输入密保答案");
+                                        return;
+                                    }
 
+                                    layer.load();
+                                    $.post("plugin/bind_authorize", data, function(e){
+                                        if(e.code == 400){
+                                            layer.closeAll('loading');
+                                            Toastr.error(e.msg);
+                                        }else if(e.code == 200){
+                                            Layer.closeAll();
+                                            Layer.alert('该插件已授权给域名: ' + $.trim($('#c-question-host').val()) + ' 接下来可以使用该域名安装插件');
+                                        }
+                                    }, "json");
+
+                                },
+                                btn2: function () {
+
+                                }
+                            });
                         }else{
                             Toastr.error(e.msg);
                         }
                     }, "json");
 
+                },function(){
+                    var area = [$(window).width() > 800 ? '600px' : '95%', $(window).height() > 600 ? '370px' : '95%'];
+                    Layer.open({
+                        content: Template("auth_tpl", {}),
+                        zIndex: 99,
+                        area: area,
+                        title: '更新授权 - ' + del_html_tags(row.name),
+                        resize: false,
+                        btn: ['更新授权', '取消'],
+                        yes: function (index, layero) {
+
+                            var data = {
+                                plugin_id: row.id,
+                                question: $('#c-auth-question').val(),
+                                answer: $.trim($('#c-auth-answer').val()),
+                                old_host: $.trim($('#c-auth-old-host').val()),
+                                host: $.trim($('#c-auth-host').val())
+                            };
+                            if(data.plugin_id == ''){
+                                Toastr.error("参数错误，请刷新页面后重试");
+                                return;
+                            }
+                            if(data.old_host == ''){
+                                Toastr.error("请输入旧的绑定的域名");
+                                return;
+                            }
+                            if(data.question == ''){
+                                Toastr.error("请选择密保问题");
+                                return;
+                            }
+                            if(data.answer == ''){
+                                Toastr.error("请输入密保答案");
+                                return;
+                            }
+                            if(data.host == ''){
+                                Toastr.error("请输入您要绑定的域名");
+                                return;
+                            }
+
+                            layer.load();
+                            $.post("plugin/update_auth", data, function(e){
+                                if(e.code == 400){
+                                    layer.closeAll('loading');
+                                    Toastr.error(e.msg);
+                                }else if(e.code == 200){
+                                    Layer.closeAll();
+                                    Layer.alert('该插件已授权给域名: ' + $.trim($('#c-auth-host').val()) + ' 接下来可以使用该域名安装插件。该插件授权剩余免费更换次数：' + e.data.surplus_change);
+                                }
+                            }, "json");
+
+                        },
+                        btn2: function () {
+
+                        }
+                    });
                 }, function (index) {
                     layer.close(index);
                 });
 
             };
 
+            function del_html_tags(str)
+            {
+                var words = '';
+                words = str.replace(/<[^>]+>/g,"");
+                return words;
+            }
 
 
             // 一级切换

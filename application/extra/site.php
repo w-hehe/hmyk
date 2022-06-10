@@ -4,7 +4,7 @@ return array (
   'shop_title' => '红盟云卡 - 基于PHP + MySQL打造的商城建站系统',
   'shop_pet_name' => '红盟云卡',
   'beian' => '',
-  'version' => '1654491902',
+  'version' => '1654850585',
   'min_cashout' => '0',
   'max_cashout_num' => '3',
   'cashout_charged' => '1',

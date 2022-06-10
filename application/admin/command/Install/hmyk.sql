@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 07/06/2022 15:07:17
+ Date: 10/06/2022 16:47:37
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', 'bfc53ce94bf2591da298ea868f639adb', 'a8a55f', '/assets/img/avatar.png', '10220739@qq.com', 0, 1654496390, '127.0.0.1', NULL, 1654568265, 'c2c6c18b-bff1-4023-935b-da8e5e703e8b', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', 'bfc53ce94bf2591da298ea868f639adb', 'a8a55f', '/assets/img/avatar.png', '10220739@qq.com', 0, 1654823294, '127.0.0.1', NULL, 1654823294, 'bfe76f9a-36ab-40dd-b8b2-ddcea39c9cbe', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_attach
@@ -357,7 +357,7 @@ CREATE TABLE `hm_config`  (
 INSERT INTO `hm_config` VALUES (1, 'shop_title', 'basic', '网站标题', '', 'string', '红盟云卡 - 基于PHP + MySQL打造的商城建站系统', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (2, 'shop_pet_name', 'basic', '网站名称', '', 'string', '红盟云卡', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (3, 'beian', 'basic', 'Beian', '苏ICP备15000000号-1', 'string', '', '', '', '', NULL);
-INSERT INTO `hm_config` VALUES (4, 'version', 'basic', '后台静态文件版本', '如果静态资源有变动请重新配置该值', 'string', '1654491902', '', 'required', '', NULL);
+INSERT INTO `hm_config` VALUES (4, 'version', 'basic', '后台静态文件版本', '如果静态资源有变动请重新配置该值', 'string', '1654850585', '', 'required', '', NULL);
 INSERT INTO `hm_config` VALUES (5, 'min_cashout', 'money', '最低提现金额', '0则不限制金额', 'number', '0', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (6, 'max_cashout_num', 'money', '每日最多提现次数', '0则不限制次数', 'number', '3', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (7, 'cashout_charged', 'money', '提现手续费%', '按照百分比填写', 'number', '1', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
@@ -575,7 +575,7 @@ CREATE TABLE `hm_options`  (
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.1.0');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.1.1');
 INSERT INTO `hm_options` VALUES (2, 'user_total', '3');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');

@@ -105,9 +105,7 @@ class DockingSite extends Backend {
             return json($result);
         }
 
-        $poster = $this->getPoster();
         $this->assign([
-            'poster' => $poster,
         ]);
 
 //        echo '<pre>'; print_r($poster);die;

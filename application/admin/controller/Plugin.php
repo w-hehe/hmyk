@@ -6,6 +6,9 @@ use app\common\controller\Backend;
 use fast\Http;
 use think\Cache;
 use think\Db;
+use fast\QRcode;
+
+
 
 /**
  *
@@ -72,21 +75,52 @@ class Plugin extends Backend {
     }
 
     /**
-     * 绑定授权
+     * 更新授权
      */
-    public function bind_authorize(){
-        $authorize_code = trim($this->request->param('authorize_code'), " ");
+    public function update_auth(){
+        $question = $this->request->param('question');
+        $answer = trim($this->request->param('answer'), " ");
         $plugin_id = $this->request->param('plugin_id');
-        $user_id = $this->request->param('user_id');
-        $host = $_SERVER['HTTP_HOST'];
+        $host = $this->request->param('host');
+        $old_host = $this->request->param('old_host');
         $data = [
             'plugin_id' => $plugin_id,
             'host' => $host,
-            'authorize_code' => $authorize_code,
-            'user_id' => $user_id
+            'old_host' => $old_host,
+            'question' => $question,
+            'answer' => $answer
         ];
-        $result = hmCurl(YS . 'bind_plugin', http_build_query($data), 1);
-//        echo $result;die;
+        $result = hmCurl(HMURL . 'api/plugin/update_auth', http_build_query($data), 1);
+        $result = json_decode($result, true);
+        if(empty($result)){
+            return json(['code' => 400, 'msg' => '更新授权请求失败，请重试']);
+        }
+        if($result['code'] == 400){
+            return json(['code' => 400, 'msg' => $result['msg']]);
+        }
+        if($result['code'] == 4001){
+            return json(['code' => 4001, 'msg' => $result['msg']]);
+        }
+        return json(['code' => 200, 'msg' => $result['msg'], 'data' => $result['data']]);
+    }
+
+    /**
+     * 绑定授权
+     */
+    public function bind_authorize(){
+        $question = $this->request->param('question');
+        $answer = trim($this->request->param('answer'), " ");
+        $plugin_id = $this->request->param('plugin_id');
+        $host = $this->request->param('host');
+        $plugin_auth_id = $this->request->param('plugin_auth_id');
+        $data = [
+            'plugin_id' => $plugin_id,
+            'host' => $host,
+            'plugin_auth_id' => $plugin_auth_id,
+            'question' => $question,
+            'answer' => $answer
+        ];
+        $result = hmCurl(HMURL . 'api/plugin/bind', http_build_query($data), 1);
         $result = json_decode($result, true);
         if(empty($result)){
             return json(['code' => 400, 'msg' => '授权请求失败，请重试']);
@@ -100,6 +134,12 @@ class Plugin extends Backend {
         return json(['code' => 200, 'msg' => $result['msg']]);
     }
 
+    public function qrCode(){
+        $qr_code = $this->request->param('qr_code');
+        QRcode::png($qr_code,false, 'L', 7, 2);
+        die;
+    }
+
 
     /**
      * 安装插件
@@ -108,7 +148,7 @@ class Plugin extends Backend {
         $plugin_id = $this->request->param('plugin_id');
 
         //获取插件信息
-        $result = json_decode(hmCurl(HMURL . '/api/plugin/detail/id/' . $plugin_id), true);
+        $result = json_decode(hmCurl(HMURL . 'api/plugin/detail/id/' . $plugin_id), true);
 
         $info = $result['data'];
         if($this->options['version'] != '开发版' && $this->options['version'] < $info['support']){
@@ -121,14 +161,25 @@ class Plugin extends Backend {
                 'plugin_id' => $plugin_id,
                 'host' => $host,
             ];
-            $result = hmCurl(YS . 'check_plugin', $data, 1);
+            $result = hmCurl(HMURL . 'api/plugin/check', http_build_query($data), 1);
+//            echo HMURL . 'api/plugin/check';die;
 //            echo $result;die;
             $result = json_decode($result, true);
             if(empty($result)){ //获取授权信息失败
-                return json(['code' => 400, 'msg' => '当前服务器无法连接该站点【' . YS . '】']);
+                return json(['code' => 400, 'msg' => '返回为空']);
             }
             if($result['code'] == 400){ //未授权
-                return json(['code' => 401, 'msg' => '需要授权码', 'data' => YS . "plugin.html?id={$result['data']}"]);
+                $data = [
+                    'qr_code' => $result['data']['qr_code'],
+                    'plugin_name' => $result['data']['plugin_name'],
+                    'out_trade_no' => $result['data']['out_trade_no'],
+                    'host' => $result['data']['host'],
+                    'plugin_auth_id' => $result['data']['plugin_auth_id'],
+                ];
+                return json(['code' => 401, 'msg' => $result['msg'], 'data' => $data]);
+            }
+            if($result['code'] == 4000){ //未设置密保
+                return json(['code' => 4000, 'msg' => $result['msg'], 'data' => $result['data']]);
             }
         }
 
@@ -459,7 +510,8 @@ class Plugin extends Backend {
         }
 
         $this->assign([
-            'ys' => YS
+            'ys' => YS,
+            'host' => empty($_SERVER['HTTP_HOST']) ? '' : $_SERVER['HTTP_HOST'],
         ]);
 
         return $this->view->fetch();

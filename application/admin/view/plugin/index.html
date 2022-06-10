@@ -56,21 +56,166 @@
         </div>
     </div>
 </div>
+<style>
+    .qr-code{
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-bottom: 25px;
+    }
+</style>
 <script id="authorize_tpl" type="text/html">
     <div>
         <form class="form-horizontal">
             <fieldset>
-                <div class="alert alert-dismissable alert-info">
-                    您需要输入插件授权码才可以安装这个插件<br>
-                    授权码会自动绑定当前域名 <br>
-                    如您还没有该插件的授权码，请<a id="authorize_url" href="<%=href%>" target="_blank">点击链接前往获取</a>
+<!--                <div class="alert alert-dismissable alert-info">-->
+<!--                    您需要输入插件授权码才可以安装这个插件<br>-->
+<!--                    授权码会自动绑定当前域名 <br>-->
+<!--                    如您还没有该插件的授权码，请<a id="authorize_url" href="" target="_blank">点击链接前往获取</a>-->
+<!--                </div>-->
+
+                <span class="text-danger" style="    display: block;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 15px;">请使用支付宝扫码付款</span>
+                <div>
+                    <div style="text-align: center;">
+                        <img src="plugin/qrCode?qr_code=<%=qr_code%>" alt="" class="qr-code">
+                    </div>
+                </div>
+                <input type="hidden" id="plugin-auth-id" value="<%=plugin_auth_id%>">
+                <div class="form-group">
+                    <label for="c-host" class="control-label col-xs-12 col-sm-3">绑定域名</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <input id="c-host" class="form-control" name="row[host]" type="text" value="<%=host%>">
+                    </div>
                 </div>
                 <div class="form-group">
+                    <label for="c-question" class="control-label col-xs-12 col-sm-3">密保问题</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <select id="c-question" class="form-control selectpicker" name="row[question]">
+                            <option value="">请选择密保问题</option>
+                            <option value="name">你的名字</option>
+                            <option value="father_name">你父亲的名字</option>
+                            <option value="mother_name">你母亲的名字</option>
+                            <option value="lover_name">你爱人的名字</option>
+                            <option value="id">你的身份证号码</option>
+                            <option value="mobile">你的手机号码</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="c-answer" class="control-label col-xs-12 col-sm-3">密保答案</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <input id="c-answer" class="form-control" name="row[answer]" type="text" value="" placeholder="更换授权域名时使用">
+                    </div>
+                </div>
+
+                <!--<div class="form-group">
                     <div class="col-lg-12">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-plug fa-fw"></i></span>
                             <input type="text" class="form-control" id="inputAuthorize" placeholder="请输入插件授权码">
                         </div>
+                    </div>
+                </div>-->
+            </fieldset>
+        </form>
+    </div>
+</script>
+<script id="question_tpl" type="text/html">
+    <div>
+        <form class="form-horizontal">
+            <fieldset>
+                <span class="text-danger" style="    display: block;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 15px;">您需要设置密保后才能安装，密保将在您更换绑定授权时使用。</span>
+
+                <input type="hidden" id="question-plugin-auth-id" value="<%=plugin_auth_id%>">
+                <div class="form-group">
+                    <label for="c-question-host" class="control-label col-xs-12 col-sm-3">绑定域名</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <input id="c-question-host" class="form-control" name="row[host]" type="text" value="<%=host%>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="c-question-question" class="control-label col-xs-12 col-sm-3">密保问题</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <select id="c-question-question" class="form-control selectpicker" name="row[question]">
+                            <option value="">请选择密保问题</option>
+                            <option value="name">你的名字</option>
+                            <option value="father_name">你父亲的名字</option>
+                            <option value="mother_name">你母亲的名字</option>
+                            <option value="lover_name">你爱人的名字</option>
+                            <option value="id">你的身份证号码</option>
+                            <option value="mobile">你的手机号码</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="c-question-answer" class="control-label col-xs-12 col-sm-3">密保答案</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <input id="c-question-answer" class="form-control" name="row[answer]" type="text" value="" placeholder="更换授权域名时使用">
+                    </div>
+                </div>
+
+                <!--<div class="form-group">
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-plug fa-fw"></i></span>
+                            <input type="text" class="form-control" id="inputAuthorize" placeholder="请输入插件授权码">
+                        </div>
+                    </div>
+                </div>-->
+            </fieldset>
+        </form>
+    </div>
+</script>
+<script id="auth_tpl" type="text/html">
+    <div>
+        <form class="form-horizontal">
+            <fieldset>
+                <span class="text-danger" style="    display: block;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 15px;">请填写以下信息，我们将验证您是否有权限更换新的绑定域名</span>
+
+                <input type="hidden" id="auth-plugin-auth-id" value="<%=plugin_auth_id%>">
+
+                <div class="form-group">
+                    <label for="c-auth-old-host" class="control-label col-xs-12 col-sm-3">旧的绑定域名</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <input id="c-auth-old-host" class="form-control" name="row[host]" type="text" value="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="c-auth-question" class="control-label col-xs-12 col-sm-3">密保问题</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <select id="c-auth-question" class="form-control selectpicker" name="row[question]">
+                            <option value="">请选择密保问题</option>
+                            <option value="name">你的名字</option>
+                            <option value="father_name">你父亲的名字</option>
+                            <option value="mother_name">你母亲的名字</option>
+                            <option value="lover_name">你爱人的名字</option>
+                            <option value="id">你的身份证号码</option>
+                            <option value="mobile">你的手机号码</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="c-auth-answer" class="control-label col-xs-12 col-sm-3">密保答案</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <input id="c-auth-answer" class="form-control" name="row[answer]" type="text" value="" placeholder="更换授权域名时使用">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="c-auth-host" class="control-label col-xs-12 col-sm-3">新的绑定域名</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <input id="c-auth-host" class="form-control" name="row[old_host]" type="text" value="{$host}">
                     </div>
                 </div>
             </fieldset>

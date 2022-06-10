@@ -23,19 +23,6 @@
     }
 </style>
 <div class="panel panel-default panel-intro">
-    <div class="panel-heading">
-        <div class="panel-lead">
-            <em>对接站点</em>
-            加载商品列表以及选择同步商品的速度，取决于您的服务器访问对接站点的速度。
-            因网络原因，加载商品列表以及同步商品有时会出现错误提示，重试即可。
-        </div>
-        <div id="poster">
-            {volist name="$poster.poster" id="vo"}
-            <a href="{$vo.url}" target="_blank">{$vo.remark}</a>
-            {/volist}
-        </div>
-
-    </div>
 
     <div class="panel-body">
         <div id="myTabContent" class="tab-content">
