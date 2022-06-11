@@ -109,12 +109,14 @@ class Backend extends Controller
      * 表示注释或字段名
      */
     protected $importHeadType = 'comment';
-    
-    
+
+
     public $timestamp = null;
-    
+
     public $options = [];
-    
+
+    public $site = [];
+
 
     /**
      * 引入后台控制器的traits
@@ -122,11 +124,11 @@ class Backend extends Controller
     use \app\admin\library\traits\Backend;
 
     public function _initialize() {
-        
+
         $this->timestamp = time();
         $options = db::name('options')->select();
         foreach($options as $val) $this->options[$val['option_name']] = $val['option_content'];
-        
+
         $modulename = $this->request->module();
         $controllername = Loader::parseName($this->request->controller());
         $actionname = strtolower($this->request->action());
@@ -201,7 +203,7 @@ class Backend extends Controller
         $lang = $this->request->langset();
         $lang = preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang) ? $lang : 'zh-cn';
 
-        $site = Config::get("site");
+        $this->site = Config::get("site");
 
         $upload = \app\common\model\Config::upload();
 
@@ -210,7 +212,7 @@ class Backend extends Controller
 
         // 配置信息
         $config = [
-            'site'           => array_intersect_key($site, array_flip(['name', 'indexurl', 'cdnurl', 'version', 'timezone', 'languages'])),
+            'site'           => array_intersect_key($this->site, array_flip(['name', 'indexurl', 'cdnurl', 'version', 'timezone', 'languages'])),
             'upload'         => $upload,
             'modulename'     => $modulename,
             'controllername' => $controllername,
@@ -229,18 +231,18 @@ class Backend extends Controller
         //加载当前控制器语言包
         $this->loadlang($controllername);
         //渲染站点配置
-        $this->assign('site', $site);
+        $this->assign('site', $this->site);
         //渲染配置信息
         $this->assign('config', $config);
         //渲染权限对象
         $this->assign('auth', $this->auth);
         //渲染管理员对象
         $this->assign('admin', Session::get('admin'));
-        
+
         $this->assign([
             'options' => $this->options
         ]);
-        
+
         //执行插件
         $active_plugins = $this->options['active_plugin'];
         $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);

@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 11/06/2022 14:39:10
+ Date: 11/06/2022 17:15:21
 */
 
 SET NAMES utf8mb4;
@@ -575,7 +575,7 @@ CREATE TABLE `hm_options`  (
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.1.2');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.1.3');
 INSERT INTO `hm_options` VALUES (2, 'user_total', '3');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');
