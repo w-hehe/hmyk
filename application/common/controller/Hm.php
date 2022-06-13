@@ -163,7 +163,7 @@ class Hm{
         if($options != null && $options['stock_show_switch'] == 1 && is_numeric($goods['stock'])){
             $stock_show = json_decode($options['stock_show'], true);
             foreach($stock_show as $val){
-                if($goods['stock'] > $val['less'] && $goods['stock'] < $val['greater']) $goods['stock_show'] = $val['content'];
+                if($goods['stock'] >= $val['less'] && $goods['stock'] <= $val['greater']) $goods['stock_show'] = $val['content'];
             }
         }
 

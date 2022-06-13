@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 11/06/2022 17:15:21
+ Date: 13/06/2022 13:10:06
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', 'bfc53ce94bf2591da298ea868f639adb', 'a8a55f', '/assets/img/avatar.png', '10220739@qq.com', 0, 1654909804, '127.0.0.1', NULL, 1654909804, 'ffa6d249-d1e2-4349-9cee-7db7123f073f', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', 'bfc53ce94bf2591da298ea868f639adb', 'a8a55f', '/assets/img/avatar.png', '10220739@qq.com', 0, 1655083414, '127.0.0.1', NULL, 1655083414, 'bd205f92-0ba0-4438-8f1c-b8817084d609', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_attach
@@ -575,14 +575,14 @@ CREATE TABLE `hm_options`  (
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.1.3');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.1.4');
 INSERT INTO `hm_options` VALUES (2, 'user_total', '3');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');
 INSERT INTO `hm_options` VALUES (5, 'goods_total', '0');
 INSERT INTO `hm_options` VALUES (6, 'active_plugin', 'a:1:{i:0;s:13:\"tips/tips.php\";}');
-INSERT INTO `hm_options` VALUES (7, 'active_template', 'a:2:{s:2:\"pc\";s:7:\"default\";s:6:\"mobile\";s:7:\"default\";}');
-INSERT INTO `hm_options` VALUES (8, 'stock_show', '[{\"less\":\"-1\",\"greater\":\"1\",\"content\":\"\\u552e\\u78d0\"},{\"less\":\"0\",\"greater\":\"11\",\"content\":\"\\u5c11\\u91cf\"},{\"less\":\"10\",\"greater\":\"1000000\",\"content\":\"\\u5145\\u8db3\"}]');
+INSERT INTO `hm_options` VALUES (7, 'active_template', 'a:3:{s:2:\"pc\";s:7:\"default\";s:6:\"mobile\";s:7:\"default\";s:0:\"\";s:7:\"default\";}');
+INSERT INTO `hm_options` VALUES (8, 'stock_show', '[{\"less\":\"-999\",\"greater\":0,\"content\":\"\\u552e\\u78d0\"},{\"less\":\"1\",\"greater\":\"10\",\"content\":\"\\u5c11\\u91cf\"},{\"less\":\"11\",\"greater\":\"1000000\",\"content\":\"\\u5145\\u8db3\"}]');
 INSERT INTO `hm_options` VALUES (9, 'stock_show_switch', '0');
 INSERT INTO `hm_options` VALUES (10, 'active_pay', '[]');
 INSERT INTO `hm_options` VALUES (11, 'coupon', '0');

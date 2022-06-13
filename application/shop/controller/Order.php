@@ -176,38 +176,6 @@ class Order extends Base {
         }
 
 
-
-       /* if($order['status'] != 'success' && $order['status'] != 'fail' && $goods['dock_id'] > 0){
-
-            $result = db::name('dock')->where(['id' => $goods['dock_id']])->find();
-
-            if($this->include_dock == false){
-                $this->include_dock = true;
-                include ROOT_PATH . '/public/content/dock/' . $result['type'] . '/' . ucfirst($result['type']) . '.php';
-            }
-            $objName = ucfirst($result['type']) . 'Dock';
-            $dockObj = new $objName();
-            $dockInfo = json_decode($result['info'], true);
-            $result = $dockObj->orderInfo($order, $dockInfo);
-//            var_dump($result);die;
-            $remote_order = $result['data'];
-            if($remote_order['order']['status'] === 'success' || $remote_order['order']['status'] === 'conduct'){
-                db::name('order')->where(['id' => $order['id']])->update(['status' => $remote_order['order']['status']]);
-                if(!empty($remote_order['order']['cdk'])){
-                    $insert_sold = [];
-                    foreach($remote_order['order']['cdk'] as $val){
-                        $insert_sold[] = [
-                            'order_id' => $order['id'],
-                            'content' => $val,
-                            'create_time' => $this->timestamp
-                        ];
-                    }
-                    db::name('sold')->insertAll($insert_sold);
-                    return $this->orderContent($order_no);
-                }
-            }
-        }*/
-
         switch($order['status']){
             case 'fail':
                 $remote_order['status'] = '下单失败，请联系客服';

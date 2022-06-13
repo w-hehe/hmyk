@@ -93,8 +93,9 @@ class Order extends Backend {
                 'order_id' => $order_id
             ];
             $sold = db::name('sold')->where($where)->find();
+
             if($sold){
-                db::name('sold')->where(['id' => $sold])->update($insert);
+                db::name('sold')->where(['id' => $sold['id']])->update($insert);
             }else{
                 db::name('sold')->insert($insert);
             }

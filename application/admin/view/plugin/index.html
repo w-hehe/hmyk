@@ -80,7 +80,7 @@
     font-size: 15px;">请使用支付宝扫码付款</span>
                 <div>
                     <div style="text-align: center;">
-                        <img src="plugin/qrCode?qr_code=<%=qr_code%>" alt="" class="qr-code">
+                        <img src="{:url('qrCode')}?qr_code=<%=qr_code%>" alt="" class="qr-code">
                     </div>
                 </div>
                 <input type="hidden" id="plugin-auth-id" value="<%=plugin_auth_id%>">

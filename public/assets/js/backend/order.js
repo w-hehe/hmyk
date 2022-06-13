@@ -88,8 +88,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     return '<span class="label label-default">未支付</span>';
                                 }else if(value == 'wait-send'){
                                     return '<span class="label label-danger">待发货</span>';
-                                }else if(value == 'yifahuo'){
-                                    return '<span class="label label-success">已发货</span>';
+                                }else if(value == 'conduct'){
+                                    return '<span class="label label-success">进行中</span>';
                                 }else if(value == 'success'){
                                     return '<span class="label label-success">已完成</span>';
                                 }else {

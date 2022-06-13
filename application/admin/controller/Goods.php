@@ -77,10 +77,12 @@ class Goods extends Backend {
                 Db::startTrans();
                 try {
                     $stock_show = json_decode($params['stock_show'], true);
-                    foreach($stock_show as $val){
-                        if((empty($val['less']) && $val['less'] != 0) || empty($val['greater']) || empty($val['content'])){
-                            throw new \Exception("范围设置不能存在空值");
+                    foreach($stock_show as $key => $val){
+                        if(empty($val['content'])){
+                            throw new \Exception("显示内容不能存在空值");
                         }
+                        if(empty($val['less'])) $stock_show[$key]['less'] = 0;
+                        if(empty($val['greater'])) $stock_show[$key]['greater'] = 0;
                     }
                     $stock_show = json_encode($stock_show);
                     $stock_show_switch = $params['stock_show_switch'];

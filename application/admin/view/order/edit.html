@@ -81,7 +81,7 @@
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('订单状态')}:</label>
         <div class="col-xs-12 col-sm-8">
-            {:build_radios('row[status]', ['daifahuo'=>__('代发货'), 'yifahuo'=>__('已发货'), 'success'=>__('交易完成')], $row['status'])}
+            {:build_radios('row[status]', ['wait-send'=>__('代发货'), 'conduct'=>__('进行中'), 'success'=>__('交易完成')], $row['status'])}
         </div>
     </div>
 
