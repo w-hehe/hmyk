@@ -134,14 +134,14 @@ class Order extends Base {
             if(empty($search_content['password'])){
                 unset($where['password']);
             }
-            $order = db::name('order')->where($where)->find();
+            $order = db::name('order')->where($where)->lock(true)->find();
 
         }else{
             $where = [
                 'uid' => $user['id'],
                 'order_no' => $order_no
             ];
-            $order = db::name('order')->where($where)->find();
+            $order = db::name('order')->where($where)->lock(true)->find();
         }
         if(!$order){
             $this->error('订单不存在！');

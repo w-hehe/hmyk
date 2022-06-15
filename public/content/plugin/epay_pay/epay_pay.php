@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 易支付
-Version: 1.2
+Version: 1.3
 Plugin URL:
 Description: 支持市面上大多数易支付
 Author: 云商学院
@@ -27,10 +27,10 @@ function pay($order, $goods, $pay_type, $cmd='order') {
     }
 
     if($cmd == 'order'){
-        $notify_url = $host . 'notify/get/notify/' . $order['order_no'];
-        $return_url = $host . 'notify/get/return/' . $order['order_no'];
+        $notify_url = $host . 'notify/get/notify/epay';
+        $return_url = $host . 'notify/get/return/epay';
     }else{
-        $notify_url = $host . 'recharge_notify/get/notify/' . $order['order_no'];
+        $notify_url = $host . 'recharge_notify/get/notify';
         $return_url = $host . 'user.html';
     }
 
@@ -61,9 +61,7 @@ function checkSign($data){
     $info = json_decode($info, true);
     $sign = $data['sign'];
     $server_sign = getSign($data, $info['secret_key']);
-    if($server_sign == $sign){
-        return true;
-    }
+    if($server_sign == $sign) return $data['out_trade_no'];
     return false;
 }
 

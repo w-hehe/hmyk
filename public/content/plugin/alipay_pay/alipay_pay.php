@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: 官方支付宝
-Version: 1.2
+Version: 1.5
 Plugin URL:
 Description: 官方支付宝支付
 Author: 云商学院
-Author URL: https://www.ysxue.cc/
+Author URL: https://blog.ysxue.net/
 */
 
 
@@ -35,22 +35,22 @@ function pay($order, $goods, $pay_type, $cmd='order') {
     }
 
     if($cmd == 'order'){
-        $notify_url = $host . 'notify/input/notify/' . $order['order_no'];
+        $notify_url = $host . 'notify/input/notify/alipay';
         $return_url = $host . 'order.html?order_no=' . $order['order_no'];
         $quit_url = $host . "goods/{$goods['id']}.html"; //用户取消付款返回商户网站的地址
     }else{
-        $notify_url = $host . 'recharge_notify/input/notify/' . $order['order_no'];
+        $notify_url = $host . 'recharge_notify/input/notify/';
         $return_url = $host . 'user.html';
         $quit_url = $host . "user/recharge.html"; //用户取消付款返回商户网站的地址
     }
-    
+
     // echo $notify_url;die;
 
     $notify_url = $notify_url;
     $return_url = $return_url;
     $quit_url = $quit_url;
-    
-    
+
+
 
     $data = [
         'app_id' => $info['app_id'], //应用id
@@ -61,10 +61,10 @@ function pay($order, $goods, $pay_type, $cmd='order') {
         'version' => '1.0', //api版本
         'notify_url' => $notify_url, //支付完成后的异步回调通知
     ];
-    
-    
-    
-    
+
+
+
+
     $biz_content = [
         'subject' => $goods['name'], //商品名称
         'out_trade_no' => $order['order_no'], //商户订单号
@@ -98,10 +98,10 @@ function pay($order, $goods, $pay_type, $cmd='order') {
     }else{
         die('官方支付宝支付插件未开启合适的支付方式！请联系管理员处理');
     }
-    
-    
+
+
     // echo '<pre>'; print_r($data);die;
-    
+
 
     $data['biz_content'] = json_encode($biz_content); //请求参数的集合
     $data['sign'] = getAlipaySign($data, ['private_key' => $info['private_key']]);
@@ -139,7 +139,7 @@ function pay($order, $goods, $pay_type, $cmd='order') {
             if($result['code'] == 40003 && $result['sub_code'] == 'isv.app-unbind-partner'){
                 echo '无效应用或应用未绑定商户';die;
             }
-            echo '<pre>'; print_r($result);die;
+            echo '<pre>一般支付配置错误的情况下会显示这个'; print_r($result);die;
         }
     }
 

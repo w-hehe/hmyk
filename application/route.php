@@ -40,8 +40,8 @@ Route::rule('tourist_login','shop/index/tourist_login'); //游客登录
 Route::rule('post_order', 'shop/order/postOrder'); //提交订单
 Route::rule('confirm','shop/pay.pay/confirm'); //确认订单页面
 Route::rule('pay','shop/pay.pay/pay'); //提交支付
-Route::rule('notify/:receive_type/:notice_type/[:out_trade_no]','shop/notify/index'); //回调通知地址
-Route::rule('recharge_notify/:receive_type/:notice_type/:out_trade_no','shop/notify/recharge_notify'); //回调通知地址
+Route::rule('notify/:receive_type/:notice_type/:pay_type','shop/notify/index'); //回调通知地址
+Route::rule('recharge_notify/:receive_type/:notice_type/:pay_type','shop/notify/recharge_notify'); //回调通知地址
 Route::rule('order','shop/order/index');
 Route::rule('user_info','user/index/info');
 Route::rule('dock_info','user/index/dockInfo');
