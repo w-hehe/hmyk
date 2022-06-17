@@ -204,7 +204,7 @@ class Notify extends Controller {
                 if($notice_type == 'notify'){
                     echo 'success'; die;
                 }else{
-                    header("location: /order.html?order_no={$out_trade_no}"); die;
+                    header("location: /order.html?order_no={$check_sign}"); die;
                 }
 
             }else{
