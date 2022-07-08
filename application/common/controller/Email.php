@@ -184,18 +184,11 @@ html;
 
         $order = db::name('order')->where(['id' => $order_id])->find();
 
-        $receiver = $order['account'];
+        $receiver = $order['email'];
 
 
 
-        if (!Validate::is($receiver, "email")) {
-            if(Validate::is($receiver, "number")){
-                $receiver = $receiver . "@qq.com";
-            }else{
-                return false;
-            }
-
-        }
+        if (!Validate::is($receiver, "email")) return false;
 
         $style = self::getStyle();
 
@@ -225,10 +218,8 @@ html;
             }
         }
 
-
-        // var_dump($goods_inputs);die;
         if($goods_inputs){
-            foreach($goods_inputs as $key => $val){
+            foreach($goods_inputs as $val){
                 foreach($order_inputs as $k =>$v){
                     if($val['name'] == "inputs[$k]"){
                         $params .= $val['title'] . "：" . $v . "<br>";

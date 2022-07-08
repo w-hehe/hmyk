@@ -35,10 +35,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 var buy_account = '未填写';
                                 if(row.account){
                                     // return row.account;
-                                    if(row.account.length > 30){
-                                        buy_account = row.account.toString().substr(0, 30) + '...';
+                                    if(row.email.length > 30){
+                                        buy_account = row.email.toString().substr(0, 30) + '...';
                                     }else{
-                                        buy_account = row.account;
+                                        buy_account = row.email;
                                     }
 
                                     if(row.user.nickname){

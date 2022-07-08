@@ -63,31 +63,17 @@ class Base extends Controller {
         }else{
             $this->user = null;
         }
-
-
-
         $controller = strtolower($this->request->controller());
-        /*if($controller != 'login' && $controller != 'register' && $this->site['force_login'] == 1 && $this->user == null){
-            $this->redirect('/login');
-        }*/
-
         $plugin_data = [
             'controller' => $controller,
             'user' => $this->user
         ];
-
-
         $this->timestamp = time();
-
         $this->equipment = is_mobile() ? 'mobile' : 'pc';
-
-
         $options = db::name('options')->select();
-
         foreach($options as $val){
             $this->options[$val['option_name']] = $val['option_content'];
         }
-
         if(!empty($this->options['active_template'])){
             $active_template = unserialize($this->options['active_template']);
             $this->template_name = $active_template[$this->equipment];
@@ -97,40 +83,17 @@ class Base extends Controller {
         if(file_exists($template_info_path)){
             $templateData = include_once($template_info_path);
         }else{
-            die("【{$this->template_name}】模板文件不存在");
+            die("<br>您未启用任何模板，请前往后台【网站扩展-模板管理】中开启相应模板。<br><br>如您未安装过网站模板，你需要在后台【网站扩展-插件管理-插件市场】选择安装您的模板");
         }
-
-
         $this->template_version = $templateData['version'];
-
         if(isset($_SERVER['REQUEST_SCHEME'])){
             $this->domain = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/';
         }else{
             $this->domain = 'http://' . $_SERVER['HTTP_HOST'] . '/';
         }
-
-
         $this->template_path = ROOT_PATH . 'public/content/template/' . $this->template_name . '/';
-
-        include_once $this->template_path . "module.php";
-
-
         $template_config = file_get_contents(ROOT_PATH . "public/content/template/{$this->template_name}/setting.json"); //模板配置
         $template_config = json_decode($template_config, true);
-
-
-        $this->site['eject_goods'] = empty(strip_tags($this->site['eject_goods'])) ? null : $this->site['eject_goods'];
-
-        $this->assign([
-            'site' => $this->site,
-            'user' => $this->user,
-            "template_version" => $this->template_version,
-            'template' => $template_config,
-            'options' => $this->options,
-            'navi' => '',
-        ]);
-
-
 
         $active_plugins = Db::name('options')->where(['option_name' => 'active_plugin'])->value('option_content');
         $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
@@ -141,9 +104,7 @@ class Base extends Controller {
                 }
             }
         }
-
-        doAction('base_controller', $plugin_data);
-
+//        doAction('base_controller', $plugin_data);
     }
 
     public function errorPage($msg, $description='', $title='配置错误', $code=500){

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 易支付
-Version: 1.3
+Version: 2.0
 Plugin URL:
 Description: 支持市面上大多数易支付
 Author: 云商学院
@@ -14,7 +14,7 @@ use app\common\controller\Hm;
 !defined('ROOT_PATH') && exit('access deined!');
 
 
-function pay($order, $goods, $pay_type, $cmd='order') {
+function pay($order, $goods, $params = []) {
     $plugin_path = ROOT_PATH . "public/content/plugin/epay_pay/";
 
     $info = file_get_contents("{$plugin_path}epay_pay_setting.json");
@@ -26,20 +26,12 @@ function pay($order, $goods, $pay_type, $cmd='order') {
         $host = 'http://' . $_SERVER['HTTP_HOST'] . '/';
     }
 
-    if($cmd == 'order'){
-        $notify_url = $host . 'notify/get/notify/epay';
-        $return_url = $host . 'notify/get/return/epay';
-    }else{
-        $notify_url = $host . 'recharge_notify/get/notify';
-        $return_url = $host . 'user.html';
-    }
-
     $data = [
         "pid"         => $info['appid'],//商户ID
-        "type"       => $pay_type,//支付方式
+        "type"       => $params['pay_type'],//支付方式
         "out_trade_no"     => $order['order_no'], //商户订单号
-        "notify_url" => $notify_url,//异步通知地址
-        "return_url" => $return_url,//同步通知地址
+        "notify_url" => $params['notify_url'],//异步通知地址
+        "return_url" => $params['return_url'],//同步通知地址
         "name" => $goods['name'], //商品名称
         "money"      => $order['money'],//订单金额
     ];
@@ -47,18 +39,26 @@ function pay($order, $goods, $pay_type, $cmd='order') {
 
     $data['sign'] = getSign($data, $info['secret_key']);
     $data['sign_type'] = 'MD5';
-    $gateway_url = $info['gateway_url'] . 'submit.php';
-    Hm::submitForm($gateway_url, $data);
+    $gateway_url = rtrim($info['gateway_url'], '/') . '/submit.php';
+
+    return [
+        'code' => 200,
+        'data' => $data,
+        'gateway_url' => $gateway_url,
+        'mode' => 'form'
+    ];
 
 }
 
 /**
  * 验签
  */
-function checkSign($data){
+function checkSign($data = null){
     $plugin_path = ROOT_PATH . "public/content/plugin/epay_pay/";
     $info = file_get_contents("{$plugin_path}epay_pay_setting.json");
     $info = json_decode($info, true);
+    $data = $data == null ? Hm::getParams('get') : $data;
+
     $sign = $data['sign'];
     $server_sign = getSign($data, $info['secret_key']);
     if($server_sign == $sign) return $data['out_trade_no'];
@@ -72,7 +72,7 @@ function checkSign($data){
  */
 function getSign($data, $secret_key) {
     foreach($data as $key => $val){
-        if($key == "sign" || $key == "sign_type"){
+        if($key == "sign" || $key == "sign_type" || $key == "pay_plugin"){
             unset($data[$key]);
         }
     }
@@ -80,6 +80,10 @@ function getSign($data, $secret_key) {
     reset($data);
     //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
     $prestr  = "";
+
+
+    // print_r($data);die;
+
     foreach ($data as $key=>$val) {
         $prestr.=$key."=".$val."&";
     }

@@ -16,14 +16,9 @@ class Pay extends Base {
 
     public function _initialize() {
         parent::_initialize();
-
-        if ($this->site['tourist_buy'] < 1 && empty($this->user['id'])) { //不允许游客购买
-            $this->redirect(url("/login"));
-        }
-
+        //不允许游客购买
+        if ($this->site['tourist_buy'] < 1 && empty($this->user['id'])) $this->redirect(url("/login"));
     }
-
-
 
     /**
      * 展示二维码页面
@@ -32,8 +27,6 @@ class Pay extends Base {
         $out_trade_no = $this->request->param('out_trade_no');
         $cmd = $this->request->param('cmd');
         $user = Hm::getUser();
-
-        // print_r($user);die;
         $order = [];
         $data = [];
         if($cmd == 'order'){

@@ -135,33 +135,10 @@ class Notify extends Controller {
         try{
 
             $timestamp = time(); //时间戳
-            $receive_type = $this->request->param('receive_type'); //接收回调报文的方式
-            $pay_type = empty($this->request->has('pay_type')) ? null : $this->request->param('pay_type');
-            $notice_type = $this->request->param('notice_type'); //通知方式 同步或异步
-            switch($receive_type){
-                case 'input':
-                    $content = file_get_contents("php://input");
-                    break;
-                case 'stripe':
-                    $content = $this->request->post();
-                    break;
-                case 'post':
-                    $content = $this->request->post();
-                    break;
-                case 'get':
-                    $content = $this->request->get();
-                    break;
-            }
-
-            if($receive_type == 'stripe'){
-                $pluginPath = ROOT_PATH . 'public/content/plugin/stripe_pay/stripe_pay.php';
-            }else{
-                $pluginPath = ROOT_PATH . 'public/content/plugin/' . $pay_type . '_pay/' . $pay_type . '_pay.php';
-            }
-
+            $pay_plugin = $this->request->param('pay_plugin');
+            $pluginPath = ROOT_PATH . 'public/content/plugin/' . $pay_plugin . '_pay/' . $pay_plugin . '_pay.php';
             require_once $pluginPath;
-
-            $check_sign = checkSign($content);
+            $check_sign = checkSign();
 
             if($check_sign){ //验签成功
                 $order = db::name('order')->where(['order_no' => $check_sign])->lock(true)->find();
@@ -172,25 +149,18 @@ class Notify extends Controller {
                 }
                 if($order['status'] != 'wait-pay'){ //重复通知
                     Db::rollback();
-                    if($notice_type == 'notify'){
-                        echo 'success'; die;
-                    }else{
-                        header("location: /order.html?order_no={$check_sign}"); die;
-                    }
+                    echo 'success'; die;
                 }
 
-
-
                 $goods = db::name('goods')->where(['id' => $order['goods_id']])->find();
-
                 $update = [
                     'status' => 'wait-send', // 通知后改为代发货
                     'pay_time' => $timestamp, //支付时间
                 ];
                 $order['pay_time'] = $timestamp;
                 db::name('order')->where(['id' => $order['id']])->update($update);
-
                 Hm::handleOrder($goods, $order, $this->site);
+                Db::commit();
 
                 try{
                     if($this->site['user_order_email'] == 1) Email::sendOrderUser($goods, $order['id'], $this->site);
@@ -199,21 +169,12 @@ class Notify extends Controller {
                 try{
                     doAction('order_notify', $order, $goods);
                 }catch(\Exception $e){}
-
-                Db::commit();
-                if($notice_type == 'notify'){
-                    echo 'success'; die;
-                }else{
-                    header("location: /order.html?order_no={$check_sign}"); die;
-                }
+                
+                echo 'success'; die;
 
             }else{
                 Db::rollback();
-                if($notice_type == 'notify'){
-                    echo 'fail'; die;
-                }else{
-                    echo '验签失败'; die;
-                }
+                echo 'fail'; die;
             }
         } catch (\Exception $e) {
             // 回滚事务

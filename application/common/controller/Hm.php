@@ -12,6 +12,80 @@ use think\Session;
  * 公共方法类
  */
 class Hm{
+    
+    
+    /**
+     * getParams
+     */
+     static public function getParams($type){
+         if($type == 'input'){
+             $data = file_get_contents("php://input");
+         }
+         if($type == 'get'){
+             $data = input('get.');
+         }
+         if($type == 'post'){
+             $data = input('post.');
+         }
+         return $data;
+     }
+    
+
+    /**
+     * getPayList
+     */
+
+    static public function payList(){
+        $where = [
+            'option_name' => 'active_pay',
+        ];
+
+        $active_pay = db::name('options')->where($where)->value('option_content');
+        $active_pay = empty($active_pay) ? [] : json_decode($active_pay, true);
+        $data = [];
+        $pays = [];
+        foreach($active_pay as $val){
+
+            if(in_array('alipay', $val['pay_type']) && !in_array('alipay', $pays)){
+                $data[] = [
+                    'name' => '支付宝',
+                    'key' => 'alipay'
+                ];
+                $pays[] = 'alipay';
+            }
+            if(in_array('wxpay', $val['pay_type']) && !in_array('wxpay', $pays)) {
+                $data[] = [
+                    'name' => '微信支付',
+                    'key' => 'wxpay'
+                ];
+                $pays[] = 'wxpay';
+            }
+            if(in_array('qqpay', $val['pay_type']) && !in_array('qqpay', $pays)) {
+                $data[] = [
+                    'name' => 'QQ支付',
+                    'key' => 'qqpay'
+                ];
+                $pays[] = 'qqpay';
+            }
+            if(in_array('apple_pay', $val['pay_type']) && !in_array('apple_pay', $pays)) {
+                $data[] = [
+                    'name' => '苹果支付',
+                    'key' => 'apple_pay'
+                ];
+                $pays[] = 'apple_pay';
+            }
+            if(in_array('card', $val['pay_type']) && !in_array('card', $pays)) {
+                $data[] = [
+                    'name' => '银行卡',
+                    'key' => 'card'
+                ];
+                $pays[] = 'card';
+            }
+
+        }
+
+        return $data;
+    }
 
     //订单发货
     static public function handleOrder($goods, $order, $site){
@@ -97,8 +171,6 @@ class Hm{
 
     }
 
-
-
     /**
      * 构造表单并提交
      */
@@ -121,6 +193,12 @@ class Hm{
     static public function handle_goods($goods, $user, $options = null){
         $goods['images'] = explode(',', $goods['images']);
         $goods['cover'] = $goods['images'][0];
+        $goods['eject'] = empty(strip_tags($goods['eject'])) ? null : $goods['eject'];
+        if(empty($goods['cover'])){
+            $goods['cover'] = getHostDomain() . '/assets/img/none.jpg';
+        }else{
+            $goods['cover'] = getHostDomain() . $goods['cover'];
+        }
         foreach($goods['grade_price'] as $val){
             if($user['agent'] == $val['grade_id']){
                 $goods['real_price'] = $val['price'];
@@ -160,7 +238,9 @@ class Hm{
             }
         }
         $goods['inputs'] = $inputs;
+        $goods['stock_show'] = $goods['stock'];
         if($options != null && $options['stock_show_switch'] == 1 && is_numeric($goods['stock'])){
+
             $stock_show = json_decode($options['stock_show'], true);
             foreach($stock_show as $val){
                 if($goods['stock'] >= $val['less'] && $goods['stock'] <= $val['greater']) $goods['stock_show'] = $val['content'];
@@ -273,7 +353,7 @@ class Hm{
             $tourist = cookie('tourist');
             if(!$tourist){ //老游客查找
                 $timestamp = time();
-                $tourist = $timestamp . mt_rand(1000, 9999); //游客标识
+                $tourist = 'ys' . $timestamp . mt_rand(1000, 9999); //游客标识
                 cookie('tourist', $tourist, $timestamp + 365 * 24 * 3600);
             }
             $user['id'] = $tourist;
@@ -282,6 +362,11 @@ class Hm{
     }
 
 
+    //生成订单号
+    static public function generateOrderNo(){
+        $order_no = date('YmdHis', time()) . mt_rand(1000, 9999);
+        return $order_no;
+    }
 
 
 }

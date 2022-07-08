@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 官方支付宝
-Version: 1.5
+Version: 2.0
 Plugin URL:
 Description: 官方支付宝支付
 Author: 云商学院
@@ -15,42 +15,13 @@ use think\Db;
 !defined('ROOT_PATH') && exit('access deined!');
 
 
-function pay($order, $goods, $pay_type, $cmd='order') {
+function pay($order, $goods, $params = []) {
 
     $plugin_path = ROOT_PATH . "public/content/plugin/alipay_pay/";
-
     $info = file_get_contents("{$plugin_path}alipay_pay_setting.json");
     $info = json_decode($info, true);
 
     $equipment = is_mobile() ? 'wap' : 'pc';
-
-//    echo $equipment;die;
-
-//    echo '<pre>'; print_r($info);die;
-
-    if(isset($_SERVER['REQUEST_SCHEME'])){
-        $host = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/';
-    }else{
-        $host = 'http://' . $_SERVER['HTTP_HOST'] . '/';
-    }
-
-    if($cmd == 'order'){
-        $notify_url = $host . 'notify/input/notify/alipay';
-        $return_url = $host . 'order.html?order_no=' . $order['order_no'];
-        $quit_url = $host . "goods/{$goods['id']}.html"; //用户取消付款返回商户网站的地址
-    }else{
-        $notify_url = $host . 'recharge_notify/input/notify/';
-        $return_url = $host . 'user.html';
-        $quit_url = $host . "user/recharge.html"; //用户取消付款返回商户网站的地址
-    }
-
-    // echo $notify_url;die;
-
-    $notify_url = $notify_url;
-    $return_url = $return_url;
-    $quit_url = $quit_url;
-
-
 
     $data = [
         'app_id' => $info['app_id'], //应用id
@@ -59,11 +30,8 @@ function pay($order, $goods, $pay_type, $cmd='order') {
         'sign_type' => 'RSA2', //加密方式
         'timestamp' => date('Y-m-d H:i:s', time()), //发送请求的时间
         'version' => '1.0', //api版本
-        'notify_url' => $notify_url, //支付完成后的异步回调通知
+        'notify_url' => $params['notify_url'], //支付完成后的异步回调通知
     ];
-
-
-
 
     $biz_content = [
         'subject' => $goods['name'], //商品名称
@@ -74,21 +42,18 @@ function pay($order, $goods, $pay_type, $cmd='order') {
 
     $sub_type = 'sub';
 
-
-
-
     if($equipment == 'wap' && isset($info['pay_type']['wap'])){
         $data['method'] = 'alipay.trade.wap.pay'; //接口名称 - 手机网站支付
         $biz_content['product_code'] = 'QUICK_WAP_WAY'; //销售产品码， 商家和支付宝签约的产品码
-        $data['return_url'] = $return_url; //付款完成后跳转的地址
+        $data['return_url'] = $params['return_url']; //付款完成后跳转的地址
         $biz_content['goods_type'] = 0; //商品主类型 0虚拟 1实物
-        $biz_content['quit_url'] = $quit_url;
+        $biz_content['quit_url'] = $params['quit_url'];
     }elseif($equipment == 'pc' && isset($info['pay_type']['pc'])){
         $data['method'] = 'alipay.trade.page.pay'; //接口名称 - pc网站支付
         $biz_content['product_code'] = 'FAST_INSTANT_TRADE_PAY'; //销售产品码， 商家和支付宝签约的产品码
-        $data['return_url'] = $return_url; //付款完成后跳转的地址
+        $data['return_url'] = $params['return_url']; //付款完成后跳转的地址
         $biz_content['goods_type'] = 0; //商品主类型 0虚拟 1实物
-        $biz_content['quit_url'] = $quit_url;
+        $biz_content['quit_url'] = $params['quit_url'];
     }elseif($equipment == 'pc' && isset($info['pay_type']['sm'])){
         $data['method'] = 'alipay.trade.precreate'; //接口名称  - 当面付
         $sub_type = 'sm';
@@ -99,21 +64,22 @@ function pay($order, $goods, $pay_type, $cmd='order') {
         die('官方支付宝支付插件未开启合适的支付方式！请联系管理员处理');
     }
 
-
-    // echo '<pre>'; print_r($data);die;
-
-
     $data['biz_content'] = json_encode($biz_content); //请求参数的集合
     $data['sign'] = getAlipaySign($data, ['private_key' => $info['private_key']]);
 
     $gateway_url = "https://openapi.alipay.com/gateway.do"; //支付宝支付网关
 
-    // echo '<pre>'; print_r($data);die;
-
     if($sub_type == 'sub'){
         // 发起wap支付或pc支付
-        Hm::submitForm($gateway_url, $data);
+        return [
+            'code' => 200,
+            'data' => $data,
+            'gateway_url' => $gateway_url,
+            'mode' => 'form'
+        ];
+
     }else{ //当面付
+        // print_r($data);die;
         $resultStr = hmCurl($gateway_url, http_build_query($data), true);
         $result = json_decode($resultStr, true);
 
@@ -122,24 +88,37 @@ function pay($order, $goods, $pay_type, $cmd='order') {
             $result = json_decode($resultStr, true);
         }
         if (empty($result)){
-            die("支付请求失败，请重试");
+            return [
+                'code' => 400,
+                'msg' => '支付请求失败，请重试',
+            ];
+
         }
         $result = $result['alipay_trade_precreate_response'];
+
+        // print_r($result);die;
+
         if ($result['code'] == 10000){
             //写入支付二维码
-            if($cmd == 'order'){
-                db::name('order')->where(['order_no' => $order['order_no']])->update(['qr_code' => $result['qr_code']]);
-            }else{
-                db::name('recharge')->where(['out_trade_no' => $order['order_no']])->update(['qr_code' => $result['qr_code']]);
-            }
-
-            header("location: /aliprecreate.html?out_trade_no=" . $order['order_no'] . "&cmd={$cmd}");
-            die;
+            db::name('order')->where(['order_no' => $order['order_no']])->update(['qr_code' => $result['qr_code']]);
+            return [
+                'code' => 200,
+                'qr_code' => $result['qr_code'],
+                'mode' => 'local',
+                'pay_type' => 'alipay'
+            ];
         } else{
             if($result['code'] == 40003 && $result['sub_code'] == 'isv.app-unbind-partner'){
-                echo '无效应用或应用未绑定商户';die;
+                return [
+                    'code' => 400,
+                    'msg' => '无效应用或应用未绑定商户',
+                ];
             }
-            echo '<pre>一般支付配置错误的情况下会显示这个'; print_r($result);die;
+            return [
+                'code' => 400,
+                'msg' => '错误的支付配置！'
+            ];
+
         }
     }
 
@@ -171,24 +150,35 @@ function getAlipaySign($data, $alipay){
 }
 
 
-function checkSign($content) {
+
+
+
+function checkSign($params = null) {
     $plugin_path = ROOT_PATH . "public/content/plugin/alipay_pay/";
     $info = file_get_contents("{$plugin_path}alipay_pay_setting.json");
     $info = json_decode($info, true);
-
-    $content = urldecode($content);
-    $content = mb_convert_encoding($content, 'utf-8', 'gbk');
-    $content = explode('&', $content);
-    $params = [];
-    foreach ($content as $val) {
-        $item = explode('=', $val, "2");
-        $params[$item[0]] = $item[1];
+    if($params == null){
+        $content = Hm::getParams('input');
+        $content = urldecode($content);
+        $content = mb_convert_encoding($content, 'utf-8', 'gbk');
+        $content = explode('&', $content);
+        $params = [];
+        foreach ($content as $val) {
+            $item = explode('=', $val, "2");
+            $params[$item[0]] = $item[1];
+        }
     }
+
+    if(!empty($params['method']) && ($params['method'] == 'alipay.trade.page.pay.return' || $params['method'] == 'alipay.trade.wap.pay.return')) return $params['out_trade_no'];
+
     if($params['trade_status'] != 'TRADE_SUCCESS') return false;
     $sign = $params['sign'];
-    unset($params['mode_type']);
-    unset($params['sign']);
-    unset($params['sign_type']);
+
+    if(!empty($params['mode_type'])) unset($params['mode_type']);
+    if(!empty($params['sign'])) unset($params['sign']);
+    if(!empty($params['sign_type'])) unset($params['sign_type']);
+    if(!empty($params['pay_plugin'])) unset($params['pay_plugin']);
+
     ksort($params);
     $stringToBeSigned = "";
     $i = 0;

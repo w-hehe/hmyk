@@ -36,12 +36,11 @@ Route::rule('getorderstatus/:out_trade_no','shop/order/getorderstatus'); //获�
 Route::rule('get_recharge_status/:out_trade_no','shop/order/get_recharge_status'); //获取订单支付状态
 Route::rule('tourist_key','shop/index/get_tourist_key'); //获取游客标识
 Route::rule('tourist_login','shop/index/tourist_login'); //游客登录
-//Route::rule('order/:order_id','shop/order/orderContent'); //查看订单内容
 Route::rule('post_order', 'shop/order/postOrder'); //提交订单
 Route::rule('confirm','shop/pay.pay/confirm'); //确认订单页面
 Route::rule('pay','shop/pay.pay/pay'); //提交支付
-Route::rule('notify/:receive_type/:notice_type/:pay_type','shop/notify/index'); //回调通知地址
-Route::rule('recharge_notify/:receive_type/:notice_type/:pay_type','shop/notify/recharge_notify'); //回调通知地址
+// Route::rule('notify/:receive_type/:notice_type/:pay_type','shop/notify/index'); //回调通知地址
+// Route::rule('recharge_notify/:receive_type/:notice_type/:pay_type','shop/notify/recharge_notify'); //回调通知地址
 Route::rule('order','shop/order/index');
 Route::rule('user_info','user/index/info');
 Route::rule('dock_info','user/index/dockInfo');
