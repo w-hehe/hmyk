@@ -150,6 +150,7 @@ class Pay extends Base {
         $goods = Hm::getGoodsInfo($post['goods_id'], $user);
         if (!$goods) $this->error('商品不存在');
         if ($post['buy_num'] > $goods['stock']) $this->error('库存不足');
+        if(empty($post['buy_num']) || $post['buy_num'] < 1) $this->error('禁止非法注入！');
         if(!empty($post['coupon'])){
             $coupon = db::name('coupon')->where(['value' => $post['coupon']])->find();
             if(!$coupon) $this->error('优惠券不存在');
