@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use app\common\controller\Backend;
+use think\Cache;
 use think\Db;
 /**
  * 模板管理
@@ -159,7 +160,7 @@ class Template extends Backend
             }
             db::name('options')->where(['option_name' => 'active_template'])->update(['option_content' => serialize($active_templates)]);
 
-
+            Cache::rm($folder . '_template');
             $this->success('操作成功');
         }
 

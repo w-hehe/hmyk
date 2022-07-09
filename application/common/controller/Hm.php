@@ -12,8 +12,8 @@ use think\Session;
  * 公共方法类
  */
 class Hm{
-    
-    
+
+
     /**
      * getParams
      */
@@ -29,7 +29,7 @@ class Hm{
          }
          return $data;
      }
-    
+
 
     /**
      * getPayList
@@ -344,12 +344,13 @@ class Hm{
                 ->where(['u.id' => session::get('user')['id']])
                 ->field($field)
                 ->find();
+            $user['login'] = true;
             if(!$user){
                 session::delete('user');
                 return self::getUser();
             }
         }else{ //游客
-            $user = ['agent' => 0];
+            $user = ['agent' => 0, 'login' => false];
             $tourist = cookie('tourist');
             if(!$tourist){ //老游客查找
                 $timestamp = time();

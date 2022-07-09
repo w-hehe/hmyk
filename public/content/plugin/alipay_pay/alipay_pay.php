@@ -79,7 +79,7 @@ function pay($order, $goods, $params = []) {
         ];
 
     }else{ //当面付
-        // print_r($data);die;
+//         print_r($data);die;
         $resultStr = hmCurl($gateway_url, http_build_query($data), true);
         $result = json_decode($resultStr, true);
 
@@ -96,7 +96,7 @@ function pay($order, $goods, $params = []) {
         }
         $result = $result['alipay_trade_precreate_response'];
 
-        // print_r($result);die;
+//         print_r($result);die;
 
         if ($result['code'] == 10000){
             //写入支付二维码
