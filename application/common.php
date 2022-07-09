@@ -30,7 +30,7 @@ function create_erweima($content, $size = '200', $lev = 'L', $margin= '0') {
  * @return string
  */
 function getHostDomain() {
-    return getHttpType() . $_SERVER['SERVER_NAME'];
+    return getHttpType() . $_SERVER['HTTP_HOST'];
 }
 
 /**
