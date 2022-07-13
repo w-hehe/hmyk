@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 13/07/2022 10:27:00
+ Date: 13/07/2022 13:05:20
 */
 
 SET NAMES utf8mb4;
@@ -575,8 +575,8 @@ CREATE TABLE `hm_options`  (
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.2.3');
-INSERT INTO `hm_options` VALUES (2, 'user_total', '8');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.2.5');
+INSERT INTO `hm_options` VALUES (2, 'user_total', '9');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');
 INSERT INTO `hm_options` VALUES (5, 'goods_total', '0');
@@ -737,11 +737,12 @@ CREATE TABLE `hm_user`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `email`(`email`) USING BTREE,
   INDEX `mobile`(`mobile`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '会员表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '会员表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hm_user
 -- ----------------------------
+INSERT INTO `hm_user` VALUES (1, 0.00, NULL, '', 'a@qq.com', '6418b1ca8d9f6ef5d9e6f1836e1762ec', 'BzuR2f', 'a@qq.com', '', '', 0, 0.00, 0, 1657681914, NULL, '');
 
 -- ----------------------------
 -- Table structure for hm_user_grade

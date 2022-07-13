@@ -135,7 +135,7 @@ class Plugin extends Backend {
     }
 
     public function qrCode(){
-        $qr_code = urlencode($this->request->param('qr_code'));
+        $qr_code = $this->request->param('qr_code');
         QRcode::png($qr_code,false, 'L', 7, 2);
         die;
     }
@@ -170,7 +170,7 @@ class Plugin extends Backend {
             }
             if($result['code'] == 400){ //未授权
                 $data = [
-                    'qr_code' => $result['data']['qr_code'],
+                    'qr_code' => urlencode($result['data']['qr_code']),
                     'plugin_name' => $result['data']['plugin_name'],
                     'out_trade_no' => $result['data']['out_trade_no'],
                     'host' => $result['data']['host'],
