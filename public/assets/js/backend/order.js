@@ -29,11 +29,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'order_no', title: __('订单号')},
                         {
                             field: 'user.nickname',
-                            title: '用户 / 下单账号',
+                            title: '用户 / 下单邮箱',
                             formatter:function(value,row,index){
                                 var user_account = '游客';
                                 var buy_account = '未填写';
-                                if(row.account){
+                                if(row.email){
                                     // return row.account;
                                     if(row.email.length > 30){
                                         buy_account = row.email.toString().substr(0, 30) + '...';

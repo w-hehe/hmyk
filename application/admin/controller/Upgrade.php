@@ -17,7 +17,7 @@ class Upgrade extends Backend {
 
         //更新包检测地址
         $version = $this->options['version'];
-        $upgrade_url = HMURL . "api/upgrade/download_upgrade/type/shop/version/" . $version;
+        $upgrade_url = HMURL . "api/upgrade/download_upgrade/version/" . $version;
         try {
             //检测更新包
             $result = hmCurl($upgrade_url);
@@ -52,12 +52,12 @@ class Upgrade extends Backend {
          * 下载更新包到本地并赋值文件路径变量
          */
         $path = file_exists($dir . $filename) ? $dir . $filename : $this->download_file($file_url, $dir, $filename);
-        
+
         if(!class_exists("\ZipArchive")) return json(['code' => 400, 'msg' => '您的PHP缺少ZipArchive扩展，你可以尝试安装编译版的PHP解决这个问题！']);
 
         $zip = new \ZipArchive();
 
-        
+
 
 
         //打开压缩包
@@ -172,7 +172,7 @@ class Upgrade extends Backend {
             }catch (\Exception $e){
                 $result = [];
             }
-            Cache::set('upgrade_result', $result, 3600 * 24);
+            Cache::set('upgrade_result', $result, 3600 * 12);
         }
 
         if (empty($result) || $result["code"] == 400) { //版本检测失败或没有新版本
@@ -196,11 +196,18 @@ class Upgrade extends Backend {
             if(empty($result)){
                 throw new \Exception("检测失败，请点击重试");
             }
+            if($result['code'] == 200){
+                $result['content'] = "";
+                foreach($result['list'] as $key => $val){
+                    $upgrade_time = date('Y-m-d H:i:s', $val['createtime']);
+                    $result['content'] .= "<style>#upgrade-content-box p{margin-bottom: 0;}</style><div id='upgrade-content-box'><h3>版本：v{$val['version']}</h3><p>更新时间：{$upgrade_time}</p>{$val['content']}</div>";
+                }
+            }
             Cache::set('upgrade_result', $result, 3600 * 12);
         }catch (\Exception $e){
             return json(['code' => 402, 'msg' => "检测失败，请点击重试"]);
         }
-        return $result;
+        return json($result);
     }
 
 }

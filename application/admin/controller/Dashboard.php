@@ -65,7 +65,7 @@ class Dashboard extends Backend {
         $start_time = strtotime(date('Y-m-d 23:59:59', $this->timestamp)) - (3600*24*15);
 //        echo date('Y-m-d H:i:s', $start_time);die;
         $sql = "select FROM_UNIXTIME(`pay_time`,'%Y-%m-%d') date, count(id) order_count, sum(money) sales_money from {$prefix}order where pay_time > {$start_time} group by date;";
-        
+
         $result = db::query($sql);
         $sts_order = [];
         for($i = 0; $i < 15; $i++){
@@ -81,9 +81,17 @@ class Dashboard extends Backend {
             }
         }
 
+        $upgrade = $this->upgrade();
+        $upgrade['content'] = "";
+        foreach($upgrade['list'] as $val){
+            $upgrade_time = date('Y-m-d H:i:s', $val['createtime']);
+            $upgrade['content'] .= "<style>#upgrade-content-box h3{color: #4e73df;}#upgrade-content-box p{margin-bottom: 0;}</style><div id='upgrade-content-box'><h3>版本：v{$val['version']}</h3><p>更新时间：{$upgrade_time}</p>{$val['content']}</div>";
+        }
+
+
         $this->view->assign([
             'sts_order' => $sts_order,
-            'upgrade' => $this->upgrade(),
+            'upgrade' => $upgrade,
             'poster' => $poster,
             "options" => $this->options,
             "today_register" => $today_register,
@@ -97,7 +105,6 @@ class Dashboard extends Backend {
             'goods_total' => $goods_total,
             'user_total' => $user_total
         ]);
-
         return $this->view->fetch();
     }
 
@@ -112,7 +119,7 @@ class Dashboard extends Backend {
         }else{
             try {
                 $result = json_decode(hmCurl($url, http_build_query($params), 0, false, 5), true);
-                if($result) Cache::set('upgrade_result', $result, 3600 * 12);
+                if($result) Cache::set('upgrade_result', $result, 3600 * 3);
             }catch (\Exception $e){
                 $result = false;
             }
@@ -121,10 +128,14 @@ class Dashboard extends Backend {
         if($result && $result['code'] == 200 && $this->options['version'] < $result['data']['version']){
             $upgrade = [
                 'version' => $result['data']['version'],
+                'list' => $result['list']
             ];
         }else{
-            $upgrade = [];
+            $upgrade = [
+                'list' => []
+            ];
         }
+//        echo '<pre>'; print_r($upgrade);die;
         return $upgrade;
     }
 
@@ -141,7 +152,7 @@ class Dashboard extends Backend {
             try {
                 $result = json_decode(hmCurl($upgrade_url, false, 0, false, 5), true);
 
-                Cache::set('poster_dashboard', $result, 3600*12);
+                Cache::set('poster_dashboard', $result, 3600*6);
 
             }catch (\Exception $e){
                 $result = [];

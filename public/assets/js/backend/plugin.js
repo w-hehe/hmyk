@@ -28,8 +28,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 escape: false,
                 columns: [
                     [
-                        // {checkbox: true},
-                        // {field: 'plugin', title: __('标识')},
                         {field: 'name', title: '插件名称', operate: 'LIKE'},
                         {field: 'description', title: __('Description'), operate: 'LIKE'},
                         {field: 'author', title: __('作者'), operate: 'LIKE'},
@@ -341,13 +339,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
             var upgrade = function (row) {
 
-                Layer.confirm(__('您确定要升级这个插件吗? 如有配置的插件，升级后则需要重新配置插件信息，请知悉！<br>如您想把其他域名的插件授权更换到当前域名下，请选择【更新授权】按钮。'), {
+                Layer.confirm(__('您正在升级插件！<br>如您想把其他域名的插件授权更换到当前域名下，请选择【更新授权】按钮。'), {
                     title: __('温馨提示'),
                     btn: ['升级插件', '更新授权', '取消']
                 }, function (index) {
                     layer.close(index);
                     layer.load();
-                    var url = 'plugin/install';
+                    var url = 'plugin/install/cmd/upgrade';
                     var data = {
                         plugin_id: row.id
                     };

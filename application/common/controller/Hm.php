@@ -194,11 +194,9 @@ class Hm{
         $goods['images'] = explode(',', $goods['images']);
         $goods['cover'] = $goods['images'][0];
         $goods['eject'] = empty(strip_tags($goods['eject'])) ? null : $goods['eject'];
-        if(empty($goods['cover'])){
-            $goods['cover'] = getHostDomain() . '/assets/img/none.jpg';
-        }else{
-            $goods['cover'] = getHostDomain() . $goods['cover'];
-        }
+
+        if(empty($goods['cover'])) $goods['cover'] = '/assets/img/none.jpg';
+
         foreach($goods['grade_price'] as $val){
             if($user['agent'] == $val['grade_id']){
                 $goods['real_price'] = $val['price'];

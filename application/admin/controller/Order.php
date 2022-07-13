@@ -19,7 +19,7 @@ use think\Config;
  */
 class Order extends Backend {
 
-    protected $searchFields = ['order_no', 'goods.name', 'account', 'user.mobile', 'user.email', 'user.nickname'];
+    protected $searchFields = ['order_no', 'goods.name', 'order.email', 'user.mobile', 'user.email', 'user.nickname'];
 
     /**
      * Order模型对象

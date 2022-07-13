@@ -11,19 +11,21 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'echarts'
             function initUpgrade(){
                 var upgrade = $('#upgrade').data('upgrade');
                 if(upgrade != 0){
-                    upgradeModel(upgrade);
+                    var upgrade_content = $('#upgrade-content').val();
+                    upgradeModel(upgrade, upgrade_content);
                 }
             }
 
             //弹出更新框
-            function upgradeModel(version){
-                var area = [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '200px' : '95%'];
+            function upgradeModel(version, upgrade_content = ''){
+                // var area = [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '200px' : '95%'];
                 Layer.open({
-                    content: Template("upgrade_tpl", {"upgrade_text":version}),
+                    content: Template("upgrade_tpl", {"upgrade_text":version, "upgrade_content": upgrade_content}),
                     zIndex: 99,
-                    area: area,
+                    maxmin: true,
+                    area: '50%',
                     title: '发现新版本',
-                    resize: false,
+                    resize: true,
                     btn: ['立即更新', '取消'],
                     yes: function (index, layero) {
                         upgradeFun();
@@ -76,7 +78,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'echarts'
 
             }
 
-
+            //更新方法
             function upgradeFun(){
                 var index = layer.load();
                 $.get("upgrade/index", function(e){
@@ -115,8 +117,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'echarts'
                     if(e.code == 400){ //暂无更新
                         Layer.alert(e.msg);
                     }else if(e.code == 200){ //发现新版本
-                        $('.upgrade-text').html("发现新版本v，老版本即刻停止维护，建议您立即更新！");
-                        upgradeModel(e.data.version);
+                        upgradeModel(e.data.version, e.content);
                     }else if(e.code == 401){ //beat版本不支持更新
                         Toastr.error(e.msg);
                     }else if(e.code == 402){ //检测出错

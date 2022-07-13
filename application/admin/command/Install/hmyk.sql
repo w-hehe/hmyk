@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 10/07/2022 00:42:19
+ Date: 13/07/2022 10:27:00
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', 'bfc53ce94bf2591da298ea868f639adb', 'a8a55f', '/assets/img/avatar.png', '10220739@qq.com', 0, 1657333016, '127.0.0.1', NULL, 1657333016, '77d0e8c2-5d7a-4209-8f21-1252d60232a7', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', 'bfc53ce94bf2591da298ea868f639adb', 'a8a55f', '/assets/img/avatar.png', 'admin@admin.com', 0, 1657429167, '127.0.0.1', NULL, 1657678117, 'a7bd3367-6806-4c0f-ba62-3ecd76475d4b', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_attach
@@ -575,8 +575,8 @@ CREATE TABLE `hm_options`  (
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.2.2');
-INSERT INTO `hm_options` VALUES (2, 'user_total', '7');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.2.3');
+INSERT INTO `hm_options` VALUES (2, 'user_total', '8');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');
 INSERT INTO `hm_options` VALUES (5, 'goods_total', '0');

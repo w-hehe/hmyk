@@ -135,7 +135,7 @@ class Plugin extends Backend {
     }
 
     public function qrCode(){
-        $qr_code = $this->request->param('qr_code');
+        $qr_code = urlencode($this->request->param('qr_code'));
         QRcode::png($qr_code,false, 'L', 7, 2);
         die;
     }
@@ -146,6 +146,8 @@ class Plugin extends Backend {
      */
     public function install(){
         $plugin_id = $this->request->param('plugin_id');
+
+        $cmd = $this->request->has('cmd') ? $this->request->param('cmd') : 'install';
 
         //获取插件信息
         $result = json_decode(hmCurl(HMURL . 'api/plugin/detail/id/' . $plugin_id), true);
@@ -162,8 +164,6 @@ class Plugin extends Backend {
                 'host' => $host,
             ];
             $result = hmCurl(HMURL . 'api/plugin/check', http_build_query($data), 1);
-//            echo HMURL . 'api/plugin/check';die;
-//            echo $result;die;
             $result = json_decode($result, true);
             if(empty($result)){ //获取授权信息失败
                 return json(['code' => 400, 'msg' => '返回为空']);
@@ -183,7 +183,6 @@ class Plugin extends Backend {
             }
         }
 
-//        print_r($info);die;
         $dir = ROOT_PATH . "runtime/plugin/"; //插件本地临时存储路径
 
 
@@ -194,7 +193,8 @@ class Plugin extends Backend {
         /**
          * 下载插件压缩包到本地并赋值文件路径变量
          */
-        $file_url = HMURL . ltrim($info['file'], '/');
+
+        $file_url = $cmd == 'install' ? HMURL . ltrim($info['file'], '/') : HMURL . ltrim($info['upgrade_file'], '/');
 
 
         // echo $file_url;die;
