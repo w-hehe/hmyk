@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 官方支付宝
-Version: 2.0
+Version: 2.1
 Plugin URL:
 Description: 官方支付宝支付
 Author: 云商学院
@@ -79,7 +79,7 @@ function pay($order, $goods, $params = []) {
         ];
 
     }else{ //当面付
-//         print_r($data);die;
+        // print_r($data);die;
         $resultStr = hmCurl($gateway_url, http_build_query($data), true);
         $result = json_decode($resultStr, true);
 
@@ -96,7 +96,7 @@ function pay($order, $goods, $params = []) {
         }
         $result = $result['alipay_trade_precreate_response'];
 
-//         print_r($result);die;
+        // print_r($result);die;
 
         if ($result['code'] == 10000){
             //写入支付二维码
@@ -159,14 +159,19 @@ function checkSign($params = null) {
     $info = json_decode($info, true);
     if($params == null){
         $content = Hm::getParams('input');
-        $content = urldecode($content);
-        $content = mb_convert_encoding($content, 'utf-8', 'gbk');
-        $content = explode('&', $content);
-        $params = [];
-        foreach ($content as $val) {
-            $item = explode('=', $val, "2");
-            $params[$item[0]] = $item[1];
-        }
+		if(empty($content)){
+			$params = Hm::getParams('get');
+		}else{
+			$content = urldecode($content);
+			$content = mb_convert_encoding($content, 'utf-8', 'gbk');
+			$content = explode('&', $content);
+			$params = [];
+			foreach ($content as $val) {
+			    $item = explode('=', $val, "2");
+			    $params[$item[0]] = $item[1];
+			}
+		}
+        
     }
 
     if(!empty($params['method']) && ($params['method'] == 'alipay.trade.page.pay.return' || $params['method'] == 'alipay.trade.wap.pay.return')) return $params['out_trade_no'];

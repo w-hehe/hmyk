@@ -2,6 +2,7 @@
 
 namespace app\api\controller\v1;
 
+use app\common\controller\Email;
 use app\common\controller\Hm;
 use fast\QRcode;
 use fast\Random;
@@ -40,6 +41,22 @@ class Pisces extends Controller {
     public function logout() {
         session::delete('user');
         return json(['code' => 1, 'msg' => '已退出']);
+    }
+
+    public function plugin(){
+        $plugin_data = [
+            'user' => $this->user
+        ];
+        $active_plugins = Db::name('options')->where(['option_name' => 'active_plugin'])->value('option_content');
+        $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
+        if ($active_plugins && is_array($active_plugins)) {
+            foreach($active_plugins as $plugin) {
+                if(true === checkPlugin($plugin) && substr($plugin, -13) != '_template.php' && substr($plugin, -8) != '_pay.php') {
+                    include_once(ROOT_PATH . 'public/content/plugin/' . $plugin);
+                }
+            }
+        }
+        doAction('home_head', $plugin_data);
     }
 
 
@@ -141,6 +158,53 @@ class Pisces extends Controller {
         return json(['code' => 1, 'msg' => 'ok', 'data' => $data]);
     }
 
+
+    /**
+     * 分类页接口
+     */
+    public function category_index(){
+        $category_id = $this->request->param('category_id');
+
+        $list = [];
+        try {
+            $model = new \app\admin\model\Goods;
+
+            $category = db::name('category')->where(['id' => $category_id])->find();
+
+            $where = [
+                'shelf' => 0,
+                'deletetime' => ['exp', Db::raw('is null')],
+                'category_id' => $category['id'],
+            ];
+            if($category['goods_sort'] == 0 || $category['goods_sort'] == 1){ //id降序
+                $goods = $model->with(['category', 'gradePrice'])->where($where)->order('sort desc, id desc')->select();
+            }else if($category['goods_sort'] == 2){ //id升序
+                $goods = $model->with(['category', 'gradePrice'])->where($where)->order('sort desc, id asc')->select();
+            }else if($category['goods_sort'] == 3){ //价格降序
+                $goods = $model->with(['category', 'gradePrice'])->where($where)->order('sort desc, price desc')->select();
+            }else if($category['goods_sort'] == 4){ //价格升序
+                $goods = $model->with(['category', 'gradePrice'])->where($where)->order('sort desc, price asc')->select();
+            }else if($category['goods_sort'] == 5){ //销量降序
+                $goods = $model->with(['category', 'gradePrice'])->where($where)->order('sort desc, sales desc')->select();
+            }else if($category['goods_sort'] == 6){ //销量升序
+                $goods = $model->with(['category', 'gradePrice'])->where($where)->order('sort desc, sales asc')->select();
+            }
+            $goods = $goods->toArray();
+
+            foreach($goods as $k => $v){
+                $list[] = Hm::handle_goods($v, $this->user, $this->options);
+            }
+        }catch (\Exception $e){
+            return json(['code' => 0, 'msg' => $e->getMessage()]);
+        }
+
+        $data = [
+            'goods' => $list,
+            'category' => $category
+        ];
+        return json(['code' => 1, 'msg' => 'ok', 'data' => $data]);
+    }
+
     /**
      * 提交商品支付
      */
@@ -157,8 +221,10 @@ class Pisces extends Controller {
         if($order_money > 0 && empty($post['pay_type'])) return json(['code' => 0, 'msg' => '请选择支付方式']);
 
         if($post['pay_type'] == 'balance' || $order_money == 0){
-            if($this->user['money'] < $order_money) return json(['code' => 0, 'msg' => '余额不足，请充值']);
-            db::name('user')->where(['id' => $this->user['id']])->setDec('money', $order_money);
+            if($order_money > 0){
+                if($this->user['money'] < $order_money) return json(['code' => 0, 'msg' => '余额不足，请充值']);
+                db::name('user')->where(['id' => $this->user['id']])->setDec('money', $order_money);
+            }
             $pay_plugin = '';
         }else{
             $active_pay = db::name('options')->where(['option_name' => 'active_pay'])->value('option_content');
@@ -221,19 +287,16 @@ class Pisces extends Controller {
             ]);
         }
 
-
         $pluginPath = ROOT_PATH . 'public/content/plugin/' . $pay_plugin . '_pay/' . $pay_plugin . '_pay.php';
         $goods['name'] = empty($this->site['diy_name']) ? $goods['name'] : $this->site['diy_name'];
         require_once $pluginPath;
         $host = getHostDomain();
         $params = [
-            'notify_url' => $host . '/shop/notify/index?pay_plugin=' . $pay_plugin,
-            'return_url' => $host . '/api/v1/pisces/callback_return?pay_plugin=' . $pay_plugin,
+            'notify_url' => $host . '/shop/notify/index/pay_plugin/' . $pay_plugin,
+            'return_url' => $host . '/api/v1/pisces/callback_return/pay_plugin/' . $pay_plugin,
             'quit_url' => $host . "/#/goods/goods_id={$goods['id']}",
             'pay_type' => $post['pay_type']
         ];
-
-        // echo $params['notify_url'];die;
 
         $result = pay($insert, $goods, $params);
         if($result['code'] == 400){
@@ -246,34 +309,53 @@ class Pisces extends Controller {
         $result['order_money'] = $insert['money'];
         $result['price'] = $goods['price'];
         $result['buy_num'] = $post['buy_num'];
+        $result['is_mobile'] = is_mobile();
+
         return json($result);
     }
 
+    /**
+     * 同步回调
+     */
     public function callback_return($content = null, $i = 0){
-        try{
-            $content = $content == null ? $this->request->get() : $content;
-            $pay_plugin = $content['pay_plugin'];
-            $pluginPath = ROOT_PATH . 'public/content/plugin/' . $pay_plugin . '_pay/' . $pay_plugin . '_pay.php';
-            require_once $pluginPath;
-            $out_trade_no = checkSign($content);
+        $content = $content == null ? $this->request->param() : $content;
+        $pay_plugin = $content['pay_plugin'];
+        $pluginPath = ROOT_PATH . 'public/content/plugin/' . $pay_plugin . '_pay/' . $pay_plugin . '_pay.php';
+        require_once $pluginPath;
+//            $out_trade_no = checkSign($content);
+        $out_trade_no = checkSign();
 
-            $order = db::name('order')->where(['order_no' => $out_trade_no])->find();
-            if(!$order) die('非法注入');
-            if($order['status'] == 'wait-pay'){ //重复通知
-                sleep(3);
-                $i++;
-                if($i >= 2){
-                    header("location: /#/order/detail?out_trade_no={$out_trade_no}"); die;
-                }else{
-                    $this->callback_return($content, $i);
-                }
-            }else{
+        if($out_trade_no){ //验签成功
+            $order = db::name('order')->where(['order_no' => $out_trade_no])->lock(true)->find();
+            if(!$order){
+                Db::rollback();
+                die('fail');
+            }
+            if($order['status'] != 'wait-pay'){ //重复通知
+                Db::rollback();
                 header("location: /#/order/detail?out_trade_no={$out_trade_no}"); die;
             }
-        }catch(\Exception $e){
-            echo $e->getMessage();
-            echo '<br>';
-            echo $e->getLine();
+            $goods = db::name('goods')->where(['id' => $order['goods_id']])->find();
+            $update = [
+                'status' => 'wait-send', // 通知后改为代发货
+                'pay_time' => $this->timestamp, //支付时间
+            ];
+            $order['pay_time'] = $this->timestamp;
+            db::name('order')->where(['id' => $order['id']])->update($update);
+            Hm::handleOrder($goods, $order, $this->site);
+            Db::commit();
+            try{
+                if($this->site['user_order_email'] == 1) Email::sendOrderUser($goods, $order['id'], $this->site);
+                if($this->site['admin_order_email'] == 1) Email::sendOrderBoss($goods, $order['id'], $this->site);
+            }catch(\Exception $e){}
+            try{
+                doAction('order_notify', $order, $goods);
+            }catch(\Exception $e){}
+            header("location: /#/order/detail?out_trade_no={$out_trade_no}"); die;
+            die;
+        }else{
+            Db::rollback();
+            echo '验签失败'; die;
         }
 
     }

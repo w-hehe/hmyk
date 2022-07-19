@@ -28,4 +28,5 @@ return array (
   'user_order_email' => '0',
   'ico' => '/assets/img/favicon.png',
   'cdk_order' => 'asc',
+  'name' => '我的网站',
 );

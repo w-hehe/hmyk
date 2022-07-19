@@ -253,7 +253,7 @@ return [
         // 驱动方式
         'type'     => 'Mysql',
         // 缓存前缀
-        'key'      => 'SXUqQo7FcsHxwTZy8kJ4Av56jeNnGPzp',
+        'key'      => 'rm7PV3k1MTpEyG4ZDedC5zog9QI2W6JO',
         // 加密方式
         'hashalgo' => 'ripemd160',
         // 缓存有效期 0表示永久缓存

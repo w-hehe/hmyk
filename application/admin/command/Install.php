@@ -63,6 +63,8 @@ class Install extends Command
             throw new Exception("\nFastAdmin already installed!\nIf you need to reinstall again, use the parameter --force=true ");
         }
 
+
+
         $adminUsername = 'admin';
         $adminPassword = Random::alnum(10);
         $adminEmail = 'admin@admin.com';
@@ -284,7 +286,12 @@ class Install extends Command
             //删除安装脚本
             @unlink(ROOT_PATH . 'public' . DS . 'install.php');
         } catch (\Exception $e) {
+        }
 
+        try {
+            //统计安装次数
+            hmCurl(HMURL . 'api/hmyk/install_log');
+        } catch (\Exception $e) {
         }
 
         return $adminName;

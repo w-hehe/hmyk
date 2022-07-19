@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: 小贴士
-Version: 1.0.1
+Version: 1.1
 Plugin URL:
 Description: 这是世界上第一个红盟云卡插件，它会在控制台页面送上一句温馨的小提示。
 Author: 红盟云商
-Author URL: http://www.hmy3.com/
+Author URL: http://hmbbs.buzz/
 */
 
 !defined('ROOT_PATH') && exit('access deined!');
@@ -13,7 +13,7 @@ Author URL: http://www.hmy3.com/
 global $array_tips;
 
 $array_tips = [
-    '请关注官网 <a href="https://www.ysxue.cc/" target="_blank">https://www.ysxue.cc/</a> 最新动态',
+    '请关注官方论坛 <a href="http://hmbbs.buzz/" target="_blank">http://hmbbs.buzz/</a> 最新动态',
     '检查你的站点根目录下是否存在文件：sql.php，有的话请删除它',
     '及时更新程序到最新版本，更好的体验红盟云卡',
     '今天你备份数据了吗？',
