@@ -68,6 +68,29 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
             // 为表格绑定事件
             Table.api.bindevent(table);
+
+            $('.btn-switch').click(function(){
+                layer.load();
+                $.get("complain/_switch", function(e){
+                    if(e.code == 200){
+                        layer.closeAll();
+                        Toastr.success(e.msg);
+                        if(e.data == 1){ //已开启
+                            $('#pon-text').html('关闭投诉入口');
+                            $('#pon-icon').attr('class', 'fa fa-toggle-on');
+                        }else{ //已关闭
+                            $('#pon-text').html('开启投诉入口');
+                            $('#pon-icon').attr('class', 'fa fa-toggle-off');
+                        }
+                    }else{
+                        layer.closeAll('loading');
+                        Toastr.error(e.msg);
+                    }
+                }).error(function(){
+                    layer.closeAll('loading');
+                    Toastr.error('服务器错误！');
+                })
+            })
         },
         add: function () {
             Controller.api.bindevent();

@@ -43,7 +43,7 @@ USDT支付
 
 在使用中有任何问题，请使用以下联系方式联系我们
 
-红盟云卡反馈建议专区：[https://www.ysxue.net/issues.html](https://blog.ysxue.net/issues.html)
+红盟云卡反馈建议专区：[http://hmbbs.buzz/](http://hmbbs.buzz/)
 
 
 ## 截图展示
@@ -63,6 +63,6 @@ USDT支付
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有Copyright © 2017-2020 by 云商学院 (https://www.ysxue.cc/)
+版权所有Copyright © 2020-2022 by 云商学院 (http://hmbbs.buzz/)
 
 All rights reserved。

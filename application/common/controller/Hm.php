@@ -88,7 +88,7 @@ class Hm{
     }
 
     //订单发货
-    static public function handleOrder($goods, $order, $site){
+    static public function handleOrder($goods, $order, $options){
         $prefix = \think\Db::getConnection()->getConfig('prefix');
         $status = true;
         $timestamp = time();
@@ -108,9 +108,9 @@ class Hm{
                 $sql_cdkey = "select {$ckd_field} from {$prefix}cdkey where goods_id = {$goods['id']} limit 1;";
             }
             if($goods['goods_type'] == 'alone'){ //独立
-                if($site['cdk_order'] == 'random') $sql_cdkey = "select {$ckd_field} from {$prefix}cdkey where goods_id = {$goods['id']} order by rand() limit {$order['buy_num']};";
-                if($site['cdk_order'] == 'asc') $sql_cdkey = "select {$ckd_field} from {$prefix}cdkey where goods_id = {$goods['id']} order by id asc limit {$order['buy_num']};";
-                if($site['cdk_order'] == 'desc') $sql_cdkey = "select {$ckd_field} from {$prefix}cdkey where goods_id = {$goods['id']} order by id desc limit {$order['buy_num']};";
+                if($options['cdk_order'] == 'random') $sql_cdkey = "select {$ckd_field} from {$prefix}cdkey where goods_id = {$goods['id']} order by rand() limit {$order['buy_num']};";
+                if($options['cdk_order'] == 'asc') $sql_cdkey = "select {$ckd_field} from {$prefix}cdkey where goods_id = {$goods['id']} order by id asc limit {$order['buy_num']};";
+                if($options['cdk_order'] == 'desc') $sql_cdkey = "select {$ckd_field} from {$prefix}cdkey where goods_id = {$goods['id']} order by id desc limit {$order['buy_num']};";
             }
             $cdkey = db::query($sql_cdkey);
         }
@@ -193,7 +193,8 @@ class Hm{
     static public function handle_goods($goods, $user, $options = null){
         $goods['images'] = explode(',', $goods['images']);
         $goods['cover'] = $goods['images'][0];
-        $goods['eject'] = empty(strip_tags($goods['eject'])) ? null : $goods['eject'];
+        $goods['eject'] = empty(strip_tags($goods['eject'])) ? '' : $goods['eject'];
+        $goods['buy_msg'] = empty(strip_tags($goods['buy_msg'])) ? '' : $goods['buy_msg'];
 
         if(empty($goods['cover'])) $goods['cover'] = '/assets/img/none.jpg';
 

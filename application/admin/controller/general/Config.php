@@ -49,7 +49,6 @@ class Config extends Backend
 
         $groupList = [
             'basic' => '基础配置',
-            'buy' => '购买配置',
             'email' => '邮件配置',
             'money' => '资金配置',
             'eject' => '弹窗配置',

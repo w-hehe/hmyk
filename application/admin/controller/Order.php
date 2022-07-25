@@ -118,7 +118,7 @@ class Order extends Backend {
         $order_id = $this->request->param('ids');
         $order = db::name('order')->where(['id' => $order_id])->find();
         $goods = db::name('goods')->where(['id' => $order['goods_id']])->find();
-        $result = Hm::handleOrder($goods, $order, $this->site);
+        $result = Hm::handleOrder($goods, $order, $this->options);
         if($result['code'] == 200){
             doAction('order_notify', $order, $goods);
             $this->success('补单成功');

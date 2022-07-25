@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 19/07/2022 11:37:54
+ Date: 25/07/2022 16:30:06
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', '0aa7ee5b4bd2a3292b340183b2971d63', 'db6b83', 'http://www.hmyk.com/assets/img/avatar.png', 'admin@admin.com', 0, 1657429167, '127.0.0.1', NULL, 1657678117, 'a7bd3367-6806-4c0f-ba62-3ecd76475d4b', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', '0aa7ee5b4bd2a3292b340183b2971d63', 'db6b83', 'http://www.hmyk.com/assets/img/avatar.png', 'admin@admin.com', 0, 1658711458, '127.0.0.1', NULL, 1658711458, '8925ac16-2943-4c98-9862-99c30a5e85a4', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_attach
@@ -158,7 +158,7 @@ CREATE TABLE `hm_auth_rule`  (
   UNIQUE INDEX `name`(`name`) USING BTREE,
   INDEX `pid`(`pid`) USING BTREE,
   INDEX `weigh`(`weigh`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 98 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '节点表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 99 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '节点表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hm_auth_rule
@@ -258,6 +258,7 @@ INSERT INTO `hm_auth_rule` VALUES (94, 'file', 0, 'extend', '网站扩展', 'fa 
 INSERT INTO `hm_auth_rule` VALUES (95, 'file', 94, 'template', '模板管理', 'fa fa-desktop', '', '', '', 1, 'addtabs', '', 'mbgl', 'mubanguanli', 1654161028, 1654161028, 0, 'normal');
 INSERT INTO `hm_auth_rule` VALUES (96, 'file', 94, 'plugin', '插件管理', 'fa fa-plug', '', '', '', 1, 'addtabs', '', 'cjgl', 'chajianguanli', 1654161062, 1654161062, 0, 'normal');
 INSERT INTO `hm_auth_rule` VALUES (97, 'file', 86, 'docking/docking_site', '货源管理', 'fa fa-sitemap', '', '', '', 1, 'addtabs', '', 'hygl', 'huoyuanguanli', 1654161340, 1654493063, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (98, 'file', 2, 'buy/index', '购买配置', 'fa fa-ellipsis-v', '', '', '', 1, 'addtabs', '', 'gmpz', 'goumaipeizhi', NULL, NULL, 0, 'normal');
 
 -- ----------------------------
 -- Table structure for hm_category
@@ -357,20 +358,15 @@ CREATE TABLE `hm_config`  (
 INSERT INTO `hm_config` VALUES (1, 'shop_title', 'basic', '网站标题', '', 'string', '我的网站', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (2, 'shop_pet_name', 'basic', '网站名称', '', 'string', '我的网站', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (3, 'beian', 'basic', 'Beian', '苏ICP备15000000号-1', 'string', '', '', '', '', NULL);
-INSERT INTO `hm_config` VALUES (4, 'version', 'basic', '后台静态文件版本', '如果静态资源有变动请重新配置该值', 'string', '1657347038', '', 'required', '', NULL);
+INSERT INTO `hm_config` VALUES (4, 'version', 'basic', '后台静态文件版本', '如果静态资源有变动请重新配置该值', 'string', '1658726345', '', 'required', '', NULL);
 INSERT INTO `hm_config` VALUES (5, 'min_cashout', 'money', '最低提现金额', '0则不限制金额', 'number', '0', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (6, 'max_cashout_num', 'money', '每日最多提现次数', '0则不限制次数', 'number', '3', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (7, 'cashout_charged', 'money', '提现手续费%', '按照百分比填写', 'number', '1', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (8, 'tourist_buy', 'basic', '游客购买', '', 'switch', '1', '{\"1\":\"开启\",\"0\":\"关闭\"}', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
-INSERT INTO `hm_config` VALUES (9, 'login', 'basic', '登录功能', '', 'switch', '1', '{\"1\":\"开启\",\"0\":\"关闭\"}', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
-INSERT INTO `hm_config` VALUES (10, 'register', 'basic', '注册功能', '', 'switch', '1', '{\"1\":\"开启\",\"0\":\"关闭\"}', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
+INSERT INTO `hm_config` VALUES (9, 'login', 'basic', '登录功能', '', 'switch', '0', '{\"1\":\"开启\",\"0\":\"关闭\"}', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
+INSERT INTO `hm_config` VALUES (10, 'register', 'basic', '注册功能', '', 'switch', '0', '{\"1\":\"开启\",\"0\":\"关闭\"}', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (11, 'statistics', 'basic', '统计代码', '第三方流量统计代码', 'text', '', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
-INSERT INTO `hm_config` VALUES (12, 'diy_name', 'buy', '商品自定义支付名称', '此选项可以替换官方支付接口的商品名称，留空使用原商品名称。', 'string', '商品购买', '', '', '', NULL);
-INSERT INTO `hm_config` VALUES (13, 'buy_email', 'buy', '接收邮箱', '开启后，用户下单需要输入邮箱', 'radio', '1', '{\"1\":\"开启\",\"0\":\"关闭\"}', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
-INSERT INTO `hm_config` VALUES (14, 'buy_password', 'buy', '查单密码', '关闭后购买商品和查询订单时不需要填写密码', 'radio', '1', '{\"1\":\"开启\",\"0\":\"关闭\"}', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
-INSERT INTO `hm_config` VALUES (15, 'tip_email', 'buy', '接收邮箱提示', '购买商品处填写接收邮箱表单内的提示内容 非必填', 'string', '订单信息接收邮箱，为空则不发送', '', '', '', NULL);
-INSERT INTO `hm_config` VALUES (16, 'tip_password', 'buy', '查单密码提示', '购买商品处填写查单密码表单内的提示内容 非必填', 'string', '游客查询订单时的凭证', '', '', '', NULL);
-INSERT INTO `hm_config` VALUES (18, 'eject_goods', 'eject', '商品页弹窗内容', '', 'editor', '', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
+INSERT INTO `hm_config` VALUES (18, 'eject_goods', 'eject', '商品页弹窗内容', '', 'editor', '<p><br></p>', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (19, 'mail_smtp_host', 'email', 'SMTP服务器', '错误的配置发送邮件会导致服务器超时', 'string', 'smtp.qq.com', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (20, 'mail_verify_type', 'email', 'SMTP验证方式', '', 'select', '2', '{\"\":\"无\",\"1\":\"TLS\",\"2\":\"SSL\"}', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (21, 'mail_smtp_port', 'email', 'SMTP端口', '(不加密默认25,SSL默认465,TLS默认587)', 'number', '465', NULL, '', '', NULL);
@@ -380,7 +376,6 @@ INSERT INTO `hm_config` VALUES (24, 'mail_from', 'email', '发件人邮箱', '',
 INSERT INTO `hm_config` VALUES (25, 'admin_order_email', 'email', '站长接收新订单邮件通知', '', 'switch', '0', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (26, 'user_order_email', 'email', '向用户发送订单信息邮件', '暂时只发送自动发货的商品订单', 'switch', '0', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (27, 'ico', 'other', '网站ico图标', '', 'image', '/assets/img/favicon.png', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
-INSERT INTO `hm_config` VALUES (29, 'cdk_order', 'buy', '卡密发货顺序', '', 'select', 'asc', '{\"asc\":\"正序\",\"desc\":\"倒序\",\"random\":\"随机\"}', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 
 -- ----------------------------
 -- Table structure for hm_coupon
@@ -570,22 +565,26 @@ CREATE TABLE `hm_options`  (
   `option_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0',
   `option_content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.2.6');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.3.0');
 INSERT INTO `hm_options` VALUES (2, 'user_total', '9');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');
 INSERT INTO `hm_options` VALUES (5, 'goods_total', '0');
-INSERT INTO `hm_options` VALUES (6, 'active_plugin', 'a:1:{i:0;s:13:\"tips/tips.php\";}');
+INSERT INTO `hm_options` VALUES (6, 'active_plugin', 'a:0:{}');
 INSERT INTO `hm_options` VALUES (7, 'active_template', 'a:2:{s:2:\"pc\";s:6:\"pisces\";s:6:\"mobile\";s:6:\"pisces\";}');
 INSERT INTO `hm_options` VALUES (8, 'stock_show', '[{\"less\":\"-999\",\"greater\":0,\"content\":\"\\u552e\\u78d0\"},{\"less\":\"1\",\"greater\":\"10\",\"content\":\"\\u5c11\\u91cf\"},{\"less\":\"11\",\"greater\":\"1000000\",\"content\":\"\\u5145\\u8db3\"}]');
 INSERT INTO `hm_options` VALUES (9, 'stock_show_switch', '0');
 INSERT INTO `hm_options` VALUES (10, 'active_pay', '[]');
 INSERT INTO `hm_options` VALUES (11, 'coupon', '0');
+INSERT INTO `hm_options` VALUES (12, 'complain', '1');
+INSERT INTO `hm_options` VALUES (13, 'buy_name', '商品购买');
+INSERT INTO `hm_options` VALUES (14, 'cdk_order', 'asc');
+INSERT INTO `hm_options` VALUES (15, 'buy_data', '[{\"name\":\"接收邮箱\",\"placeholder\":\"订单信息接收邮箱，为空则不发送\",\"search_placeholder\":\"下单时填写的邮箱\",\"email\":\"checked\"},{\"name\":\"查单密码\",\"placeholder\":\"游客查询订单时的凭证\",\"search_placeholder\":\"下单时填写的密码\",\"required\":\"checked\",\"buy\":\"checked\",\"search\":\"checked\"}]');
 
 -- ----------------------------
 -- Table structure for hm_order
