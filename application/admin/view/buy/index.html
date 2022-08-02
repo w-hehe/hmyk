@@ -45,8 +45,13 @@
                         <label for="email" class="control-label">自定义支付接口商品支付名称</label>
                         <input type="text" class="form-control" id="email" name="row[buy_name]" value="{$options.buy_name|htmlentities}" />
                     </div>
+
                     <div class="form-group">
-                        <label class="control-label">下单默认输入数据（一般用于查单验证）</label>
+                        <label class="control-label">下单默认输入数据</label>
+                        <div class="alert alert-success-light" style="margin-bottom: 0; padding: 5px 10px;">
+                            此处配置一般用于查单验证，如需用户填写更多下单信息，请在商品信息中选择附加选项<br>
+                            勾选邮箱类型后，则会往该参数内发送订单信息邮件，前提您要正确设置通知配置。
+                        </div>
                         <table class="table table-responsive fieldlist" data-name="row[buy_data]" data-template="testtpl" data-tag="tr">
                             <tr>
                                 <td>名称</td>

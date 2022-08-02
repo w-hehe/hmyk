@@ -59,8 +59,13 @@ class Email
             $this->options = array_merge($this->options, $config);
         }
         $this->options = array_merge($this->options, $options);
-        $secureArr = [0 => '', 1 => 'tls', 2 => 'ssl'];
-        $secure = isset($secureArr[$this->options['mail_verify_type']]) ? $secureArr[$this->options['mail_verify_type']] : '';
+        $secureArr = [0 => '', 'TLS' => 'tls', 'SSL' => 'ssl'];
+        if(empty($this->options['mail_verify_type'])){
+            $secure = '';
+        }else{
+            $secure = isset($secureArr[$this->options['mail_verify_type']]) ? $secureArr[$this->options['mail_verify_type']] : '';
+        }
+
 
         if(empty($secure) && ($this->options['mail_smtp_port'] == 465 || $this->options['mail_smtp_port'] == 587)){
             $this->options['mail_smtp_port'] = 25;

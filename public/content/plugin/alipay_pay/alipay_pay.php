@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 官方支付宝
-Version: 2.1
+Version: 2.2
 Plugin URL:
 Description: 官方支付宝支付
 Author: 云商学院
@@ -66,6 +66,8 @@ function pay($order, $goods, $params = []) {
 
     $data['biz_content'] = json_encode($biz_content); //请求参数的集合
     $data['sign'] = getAlipaySign($data, ['private_key' => $info['private_key']]);
+
+    if(empty($data['sign'])) return ['code' => 400, 'msg' => '支付配置错误，签名生成失败。'];
 
     $gateway_url = "https://openapi.alipay.com/gateway.do"; //支付宝支付网关
 
@@ -141,8 +143,11 @@ function getAlipaySign($data, $alipay){
     try {
         openssl_sign($data_str, $sign, $private_key, OPENSSL_ALGO_SHA256);
     } catch (\Exception $e) {
-        echo '支付配置错误，错误信息：';
-        echo $e->getMessage();die;
+        return false;
+        return [
+            'code' => 400,
+            'msg' => '支付配置错误: ' . $e->getMessage(),
+        ];
     }
 
     $sign = base64_encode($sign);
@@ -171,7 +176,7 @@ function checkSign($params = null) {
 			    $params[$item[0]] = $item[1];
 			}
 		}
-        
+
     }
 
     if(!empty($params['method']) && ($params['method'] == 'alipay.trade.page.pay.return' || $params['method'] == 'alipay.trade.wap.pay.return')) return $params['out_trade_no'];

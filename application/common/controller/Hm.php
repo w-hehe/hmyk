@@ -157,7 +157,8 @@ class Hm{
         db::name('order')->where(['id' => $order['id']])->update($order_update); //更新订单状态
         if($status == true){
             db::name('goods')->where(['id' => $goods['id']])->setInc('sales', $order['buy_num']); //更新商品销量
-            db::name('goods')->where(['id' => $goods['id']])->setDec('stock', $order['buy_num']); //更新商品库存
+            $decStock = $order['buy_num'] > $goods['stock'] ? $goods['stock'] : $order['buy_num'];
+            db::name('goods')->where(['id' => $goods['id']])->setDec('stock', $decStock); //更新商品库存
             db::name('goods')->where(['id' => $goods['id']])->setInc('sales_money', $order['money']); //更新商品销售额
         }
 
@@ -343,10 +344,12 @@ class Hm{
                 ->where(['u.id' => session::get('user')['id']])
                 ->field($field)
                 ->find();
-            $user['login'] = true;
             if(!$user){
+                $user['login'] = false;
                 session::delete('user');
                 return self::getUser();
+            }else{
+                $user['login'] = true;
             }
         }else{ //游客
             $user = ['agent' => 0, 'login' => false];

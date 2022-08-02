@@ -29,40 +29,56 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'order_no', title: __('订单号')},
                         {
                             field: 'user.nickname',
-                            title: '用户 / 下单邮箱',
+                            title: '用户 / 验证信息',
                             formatter:function(value,row,index){
-                                var user_account = '游客';
-                                var buy_account = '未填写';
-                                if(row.email){
-                                    // return row.account;
-                                    if(row.email.length > 30){
-                                        buy_account = row.email.toString().substr(0, 30) + '...';
+                                var user = '';
+                                var email = '';
+                                var password = '';
+                                if(row.user.nickname){
+                                    if(row.user.nickname.length > 30){
+                                        user = row.user.nickname.toString().substr(0, 30) + '...';
                                     }else{
-                                        buy_account = row.email;
+                                        user = row.user.nickname;
                                     }
-
-                                    if(row.user.nickname){
-                                        if(row.user.nickname.length > 30){
-                                            user_account = row.user.nickname.toString().substr(0, 30) + '...';
-                                        }else{
-                                            user_account = row.user.nickname;
-                                        }
-                                    }else{
-                                        user_account = '游客';
-                                    }
-
                                 }else{
-                                    if(row.user.nickname){
-                                        if(row.user.nickname.length > 30){
-                                            user_account = row.user.nickname.toString().substr(0, 30) + '...';
-                                        }else{
-                                            user_account = row.user.nickname;
-                                        }
-                                    }else{
-                                        user_account = '游客';
-                                    }
+                                    user = '游客';
                                 }
-                                return `<div style="padding: 6px 0; height: 100%;">${user_account}<hr style="margin: 6px 0;">${buy_account}</div>`;
+
+                                if(row.email){
+                                    if(row.email.length > 30){
+                                        email = row.email.toString().substr(0, 30) + '...';
+                                    }else{
+                                        email = row.email;
+                                    }
+                                }else{
+                                    email = '';
+                                }
+
+                                if(row.password){
+                                    if(row.password.length > 30){
+                                        password = row.password.toString().substr(0, 30) + '...';
+                                    }else{
+                                        password = row.password;
+                                    }
+                                }else{
+                                    password = '';
+                                }
+
+
+                                if(email != '' || password != ''){
+                                    var str = `<div style="padding: 6px 0; height: 100%;">${user}`;
+                                    str += `<hr style="margin: 6px 0;">`;
+                                }else{
+                                    var str = `<div>${user}`;
+                                }
+                                if(email != '' && password != ''){
+                                    str += `${email}/${password}</div>`;
+                                }else{
+                                    if(email != '') str += `${email}`;
+                                    if(password != '') str += `${password}`;
+                                }
+                                str += `</div>`;
+                                return str;
                             }
                         },
                         {field: 'goods.name', title: __('Goods_name'), operate: 'LIKE'},
@@ -170,9 +186,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     url: 'order/sendgoods',
                                     text:'发货',
                                     hidden:function(row){
-                                        if(row.goods.dock_id > 0 || row.status != 'wait-send'){
-                                            return true;
-                                        }
+                                        if(row.goods.dock_id > 0 || row.status != 'wait-send') return true;
                                     }
 
                                 },

@@ -67,7 +67,9 @@ class Goods extends Backend {
         return json(['code' => 200, 'msg' => '操作成功']);
     }
 
-
+    /**
+     * 配置库存显示
+     */
     public function stockshow(){
         if ($this->request->isPost()) {
             $params = $this->request->post("row/a");
@@ -119,10 +121,13 @@ class Goods extends Backend {
         $params = $this->request->param();
         if($this->request->isPost()) {
             $params = $params['row'];
+//            print_r($params);die;
             if(empty($params['category_id'])) return $this->error('请选择商品分类');
             if(empty($params['name'])) return $this->error('商品名称不能为空');
             if($params['goods_type'] == 'dock' && empty($params['remote_id'])) return $this->error('请选择对接商品');
-            $params['price'] = empty($params['price']) || $params['price'] < 0 ? 0 : floor($params['price'] * 100) / 100;
+//            print_r($params);die;
+            $params['price'] = empty($params['price']) || $params['price'] < 0 ? 0 : number_format($params['price'], 2);
+//            print_r($params);die;
             $update = [
                 "inputs" => $params["inputs"],
                 'dock_id' => $params['dock_id'],
@@ -231,7 +236,7 @@ class Goods extends Backend {
             if(empty($params['category_id'])) return $this->error('请选择商品分类');
             if(empty($params['name'])) return $this->error('商品名称不能为空');
             if($params['goods_type'] == 'dock' && empty($params['remote_id'])) return $this->error('请选择对接商品');
-            $params['price'] = empty($params['price']) || $params['price'] < 0 ? 0 : floor($params['price'] * 100) / 100;
+            $params['price'] = empty($params['price']) || $params['price'] < 0 ? 0 : number_format($params['price'], 2);
             $insert = [
                 "inputs" => $params["inputs"],
                 'dock_id' => $params['dock_id'],

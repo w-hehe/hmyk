@@ -59,7 +59,11 @@ class Attach extends Backend {
             Db::startTrans();
             try {
                 foreach ($list as $k => $v) {
-                    $res = db::name('goods')->where(['attach_id' => $v->id])->find();
+                    $where = [
+                        'attach_id' => $v->id,
+                        'deletetime' => null
+                    ];
+                    $res = db::name('goods')->where($where)->find();
                     if($res){
                         throw new Exception("附加选项被占用，无法删除");
                     }

@@ -217,13 +217,7 @@ class User extends Backend {
         if (!$this->request->isPost()) {
             $this->error(__("Invalid parameters"));
         }
-        $ids = $ids ? $ids : $this->request->post("ids");
-        $row = $this->model->get($ids);
-        $this->modelValidate = true;
-        if (!$row) {
-            $this->error(__('No Results were found'));
-        }
-        Auth::instance()->delete($row['id']);
+        db::name('user')->whereIn('id', explode(',', $ids))->delete();
         $this->success();
     }
 

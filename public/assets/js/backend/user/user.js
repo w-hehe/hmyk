@@ -25,9 +25,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {checkbox: true},
                         {field: 'id', title: __('Id'), sortable: true},
-                        {field: 'nickname', title: __('Nickname'), operate: 'LIKE'},
+                        {field: 'email', title: '登录邮箱', operate: 'LIKE'},
                         {field: 'mobile', title: __('Mobile'), operate: 'LIKE'},
-                        {field: 'email', title: __('Email'), operate: 'LIKE'},
                         {field: 'agent', title: __('代理等级')},
                         {field: 'money', title: __('余额'), operate: 'BETWEEN', sortable: true},
                         // {field: 'score', title: __('Score'), operate: 'BETWEEN', sortable: true},

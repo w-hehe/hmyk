@@ -7,9 +7,7 @@ use app\common\controller\Hm;
 use think\Controller;
 use think\Db;
 use think\Cache;
-use app\common\controller\dock\Kky;
-use app\common\controller\dock\Dock;
-use app\common\controller\dock\Yile;
+
 use app\common\controller\Email;
 use think\Session;
 
@@ -29,6 +27,7 @@ class Notify extends Controller {
         $this->site = \think\Config::get('site');
         $options = db::name('options')->select();
         foreach($options as $val) $this->options[$val['option_name']] = $val['option_content'];
+        $this->options['buy_data'] = json_decode($this->options['buy_data'], true);
         $this->timestamp = time();
         $active_plugins = Db::name('options')->where(['option_name' => 'active_plugin'])->value('option_content');
         $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
@@ -43,11 +42,8 @@ class Notify extends Controller {
 
     public function test(){
 
-
-
-        // $order = db::name('order')->where(['id' => 1])->find();
-        // $goods = db::name('goods')->where(['id' => $order['goods_id']])->find();
-        // doAction('order_notify', $order, $goods);
+//         $order = db::name('order')->where(['id' => 29])->find();
+//         $goods = db::name('goods')->where(['id' => $order['goods_id']])->find();
     }
 
 
@@ -134,7 +130,6 @@ class Notify extends Controller {
      * 回调通知
      */
     public function index(){
-
         Db::startTrans();
         try{
 
@@ -146,7 +141,6 @@ class Notify extends Controller {
 
             if($check_sign){ //验签成功
                 $order = db::name('order')->where(['order_no' => $check_sign])->lock(true)->find();
-                // var_dump($check_sign);die;
                 if(!$order){
                     Db::rollback();
                     die('fail');
@@ -163,16 +157,43 @@ class Notify extends Controller {
                 ];
                 $order['pay_time'] = $timestamp;
                 db::name('order')->where(['id' => $order['id']])->update($update);
-                Hm::handleOrder($goods, $order, $this->options);
+                $result = Hm::handleOrder($goods, $order, $this->options);
                 Db::commit();
 
-                try{
-                    if($this->site['user_order_email'] == 1) Email::sendOrderUser($goods, $order['id'], $this->site);
-                    if($this->site['admin_order_email'] == 1) Email::sendOrderBoss($goods, $order['id'], $this->site);
-                }catch(\Exception $e){}
+                $n_order_data = [
+                    'goods_name' => $goods['name'],
+                    'out_trade_no' => $order['order_no'],
+                    'buy_num' => $order['buy_num'],
+                    'goods_price' => $order['goods_money'],
+                    'order_money' => $order['money'],
+                    'cdk' => $result['data']['cdk'],
+                    'create_time' => $order['create_time'],
+                    'pay_type' => $order['pay_type'],
+                    'pay_time' => $order['pay_time']
+                ];
+
+                $email = [];
+                if(!empty($this->options['buy_data'][0]['email']) && !empty($order['email'])) $email[] = $order['email'];
+                if(!empty($this->options['buy_data'][1]['email']) && !empty($order['password'])) $email[] = $order['password'];
+
+                if(!empty($this->options['n_order_ad'])){
+                    $obj_path = "notice\\" . lcfirst($this->options['n_order_ad']) . "\\{$this->options['n_order_ad']}";
+                    $obj = new $obj_path;
+                    $obj->nOrderAd($n_order_data);
+                }
+                if(!empty($this->options['n_order_us']) && !empty($email)){
+                    $obj_path = "notice\\" . lcfirst($this->options['n_order_us']) . "\\{$this->options['n_order_us']}";
+                    $obj = new $obj_path;
+                    foreach($email as $val){
+                        $n_order_data['email'] = $val;
+                        $obj->nOrderUs($n_order_data);
+                    }
+                }
+
                 try{
                     doAction('order_notify', $order, $goods);
                 }catch(\Exception $e){}
+
 
                 echo 'success'; die;
 

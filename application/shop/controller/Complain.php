@@ -2,6 +2,7 @@
 
 namespace app\shop\controller;
 
+use fast\Http;
 use fast\Random;
 use think\Db;
 use think\Session;
@@ -69,7 +70,14 @@ class Complain extends Base {
                 'details' => $post['details'],
                 'create_time' => time(),
             ];
+            if(!empty($this->options['n_complain_ad'])){
+                $obj_path = "notice\\" . lcfirst($this->options['n_complain_ad']) . "\\{$this->options['n_complain_ad']}";
+                $obj = new $obj_path;
+                $obj->nComplainAd($insert);
+            }
+
             db::name('complain')->insert($insert);
+
             return json(['code' => 200, 'msg' => '投诉已提交', 'data' => $insert['complain_id']]);
         }
 
@@ -89,7 +97,7 @@ class Complain extends Base {
         $this->assign([
             'complain' => $complain,
         ]);
-        
+
         return view();
     }
 
