@@ -43,11 +43,13 @@
             <div class="panel-heading">通知配置</div>
             <div class="panel-body">
 
+                <div class="alert alert-success-light" style="margin-bottom: 0; padding: 5px 10px;">
+                    站长是ID为1的管理员
+                </div>
+
                 <form id="update-form" role="form" data-toggle="validator" method="POST" action="{:url('general.notice/_edit')}">
                     {:token()}
                     <div class="box-body box-profile">
-
-
                         <div class="form-group">
                             <label for="c-complain" class="control-label">订单投诉_站长</label>
                             <select id="c-complain" class="form-control selectpicker" name="row[n_complain_ad]">

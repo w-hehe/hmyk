@@ -1,0 +1,44 @@
+<style>
+    .panel{
+        margin-bottom: 0;
+    }
+    .input-notice {
+        color: #4e73df;
+        margin-top: 5px;
+        display: block;
+    }
+</style>
+<div class="panel panel-default panel-intro">
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <form id="index-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">首页弹窗内容</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <textarea id="c-index_eject" class="form-control editor" rows="5" name="row[index_eject]" cols="50">{$options.index_eject}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">商品页弹窗内容</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <textarea id="c-goods_eject" class="form-control editor" rows="5" name="row[goods_eject]" cols="50">{$options.goods_eject}</textarea>
+                                <span class="input-notice">如需单独配置商品页弹窗，请在商品编辑中单独设置</span>
+                            </div>
+                        </div>
+                        <div class="form-group layer-footer">
+                            <label class="control-label col-xs-12 col-sm-2"></label>
+                            <div class="col-xs-12 col-sm-8">
+                                <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+                                <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

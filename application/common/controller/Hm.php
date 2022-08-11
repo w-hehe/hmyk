@@ -199,6 +199,14 @@ class Hm{
 
         if(empty($goods['cover'])) $goods['cover'] = '/assets/img/none.jpg';
 
+//        测试
+//        if(empty($goods['cover'])){
+//            $goods['cover'] = 'http://127.0.0.1:12345/assets/img/none.jpg';
+//        }else{
+//            $goods['cover'] = 'http://127.0.0.1:12345' . $goods['cover'];
+//        }
+//      测试
+
         foreach($goods['grade_price'] as $val){
             if($user['agent'] == $val['grade_id']){
                 $goods['real_price'] = $val['price'];

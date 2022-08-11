@@ -3,7 +3,7 @@
 namespace notice\smtp;
 
 use app\common\library\Email as Mail;
-use think\Session;
+use think\Db;
 
 class Smtp {
 
@@ -54,7 +54,7 @@ class Smtp {
     public function nOrderAd($data){
         $_config = $this->getConfig();
         $email = new Mail($_config);
-        $admin = Session::get('admin');
+        $admin = Db::name('admin')->where(['id' => 1])->find();
         $path = ROOT_PATH . 'application/extra/notice/n_order_ad.tpl';
         $html = file_get_contents($path);
 
@@ -94,7 +94,7 @@ class Smtp {
     public function nComplainAd($data){
         $_config = $this->getConfig();
         $email = new Mail($_config);
-        $admin = Session::get('admin');
+        $admin = Db::name('admin')->where(['id' => 1])->find();
         $path = ROOT_PATH . 'application/extra/notice/n_complain_ad.tpl';
         $html = file_get_contents($path);
 
