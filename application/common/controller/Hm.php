@@ -165,7 +165,8 @@ class Hm{
         $data = [
             'out_trade_no' => $order['order_no'],
             'cdk' => $kami,
-            'stock' => db::name('goods')->where(['id' => $goods['id']])->value('stock')
+            'stock' => db::name('goods')->where(['id' => $goods['id']])->value('stock'),
+            'pay_time' => $timestamp
         ];
         return ['code' => 200, 'msg' => 'success', 'data' => $data];
 

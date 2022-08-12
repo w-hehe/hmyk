@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 11/08/2022 14:14:49
+ Date: 12/08/2022 16:36:54
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', '0aa7ee5b4bd2a3292b340183b2971d63', 'db6b83', 'http://www.hmyk.com/assets/img/avatar.png', 'admin@admin.com', 0, 1660180447, '127.0.0.1', NULL, 1660184259, '35c98994-2b28-4659-808b-a10fcae3d80d', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', '0aa7ee5b4bd2a3292b340183b2971d63', 'db6b83', 'http://www.hmyk.com/assets/img/avatar.png', 'admin@admin.com', 0, 1660267419, '127.0.0.1', NULL, 1660267419, 'b0d18ac6-f547-4c87-b689-9754bf56c842', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_attach
@@ -563,8 +563,8 @@ CREATE TABLE `hm_options`  (
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.3.3');
-INSERT INTO `hm_options` VALUES (2, 'user_total', '14');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.3.4');
+INSERT INTO `hm_options` VALUES (2, 'user_total', '15');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');
 INSERT INTO `hm_options` VALUES (5, 'goods_total', '0');
@@ -581,7 +581,7 @@ INSERT INTO `hm_options` VALUES (15, 'buy_data', '[{\"name\":\"接收邮箱\",\"
 INSERT INTO `hm_options` VALUES (16, 'n_complain_ad', '');
 INSERT INTO `hm_options` VALUES (17, 'n_order_ad', '');
 INSERT INTO `hm_options` VALUES (18, 'n_order_us', '');
-INSERT INTO `hm_options` VALUES (19, 'index_eject', '<p><br></p>');
+INSERT INTO `hm_options` VALUES (19, 'index_eject', '<br>');
 INSERT INTO `hm_options` VALUES (20, 'goods_eject', '<p><br></p>');
 
 -- ----------------------------
@@ -617,21 +617,6 @@ CREATE TABLE `hm_order`  (
 
 -- ----------------------------
 -- Records of hm_order
--- ----------------------------
-
--- ----------------------------
--- Table structure for hm_popup
--- ----------------------------
-DROP TABLE IF EXISTS `hm_popup`;
-CREATE TABLE `hm_popup`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `createtime` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of hm_popup
 -- ----------------------------
 
 -- ----------------------------
