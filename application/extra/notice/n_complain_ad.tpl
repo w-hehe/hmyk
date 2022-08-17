@@ -1,4 +1,3 @@
-
 <p>网站域名：<a href="{$host}" target="_blank">{$host}</a></p>
 
 <p>投诉人：<span style="color: rgb(156, 0, 255);">{$name}</span></p>

@@ -1,3 +1,4 @@
+
 <p>网站域名：<a href="{$host}" target="_blank">{$host}</a></p>
 
 <p>订单编号：{$out_trade_no}</p>
@@ -16,4 +17,4 @@
 
 <p>付款方式：<span style="color: rgb(8, 82, 148);">{$pay_type}</span></p>
 
-<p>付款时间：{$pay_time}</p><p>剩余库存：{$stock}</p>
+<p>付款时间：{$pay_time}</p>

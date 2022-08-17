@@ -169,7 +169,9 @@ class Notify extends Controller {
                     'cdk' => $result['data']['cdk'],
                     'create_time' => $order['create_time'],
                     'pay_type' => $order['pay_type'],
-                    'pay_time' => $order['pay_time']
+                    'pay_time' => $order['pay_time'],
+                    'details' => $goods['details'],
+                    'stock' => $result['data']['stock']
                 ];
 
                 $email = [];

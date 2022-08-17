@@ -95,36 +95,30 @@
 
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#one" data-toggle="tab"><i class="fa fa-twitch"></i> 通知程序</a></li>
-<!--                    <li><a href="#two" data-toggle="tab"><i class="fa fa-clone"></i> 信息模板</a></li>-->
+                    <li class="active"><a href="#oneTable" data-toggle="tab"><i class="fa fa-twitch"></i> 通知程序</a></li>
+                    <li><a href="#twoTable" data-toggle="tab"><i class="fa fa-clone"></i> 信息模板</a></a></li>
                 </ul>
             </div>
             <div class="panel-body">
                 <div id="myTabContent" class="tab-content">
-                    <div class="tab-pane fade active in" id="one">
+                    <div class="tab-pane fade active in" id="oneTable">
                         <div class="widget-body no-padding">
-                            <div id="toolbar" class="toolbar">
-                                <a href="javascript:;" class="btn btn-primary btn-refresh" title="{:__('Refresh')}" ><i class="fa fa-refresh"></i> 刷新</a>
-                            </div>
-                            <table id="table" class="table table-striped table-bordered table-hover table-nowrap"
-                                   data-operate-edit="{:$auth->check('general/notice/edit')}"
+                            <table id="table1" class="table table-striped table-bordered table-hover table-nowrap"
+                                   data-operate-edit="general/notice/edit"
                                    data-operate-del="false"
                                    width="100%">
                             </table>
                         </div>
                     </div>
-<!--                    <div class="tab-pane fade" id="two">-->
-<!--                        <div class="widget-body no-padding">-->
-<!--                            <div id="toolbar2" class="toolbar">-->
-<!--                                <a href="javascript:;" class="btn btn-primary btn-refresh" title="{:__('Refresh')}" ><i class="fa fa-refresh"></i> 刷新</a>-->
-<!--                            </div>-->
-<!--                            <table id="table2" class="table table-striped table-bordered table-hover table-nowrap"-->
-<!--                                   data-operate-edit="{:$auth->check('general/notice/edit')}"-->
-<!--                                   data-operate-del="false"-->
-<!--                                   width="100%">-->
-<!--                            </table>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="tab-pane fade" id="twoTable">
+                        <div class="widget-body no-padding">
+                            <table id="table2" class="table table-striped table-bordered table-hover table-nowrap"
+                                   data-operate-edit="false"
+                                   data-operate-del="false"
+                                   width="100%">
+                            </table>
+                        </div>
+                    </div>
 
                 </div>
             </div>

@@ -1,0 +1,43 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <div class="alert alert-success-light" style="margin-bottom: 0; padding: 5px 10px; margin: 0 10px;">
+            变量(注意写入模板时，变量要用大括号{}圈起来，否则会识别不到)：<br />
+            {if condition="$file == 'n_complain_ad'"}
+            网站域名：$host &nbsp;&nbsp;&nbsp;&nbsp;投诉人：$name<br />
+            联系QQ：$qq &nbsp;&nbsp;&nbsp;&nbsp;订单号：$out_trade_no<br />
+            投诉内容：$details &nbsp;&nbsp;&nbsp;&nbsp;投诉时间：$date<br />
+            {/if}
+            {if condition="$file == 'n_order_ad'"}
+            网站域名：$host &nbsp;&nbsp;&nbsp;&nbsp;订单号：$out_trade_no<br />
+            商品名称：$goods_name &nbsp;&nbsp;&nbsp;&nbsp;购买数量：$buy_num<br />
+            商品单价：$goods_price &nbsp;&nbsp;&nbsp;&nbsp;订单金额：$order_money<br />
+            发货内容：$cdk &nbsp;&nbsp;&nbsp;&nbsp;订单创建时间：$create_time<br />
+            付款方式：$pay_type &nbsp;&nbsp;&nbsp;&nbsp;支付时间：$pay_time<br />
+            商品描述：$details &nbsp;&nbsp;&nbsp;&nbsp;剩余库存：$stock<br />
+            {/if}
+            {if condition="$file == 'n_order_us'"}
+            网站域名：$host &nbsp;&nbsp;&nbsp;&nbsp;订单号：$out_trade_no<br />
+            商品名称：$goods_name &nbsp;&nbsp;&nbsp;&nbsp;购买数量：$buy_num<br />
+            商品单价：$goods_price &nbsp;&nbsp;&nbsp;&nbsp;订单金额：$order_money<br />
+            发货内容：$cdk &nbsp;&nbsp;&nbsp;&nbsp;订单创建时间：$create_time<br />
+            付款方式：$pay_type &nbsp;&nbsp;&nbsp;&nbsp;支付时间：$pay_time<br />
+            商品描述：$details &nbsp;&nbsp;&nbsp;&nbsp;剩余库存：$stock<br />
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+
+        <label class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-content" class="form-control editor" rows="5" name="content" cols="50">{$content|htmlentities}</textarea>
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

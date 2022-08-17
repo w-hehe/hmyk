@@ -24,6 +24,8 @@ class Smtp2 {
         $html = str_replace('{$buy_num}', $data['buy_num'], $html);
         $html = str_replace('{$goods_price}', $data['goods_price'], $html);
         $html = str_replace('{$order_money}', $data['order_money'], $html);
+        $html = str_replace('{$details}', $data['details'], $html);
+        $html = str_replace('{$stock}', $data['stock'], $html);
         if(empty($data['cdk'])){
             $html = str_replace('{$cdk}', '未发卡', $html);
         }else{
@@ -64,6 +66,8 @@ class Smtp2 {
         $html = str_replace('{$buy_num}', $data['buy_num'], $html);
         $html = str_replace('{$goods_price}', $data['goods_price'], $html);
         $html = str_replace('{$order_money}', $data['order_money'], $html);
+        $html = str_replace('{$details}', $data['details'], $html);
+        $html = str_replace('{$stock}', $data['stock'], $html);
         if(empty($data['cdk'])){
             $html = str_replace('{$cdk}', '未发卡', $html);
         }else{

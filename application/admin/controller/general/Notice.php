@@ -69,6 +69,53 @@ class Notice extends Backend {
         $this->success();
     }
 
+    public function edit_template(){
+        $path = ROOT_PATH . 'application/extra/notice';
+        $file = $this->request->param('ids');
+
+        $file_path = $path . "/" . $file . ".tpl";
+
+        if($this->request->isPost()){
+            $content = $this->request->param('content');
+            $res = file_put_contents($file_path, $content);
+            if($res){
+                $this->success();
+            }else{
+                $this->error();
+            }
+        }
+
+        $content = file_get_contents($file_path);
+        $this->assign([
+            'content' => $content,
+            'file' => $file
+        ]);
+        return view();
+    }
+
+    public function template() {
+
+        $list = [
+            [
+                'name' => '订单投诉_站长',
+                'file' => 'n_complain_ad'
+            ],
+            [
+                'name' => '新订单_站长',
+                'file' => 'n_order_ad'
+            ],
+            [
+                'name' => '新订单_用户',
+                'file' => 'n_order_us'
+            ],
+        ];
+
+        $total = count($list);
+
+        $result = ['total' => $total, 'rows' => $list];
+        return json($result);
+    }
+
     public function index() {
         $path = ROOT_PATH . 'extend/notice';
         $dir = @dir($path);
