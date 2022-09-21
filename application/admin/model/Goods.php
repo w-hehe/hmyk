@@ -29,7 +29,7 @@ class Goods extends Model {
         return $this->hasMany('cdkey', 'goods_id', 'id');
     }
 
-    public function gradePrice() {
+    public function price() {
         return $this->hasMany('price', 'goods_id', 'id');
     }
 
@@ -37,6 +37,7 @@ class Goods extends Model {
 
 
     public function category() {
+//        return $this->hasOne('category', 'category_id');
         return $this->belongsTo('category', 'category_id', 'id', [], 'LEFT')->setEagerlyType(0);
     }
 

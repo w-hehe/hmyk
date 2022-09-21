@@ -7,6 +7,104 @@
     .ys-hidden{
         display: none;
     }
+    .sku-checkbox label{
+        padding-left: 0;
+    }
+    .sku-name{
+        color: #1688f1;
+        font-size: 15px;
+        margin-right: 20px;
+        font-weight: bold;
+    }
+
+    /*sku选择样式*/
+
+    .clear{
+        clear: both;
+    }
+    .delCusSkuVal,
+    .delCusSkuType {
+        font-size: 14px;
+        text-decoration: none;
+        color: #666;
+    }
+    /*表格样式*/
+    table.skuTable {
+        font-size:14px;
+        color:#333333;
+        border-width: 1px;
+        border-color: #ddd;
+        border-collapse: collapse;
+    }
+    table.skuTable th {
+        border-width: 1px;
+        padding: 10px 10px;
+        border-style: solid;
+        border-color: #ddd;
+        color:#666;
+        background-color: #ededed;
+    }
+    table.skuTable td {
+        border-width: 1px;
+        padding: 5px 10px;
+        border-style: solid;
+        border-color: #ddd;
+        background-color: #ffffff;
+        color:#777;
+        widows: auto;
+        text-align: center;
+        font-size: 12px;
+    }
+    table.skuTable td input{
+        width:100%;
+        font-size:14px;
+        padding:0;
+        margin:0;
+        color:#666;
+        border-color: #dfdfdf;
+        border-width: 1px;
+        padding: 0 0 0 5px;
+    }
+
+
+    /*按钮样式*/
+    .button{
+        padding: 4px 10px;
+        border: none;
+        background: #34495e;
+        color: white;
+        font-size: 16.5px;
+        text-decoration: none;
+        text-shadow: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        -webkit-transition: 0.25s;
+        -moz-transition: 0.25s;
+        -o-transition: 0.25s;
+        transition: 0.25s;
+        -webkit-backface-visibility: hidden;
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .cloneSku{
+        margin: 10px 0 0 40px;
+        background-color: #3498db;
+    }
+    button:focus {
+        outline: none;
+    }
+    /*其他样式*/
+    li em{
+        color: #f00;
+        margin-left: -8px;
+        width: 8px;
+        font-style: normal;
+        vertical-align: sub;
+    }
 
 </style>
 <form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
@@ -15,7 +113,7 @@
         <div class="panel-heading">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#one" data-toggle="tab" aria-expanded="true">基础信息</a></li>
-                <li class=""><a href="#price" data-toggle="tab" aria-expanded="false">价格设置</a></li>
+                <li class=""><a href="#sku" data-toggle="tab" aria-expanded="false">商品规格</a></li>
                 <li class=""><a href="#two" data-toggle="tab" aria-expanded="false">详细信息</a></li>
                 <li class=""><a href="#three" data-toggle="tab" aria-expanded="false">弹窗信息</a></li>
             </ul>
@@ -24,7 +122,12 @@
             <div id="myTabContent" class="tab-content">
 
                 <div class="tab-pane fade active in" id="one">
-                    <div class="ys-hidden">对接站ID<input id="dock_id" type="text" name="row[dock_id]" value="0" /><br>对接商品ID<input id="remote_id" type="text" name="row[remote_id]" value="0" /><br>对接商品数据<textarea id="dock-data" name="row[dock_data]"></textarea><br>对接站附加选项<textarea id="inputs" name="row[inputs]"></textarea></div>
+                    <div class="ys-hidden">
+                        对接站ID<input id="dock_id" type="text" name="row[dock_id]" value="0" /><br>
+                        对接商品ID<input id="remote_id" type="text" name="row[remote_id]" value="0" /><br>
+                        对接商品数据<textarea id="dock-data" name="row[dock_data]"></textarea><br>
+                        对接站附加选项<textarea id="inputs" name="row[inputs]"></textarea>
+                    </div>
 
                     <div class="form-group">
                         <label class="control-label col-xs-12 col-sm-2">分类</label>
@@ -124,38 +227,33 @@
 
 
                 </div>
-                <div class="tab-pane fade" id="price">
+                <div class="tab-pane fade" id="sku">
                     <div class="row">
                         <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-2">零售价</label>
+                            <label class="control-label col-xs-12 col-sm-2">商品规格</label>
                             <div class="col-xs-12 col-sm-8">
-                                <input id="c-price" class="form-control" step="0.01" name="row[price]" type="number" placeholder="">
+                                <textarea style="display: none;" id="speifition-data">{:json_encode($specification)}</textarea>
+                                <select id="c-specification_id" class="form-control selectpicker" multiple="multiple" name="row[specification_id]">
+                                    {foreach name="specification" item="vo"}
+                                    <option value="{$key}">{$vo.name}</option>
+                                    {/foreach}
+                                </select>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">规格设置</label>
+                            <div class="col-xs-12 col-sm-8" id="select-sku"></div>
+                        </div>
 
-                        </div>
                         <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-2">代理价格</label>
-                            <div class="col-xs-12 col-sm-8">
-                                <dl class="fieldlist" data-name="row[grade_price]" data-template="user_grade_tpl">
-                                    <dd>
-                                        <ins>等级</ins>
-                                        <ins>价格</ins>
-                                    </dd>
-                                    <dd>
-                                        <a href="javascript:;" class="btn btn-sm btn-success btn-append hide"><i class="fa fa-plus"></i> 追加</a>
-                                    </dd>
-                                    <textarea name="row[grade_price]" class="form-control hide" cols="30" rows="5">{$grade}</textarea>
-                                </dl>
-                            </div>
+                            <textarea style="display: none;" id="grade-data">{$grade}</textarea>
+                            <label class="control-label col-xs-12 col-sm-2">价格设置</label>
+                            <div class="col-xs-12 col-sm-8" id="sku-table"></div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-2">成本价</label>
-                            <div class="col-xs-12 col-sm-8">
-                                <input id="c-buy_price" value="" class="form-control" step="0.01" name="row[buy_price]" type="number" placeholder="成本价仅作为系统统计利润时需要">
-                            </div>
-                        </div>
+
                     </div>
                 </div>
+
                 <div class="tab-pane fade" id="two">
                     <div class="row">
                        <div class="col-xs-12">

@@ -58,7 +58,7 @@ class Goods extends Backend {
      */
     public function update_stock(){
         $params = $this->request->param();
-        include ROOT_PATH . '/public/content/dock/' . $params['docksite']['type'] . '/' . ucfirst($params['docksite']['type']) . '.php';
+        include ROOT_PATH . 'content/dock/' . $params['docksite']['type'] . '/' . ucfirst($params['docksite']['type']) . '.php';
         $objName = ucfirst($params['docksite']['type']) . 'Dock';
         $dockObj = new $objName();
         $result = $dockObj->goodsInfo(json_decode($params['docksite']['info'], true), $params['remote_id']);
@@ -117,79 +117,166 @@ class Goods extends Backend {
      * 编辑商品
      */
     public function edit($ids = null) {
-        $row = $this->model->get($ids);
+        $row = $this->model->with(['price'])->where(['id' => $ids])->find()->toArray();
         $params = $this->request->param();
+        $specification = db::name('specification')->select();
         if($this->request->isPost()) {
-            $params = $params['row'];
-//            print_r($params);die;
-            if(empty($params['category_id'])) return $this->error('请选择商品分类');
-            if(empty($params['name'])) return $this->error('商品名称不能为空');
-            if($params['goods_type'] == 'dock' && empty($params['remote_id'])) return $this->error('请选择对接商品');
-//            print_r($params);die;
-            $params['price'] = empty($params['price']) || $params['price'] < 0 ? 0 : $params['price'];
-//            print_r($params);die;
-            $update = [
-                "inputs" => $params["inputs"],
-                'dock_id' => $params['dock_id'],
-                'dock_data' => $params['dock_data'],
-                'remote_id' => $params['remote_id'],
-                'buy_default' => $params['buy_default'],
-                'category_id' => $params['category_id'], //商品分类ID
-                'attach_id' => $params['attach_id'], //附加选项ID
-                'name' => $params['name'], //商品名称
-                'price' => $params['price'], //商品售卖价格
-                'buy_price' => $params['buy_price'], //成本价格
-                'sales' => empty($params['sales']) ? 0 : $params['sales'], //销量
-                'images' => empty($params['images']) ? '' : $params['images'], //商品图片
-                'details' => $params['details'], //商品说明,
-                'eject' => $params['eject'], //商品弹窗内容
-                'goods_type' => $params['goods_type'], //商品类型
-                'sort' => empty($params['sort']) ? 0 : $params['sort'], //排序字段
-                'buy_msg' => $params['buy_msg'], //购买后的提示内容
-                'quota' => empty($params['quota']) ? 0 : $params['quota'], //单IP单日限购数量
-            ];
-            if(!empty($params['stock'])) $update['stock'] = $params['stock']; //商品库存
-
-            if($row['goods_type'] == 'dock' && $params['goods_type'] != 'dock'){
-                $update['remote_id'] = 0;
-                $update['inputs'] = '';
-                $update['dock_id'] = 0;
-                if($params['goods_type'] != 'manual') $update['stock'] = 0;
-            }
-
-
-            db::name('goods')->where(['id' => $ids])->update($update); //修改商品信息
-            //处理代理的购买价格
-            $grade_price = $params['grade_price'];
-            $grade_price = json_decode($grade_price, true);
-            foreach($grade_price as $val){
-                $where = [
-                    'goods_id' => $ids,
-                    'grade_id' => $val['grade_id']
-                ];
-                if(!isset($val['price']) || $val['price'] == ""){
-                    $res = db::name('price')->where($where)->find();
-                    if($res){
-                        db::name('price')->where(['id' => $res['id']])->delete();
-                    }
-
-                }else{
-                    $res = db::name('price')->where($where)->find();
-                    if($res){
-                        $price_update = [
-                            'price' => $val['price'],
-                            'update_time' => $this->timestamp
-                        ];
-                        db::name('price')->where(['id' => $res['id']])->update($price_update);
-                    }else{
-                        $price_insert = [
-                            'goods_id' => $ids,
-                            'grade_id' => $val['grade_id'],
-                            'price' => $val['price']
-                        ];
-                        db::name('price')->insert($price_insert);
+            db::startTrans();
+            try {
+                $sku = $params['sku'];
+                $sku_type = empty($params['sku_value']) && empty($row['sku']) ? 'one' : 'many';
+                if($sku_type == 'many' && empty($row['sku'])){
+                    $sku_value = [];
+                    foreach($params['sku_value'] as $key => $val){
+                        foreach($val as $v){
+                            if(empty($v)) continue;
+                            $v_arr = explode(',', $v);
+                            $sku_value[$key]['value'][] = [
+                                'name' => $v_arr[0],
+                                'id' => $v_arr[1]
+                            ];
+                        }
+                        if(empty($sku_value[$key]['value'])) continue;
+                        $sku_value[$key]['name'] = $key;
                     }
                 }
+                $params = $params['row'];
+                if(empty($params['category_id'])) throw new \Exception("请选择商品分类");
+                $params['name'] = empty($params['name']) ? '未命名商品' : $params['name'];
+                if($params['goods_type'] == 'dock' && empty($params['remote_id'])) throw new \Exception("请选择对接商品");;;
+                $params['price'] = empty($params['price']) || $params['price'] < 0 ? 0 : $params['price'];
+                $update = [
+                    "inputs" => $params["inputs"],
+                    'dock_id' => $params['dock_id'],
+                    'dock_data' => $params['dock_data'],
+                    'remote_id' => $params['remote_id'],
+                    'buy_default' => $params['buy_default'],
+                    'category_id' => $params['category_id'], //商品分类ID
+                    'attach_id' => $params['attach_id'], //附加选项ID
+                    'name' => $params['name'], //商品名称
+                    'buy_price' => empty($params['buy_price']) ? 0 : $params['buy_price'], //成本价格
+                    'sales' => empty($params['sales']) ? 0 : $params['sales'], //销量
+                    'images' => empty($params['images']) ? '' : $params['images'], //商品图片
+                    'details' => $params['details'], //商品说明,
+                    'eject' => $params['eject'], //商品弹窗内容
+                    'goods_type' => $params['goods_type'], //商品类型
+                    'sort' => empty($params['sort']) ? 0 : $params['sort'], //排序字段
+                    'buy_msg' => $params['buy_msg'], //购买后的提示内容
+                    'quota' => empty($params['quota']) ? 0 : $params['quota'], //单IP单日限购数量
+                ];
+                if(isset($sku_value)) $update['sku'] = json_encode($sku_value);
+                if(!empty($params['stock'])) $update['stock'] = $params['stock']; //商品库存
+
+
+                if($row['goods_type'] == 'dock' && $params['goods_type'] != 'dock'){
+                    $update['remote_id'] = 0;
+                    $update['inputs'] = '';
+                    $update['dock_id'] = 0;
+                    if($params['goods_type'] != 'manual') $update['stock'] = 0;
+                }
+                db::name('goods')->where(['id' => $ids])->update($update); //修改商品信息
+
+//                print_r($specification);die;
+                //处理代理的购买价格
+                $price_insert_sku = [];
+                foreach($sku['price'] as $key => $val){ //规格列表
+                    $price_insert_sku[$key]['sku_ids'] = $key;
+                    $price_insert_sku[$key]['sku'] = '';
+                    $sku_ids = explode(',', $key);
+                    foreach($sku_ids as $k => $v){
+                        $sku_id = explode('-', $v);
+                        foreach($specification as $sk => $sv){
+                            if($sku_id[0] == $sv['id']){
+                                $sv_value = json_decode($sv['value'], true);
+                                foreach($sv_value as $vk => $vv){
+                                    if($sku_id[1] == $vk){
+                                        $vk_value = explode('|', $vv['value']);
+                                        foreach($vk_value as $vk_k => $vk_v){
+                                            if($sku_id[2] == $vk_k){
+                                                $price_insert_sku[$key]['sku'] .= $vk_v . ',';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $price_insert_sku[$key]['sku'] = rtrim($price_insert_sku[$key]['sku'], ',');
+                }
+                $price_insert = [];
+                $i = 0;
+                foreach($sku['price'] as $key => $val){
+                    if($sku_type == 'many'){
+                        foreach($val as $k => $v){
+                            if($k != 'price' && $v === "") continue;
+                            $price_insert[$i] = $price_insert_sku[$key];
+                            $price_insert[$i]['goods_id'] = $ids;
+                            if($k == 'price'){
+                                $price_insert[$i]['grade_id'] = 0;
+                            }else{
+                                $k_arr = explode('_', $k);
+                                $price_insert[$i]['grade_id'] = $k_arr[1];
+                            }
+                            $price_insert[$i]['price'] = empty($v) ? 0 : $v;
+                            $i++;
+                        }
+                    }else{
+
+                        if($key != 'price' && $val == "") continue;
+                        $price_insert[$i]['price'] = $val;
+                        $price_insert[$i]['goods_id'] = $ids;
+                        if($key == 'price'){
+                            $price_insert[$i]['grade_id'] = 0;
+                        }else{
+                            $key_arr = explode('_', $key);
+                            $price_insert[$i]['grade_id'] = $key_arr[1];
+                        }
+                        $i++;
+                    }
+
+                }
+
+                if($sku_type == 'many') {
+                    db::name('price')->where([
+                        'goods_id' => $ids,
+                    ])->whereNull('sku_ids')->delete();
+                }else{
+                    db::name('price')->where([
+                        'goods_id' => $ids,
+                    ])->whereNotNull('sku_ids')->delete();
+                }
+                foreach ($price_insert as $val) {
+                    $where = [
+                        'goods_id' => $ids,
+                        'grade_id' => $val['grade_id'],
+                    ];
+                    if($sku_type == 'many') $where['sku_ids'] = $val['sku_ids'];
+                    if (!isset($val['price']) || $val['price'] === "") {
+                        $res = db::name('price')->where($where)->find();
+                        if ($res) db::name('price')->where(['id' => $res['id']])->delete();
+                    } else {
+                        $res = db::name('price')->where($where)->find();
+                        if ($res) {
+                            $price_update = [
+                                'price' => $val['price'],
+                            ];
+                            db::name('price')->where(['id' => $res['id']])->update($price_update);
+                        } else {
+                            $insert = [
+                                'goods_id' => $ids,
+                                'grade_id' => $val['grade_id'],
+                                'price' => $val['price'],
+                                'sku_ids' => $val['sku_ids'],
+                                'sku' => $val['sku']
+                            ];
+                            db::name('price')->insert($insert);
+                        }
+                    }
+                }
+                db::commit();
+            }catch (\Exception $e){
+                db::rollback();
+                $this->error($e->getMessage(). '-' . $e->getLine());
             }
             $this->success();
         }
@@ -204,7 +291,7 @@ class Goods extends Backend {
             ];
             foreach($grade_price as $v){
                 if($val['id'] == $v['grade_id']){
-                    $grade[$key]['price'] = $v['price'];
+//                    $grade[$key]['price'] = $v['price'];
                 }
             }
         }
@@ -213,17 +300,32 @@ class Goods extends Backend {
         $dock = db::name('dock')->select();
         $increase = db::name('increase')->select();
 
+        $sku_type = empty($row['sku']) ? 'one' : 'many';
+
+        $price = [];
+        if($sku_type == 'many'){
+            foreach($row['price'] as $val){
+                $price[$val['sku_ids']][$val['grade_id']] = $val['price'];
+            }
+        }else{
+            foreach($row['price'] as $val){
+                $price[$val['grade_id']] = $val['price'];
+            }
+        }
+
+
+
         $this->assign([
             'row' => $row,
             'grade' => $grade,
             'dock' => $dock,
-            'increase' => $increase
+            'increase' => $increase,
+            'specification' => $specification,
+            'price' => json_encode($price)
         ]);
 
         return $this->view->fetch();
     }
-
-
 
 
     /**
@@ -231,46 +333,7 @@ class Goods extends Backend {
      */
     public function add() {
         $params = $this->request->param();
-        if($this->request->isPost()) {
-            $params = $params['row'];
-            if(empty($params['category_id'])) return $this->error('请选择商品分类');
-            if(empty($params['name'])) return $this->error('商品名称不能为空');
-            if($params['goods_type'] == 'dock' && empty($params['remote_id'])) return $this->error('请选择对接商品');
-            $params['price'] = empty($params['price']) || $params['price'] < 0 ? 0 : $params['price'];
-            $insert = [
-                "inputs" => $params["inputs"],
-                'dock_id' => $params['dock_id'],
-                'dock_data' => $params['dock_data'],
-                'remote_id' => $params['remote_id'],
-                'buy_default' => $params['buy_default'],
-                'category_id' => $params['category_id'], //商品分类ID
-                'attach_id' => $params['attach_id'], //附加选项ID
-                'name' => $params['name'], //商品名称
-                'price' => $params['price'], //商品售卖价格
-                'buy_price' => $params['buy_price'], //成本价格
-                'sales' => empty($params['sales']) ? 0 : $params['sales'], //销量
-                'images' => empty($params['images']) ? '' : $params['images'], //商品图片
-                'details' => $params['details'], //商品说明,
-                'eject' => $params['eject'], //商品弹窗内容
-                'goods_type' => $params['goods_type'], //商品类型
-                'sort' => empty($params['sort']) ? 0 : $params['sort'], //排序字段
-                'buy_msg' => $params['buy_msg'], //购买后的提示内容
-                'quota' => empty($params['quota']) ? 0 : $params['quota'], //单IP单日限购数量
-                'stock' => $params['stock'], //商品库存
-            ];
-            $grade_price = $params['grade_price'];
-            $grade_price = json_decode($grade_price, true);
-            $price_insert = [];
-            $goods_id = db::name('goods')->insertGetId($insert);
-            foreach($grade_price as $val){
-                if(isset($val['price']) && $val['price'] != ""){
-                    $val['goods_id'] = $goods_id;
-                    $price_insert[] = $val;
-                }
-            }
-            if(!empty($price_insert)) db::name('price')->insertAll($price_insert);
-            $this->success();
-        }
+
         $grade_result = db::name('user_grade')->order('id asc')->select();
         $grade = [];
         foreach($grade_result as $val){
@@ -279,15 +342,132 @@ class Goods extends Backend {
                 'name' => $val['name']
             ];
         }
+        $specification = db::name('specification')->select();
+
+        if($this->request->isPost()) {
+            db::startTrans();
+            try {
+                $sku = $params['sku'];
+                $sku_type = empty($params['sku_value']) ? 'one' : 'many';
+                if($sku_type == 'many'){
+                    $sku_value = [];
+                    foreach($params['sku_value'] as $key => $val){
+                        foreach($val as $v){
+                            if(empty($v)) continue;
+                            $v_arr = explode(',', $v);
+                            $sku_value[$key]['value'][] = [
+                                'name' => $v_arr[0],
+                                'id' => $v_arr[1]
+                            ];
+                        }
+                        if(empty($sku_value[$key]['value'])) continue;
+                        $sku_value[$key]['name'] = $key;
+                    }
+                }
+                $params = $params['row'];
+                if(empty($params['category_id'])) throw new \Exception('请选择商品分类');
+                $params['name'] = empty($params['name']) ? '未命名商品' : $params['name'];
+                if($params['goods_type'] == 'dock' && empty($params['remote_id'])) throw new \Exception('请选择对接商品');
+                $params['price'] = empty($params['price']) || $params['price'] < 0 ? 0 : $params['price'];
+                $insert = [
+                    'sku' => $sku_type == 'many' ? json_encode($sku_value) : '',
+                    "inputs" => $params["inputs"],
+                    'dock_id' => $params['dock_id'],
+                    'dock_data' => $params['dock_data'],
+                    'remote_id' => $params['remote_id'],
+                    'buy_default' => $params['buy_default'],
+                    'category_id' => $params['category_id'], //商品分类ID
+                    'attach_id' => $params['attach_id'], //附加选项ID
+                    'name' => $params['name'], //商品名称
+                    'sales' => empty($params['sales']) ? 0 : $params['sales'], //销量
+                    'images' => empty($params['images']) ? '' : $params['images'], //商品图片
+                    'details' => $params['details'], //商品说明,
+                    'eject' => $params['eject'], //商品弹窗内容
+                    'goods_type' => $params['goods_type'], //商品类型
+                    'sort' => empty($params['sort']) ? 0 : $params['sort'], //排序字段
+                    'buy_msg' => $params['buy_msg'], //购买后的提示内容
+                    'quota' => empty($params['quota']) ? 0 : $params['quota'], //单IP单日限购数量
+                ];
+
+                $goods_id = db::name('goods')->insertGetId($insert);
+
+                $price_insert_sku = [];
+                foreach($sku['price'] as $key => $val){ //规格列表
+                    $price_insert_sku[$key]['sku_ids'] = $key;
+                    $price_insert_sku[$key]['sku'] = '';
+                    $sku_ids = explode(',', $key);
+                    foreach($sku_ids as $k => $v){
+                        $sku_id = explode('-', $v);
+                        foreach($specification as $sk => $sv){
+                            if($sku_id[0] == $sv['id']){
+                                $sv_value = json_decode($sv['value'], true);
+                                foreach($sv_value as $vk => $vv){
+                                    if($sku_id[1] == $vk){
+                                        $vk_value = explode('|', $vv['value']);
+                                        foreach($vk_value as $vk_k => $vk_v){
+                                            if($sku_id[2] == $vk_k){
+                                                $price_insert_sku[$key]['sku'] .= $vk_v . ',';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $price_insert_sku[$key]['sku'] = rtrim($price_insert_sku[$key]['sku'], ',');
+                }
+                $price_insert = [];
+                $i = 0;
+                foreach($sku['price'] as $key => $val){
+                    if($sku_type == 'many'){
+                        foreach($val as $k => $v){
+                            if($k != 'price' && $v == "") continue;
+                            $price_insert[$i] = $price_insert_sku[$key];
+                            $price_insert[$i]['goods_id'] = $goods_id;
+                            if($k == 'price'){
+                                $price_insert[$i]['grade_id'] = 0;
+                            }else{
+                                $k_arr = explode('_', $k);
+                                $price_insert[$i]['grade_id'] = $k_arr[1];
+                            }
+                            $price_insert[$i]['price'] = empty($v) ? 0 : $v;
+                            $i++;
+                        }
+                    }else{
+                        if($key != 'price' && $val === "") continue;
+                        $price_insert[$i]['price'] = $val;
+                        $price_insert[$i]['goods_id'] = $goods_id;
+                        if($key == 'price'){
+                            $price_insert[$i]['grade_id'] = 0;
+                        }else{
+                            $key_arr = explode('_', $key);
+                            $price_insert[$i]['grade_id'] = $key_arr[1];
+                        }
+                        $price_insert[$i]['price'] = empty($val['price']) ? 0 : $val['price'];
+                        $i++;
+                    }
+
+                }
+                db::name('price')->insertAll($price_insert);
+                db::commit();
+            }catch (\Exception $e){
+                db::rollback();
+                $this->error($e->getMessage() . '-' . $e->getLine());
+            }
+            $this->success();
+        }
+
         $grade = json_encode($grade);
 
         $dock = db::name('dock')->select();
         $increase = db::name('increase')->select();
 
+
         $this->assign([
             'grade' => $grade,
             'dock' => $dock,
-            'increase' => $increase
+            'increase' => $increase,
+            'specification' => $specification
         ]);
         return $this->view->fetch();
     }
@@ -298,8 +478,8 @@ class Goods extends Backend {
     public function dockselectgoods(){
         $dock_id = $this->request->param('dock_id');
         $result = db::name('dock')->where(['id' => $dock_id])->find();
-        $view = ROOT_PATH . '/public/content/dock/' . $result['type'] . '/select_goods.html';
-        include ROOT_PATH . '/public/content/dock/' . $result['type'] . '/' . ucfirst($result['type']) . '.php';
+        $view = ROOT_PATH . 'content/dock/' . $result['type'] . '/select_goods.html';
+        include ROOT_PATH . 'content/dock/' . $result['type'] . '/' . ucfirst($result['type']) . '.php';
         $objName = ucfirst($result['type']) . 'Dock';
         $dockObj = new $objName();
 
@@ -333,15 +513,12 @@ class Goods extends Backend {
     public function dockGoodsList(){
         $dock_id = $this->request->param('dock');
         $result = db::name('dock')->where(['id' => $dock_id])->find();
-        include ROOT_PATH . '/public/content/dock/' . $result['type'] . '/' . ucfirst($result['type']) . '.php';
+        include ROOT_PATH . 'content/dock/' . $result['type'] . '/' . ucfirst($result['type']) . '.php';
         $objName = ucfirst($result['type']) . 'Dock';
         $dockObj = new $objName();
         $list = $dockObj->goodsList($result['info']);
         print_r($list);
     }
-
-
-
 
 
     /**
@@ -392,42 +569,59 @@ class Goods extends Backend {
         $id = $this->request->param('ids'); //商品id
         $goods_info = db::name('goods')->where(['id' => $id])->find();
         if ($this->request->isPost()) {
-            $params = $this->request->post("row/a");
+
+            $params = $this->request->post();
             $result = false;
             Db::startTrans();
+            
             try {
-                $kami = isset($params['kami']) ? $params['kami'] : null;
+
                 if($goods_info['goods_type'] == 'fixed'){
-                    if(isset($params['kami'])){
-                        $kami = trim($params['kami'], ' ');
+                    if(isset($params['row']['kami'])){
+                        $kami = trim($params['row']['kami'], ' ');
                         if(empty($kami)) throw new Exception("卡密不能为空");
                     }
-                }else{ //普通卡密
-                    $kami = explode("\r\n", $kami);
-                }
-                $timestamp = time();
-                if($goods_info['goods_type'] != 'fixed'){
-                    $kami = array_filter($kami); //去除空元素
+                }elseif($goods_info['goods_type'] == 'alone'){ //独立卡密
                     $insert = [];
-                    foreach($kami as $val){
-                        $insert[] = [
-                            'type' => $goods_info['goods_type'],
-                            'goods_id' => $id,
-                            'cdk' => $val,
-                            'createtime' => $timestamp
-                        ];
+                    if(empty($goods_info['sku'])){
+                        $stock = empty($params['row']['stock']) ? [] : $params['row']['stock'];
+                        $stock_arr = array_filter(explode("\r\n", $stock));
+                        foreach($stock_arr as $val){
+                            $insert[] = [
+                                'type' => $goods_info['goods_type'],
+                                'goods_id' => $id,
+                                'cdk' => $val,
+                                'createtime' => $this->timestamp,
+                            ];
+                        }
+                    }else{
+                        $stock = isset($params['stock']) ? $params['stock'] : [];
+                        foreach($stock as $key => $val){
+                            $item = array_filter(explode("\r\n", $val));
+                            foreach($item as $v){
+                                $insert[] = [
+                                    'type' => $goods_info['goods_type'],
+                                    'goods_id' => $id,
+                                    'cdk' => $v,
+                                    'createtime' => $this->timestamp,
+                                    'sku_ids' => $key
+                                ];
+                            }
+                        }
                     }
+
                     db::name('cdkey')->insertAll($insert);
                     $stock = db::name('cdkey')->where(['goods_id' => $id])->count();
-                }else{ //重复卡密
+                }
+                if($goods_info['goods_type'] == 'fixed'){ //固定卡密
                     $stock = 0;
-                    if(isset($params['kami'])){
+                    if(isset($params['row']['kami'])){
                         $insert = [
                             'type' => $goods_info['goods_type'],
                             'goods_id' => $id,
                             'cdk' => $kami,
-                            'createtime' => $timestamp,
-                            'num' => $params['stock']
+                            'createtime' => $this->timestamp,
+                            'num' => $params['row']['stock']
                         ];
                         $res = db::name('cdkey')->where(['goods_id' => $id])->find();
                         if($res){
@@ -435,12 +629,24 @@ class Goods extends Backend {
                         }else{
                             db::name('cdkey')->insert($insert);
                         }
-                        $stock = $params['stock'];
                     }
                 }
-
-                db::name('goods')->where(['id' => $id])->update(['stock' => $stock]);
-
+                if($goods_info['goods_type'] == 'manual'){
+                    
+                        $insert = [
+                            'type' => $goods_info['goods_type'],
+                            'goods_id' => $id,
+                            'cdk' => '',
+                            'createtime' => $this->timestamp,
+                            'num' => empty($params['row']['stock']) ? 0 : $params['row']['stock']
+                        ];
+                        $res = db::name('cdkey')->where(['goods_id' => $id])->find();
+                        if($res){
+                            db::name('cdkey')->where(['id' => $res['id']])->update($insert);
+                        }else{
+                            db::name('cdkey')->insert($insert);
+                        }
+                }
                 $result = true;
                 Db::commit();
             }catch (Exception $e) {
@@ -488,11 +694,6 @@ class Goods extends Backend {
      */
     public function ept(){
         $id = $this->request->param('id');
-        $update = [
-            'stock' => 0,
-            'updatetime' => time()
-        ];
-        db::name('goods')->where(['id' => $id])->update($update);
         db::name('cdkey')->where(['goods_id' => $id])->delete();
         return  json(['code' => 200, 'msg' => '操作成功']);
     }
@@ -617,14 +818,19 @@ class Goods extends Backend {
             if($shelf != 'all' && $shelf != null){
                 $where_shelf['shelf'] = $shelf;
             }
-            $list = $this->model->with(['category', 'docksite'])
+
+            $list = $this->model->with(['category', 'docksite', 'price'])
                 ->where($where)->where($where_shelf)
                 ->order($sort, $order)
                 ->paginate($limit)->toArray();
             $rows = $list['data'];
+
             foreach($rows as &$val){
-                if(empty($val['images'])) $val['images'] = "/assets/img/none.jpg";
+                $val['images'] = empty($val['images']) ? "/assets/img/none.jpg" : $val['images'];
+                $val['price'] = $val['price'][0]['price'];
+                $val['stock'] = db::name('cdkey')->where(['goods_id' => $val['id']])->sum('num');
             }
+
             $result = ["total" => $list['total'], "rows" => $rows];
             return json($result);
         }
@@ -634,17 +840,6 @@ class Goods extends Backend {
 
         return $this->view->fetch();
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     //上架商品

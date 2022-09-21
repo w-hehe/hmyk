@@ -34,7 +34,7 @@ class Notify extends Controller {
         if ($active_plugins && is_array($active_plugins)) {
             foreach($active_plugins as $plugin) {
                 if(true === checkPlugin($plugin) && substr($plugin, -13) != '_template.php' && substr($plugin, -8) != '_pay.php') {
-                    include_once(ROOT_PATH . 'public/content/plugin/' . $plugin);
+                    include_once(ROOT_PATH . 'content/plugin/' . $plugin);
                 }
             }
         }
@@ -90,7 +90,7 @@ class Notify extends Controller {
 
         }
 
-        $pluginPath = ROOT_PATH . 'public/content/plugin/' . $recharge['pay_plugin'] . '/' . $recharge['pay_plugin'] . '.php';
+        $pluginPath = ROOT_PATH . 'content/plugin/' . $recharge['pay_plugin'] . '/' . $recharge['pay_plugin'] . '.php';
         require_once $pluginPath;
 
         $check_sign = checkSign($content);
@@ -135,7 +135,7 @@ class Notify extends Controller {
 
             $timestamp = time(); //时间戳
             $pay_plugin = $this->request->param('pay_plugin');
-            $pluginPath = ROOT_PATH . 'public/content/plugin/' . $pay_plugin . '_pay/' . $pay_plugin . '_pay.php';
+            $pluginPath = ROOT_PATH . 'content/plugin/' . $pay_plugin . '_pay/' . $pay_plugin . '_pay.php';
             require_once $pluginPath;
             $check_sign = checkSign();
 

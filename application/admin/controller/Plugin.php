@@ -57,7 +57,7 @@ class Plugin extends Backend {
     public function setting(){
         $plugin = $this->request->param('plugin_name');
 
-        $plugin_path = ROOT_PATH . "public/content/plugin/{$plugin}/";
+        $plugin_path = ROOT_PATH . "content/plugin/{$plugin}/";
 
         if($this->request->isPost()){
             $post = $this->request->post("row/a");
@@ -210,9 +210,9 @@ class Plugin extends Backend {
 
 
         if($info['type'] == 'template'){
-            $toPath = ROOT_PATH . 'public/content/template';
+            $toPath = ROOT_PATH . 'content/template';
         }else{
-            $toPath = ROOT_PATH . 'public/content/plugin';
+            $toPath = ROOT_PATH . 'content/plugin';
         }
 
         //打开压缩包
@@ -295,13 +295,13 @@ class Plugin extends Backend {
                 }
             }
             db::name('options')->where(['option_name' => 'active_plugin'])->update(['option_content' => serialize($active_plugins)]);
-            if(file_exists(ROOT_PATH . 'public/content/plugin/' . $plugin . '/' . $plugin . '_del.php')){
-                include_once ROOT_PATH . 'public/content/plugin/' . $plugin . '/' . $plugin . '_del.php';
+            if(file_exists(ROOT_PATH . 'content/plugin/' . $plugin . '/' . $plugin . '_del.php')){
+                include_once ROOT_PATH . 'content/plugin/' . $plugin . '/' . $plugin . '_del.php';
             }
-            rmdirs(ROOT_PATH . 'public/content/plugin/' . $plugin);
+            rmdirs(ROOT_PATH . 'content/plugin/' . $plugin);
             if(strstr($plugin, '_template')){
                 $template = explode('_template', $plugin);
-                rmdirs(ROOT_PATH . 'public/content/template/' . $template[0]);
+                rmdirs(ROOT_PATH . 'content/template/' . $template[0]);
             }
 
             db::commit();
@@ -367,7 +367,7 @@ class Plugin extends Backend {
 
             $hmPlugins = [];
             $pluginFiles = [];
-            $pluginPath = ROOT_PATH . 'public/content/plugin';
+            $pluginPath = ROOT_PATH . 'content/plugin';
             //            echo $pluginPath;die;
             $pluginDir = @dir($pluginPath);
 
@@ -463,7 +463,7 @@ class Plugin extends Backend {
 
             $hmPlugins = [];
             $pluginFiles = [];
-            $pluginPath = ROOT_PATH . 'public/content/plugin';
+            $pluginPath = ROOT_PATH . 'content/plugin';
             $pluginDir = @dir($pluginPath);
 
             if ($pluginDir){
@@ -525,7 +525,7 @@ class Plugin extends Backend {
      * @return array
      */
     function getPluginData($pluginFile, $key){
-        $pluginPath = ROOT_PATH . 'public/content/plugin/';
+        $pluginPath = ROOT_PATH . 'content/plugin/';
         $pluginData = implode('', file($pluginPath . $pluginFile));
         preg_match("/Plugin Name:(.*)/i", $pluginData, $plugin_name);
         preg_match("/Version:(.*)/i", $pluginData, $version);

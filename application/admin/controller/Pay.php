@@ -67,7 +67,7 @@ class Pay extends Backend {
 
             $hmPlugins = [];
             $pluginFiles = [];
-            $pluginPath = ROOT_PATH . 'public/content/plugin';
+            $pluginPath = ROOT_PATH . 'content/plugin';
             $pluginDir = @dir($pluginPath);
 
             if ($pluginDir){
@@ -120,7 +120,7 @@ class Pay extends Backend {
      * @return array
      */
     function getPluginData($pluginFile, $key){
-        $pluginPath = ROOT_PATH . 'public/content/plugin/';
+        $pluginPath = ROOT_PATH . 'content/plugin/';
         $pluginData = implode('', file($pluginPath . $pluginFile));
         preg_match("/Plugin Name:(.*)/i", $pluginData, $plugin_name);
         preg_match("/Version:(.*)/i", $pluginData, $version);
@@ -165,7 +165,7 @@ class Pay extends Backend {
      */
     public function edit($ids = null) {
 
-        $plugin_path = ROOT_PATH . "public/content/plugin/{$ids}/";
+        $plugin_path = ROOT_PATH . "content/plugin/{$ids}/";
 
         if($this->request->isPost()){
             $post = $this->request->post("row/a");
@@ -205,7 +205,7 @@ class Pay extends Backend {
 	//启用支付
 	public function openStatus(){
 		$post = $this->request->param();
-        $plugin_path = ROOT_PATH . "public/content/plugin/{$post['id']}/";
+        $plugin_path = ROOT_PATH . "content/plugin/{$post['id']}/";
         $active_pay = db::name('options')->where(['option_name' => 'active_pay'])->value('option_content');
         $active_pay = empty($active_pay) ? [] : json_decode($active_pay, true);
         $info = file_get_contents("{$plugin_path}{$post['id']}_setting.json");

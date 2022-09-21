@@ -49,7 +49,7 @@ class Template extends Backend
 
             $hmTemplates = [];
             $templateFiles = [];
-            $templatePath = ROOT_PATH . 'public/content/template';
+            $templatePath = ROOT_PATH . '/content/template';
             $templateDir = @dir($templatePath);
 
             // print_r($templateDir);die;
@@ -93,7 +93,7 @@ class Template extends Backend
 
                 // $templateData = $this->getTemplateData($templateFile, $key + 1);
 
-                $templatePath = ROOT_PATH . 'public/content/template/' . $templateFile;
+                $templatePath = ROOT_PATH . '/content/template/' . $templateFile;
 
                 $templateData = include_once($templatePath);
 
@@ -132,17 +132,12 @@ class Template extends Backend
 
 
     public function setting(){
-//        include ROOT_PATH . 'public/content/template/default/setting.php';
 
         $folder = $this->request->param('ids');
 
         $active_templates = $this->options['active_template'];
 
-        if(!empty($active_templates)){
-            $active_templates = unserialize($active_templates);
-        }else{
-            $active_templates = [];
-        }
+        $active_templates = empty($active_templates) ? [] : unserialize($active_templates);
 
 
 
@@ -153,7 +148,7 @@ class Template extends Backend
             unset($post['apply']);
 
             $post = json_encode($post);
-            file_put_contents(ROOT_PATH . 'public/content/template/' . $folder . '/setting.json', $post);
+            file_put_contents(ROOT_PATH . 'content/template/' . $folder . '/setting.json', $post);
 
             foreach($apply as $val){
                 $active_templates[$val] = $folder;
@@ -166,7 +161,7 @@ class Template extends Backend
 
 
 
-        $info = file_get_contents(ROOT_PATH . 'public/content/template/' . $folder . '/setting.json');
+        $info = file_get_contents(ROOT_PATH . 'content/template/' . $folder . '/setting.json');
         $info = json_decode($info, true);
 
         $active_templates['pc'] = empty($active_templates['pc']) ? 'default' : $active_templates['pc'];
@@ -178,7 +173,7 @@ class Template extends Backend
         ]);
 
 
-        return view(ROOT_PATH . 'public/content/template/' . $folder . '/setting.php');
+        return view(ROOT_PATH . 'content/template/' . $folder . '/setting.php');
     }
 
     /**
@@ -203,7 +198,7 @@ class Template extends Backend
                         continue;
                     }
                     $directory = $info['directory'];
-                    $dir = ROOT_PATH . 'public' . DS . 'template' . DS . $directory;
+                    $dir = ROOT_PATH . 'template' . DS . $directory;
                     $res = rmdirs($dir);
                     if($res){
                         $count += $v->delete();

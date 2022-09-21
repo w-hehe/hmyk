@@ -77,12 +77,29 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     if(email != '') str += `${email}`;
                                     if(password != '') str += `${password}`;
                                 }
+
+
                                 str += `</div>`;
+
                                 return str;
                             }
                         },
-                        {field: 'goods.name', title: __('Goods_name'), operate: 'LIKE'},
+                        {
+                            field: 'goods.name',
+                            title: '商品名称 / 规格',
+                            operate: 'LIKE',
+                            formatter: function(value,row,index){
+                                var str = '';
+                                str += value;
+                                if(row.buy_info){
+                                    str += '<hr style="margin: 6px 0;">';
+                                    str += row.buy_info.sku_name;
+                                }
+                                return str;
+                            }
+                        },
                         // {field: 'goods_cover', title: __('Goods_cover'), operate: 'LIKE'},
+                        // <hr style="margin: 6px 0;">
                         {
                             field: 'goods_money',
                             title: '商品单价 / 购买数量',
@@ -119,11 +136,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             title: '支付方式',
                             formatter: function(value){
                                 if(value == 'alipay'){
-                                    return '<span class="label label-success">支付宝支付</span>';
+                                    return '<span class="label label-success">支付宝</span>';
                                 }else if(value == 'wxpay'){
-                                    return '<span class="label label-success">微信支付</span>';
+                                    return '<span class="label label-success">微信</span>';
                                 }else if(value == 'qqpay'){
-                                    return '<span class="label label-success">QQ支付</span>';
+                                    return '<span class="label label-success">QQ</span>';
+                                }else if(value == 'balance'){
+                                    return '<span class="label label-success">余额</span>';
                                 }else {
                                     return '-';
                                 }

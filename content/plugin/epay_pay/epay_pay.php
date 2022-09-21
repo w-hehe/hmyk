@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 易支付
-Version: 2.0
+Version: 2.01
 Plugin URL:
 Description: 支持市面上大多数易支付
 Author: 云商学院
@@ -15,7 +15,7 @@ use app\common\controller\Hm;
 
 
 function pay($order, $goods, $params = []) {
-    $plugin_path = ROOT_PATH . "public/content/plugin/epay_pay/";
+    $plugin_path = ROOT_PATH . "content/plugin/epay_pay/";
 
     $info = file_get_contents("{$plugin_path}epay_pay_setting.json");
     $info = json_decode($info, true);
@@ -54,7 +54,7 @@ function pay($order, $goods, $params = []) {
  * 验签
  */
 function checkSign($data = null){
-    $plugin_path = ROOT_PATH . "public/content/plugin/epay_pay/";
+    $plugin_path = ROOT_PATH . "content/plugin/epay_pay/";
     $info = file_get_contents("{$plugin_path}epay_pay_setting.json");
     $info = json_decode($info, true);
     $data = $data == null ? Hm::getParams('get') : $data;

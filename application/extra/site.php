@@ -4,7 +4,7 @@ return array (
   'shop_title' => '我的网站',
   'shop_pet_name' => '我的网站',
   'beian' => '',
-  'version' => '1660096606',
+  'version' => '1663651756',
   'min_cashout' => '0',
   'max_cashout_num' => '3',
   'cashout_charged' => '1',
@@ -12,6 +12,5 @@ return array (
   'login' => '1',
   'register' => '1',
   'statistics' => '',
-  'eject_goods' => '<p>111</p>',
   'ico' => '/assets/img/favicon.png',
 );

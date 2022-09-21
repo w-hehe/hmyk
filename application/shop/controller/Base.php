@@ -56,17 +56,17 @@ class Base extends Controller {
             $active_template = unserialize($this->options['active_template']);
             $this->template_name = $active_template[$this->equipment];
         }
-        $template_info_path = ROOT_PATH . 'public/content/template/' . $this->template_name . '/info.php';
+        $template_info_path = ROOT_PATH . 'content/template/' . $this->template_name . '/info.php';
         if(!file_exists($template_info_path)){
             die("<br>您未启用任何模板，请前往后台【网站扩展-模板管理】中开启相应模板。<br><br>如您未安装过网站模板，你需要在后台【网站扩展-插件管理-插件市场】选择安装您的模板");
         }
-        $this->template_path = ROOT_PATH . 'public/content/template/' . $this->template_name . '/';
+        $this->template_path = ROOT_PATH . 'content/template/' . $this->template_name . '/';
         $active_plugins = Db::name('options')->where(['option_name' => 'active_plugin'])->value('option_content');
         $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
         if ($active_plugins && is_array($active_plugins)) {
             foreach($active_plugins as $plugin) {
                 if(true === checkPlugin($plugin) && substr($plugin, -13) != '_template.php' && substr($plugin, -8) != '_pay.php') {
-                    include_once(ROOT_PATH . 'public/content/plugin/' . $plugin);
+                    include_once(ROOT_PATH . 'content/plugin/' . $plugin);
                 }
             }
         }

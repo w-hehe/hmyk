@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 官方支付宝
-Version: 2.2
+Version: 2.31
 Plugin URL:
 Description: 官方支付宝支付
 Author: 云商学院
@@ -17,7 +17,7 @@ use think\Db;
 
 function pay($order, $goods, $params = []) {
 
-    $plugin_path = ROOT_PATH . "public/content/plugin/alipay_pay/";
+    $plugin_path = ROOT_PATH . "content/plugin/alipay_pay/";
     $info = file_get_contents("{$plugin_path}alipay_pay_setting.json");
     $info = json_decode($info, true);
 
@@ -159,7 +159,7 @@ function getAlipaySign($data, $alipay){
 
 
 function checkSign($params = null) {
-    $plugin_path = ROOT_PATH . "public/content/plugin/alipay_pay/";
+    $plugin_path = ROOT_PATH . "content/plugin/alipay_pay/";
     $info = file_get_contents("{$plugin_path}alipay_pay_setting.json");
     $info = json_decode($info, true);
     if($params == null){
@@ -179,9 +179,7 @@ function checkSign($params = null) {
 
     }
 
-    if(!empty($params['method']) && ($params['method'] == 'alipay.trade.page.pay.return' || $params['method'] == 'alipay.trade.wap.pay.return')) return $params['out_trade_no'];
-
-    if($params['trade_status'] != 'TRADE_SUCCESS') return false;
+    if(!empty($params['trade_status']) && $params['trade_status'] != 'TRADE_SUCCESS') return false;
     $sign = $params['sign'];
 
     if(!empty($params['mode_type'])) unset($params['mode_type']);

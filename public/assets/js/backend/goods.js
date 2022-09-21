@@ -74,9 +74,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 }
                             }
                         },
-                        {field: 'price', title: __('价格'), operate:'BETWEEN', sortable: true},
+                        {field: 'price', title: __('价格'), operate:'BETWEEN', sortable: false},
                         // {field: 'original_price', title: __('Original_price'), operate:'BETWEEN'},
-                        {field: 'stock', title: __('库存'), sortable: true},
+                        {field: 'stock', title: __('库存'), sortable: false},
                         {
                             field: 'dock_id',
                             title: __('商品来源'),
@@ -143,7 +143,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     url: 'goods/stock_add',
                                     text:'添加库存',
                                     hidden:function(row){
-                                        if(row.goods_type == 'manual' || row.goods_type == 'dock') return true;
+                                        if(row.goods_type == 'dock') return true;
                                     }
 
                                 },
@@ -155,7 +155,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     url: 'goods/stock',
                                     text:'管理库存',
                                     hidden:function(row){
-                                        if(row.goods_type == 'manual' || row.goods_type == 'dock'){
+                                        if(row.goods_type == 'dock' || row.goods_type == 'manual'){
                                             return true;
                                         }
                                     }
@@ -428,49 +428,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             //必须默认触发shown.bs.tab事件
             $('ul.nav-tabs li.active a[data-toggle="tab"]').trigger("shown.bs.tab");
 
-            return;
-
-            // 初始化表格参数配置
-            Table.api.init({
-                extend: {
-//                    stock_del: 'goods/stock_del',
-                    del_url: 'goods/stock_del',
-                }
-            });
-
-
-
-
-
-            // 按钮
-            $(document).on("click", ".btn-repeat", function () {
-                Layer.confirm('您确定要删除该商品所有重复库存吗？ 注意该操作无法撤销！', {
-                    title: __('温馨提示'),
-                    btn: [__('确定'), __('取消')]
-                }, function (index) {
-                    layer.close(index);
-                    layer.load();
-                    $.post("goods/repeat", {id:$('#ids').val()}, function(e){
-                        layer.closeAll();
-                        if(e.code == 400){
-                            layer.closeAll('loading');
-                            Toastr.error(e.msg);
-                        }else if(e.code == 200){
-                            Layer.closeAll();
-                            Toastr.success(e.msg);
-                            table.bootstrapTable('refresh', {});
-                        }
-                    }, "json").error(function(){
-                        Layer.closeAll();
-                        Toastr.error('请求失败');
-                    });
-
-                }, function (index) {
-                    layer.close(index);
-                });
-            });
-
-
         },
 
         dockselectgoods: function(){
@@ -486,6 +443,181 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         add: function () {
             Controller.api.bindevent();
+            var specification = $('#speifition-data').val();
+            specification = JSON.parse(specification)
+            var grade = $('#grade-data').val();
+            grade = JSON.parse(grade);
+            $('#c-specification_id').change(function(){
+                var specification_id = $(this).val();
+                if(specification_id == null){
+                    $('#select-sku').empty();
+                }else{
+                    var html = ``;
+                    for(var i = 0; i < specification_id.length; i++){
+                        var value = JSON.parse(specification[specification_id[i]].value);
+                        var id = specification[specification_id[i]].id;
+                        for(var j = 0; j < value.length; j++){
+                            var sku_name = value[j].name;
+                            html += `<div class="radio sku-checkbox SKU_TYPE"><span propid="${id}-${i}-${j}" sku-type-name="${sku_name}" class="sku-name">`;
+                            html += `${sku_name}</span>`;
+                            var sku_value = value[j].value.split("|");
+                            for(var l = 0; l < sku_value.length; l++){
+                                html += `
+                                    <label for="value-${id}-${j}-${l}">
+                                        <input id="value-${id}-${j}-${l}" propvalid="${id}-${j}-${l}" class="sku-value" name="sku_value[${sku_name}][]" type="checkbox" data-name="${sku_value[l]}" value="${sku_value[l]},${id}-${j}-${l}">
+                                        ${sku_value[l]}
+                                    </label>`;
+                            }
+                            html += `</div>`;
+                        }
+                    }
+                    $('#select-sku').empty();
+                    $('#select-sku').append(html);
+                }
+
+            })
+            var alreadySetSkuVals = {};//已经设置的SKU值数据
+            $(document).on("change",'.sku-value',function(){
+                var skuTypeArr =  [];//存放SKU类型的数组
+                var totalRow = 1;//总行数
+                //获取元素类型
+                $(".SKU_TYPE").each(function(){
+                    //SKU类型节点
+                    var skuTypeNode = $(this).children("span");
+                    var skuTypeObj = {};//sku类型对象
+                    //SKU属性类型标题
+                    skuTypeObj.skuTypeTitle = $(skuTypeNode).attr("sku-type-name");
+                    //SKU属性类型主键
+                    var propid = $(skuTypeNode).attr("propid");
+                    skuTypeObj.skuTypeKey = propid;
+                    skuValueArr = [];//存放SKU值得数组
+                    //SKU相对应的节点
+                    var skuValNode = $(this);
+                    //获取SKU值
+                    var skuValCheckBoxs = $(skuValNode).find("input[type='checkbox'][class*='sku-value']");
+                    var checkedNodeLen = 0 ;//选中的SKU节点的个数
+                    $(skuValCheckBoxs).each(function(){
+                        if($(this).is(":checked")){
+                            var skuValObj = {};//SKU值对象
+                            skuValObj.skuValueTitle = $(this).data('name');//SKU值名称
+                            skuValObj.skuValueId = $(this).attr("propvalid");//SKU值主键
+                            skuValObj.skuPropId = $(this).attr("propid");//SKU类型主键
+                            skuValueArr.push(skuValObj);
+                            checkedNodeLen ++ ;
+                        }
+                    });
+                    if(skuValueArr && skuValueArr.length > 0){
+                        totalRow = totalRow * skuValueArr.length;
+                        skuTypeObj.skuValues = skuValueArr;//sku值数组
+                        skuTypeObj.skuValueLen = skuValueArr.length;//sku值长度
+                        skuTypeArr.push(skuTypeObj);//保存进数组中
+                    }
+                });
+                if(skuTypeArr.length > 0){
+                    var SKUTableDom = "";//sku表格数据
+                    SKUTableDom += "<table class='skuTable'><tr>";
+                    //创建表头
+                    for(var t = 0 ; t < skuTypeArr.length ; t ++){
+                        SKUTableDom += '<th>'+skuTypeArr[t].skuTypeTitle+'</th>';
+                    }
+                    SKUTableDom += '<th>零售价</th>';
+                    for(var i = 0; i < grade.length; i++){
+                        SKUTableDom += `<th>${grade[i].name}代理价</th>`;
+                    }
+                    SKUTableDom += "</tr>";
+                    //循环处理表体
+                    for(var i = 0 ; i < totalRow ; i ++){//总共需要创建多少行
+                        var currRowDoms = "";
+                        var rowCount = 1;//记录行数
+                        var propvalidArr = [];//记录SKU值主键
+                        var propIdArr = [];//属性类型主键
+                        var propvalnameArr = [];//记录SKU值标题
+                        var propNameArr = [];//属性类型标题
+                        for(var j = 0 ; j < skuTypeArr.length ; j ++){//sku列
+                            var skuValues = skuTypeArr[j].skuValues;//SKU值数组
+                            var skuValueLen = skuValues.length;//sku值长度
+                            rowCount = (rowCount * skuValueLen);//目前的生成的总行数
+                            var anInterBankNum = (totalRow / rowCount);//跨行数
+                            var point = ((i / anInterBankNum) % skuValueLen);
+                            propNameArr.push(skuTypeArr[j].skuTypeTitle);
+                            if(0  == (i % anInterBankNum)){//需要创建td
+                                currRowDoms += '<td rowspan='+anInterBankNum+'>'+skuValues[point].skuValueTitle+'</td>';
+                                propvalidArr.push(skuValues[point].skuValueId);
+                                propIdArr.push(skuValues[point].skuPropId);
+                                propvalnameArr.push(skuValues[point].skuValueTitle);
+                            }else{
+                                //当前单元格为跨行
+                                propvalidArr.push(skuValues[parseInt(point)].skuValueId);
+                                propIdArr.push(skuValues[parseInt(point)].skuPropId);
+                                propvalnameArr.push(skuValues[parseInt(point)].skuValueTitle);
+                            }
+                        }
+
+                        var propvalids = propvalidArr.toString()
+                        var alreadySetSkuPrice = "";//已经设置的SKU价格
+                        var alreadySetSkuStock = "";//已经设置的SKU库存
+                        //赋值
+                        if(alreadySetSkuVals){
+                            var currGroupSkuVal = alreadySetSkuVals[propvalids];//当前这组SKU值
+                            if(currGroupSkuVal){
+                                alreadySetSkuPrice = currGroupSkuVal.skuPrice;
+                                alreadySetSkuStock = currGroupSkuVal.skuStock
+                            }
+                        }
+                        //console.log(propvalids);
+                        var _propids = propIdArr.toString();
+                        var _propvalnames = propvalnameArr.join(";");
+                        var _propnames = propNameArr.join(";");
+                        SKUTableDom += `<tr propvalids="${propvalids}" propids="${_propids}" propvalnames="${_propvalnames}" propnames="${_propnames}" class="sku_table_tr">${currRowDoms}`;
+                        SKUTableDom += `<td><input name="sku[price][${propvalids}][price]" type="number" class="setting_sku_price" value="${alreadySetSkuPrice}"/></td>`;
+                        for(var j = 0; j < grade.length; j++){
+                            SKUTableDom += `<td><input name="sku[price][${propvalids}][grade_${grade[j].grade_id}]" type="number" class="setting_sku_price" value=""/></td>`;
+                        }
+
+                        SKUTableDom += `</tr>`;
+                    }
+                    SKUTableDom += "</table>";
+                    $('#sku-table').empty();
+                    $('#sku-table').append(SKUTableDom)
+                }else{
+                    var SKUTableDom = "";//sku表格数据
+                    SKUTableDom += "<table class='skuTable'><tr>";
+                    SKUTableDom += '<th>零售价</th>';
+                    for(var i = 0; i < grade.length; i++){
+                        SKUTableDom += `<th>${grade[i].name}代理价</th>`;
+                    }
+                    SKUTableDom += "</tr>";
+                    SKUTableDom += `<tr class="sku_table_tr">`;
+                    SKUTableDom += `<td><input name="sku[price][price]" type="number" class="setting_sku_price" value=""/></td>`;
+                    for(var j = 0; j < grade.length; j++){
+                        SKUTableDom += `<td><input name="sku[price][grade_${grade[j].grade_id}]" type="number" class="setting_sku_price" value=""/></td>`;
+                    }
+                    SKUTableDom += `</tr>`;
+                    SKUTableDom += "</table>";
+                    $('#sku-table').empty();
+                    $('#sku-table').append(SKUTableDom)
+                }
+
+            });
+
+            var SKUTableDom = "";//sku表格数据
+            SKUTableDom += "<table class='skuTable'><tr>";
+            SKUTableDom += '<th>零售价</th>';
+            for(var i = 0; i < grade.length; i++){
+                SKUTableDom += `<th>${grade[i].name}代理价</th>`;
+            }
+            SKUTableDom += "</tr>";
+            SKUTableDom += `<tr class="sku_table_tr">`;
+            SKUTableDom += `<td><input name="sku[price][price]" type="number" class="setting_sku_price" value=""/></td>`;
+            for(var j = 0; j < grade.length; j++){
+                SKUTableDom += `<td><input name="sku[price][grade_${grade[j].grade_id}]" type="number" class="setting_sku_price" value=""/></td>`;
+            }
+            SKUTableDom += `</tr>`;
+            SKUTableDom += "</table>";
+            $('#sku-table').empty();
+            $('#sku-table').append(SKUTableDom)
+
+
             $('#dock-select-btn').click(function(){
                 var dock_id = $('#c-dock_id').val();
                 if(dock_id == 0){
@@ -544,10 +676,330 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Controller.api.bindevent();
         },
         stock_add: function () {
+            //初始化表格
+            var skuData = $('#sku-data').val();
+            if(skuData != ''){
+                var alreadySetSkuVals = {};//已经设置的SKU值数据
+                skuData = JSON.parse(skuData)
+                console.log(skuData)
+                var skuTotal = 1;
+                var SKUTableDom = "";//sku表格数据
+                SKUTableDom += "<table class='skuTable'><tr>";
+                //创建表头
+                for(key in skuData){
+                    if(skuData[key].value == undefined) continue;
+                    SKUTableDom += '<th>'+ key +'</th>';
+                    skuTotal = skuTotal * skuData[key].value.length;
+                }
+                SKUTableDom += '<th>添加库存</th>';
+                SKUTableDom += "</tr>";
+                //循环处理表体
+                for(var i = 0 ; i < skuTotal ; i ++){//总共需要创建多少行
+                    var currRowDoms = "";
+                    var rowCount = 1;//记录行数
+                    var propvalidArr = [];//记录SKU值主键
+                    var propIdArr = [];//属性类型主键
+                    var propvalnameArr = [];//记录SKU值标题
+                    var propNameArr = [];//属性类型标题
+                    for(key in skuData){
+                        if(skuData[key].value == undefined) continue;
+                        var skuValues = skuData[key].value;//SKU值数组
+                        var skuValueLen = skuValues.length;//sku值长度
+                        rowCount = (rowCount * skuValueLen);//目前的生成的总行数
+                        var anInterBankNum = (skuTotal / rowCount);//跨行数
+                        var point = ((i / anInterBankNum) % skuValueLen);
+                        propNameArr.push(skuData[key].name);
+                        if(0  == (i % anInterBankNum)){//需要创建td
+                            currRowDoms += '<td rowspan='+anInterBankNum+'>'+skuValues[point].name+'</td>';
+                            propvalidArr.push(skuValues[point].id);
+                            propIdArr.push(skuValues[point].id);
+                            propvalnameArr.push(skuValues[point].name);
+                        }else{
+                            //当前单元格为跨行
+                            propvalidArr.push(skuValues[parseInt(point)].id);
+                            propIdArr.push(skuValues[parseInt(point)].id);
+                            propvalnameArr.push(skuValues[parseInt(point)].name);
+                        }
+                    }
+
+
+                    var propvalids = propvalidArr.toString()
+                    var alreadySetSkuPrice = "";//已经设置的SKU价格
+                    var alreadySetSkuStock = "";//已经设置的SKU库存
+                    //赋值
+                    if(alreadySetSkuVals){
+                        var currGroupSkuVal = alreadySetSkuVals[propvalids];//当前这组SKU值
+                        if(currGroupSkuVal){
+                            alreadySetSkuPrice = currGroupSkuVal.skuPrice;
+                            alreadySetSkuStock = currGroupSkuVal.skuStock
+                        }
+                    }
+                    //console.log(propvalids);
+                    var _propids = propIdArr.toString();
+                    var _propvalnames = propvalnameArr.join(";");
+                    var _propnames = propNameArr.join(";");
+                    SKUTableDom += `<tr propvalids="${propvalids}" propids="${_propids}" propvalnames="${_propvalnames}" propnames="${_propnames}" class="sku_table_tr">${currRowDoms}`;
+                    SKUTableDom += `<td style="padding: 0;"><textarea name="stock[${propvalids}]" class="setting_sku_price" value="${alreadySetSkuPrice}" style="resize: vertical; border: none; width: 100%; height: 60px;"></textarea></td>`;
+                    SKUTableDom += `</tr>`;
+                }
+                SKUTableDom += "</table>";
+                $('#sku-table').empty();
+                $('#sku-table').append(SKUTableDom)
+            }
+
             Controller.api.bindevent();
         },
         edit: function () {
             Controller.api.bindevent();
+            var specification = $('#speifition-data').val();
+            specification = JSON.parse(specification)
+            var grade = $('#grade-data').val();
+            grade = JSON.parse(grade);
+            console.log(specification);
+            console.log(grade);
+            $('#c-specification_id').change(function(){ //选择规格
+                var specification_id = $(this).val();
+                if(specification_id == null){
+                    $('#select-sku').empty();
+                }else{
+                    var html = ``;
+                    for(var i = 0; i < specification_id.length; i++){
+                        var value = JSON.parse(specification[specification_id[i]].value);
+                        var id = specification[specification_id[i]].id;
+                        for(var j = 0; j < value.length; j++){
+                            var sku_name = value[j].name;
+                            html += `<div class="radio sku-checkbox SKU_TYPE"><span propid="${id}-${i}-${j}" sku-type-name="${sku_name}" class="sku-name">`;
+                            html += `${sku_name}</span>`;
+                            var sku_value = value[j].value.split("|");
+                            for(var l = 0; l < sku_value.length; l++){
+                                html += `
+                                    <label for="value-${id}-${j}-${l}">
+                                        <input id="value-${id}-${j}-${l}" propvalid="${id}-${j}-${l}" class="sku-value" name="sku_value[${sku_name}][]" type="checkbox" data-name="${sku_value[l]}" value="${sku_value[l]},${id}-${j}-${l}">
+                                        ${sku_value[l]}
+                                    </label>`;
+                            }
+                            html += `</div>`;
+                        }
+                    }
+                    $('#select-sku').empty();
+                    $('#select-sku').append(html);
+                }
+            })
+            var alreadySetSkuVals = {};//已经设置的SKU值数据
+            $(document).on("change",'.sku-value',function(){
+                var skuTypeArr =  [];//存放SKU类型的数组
+                var totalRow = 1;//总行数
+                //获取元素类型
+                $(".SKU_TYPE").each(function(){
+                    //SKU类型节点
+                    var skuTypeNode = $(this).children("span");
+                    var skuTypeObj = {};//sku类型对象
+                    //SKU属性类型标题
+                    skuTypeObj.skuTypeTitle = $(skuTypeNode).attr("sku-type-name");
+                    //SKU属性类型主键
+                    var propid = $(skuTypeNode).attr("propid");
+                    skuTypeObj.skuTypeKey = propid;
+                    skuValueArr = [];//存放SKU值得数组
+                    //SKU相对应的节点
+                    var skuValNode = $(this);
+                    //获取SKU值
+                    var skuValCheckBoxs = $(skuValNode).find("input[type='checkbox'][class*='sku-value']");
+                    var checkedNodeLen = 0 ;//选中的SKU节点的个数
+                    $(skuValCheckBoxs).each(function(){
+                        if($(this).is(":checked")){
+                            var skuValObj = {};//SKU值对象
+                            skuValObj.skuValueTitle = $(this).data('name');//SKU值名称
+                            skuValObj.skuValueId = $(this).attr("propvalid");//SKU值主键
+                            skuValObj.skuPropId = $(this).attr("propid");//SKU类型主键
+                            skuValueArr.push(skuValObj);
+                            checkedNodeLen ++ ;
+                        }
+                    });
+                    if(skuValueArr && skuValueArr.length > 0){
+                        totalRow = totalRow * skuValueArr.length;
+                        skuTypeObj.skuValues = skuValueArr;//sku值数组
+                        skuTypeObj.skuValueLen = skuValueArr.length;//sku值长度
+                        skuTypeArr.push(skuTypeObj);//保存进数组中
+                    }
+                });
+
+                if(skuTypeArr.length > 0){
+                    var SKUTableDom = "";//sku表格数据
+                    SKUTableDom += "<table class='skuTable'><tr>";
+                    console.log(skuTypeArr)
+                    //创建表头
+                    for(var t = 0 ; t < skuTypeArr.length ; t ++){
+                        SKUTableDom += '<th>'+skuTypeArr[t].skuTypeTitle+'</th>';
+                    }
+                    SKUTableDom += '<th>零售价</th>';
+                    for(var i = 0; i < grade.length; i++){
+                        SKUTableDom += `<th>${grade[i].name}代理价</th>`;
+                    }
+                    SKUTableDom += "</tr>";
+                    //循环处理表体
+                    for(var i = 0 ; i < totalRow ; i ++){//总共需要创建多少行
+                        var currRowDoms = "";
+                        var rowCount = 1;//记录行数
+                        var propvalidArr = [];//记录SKU值主键
+                        var propIdArr = [];//属性类型主键
+                        var propvalnameArr = [];//记录SKU值标题
+                        var propNameArr = [];//属性类型标题
+                        for(var j = 0 ; j < skuTypeArr.length ; j ++){//sku列
+                            var skuValues = skuTypeArr[j].skuValues;//SKU值数组
+                            var skuValueLen = skuValues.length;//sku值长度
+                            rowCount = (rowCount * skuValueLen);//目前的生成的总行数
+                            var anInterBankNum = (totalRow / rowCount);//跨行数
+                            var point = ((i / anInterBankNum) % skuValueLen);
+                            propNameArr.push(skuTypeArr[j].skuTypeTitle);
+                            if(0  == (i % anInterBankNum)){//需要创建td
+                                currRowDoms += '<td rowspan='+anInterBankNum+'>'+skuValues[point].skuValueTitle+'</td>';
+                                propvalidArr.push(skuValues[point].skuValueId);
+                                propIdArr.push(skuValues[point].skuPropId);
+                                propvalnameArr.push(skuValues[point].skuValueTitle);
+                            }else{
+                                //当前单元格为跨行
+                                propvalidArr.push(skuValues[parseInt(point)].skuValueId);
+                                propIdArr.push(skuValues[parseInt(point)].skuPropId);
+                                propvalnameArr.push(skuValues[parseInt(point)].skuValueTitle);
+                            }
+                        }
+
+                        var propvalids = propvalidArr.toString()
+                        var alreadySetSkuPrice = "";//已经设置的SKU价格
+                        var alreadySetSkuStock = "";//已经设置的SKU库存
+                        //赋值
+                        if(alreadySetSkuVals){
+                            var currGroupSkuVal = alreadySetSkuVals[propvalids];//当前这组SKU值
+                            if(currGroupSkuVal){
+                                alreadySetSkuPrice = currGroupSkuVal.skuPrice;
+                                alreadySetSkuStock = currGroupSkuVal.skuStock
+                            }
+                        }
+                        //console.log(propvalids);
+                        var _propids = propIdArr.toString();
+                        var _propvalnames = propvalnameArr.join(";");
+                        var _propnames = propNameArr.join(";");
+                        SKUTableDom += `<tr propvalids="${propvalids}" propids="${_propids}" propvalnames="${_propvalnames}" propnames="${_propnames}" class="sku_table_tr">${currRowDoms}`;
+                        SKUTableDom += `<td><input name="sku[price][${propvalids}][price]" type="number" class="setting_sku_price" value="${alreadySetSkuPrice}"/></td>`;
+                        for(var j = 0; j < grade.length; j++){
+                            SKUTableDom += `<td><input name="sku[price][${propvalids}][grade_${grade[j].grade_id}]" type="number" class="setting_sku_price" value=""/></td>`;
+                        }
+
+                        SKUTableDom += `</tr>`;
+                    }
+                    SKUTableDom += "</table>";
+                    $('#sku-table').empty();
+                    $('#sku-table').append(SKUTableDom)
+                }else{
+                    var SKUTableDom = "";//sku表格数据
+                    SKUTableDom += "<table class='skuTable'><tr>";
+                    SKUTableDom += '<th>零售价</th>';
+                    for(var i = 0; i < grade.length; i++){
+                        SKUTableDom += `<th>${grade[i].name}代理价</th>`;
+                    }
+                    SKUTableDom += "</tr>";
+                    SKUTableDom += `<tr class="sku_table_tr">`;
+                    SKUTableDom += `<td><input name="sku[price][price]" type="number" class="setting_sku_price" value=""/></td>`;
+                    for(var j = 0; j < grade.length; j++){
+                        SKUTableDom += `<td><input name="sku[price][grade_${grade[j].grade_id}]" type="number" class="setting_sku_price" value=""/></td>`;
+                    }
+                    SKUTableDom += `</tr>`;
+                    SKUTableDom += "</table>";
+                    $('#sku-table').empty();
+                    $('#sku-table').append(SKUTableDom)
+                }
+
+            });
+
+            //初始化表格
+            var skuData = $('#sku-data').val();
+            if(skuData == ''){
+                var priceData = $('#price-data').val();
+                priceData =  JSON.parse(priceData);
+                console.log(priceData)
+                var SKUTableDom = "";//sku表格数据
+                SKUTableDom += "<table class='skuTable'><tr>";
+                SKUTableDom += '<th>零售价</th>';
+                for(var i = 0; i < grade.length; i++){
+                    SKUTableDom += `<th>${grade[i].name}代理价</th>`;
+                }
+                SKUTableDom += "</tr>";
+                SKUTableDom += `<tr class="sku_table_tr">`;
+                SKUTableDom += `<td><input name="sku[price][price]" type="number" class="setting_sku_price" value="${priceData[0]}"/></td>`;
+                for(var j = 0; j < grade.length; j++){
+                    SKUTableDom += `<td><input name="sku[price][grade_${grade[j].grade_id}]" type="number" class="setting_sku_price" value="${priceData[grade[j].grade_id]}"/></td>`;
+                }
+                SKUTableDom += `</tr>`;
+                SKUTableDom += "</table>";
+            }else{
+                var priceData = $('#price-data').val();
+                console.log(skuData)
+                priceData =  JSON.parse(priceData);
+                console.log(priceData)
+                skuData = JSON.parse(skuData)
+                console.log(skuData)
+                var skuTotal = 1;
+                var SKUTableDom = "";//sku表格数据
+                SKUTableDom += "<table class='skuTable'><tr>";
+                //创建表头
+                for(key in skuData){
+                    if(skuData[key].value == undefined) continue;
+                    SKUTableDom += '<th>'+ key +'</th>';
+                    skuTotal = skuTotal * skuData[key].value.length;
+                }
+                SKUTableDom += '<th>零售价</th>';
+                for(var i = 0; i < grade.length; i++){
+                    SKUTableDom += `<th>${grade[i].name}代理价</th>`;
+                }
+                SKUTableDom += "</tr>";
+                //循环处理表体
+                for(var i = 0 ; i < skuTotal ; i ++){//总共需要创建多少行
+                    var currRowDoms = "";
+                    var rowCount = 1;//记录行数
+                    var propvalidArr = [];//记录SKU值主键
+                    var propIdArr = [];//属性类型主键
+                    var propvalnameArr = [];//记录SKU值标题
+                    var propNameArr = [];//属性类型标题
+                    for(key in skuData){
+                        if(skuData[key].value == undefined) continue;
+                        var skuValues = skuData[key].value;//SKU值数组
+                        var skuValueLen = skuValues.length;//sku值长度
+                        rowCount = (rowCount * skuValueLen);//目前的生成的总行数
+                        var anInterBankNum = (skuTotal / rowCount);//跨行数
+                        var point = ((i / anInterBankNum) % skuValueLen);
+                        propNameArr.push(skuData[key].name);
+                        if(0  == (i % anInterBankNum)){//需要创建td
+                            currRowDoms += '<td rowspan='+anInterBankNum+'>'+skuValues[point].name+'</td>';
+                            propvalidArr.push(skuValues[point].id);
+                            propIdArr.push(skuValues[point].id);
+                            propvalnameArr.push(skuValues[point].name);
+                        }else{
+                            //当前单元格为跨行
+                            propvalidArr.push(skuValues[parseInt(point)].id);
+                            propIdArr.push(skuValues[parseInt(point)].id);
+                            propvalnameArr.push(skuValues[parseInt(point)].name);
+                        }
+                    }
+
+                    var propvalids = propvalidArr.toString()
+                    var _propids = propIdArr.toString();
+                    var _propvalnames = propvalnameArr.join(";");
+                    var _propnames = propNameArr.join(";");
+                    SKUTableDom += `<tr propvalids="${propvalids}" propids="${_propids}" propvalnames="${_propvalnames}" propnames="${_propnames}" class="sku_table_tr">${currRowDoms}`;
+                    SKUTableDom += `<td><input name="sku[price][${propvalids}][price]" type="number" class="setting_sku_price" value="${priceData[propvalids][0]}" /></td>`;
+                    for(var j = 0; j < grade.length; j++){
+                        SKUTableDom += `<td><input name="sku[price][${propvalids}][grade_${grade[j].grade_id}]" type="number" class="setting_sku_price" value="${priceData[propvalids][grade[j].grade_id]}"/></td>`;
+                    }
+                    SKUTableDom += `</tr>`;
+                }
+                SKUTableDom += "</table>";
+            }
+
+            $('#sku-table').empty();
+            $('#sku-table').append(SKUTableDom)
+
+
+
             $('#dock-select-btn').click(function(){
                 var dock_id = $('#c-dock_id').val();
                 if(dock_id == 0){
@@ -605,6 +1057,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         api: {
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
+            },
+            sku: {
+                get: function () {
+                    var userinfo = localStorage.getItem("hmyk_userinfo");
+                    console.log(userinfo)
+                    return userinfo ? JSON.parse(userinfo) : null;
+                },
+                set: function (data) {
+                    if (data) {
+                        localStorage.setItem("hmyk_userinfo", JSON.stringify(data));
+                    } else {
+                        localStorage.removeItem("hmyk_userinfo");
+                    }
+                }
             }
         }
     };

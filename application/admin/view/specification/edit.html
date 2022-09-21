@@ -1,0 +1,39 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-name" class="form-control" name="row[name]" type="text" value="{$row.name|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">属性</label>
+        <div class="col-xs-12 col-sm-8">
+            <dl class="fieldlist" data-name="row[sku]" data-template="testtpl">
+                <dd>
+                    <ins>属性名</ins>
+                    <ins style="width: 250px;">属性值(多个属性值使用竖线|分隔)</ins>
+                </dd>
+                <dd>
+                    <a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> 追加</a>
+                </dd>
+                <textarea name="row[sku]" class="form-control hide" cols="30" rows="5">{$row.value}</textarea>
+            </dl>
+            <!--定义模板，模板语法使用Art-Template模板语法-->
+            <script type="text/html" id="testtpl">
+                <dd class="form-inline">
+                    <input type="text" name="row[<%=name%>][<%=index%>][name]" class="form-control" value="<%=row['name']%>" size="10">
+                    <input type="text" name="row[<%=name%>][<%=index%>][value]" class="form-control" value="<%=row['value']%>" size="30">
+                    <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
+                </dd>
+            </script>
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

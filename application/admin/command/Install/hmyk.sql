@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 17/08/2022 10:22:29
+ Date: 20/09/2022 15:16:06
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', '0aa7ee5b4bd2a3292b340183b2971d63', 'db6b83', 'http://www.hmyk.com/assets/img/avatar.png', 'admin@admin.com', 0, 1660699127, '127.0.0.1', NULL, 1660701518, 'a8afe355-222e-4683-a4a1-62e8a6271881', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', '0aa7ee5b4bd2a3292b340183b2971d63', 'db6b83', 'http://www.hmyk.com/assets/img/avatar.png', 'admin@admin.com', 0, 1663642448, '127.0.0.1', NULL, 1663642448, '4eca8de9-7104-4a4d-8565-fa262c83863f', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_attach
@@ -158,7 +158,7 @@ CREATE TABLE `hm_auth_rule`  (
   UNIQUE INDEX `name`(`name`) USING BTREE,
   INDEX `pid`(`pid`) USING BTREE,
   INDEX `weigh`(`weigh`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '节点表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 102 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '节点表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hm_auth_rule
@@ -261,6 +261,7 @@ INSERT INTO `hm_auth_rule` VALUES (97, 'file', 86, 'docking/docking_site', '货�
 INSERT INTO `hm_auth_rule` VALUES (98, 'file', 2, 'buy/index', '购买配置', 'fa fa-ellipsis-v', '', '', '', 1, 'addtabs', '', 'gmpz', 'goumaipeizhi', NULL, NULL, 0, 'normal');
 INSERT INTO `hm_auth_rule` VALUES (99, 'file', 2, 'general/notice/index', '通知配置', 'fa fa-twitch', '', '', '', 1, 'addtabs', '', 'tzpz', 'tongzhipeizhi', NULL, NULL, 0, 'normal');
 INSERT INTO `hm_auth_rule` VALUES (100, 'file', 2, 'general/popup/index', '弹窗配置', 'fa fa-unsorted', '', '', '', 1, 'addtabs', '', 'tcpz', 'tanchuangpeizhi', NULL, NULL, 0, 'normal');
+INSERT INTO `hm_auth_rule` VALUES (101, 'file', 86, 'specification', '商品规格', 'fa fa-sliders', '', '', '', 1, 'addtabs', '', 'spgg', 'shangpinguige', NULL, NULL, 0, 'normal');
 
 -- ----------------------------
 -- Table structure for hm_category
@@ -297,12 +298,14 @@ CREATE TABLE `hm_category`  (
 DROP TABLE IF EXISTS `hm_cdkey`;
 CREATE TABLE `hm_cdkey`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `sku_ids` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `goods_id` int(10) NULL DEFAULT NULL COMMENT '关联商品',
   `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `cdk` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '内容',
   `num` int(10) NULL DEFAULT 1 COMMENT '数量',
   `createtime` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '添加时间',
   `updatetime` int(10) NULL DEFAULT NULL COMMENT '编辑时间',
+  `status` tinyint(1) NULL DEFAULT 1,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '库存卡密' ROW_FORMAT = DYNAMIC;
 
@@ -360,7 +363,7 @@ CREATE TABLE `hm_config`  (
 INSERT INTO `hm_config` VALUES (1, 'shop_title', 'basic', '网站标题', '', 'string', '我的网站', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (2, 'shop_pet_name', 'basic', '网站名称', '', 'string', '我的网站', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (3, 'beian', 'basic', 'Beian', '苏ICP备15000000号-1', 'string', '', '', '', '', NULL);
-INSERT INTO `hm_config` VALUES (4, 'version', 'basic', '后台静态文件版本', '如果静态资源有变动请重新配置该值', 'string', '1660096606', '', 'required', '', NULL);
+INSERT INTO `hm_config` VALUES (4, 'version', 'basic', '后台静态文件版本', '如果静态资源有变动请重新配置该值', 'string', '1663651756', '', 'required', '', NULL);
 INSERT INTO `hm_config` VALUES (5, 'min_cashout', 'money', '最低提现金额', '0则不限制金额', 'number', '0', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (6, 'max_cashout_num', 'money', '每日最多提现次数', '0则不限制次数', 'number', '3', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
 INSERT INTO `hm_config` VALUES (7, 'cashout_charged', 'money', '提现手续费%', '按照百分比填写', 'number', '1', '', '', '', '{\"table\":\"\",\"conditions\":\"\",\"key\":\"\",\"value\":\"\"}');
@@ -434,6 +437,7 @@ CREATE TABLE `hm_dock`  (
 DROP TABLE IF EXISTS `hm_goods`;
 CREATE TABLE `hm_goods`  (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `sku` varchar(800) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `dock_id` int(10) NULL DEFAULT 0 COMMENT '对接站点 ID',
   `dock_data` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '对接商品数据',
   `remote_id` int(10) NULL DEFAULT 0 COMMENT '对接商品 ID',
@@ -441,7 +445,6 @@ CREATE TABLE `hm_goods`  (
   `category_id` int(10) NULL DEFAULT 0 COMMENT '商品分类 ID',
   `attach_id` int(10) NULL DEFAULT 0 COMMENT '附加选项 ID',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '出售价格',
   `buy_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '进货价格',
   `increase_id` int(10) NOT NULL DEFAULT 0 COMMENT '加价模板 ID',
   `buy_min` int(10) NOT NULL DEFAULT 1 COMMENT '最小购买',
@@ -450,7 +453,6 @@ CREATE TABLE `hm_goods`  (
   `quota` int(10) NULL DEFAULT 0 COMMENT '单IP限购数量',
   `sales` int(11) NULL DEFAULT 0 COMMENT '销量',
   `sales_money` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '销售额',
-  `stock` int(10) NULL DEFAULT NULL COMMENT '库存',
   `images` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '封面图',
   `details` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '详细内容',
   `eject` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '弹窗内容',
@@ -563,11 +565,11 @@ CREATE TABLE `hm_options`  (
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.3.5');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.3.6');
 INSERT INTO `hm_options` VALUES (2, 'user_total', '16');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');
-INSERT INTO `hm_options` VALUES (5, 'goods_total', '0');
+INSERT INTO `hm_options` VALUES (5, 'goods_total', '-26');
 INSERT INTO `hm_options` VALUES (6, 'active_plugin', 'a:1:{i:0;s:13:\"tips/tips.php\";}');
 INSERT INTO `hm_options` VALUES (7, 'active_template', 'a:2:{s:2:\"pc\";s:6:\"pisces\";s:6:\"mobile\";s:6:\"pisces\";}');
 INSERT INTO `hm_options` VALUES (8, 'stock_show', '[{\"less\":\"-999\",\"greater\":0,\"content\":\"\\u552e\\u78d0\"},{\"less\":\"1\",\"greater\":\"10\",\"content\":\"\\u5c11\\u91cf\"},{\"less\":\"11\",\"greater\":\"1000000\",\"content\":\"\\u5145\\u8db3\"}]');
@@ -612,6 +614,7 @@ CREATE TABLE `hm_order`  (
   `qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `buy_info` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
@@ -628,7 +631,8 @@ CREATE TABLE `hm_price`  (
   `goods_id` int(10) NULL DEFAULT NULL,
   `grade_id` int(10) NULL DEFAULT NULL,
   `price` decimal(10, 2) NULL DEFAULT NULL,
-  `update_time` int(10) NULL DEFAULT NULL,
+  `sku_ids` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `sku` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品价格表' ROW_FORMAT = DYNAMIC;
 
@@ -694,6 +698,25 @@ CREATE TABLE `hm_sold`  (
 -- ----------------------------
 -- Records of hm_sold
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for hm_specification
+-- ----------------------------
+DROP TABLE IF EXISTS `hm_specification`;
+CREATE TABLE `hm_specification`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `value` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `create_time` int(10) NULL DEFAULT NULL,
+  `update_time` int(10) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '规格管理' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of hm_specification
+-- ----------------------------
+INSERT INTO `hm_specification` VALUES (1, '清粉', '[{\"name\":\"\\u7c7b\\u578b\",\"value\":\"\\u67e5\\u5355\\u5220|\\u67e5\\u5c4f\\u853d|\\u6e05\\u7406\\u670b\\u53cb\\u5708\"},{\"name\":\"\\u65f6\\u6548\",\"value\":\"\\u5468\\u5361|\\u6708\\u5361|\\u5e74\\u5361\"}]', NULL, NULL);
+INSERT INTO `hm_specification` VALUES (2, '手机', '[{\"name\":\"\\u989c\\u8272\",\"value\":\"\\u767d\\u8272|\\u9ed1\\u8272|\\u7eff\\u8272|\\u84dd\\u8272\"},{\"name\":\"\\u5185\\u5b58\",\"value\":\"64G|128G\"}]', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for hm_test

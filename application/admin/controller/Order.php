@@ -160,6 +160,7 @@ class Order extends Backend {
             foreach($list as &$val){
                 $val->create_time = date('Y-m-d H:i:s', $val->create_time);
                 $val->pay_time = empty($val->pay_time) ? '未支付' : date('Y-m-d H:i:s', $val->pay_time);
+                $val->buy_info = json_decode($val->buy_info, true);
             }
 
             $result = ["total" => $total, "rows" => $list];
