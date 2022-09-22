@@ -124,8 +124,15 @@ class Goods extends Backend {
             db::startTrans();
             try {
                 $sku = $params['sku'];
-                $sku_type = empty($params['sku_value']) && empty($row['sku']) ? 'one' : 'many';
-                if($sku_type == 'many' && empty($row['sku'])){
+
+                foreach($sku['price'] as $val){
+                    $sku_type = is_array($val) ? 'many' : 'one'; //单规格或多规格
+                    break;
+                }
+
+//                echo $sku_type . "\n\n"; print_r($params);die;
+
+                if($sku_type == 'many' && !empty($params['sku_value'])){
                     $sku_value = [];
                     foreach($params['sku_value'] as $key => $val){
                         foreach($val as $v){
@@ -164,9 +171,8 @@ class Goods extends Backend {
                     'buy_msg' => $params['buy_msg'], //购买后的提示内容
                     'quota' => empty($params['quota']) ? 0 : $params['quota'], //单IP单日限购数量
                 ];
+                if($sku_type == 'one') $update['sku'] = null;
                 if(isset($sku_value)) $update['sku'] = json_encode($sku_value);
-                if(!empty($params['stock'])) $update['stock'] = $params['stock']; //商品库存
-
 
                 if($row['goods_type'] == 'dock' && $params['goods_type'] != 'dock'){
                     $update['remote_id'] = 0;
@@ -208,7 +214,7 @@ class Goods extends Backend {
                 foreach($sku['price'] as $key => $val){
                     if($sku_type == 'many'){
                         foreach($val as $k => $v){
-                            if($k != 'price' && $v === "") continue;
+//                            if($k != 'price' && $v === "") continue;
                             $price_insert[$i] = $price_insert_sku[$key];
                             $price_insert[$i]['goods_id'] = $ids;
                             if($k == 'price'){
@@ -217,7 +223,7 @@ class Goods extends Backend {
                                 $k_arr = explode('_', $k);
                                 $price_insert[$i]['grade_id'] = $k_arr[1];
                             }
-                            $price_insert[$i]['price'] = empty($v) ? 0 : $v;
+                            $price_insert[$i]['price'] =  $v;
                             $i++;
                         }
                     }else{
@@ -245,12 +251,14 @@ class Goods extends Backend {
                         'goods_id' => $ids,
                     ])->whereNotNull('sku_ids')->delete();
                 }
+//                print_r($price_insert);die;
                 foreach ($price_insert as $val) {
                     $where = [
                         'goods_id' => $ids,
                         'grade_id' => $val['grade_id'],
                     ];
                     if($sku_type == 'many') $where['sku_ids'] = $val['sku_ids'];
+                    if($val['grade_id'] == 0 && empty($val['price'])) $val['price'] = 0;
                     if (!isset($val['price']) || $val['price'] === "") {
                         $res = db::name('price')->where($where)->find();
                         if ($res) db::name('price')->where(['id' => $res['id']])->delete();
@@ -266,8 +274,8 @@ class Goods extends Backend {
                                 'goods_id' => $ids,
                                 'grade_id' => $val['grade_id'],
                                 'price' => $val['price'],
-                                'sku_ids' => $val['sku_ids'],
-                                'sku' => $val['sku']
+                                'sku_ids' => empty($val['sku_ids']) ? null : $val['sku_ids'],
+                                'sku' => empty($val['sku']) ? null : $val['sku'],
                             ];
                             db::name('price')->insert($insert);
                         }
@@ -573,7 +581,7 @@ class Goods extends Backend {
             $params = $this->request->post();
             $result = false;
             Db::startTrans();
-            
+
             try {
 
                 if($goods_info['goods_type'] == 'fixed'){
@@ -632,7 +640,7 @@ class Goods extends Backend {
                     }
                 }
                 if($goods_info['goods_type'] == 'manual'){
-                    
+
                         $insert = [
                             'type' => $goods_info['goods_type'],
                             'goods_id' => $id,
@@ -674,18 +682,7 @@ class Goods extends Backend {
     //删除库存
     public function stock_del(){
         $ids = $this->request->param('ids');
-        Db::startTrans();
-        try{
-            db::name('cdkey')->whereIn('id', $ids)->delete();
-            $goods_id = $this->request->param('goods_id');
-            $stock = db::name('cdkey')->where(['goods_id' => $goods_id])->sum('num');
-            db::name('goods')->where(['id' => $goods_id])->update(['stock' => $stock]);
-            db::commit();
-        } catch (\Exception $e) {
-            db::rollback();
-            $this->error($e->getMessage());
-        }
-
+        db::name('cdkey')->whereIn('id', $ids)->delete();
         $this->success('删除成功');
     }
 
@@ -824,10 +821,9 @@ class Goods extends Backend {
                 ->order($sort, $order)
                 ->paginate($limit)->toArray();
             $rows = $list['data'];
-
             foreach($rows as &$val){
                 $val['images'] = empty($val['images']) ? "/assets/img/none.jpg" : $val['images'];
-                $val['price'] = $val['price'][0]['price'];
+                $val['price'] = empty($val['price'][0]['price']) ? 0 : $val['price'][0]['price'];
                 $val['stock'] = db::name('cdkey')->where(['goods_id' => $val['id']])->sum('num');
             }
 

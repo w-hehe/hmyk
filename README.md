@@ -45,15 +45,18 @@ USDT支付
 
 红盟云卡反馈建议专区：[http://hmbbs.buzz/](http://hmbbs.buzz/)
 
+Telegram交流群：https://t.me/hongmengyunka
+
 
 ## 截图展示
-![后台首页](image/houtai.png)
-
-![插件管理](image/plugin.png)
-
-![默认模板](image/default.png)
-
-![天蝎座模板](image/tianxie.png)
+![卡片首页](images/卡片首页.png)
+![商品详情页](images/商品详情页.png)
+![商品列表](images/商品列表.png)
+![购买配置](images/购买配置.png)
+![通知配置](images/通知配置.png)
+![代理功能](images/代理功能.png)
+![优惠券功能](images/优惠券功能.png)
+![商品分类](images/商品分类.png)
 
 
 

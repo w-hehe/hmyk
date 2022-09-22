@@ -228,14 +228,26 @@ class Hm{
         // }
 //      测试
 
-        foreach($goods['price'] as $val){
-            if($user['agent'] >= $val['grade_id'] && $val['sku_ids'] == $goods['price'][0]['sku_ids']){
-                $goods['real_price'] = $val['price'];
+//        print_r($goods);die;
+        foreach($goods['price'] as $key => $val){
+            $item = $val;
+            if($item['grade_id'] == 0){
+                // $goods['price'][$key]['price'] = sprintf("%.2f", $item['price'] - sprintf("%.2f",floor(($item['price'] * ($user['discount'] / 100)) * 100) / 100));
+                if(!empty($user['discount'])){
+                    $item['price'] = sprintf("%.2f", $item['price'] - sprintf("%.2f",floor(($item['price'] * ($user['discount'] / 100)) * 100) / 100));
+                    $goods['price'][$key]['price'] = $item['price'];
+                }
+
             }
+
+            if($user['agent'] >= $item['grade_id'] && $item['sku_ids'] == $goods['price'][0]['sku_ids']){
+                $goods['real_price'] = $item['price'];
+            }
+
         }
-        if(!empty($user['discount']) && empty($goods['real_price'])){
-            $goods['real_price'] = sprintf("%.2f", $goods['price'] - sprintf("%.2f",floor(($goods['price'] * ($user['discount'] / 100)) * 100) / 100));
-        }
+//        if(!empty($user['discount']) && empty($goods['real_price'])){
+//            $goods['real_price'] = sprintf("%.2f", $goods['price'] - sprintf("%.2f",floor(($goods['price'] * ($user['discount'] / 100)) * 100) / 100));
+//        }
 
         $inputs = [];
         if($goods['attach_id'] > 0){ //附加选项

@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 20/09/2022 15:16:06
+ Date: 22/09/2022 14:39:58
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', '0aa7ee5b4bd2a3292b340183b2971d63', 'db6b83', 'http://www.hmyk.com/assets/img/avatar.png', 'admin@admin.com', 0, 1663642448, '127.0.0.1', NULL, 1663642448, '4eca8de9-7104-4a4d-8565-fa262c83863f', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', '0aa7ee5b4bd2a3292b340183b2971d63', 'db6b83', 'http://www.hmyk.com/assets/img/avatar.png', 'admin@admin.com', 0, 1663809509, '127.0.0.1', NULL, 1663809509, 'f7a81bd3-d9be-4a7d-9b15-b260da398ec5', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_attach
@@ -565,8 +565,8 @@ CREATE TABLE `hm_options`  (
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.3.6');
-INSERT INTO `hm_options` VALUES (2, 'user_total', '16');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.3.7');
+INSERT INTO `hm_options` VALUES (2, 'user_total', '17');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');
 INSERT INTO `hm_options` VALUES (5, 'goods_total', '-26');
@@ -710,13 +710,11 @@ CREATE TABLE `hm_specification`  (
   `create_time` int(10) NULL DEFAULT NULL,
   `update_time` int(10) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '规格管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '规格管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of hm_specification
 -- ----------------------------
-INSERT INTO `hm_specification` VALUES (1, '清粉', '[{\"name\":\"\\u7c7b\\u578b\",\"value\":\"\\u67e5\\u5355\\u5220|\\u67e5\\u5c4f\\u853d|\\u6e05\\u7406\\u670b\\u53cb\\u5708\"},{\"name\":\"\\u65f6\\u6548\",\"value\":\"\\u5468\\u5361|\\u6708\\u5361|\\u5e74\\u5361\"}]', NULL, NULL);
-INSERT INTO `hm_specification` VALUES (2, '手机', '[{\"name\":\"\\u989c\\u8272\",\"value\":\"\\u767d\\u8272|\\u9ed1\\u8272|\\u7eff\\u8272|\\u84dd\\u8272\"},{\"name\":\"\\u5185\\u5b58\",\"value\":\"64G|128G\"}]', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for hm_test
