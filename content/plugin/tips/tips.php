@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 小贴士
-Version: 1.1
+Version: 1.11
 Plugin URL:
 Description: 这是世界上第一个红盟云卡插件，它会在控制台页面送上一句温馨的小提示。
 Author: 红盟云商

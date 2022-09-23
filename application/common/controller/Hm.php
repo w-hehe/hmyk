@@ -181,6 +181,10 @@ class Hm{
             db::name('goods')->where(['id' => $goods['id']])->setInc('sales_money', $order['money']); //更新商品销售额
         }
 
+        includeAction();
+        $order['pay_time'] = $timestamp;
+        doAction('order_notify', $order, $goods);
+
         $data = [
             'out_trade_no' => $order['order_no'],
             'cdk' => $kami,
@@ -228,6 +232,9 @@ class Hm{
         // }
 //      测试
 
+        $price_key = array_column($goods['price'], 'grade_id');
+        array_multisort($price_key,SORT_ASC,$goods['price']);
+
 //        print_r($goods);die;
         foreach($goods['price'] as $key => $val){
             $item = $val;
@@ -245,6 +252,9 @@ class Hm{
             }
 
         }
+
+
+
 //        if(!empty($user['discount']) && empty($goods['real_price'])){
 //            $goods['real_price'] = sprintf("%.2f", $goods['price'] - sprintf("%.2f",floor(($goods['price'] * ($user['discount'] / 100)) * 100) / 100));
 //        }

@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 22/09/2022 14:39:58
+ Date: 23/09/2022 16:19:56
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', '0aa7ee5b4bd2a3292b340183b2971d63', 'db6b83', 'http://www.hmyk.com/assets/img/avatar.png', 'admin@admin.com', 0, 1663809509, '127.0.0.1', NULL, 1663809509, 'f7a81bd3-d9be-4a7d-9b15-b260da398ec5', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', NULL, 'admin', '0aa7ee5b4bd2a3292b340183b2971d63', 'db6b83', 'http://www.hmyk.com/assets/img/avatar.png', 'admin@admin.com', 0, 1663895825, '127.0.0.1', NULL, 1663895825, 'a8a52088-1bd7-491c-b723-923860d2aab0', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_attach
@@ -565,11 +565,11 @@ CREATE TABLE `hm_options`  (
 -- ----------------------------
 -- Records of hm_options
 -- ----------------------------
-INSERT INTO `hm_options` VALUES (1, 'version', '2.3.7');
-INSERT INTO `hm_options` VALUES (2, 'user_total', '17');
+INSERT INTO `hm_options` VALUES (1, 'version', '2.3.8');
+INSERT INTO `hm_options` VALUES (2, 'user_total', '18');
 INSERT INTO `hm_options` VALUES (3, 'order_total', '0');
 INSERT INTO `hm_options` VALUES (4, 'money_total', '0');
-INSERT INTO `hm_options` VALUES (5, 'goods_total', '-26');
+INSERT INTO `hm_options` VALUES (5, 'goods_total', '-30');
 INSERT INTO `hm_options` VALUES (6, 'active_plugin', 'a:1:{i:0;s:13:\"tips/tips.php\";}');
 INSERT INTO `hm_options` VALUES (7, 'active_template', 'a:2:{s:2:\"pc\";s:6:\"pisces\";s:6:\"mobile\";s:6:\"pisces\";}');
 INSERT INTO `hm_options` VALUES (8, 'stock_show', '[{\"less\":\"-999\",\"greater\":0,\"content\":\"\\u552e\\u78d0\"},{\"less\":\"1\",\"greater\":\"10\",\"content\":\"\\u5c11\\u91cf\"},{\"less\":\"11\",\"greater\":\"1000000\",\"content\":\"\\u5145\\u8db3\"}]');
@@ -776,9 +776,9 @@ CREATE TABLE `hm_user_grade`  (
 -- ----------------------------
 -- Records of hm_user_grade
 -- ----------------------------
-INSERT INTO `hm_user_grade` VALUES (1, '普通', 10.00, 1648176573);
-INSERT INTO `hm_user_grade` VALUES (2, '精英', 20.00, 1648256768);
-INSERT INTO `hm_user_grade` VALUES (3, '至尊', 35.00, 1648260107);
-INSERT INTO `hm_user_grade` VALUES (4, '合作商', 50.00, 1648260104);
+INSERT INTO `hm_user_grade` VALUES (1, '普通', 10.00, 1663915064);
+INSERT INTO `hm_user_grade` VALUES (2, '精英', 20.00, 1663915057);
+INSERT INTO `hm_user_grade` VALUES (3, '至尊', 35.00, 1663915070);
+INSERT INTO `hm_user_grade` VALUES (4, '合作商', 50.00, 1663915061);
 
 SET FOREIGN_KEY_CHECKS = 1;

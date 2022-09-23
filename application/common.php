@@ -4,12 +4,25 @@
 
 use Symfony\Component\VarExporter\VarExporter;
 use think\Cache;
+use think\Db;
 use think\Response;
 use think\exception\HttpResponseException;
 
 define('HMURL', 'http://www.hmapi.me/');
 define('YS', 'https://blog.ysxue.net/');
 
+
+function includeAction(){
+    $active_plugins = Db::name('options')->where(['option_name' => 'active_plugin'])->value('option_content');
+    $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
+    if ($active_plugins && is_array($active_plugins)) {
+        foreach($active_plugins as $plugin) {
+            if(true === checkPlugin($plugin) && substr($plugin, -13) != '_template.php' && substr($plugin, -8) != '_pay.php') {
+                include_once(ROOT_PATH . 'content/plugin/' . $plugin);
+            }
+        }
+    }
+}
 
 
 /**
@@ -231,7 +244,7 @@ function curlJson($url, $data = null, $json = true, $header = []) {
  * 检查插件
  */
 function checkPlugin($plugin) {
-    if (is_string($plugin) && preg_match("/^[\w\-\/]+\.php$/", $plugin) && file_exists(ROOT_PATH . 'public/content/plugin/' . $plugin)) {
+    if (is_string($plugin) && preg_match("/^[\w\-\/]+\.php$/", $plugin) && file_exists(ROOT_PATH . 'content/plugin/' . $plugin)) {
         return true;
     } else {
         return false;

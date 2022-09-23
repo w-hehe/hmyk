@@ -355,6 +355,7 @@ class Goods extends Backend {
         if($this->request->isPost()) {
             db::startTrans();
             try {
+//                print_r($params);die;
                 $sku = $params['sku'];
                 $sku_type = empty($params['sku_value']) ? 'one' : 'many';
                 if($sku_type == 'many'){
@@ -373,6 +374,7 @@ class Goods extends Backend {
                     }
                 }
                 $params = $params['row'];
+
                 if(empty($params['category_id'])) throw new \Exception('请选择商品分类');
                 $params['name'] = empty($params['name']) ? '未命名商品' : $params['name'];
                 if($params['goods_type'] == 'dock' && empty($params['remote_id'])) throw new \Exception('请选择对接商品');
@@ -451,11 +453,12 @@ class Goods extends Backend {
                             $key_arr = explode('_', $key);
                             $price_insert[$i]['grade_id'] = $key_arr[1];
                         }
-                        $price_insert[$i]['price'] = empty($val['price']) ? 0 : $val['price'];
+                        $price_insert[$i]['price'] = empty($val) ? 0 : $val;
                         $i++;
                     }
 
                 }
+//                print_r($sku); print_r($price_insert);die;
                 db::name('price')->insertAll($price_insert);
                 db::commit();
             }catch (\Exception $e){

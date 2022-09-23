@@ -29,15 +29,6 @@ class Notify extends Controller {
         foreach($options as $val) $this->options[$val['option_name']] = $val['option_content'];
         $this->options['buy_data'] = json_decode($this->options['buy_data'], true);
         $this->timestamp = time();
-        $active_plugins = Db::name('options')->where(['option_name' => 'active_plugin'])->value('option_content');
-        $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
-        if ($active_plugins && is_array($active_plugins)) {
-            foreach($active_plugins as $plugin) {
-                if(true === checkPlugin($plugin) && substr($plugin, -13) != '_template.php' && substr($plugin, -8) != '_pay.php') {
-                    include_once(ROOT_PATH . 'content/plugin/' . $plugin);
-                }
-            }
-        }
     }
 
     public function test(){
@@ -191,11 +182,6 @@ class Notify extends Controller {
                         $obj->nOrderUs($n_order_data);
                     }
                 }
-
-                try{
-                    doAction('order_notify', $order, $goods);
-                }catch(\Exception $e){}
-
 
                 echo 'success'; die;
 

@@ -243,16 +243,7 @@ class Backend extends Controller
             'options' => $this->options
         ]);
 
-        //执行插件
-        $active_plugins = $this->options['active_plugin'];
-        $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
-        if ($active_plugins && is_array($active_plugins)) {
-            foreach($active_plugins as $plugin) {
-                if(true === checkPlugin($plugin) && substr($plugin, -8) != '_pay.php') {
-                    include_once(ROOT_PATH . 'public/content/plugin/' . $plugin);
-                }
-            }
-        }
+        includeAction();
     }
 
     /**
