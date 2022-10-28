@@ -147,7 +147,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     }
 
                                 },
-                                {
+                                { //单规格
                                     name: 'admin_stock',
                                     title: __('管理库存'),
                                     classname: 'btn btn-xs btn-juse btn-dialog',
@@ -155,7 +155,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     url: 'goods/stock',
                                     text:'管理库存',
                                     hidden:function(row){
-                                        if(row.goods_type == 'dock' || row.goods_type == 'manual'){
+                                        if(row.goods_type == 'dock' || row.goods_type == 'manual' || (row.sku != '' && row.sku != null)){
+                                            return true;
+                                        }
+                                    }
+                                },
+                                { //多规格
+                                    name: 'admin_stock',
+                                    title: __('管理库存'),
+                                    classname: 'btn btn-xs btn-juse btn-dialog',
+                                    icon: 'fa fa-cogs',
+                                    url: 'goods/stock_sku',
+                                    text:'管理库存',
+                                    hidden:function(row){
+                                        if(row.goods_type == 'dock' || row.goods_type == 'manual' || row.sku == '' || row.sku == null){
                                             return true;
                                         }
                                     }
@@ -400,9 +413,242 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
                 // 为表格2绑定事件
                 Table.api.bindevent(table2);
+            },
+
+            ws_sku: function () {
+                Table.api.init({
+                    extend: {
+                        del_url: 'goods/stock_del', //删除选中
+                        // repeat_url: 'goods/repeat/price_id/' + $('#price_id').val(), //删除重复
+                        // ept_url: 'goods/ept/price_id/' + $('#price_id').val(), //清空库存
+                    }
+                });
+                // 表格1
+                var table1 = $("#table1");
+                table1.bootstrapTable({
+                    url: 'goods/stock_sku_manage' + location.search + "&status=ws&price_id=" + $('#price_id').val(),
+                    toolbar: '#toolbar1',
+                    sortName: 'id',
+                    visible: false,
+                    showToggle: false,
+                    showColumns: false,
+                    showExport: false,
+                    search:false,
+                    commonSearch: false,
+                    columns: [
+                        [
+                            {checkbox: true},
+                            {
+                                field: 'cdk',
+                                title: __('卡密'),
+                                align: 'center',
+                                formatter:function(value,row,index){
+                                    if(row.type == 3){
+                                        return `<a href="javascript:"><img class="img-sm img-center" src="${value}"></a>`;
+                                    }else{
+                                        return value;
+                                    }
+                                }
+                            },
+                            {
+                                field: 'createtime',
+                                title: __('添加时间'),
+                                operate: 'RANGE',
+                                addclass: 'datetimerange',
+                                formatter: Table.api.formatter.datetime
+                            },
+                            {field: 'operate', title: __('Operate'), table: table1, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        ]
+                    ]
+                });
+
+                // 为表格1绑定事件
+                Table.api.bindevent(table1);
+
+                // 按钮
+                $(document).on("click", ".btn-repeat", function () {
+                    Layer.confirm('您确定要删除该商品所有重复库存吗？ 注意该操作无法撤销！', {
+                        title: __('温馨提示'),
+                        btn: [__('确定'), __('取消')]
+                    }, function (index) {
+                        layer.close(index);
+                        layer.load();
+                        $.post("goods/repeat_sku", {price_id: $('#price_id').val()}, function (e) {
+                            layer.closeAll();
+                            if (e.code == 400) {
+                                layer.closeAll('loading');
+                                Toastr.error(e.msg);
+                            } else if (e.code == 200) {
+                                Layer.closeAll();
+                                Toastr.success(e.msg);
+                                table1.bootstrapTable('refresh', {});
+                            }
+                        }, "json").error(function () {
+                            Layer.closeAll();
+                            Toastr.error('请求失败');
+                        });
+
+                    }, function (index) {
+                        layer.close(index);
+                    });
+                });
+
+
+
+                // 按钮
+                $(document).on("click", ".btn-ept", function () {
+                    Layer.confirm('您确定要清空该商品所有的库存吗？ 注意该操作无法撤销！', {
+                        title: __('温馨提示'),
+                        btn: [__('确定'), __('取消')]
+                    }, function (index) {
+                        layer.close(index);
+                        layer.load();
+                        $.post("goods/ept_sku", {price_id: $('#price_id').val()}, function (e) {
+                            layer.closeAll();
+                            if (e.code == 400) {
+                                layer.closeAll('loading');
+                                Toastr.error(e.msg);
+                            } else if (e.code == 200) {
+                                Layer.closeAll();
+                                Toastr.success(e.msg);
+                                table1.bootstrapTable('refresh', {});
+                            }
+                        }, "json").error(function () {
+                            Layer.closeAll();
+                            Toastr.error('请求失败');
+                        });
+
+                    }, function (index) {
+                        layer.close(index);
+                    });
+                });
+            },
+            ys_sku: function () {
+                // 表格2
+                var table2 = $("#table2");
+                table2.bootstrapTable({
+                    url: 'goods/stock_sku_manage' + location.search + "&status=ys&price_id=" + $('#price_id').val(),
+                    extend: {
+                        index_url: '',
+                        add_url: '',
+                        edit_url: '',
+                        del_url: '',
+                        multi_url: '',
+                        table: '',
+                    },
+                    toolbar: '#toolbar2',
+                    sortName: 'id',
+                    visible: false,
+                    showToggle: false,
+                    showColumns: false,
+                    showExport: false,
+                    search:false,
+                    commonSearch: false,
+                    columns: [
+                        [
+                            {checkbox: true},
+                            {
+                                field: 'content',
+                                title: __('卡密'),
+                                align: 'center',
+                                formatter:function(value,row,index){
+                                    if(row.type == 3){
+                                        return `<a href="javascript:"><img class="img-sm img-center" src="${value}"></a>`;
+                                    }else{
+                                        return value;
+                                    }
+                                }
+                            },
+                            {
+                                field: 'create_time',
+                                title: __('出售时间'),
+                                operate: 'RANGE',
+                                addclass: 'datetimerange',
+                                formatter: Table.api.formatter.datetime
+                            },
+
+                        ]
+                    ]
+                });
+
+                // 为表格2绑定事件
+                Table.api.bindevent(table2);
             }
         },
 
+        stock_sku: function () {
+
+            // 初始化表格参数配置
+            Table.api.init({
+                extend: {
+                    index_url: 'goods/stock_sku',
+                }
+            });
+
+            var table = $("#table");
+
+            // 初始化表格
+            table.bootstrapTable({
+                url: $.fn.bootstrapTable.defaults.extend.index_url + '?goods_id=' + $('#goods_id').val(),
+                pk: 'price_id',
+                // sortName: 'price_id',
+                pagination: false,
+                columns: [
+                    [
+                        {checkbox: true},
+                        {field: 'sku', title: '规格'},
+                        {field: 'stock', title: '库存'},
+                        {
+                            field: 'operate',
+                            title: __('Operate'),
+                            table: table,
+                            events: Table.api.events.operate,
+                            buttons: [
+                                {
+                                    name: 'admin_stock',
+                                    title: __('管理库存'),
+                                    classname: 'btn btn-xs btn-juse btn-dialog',
+                                    icon: 'fa fa-cogs',
+                                    url: 'goods/stock_sku_manage',
+                                    text:'管理库存'
+                                }
+                            ],
+                            formatter: Table.api.formatter.operate
+                        }
+                    ]
+                ]
+            });
+
+            // 为表格绑定事件
+            Table.api.bindevent(table);
+
+        },
+        stock_sku_manage: function () {
+
+            // 初始化表格参数配置
+            Table.api.init({
+                extend: {
+                    del_url: 'goods/stock_del',
+                }
+            });
+
+            //绑定事件
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var panel = $($(this).attr("href"));
+                if (panel.size() > 0) {
+                    Controller.table[panel.attr("id")].call(this);
+                    $(this).on('click', function (e) {
+                        $($(this).attr("href")).find(".btn-refresh").trigger("click");
+                    });
+                }
+                //移除绑定的事件
+                $(this).unbind('shown.bs.tab');
+            });
+
+            //必须默认触发shown.bs.tab事件
+            $('ul.nav-tabs li.active a[data-toggle="tab"]').trigger("shown.bs.tab");
+
+        },
         stock: function () {
 
             // 初始化表格参数配置

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="spm_prefix" content="888.71946">
+    <script type="text/javascript">
+        var msource;
+        try {
+            var u = new URL(location.href);
+            var sp = u.searchParams;
+            msource = sp.get('msource') || sp.get('from') || sp.get('source_from') || sp.get('from_module')
+        } catch (e) {
+            console.warn('get page source from query failed', e)
+        }
+        window.activity = {id: 69640, spmId: '888.71946'};
+        window.reportMsgObj = {};
+
+        var ua = window.navigator.userAgent
+        var buvidMatch = ua.match(/Buvid\/([a-zA-Z0-9]+)/)
+        var appBuvid = buvidMatch && buvidMatch.length > 0 ? buvidMatch[1] : ''
+        window.reportConfig = {
+            sample: 1,
+            extMsgs: {
+                appBuvid: appBuvid,
+            },
+            scrollTracker: true,
+            msgObjects: 'reportMsgObj',
+            pvMsg: {msource: msource},
+            errorTracker: true
+        };
+    </script>
+    <script src="ie/static/js/log-reporter.js"></script>
+    <script src="ie/static/js/activity-report.js"></script>
+    <title>浏览器下载建议</title>
+    <link rel="stylesheet" type="text/css" href="ie/static/css/font_1454899_pqhvobved2o.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        ul, li {
+            list-style: none;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        ins, a {
+            text-decoration: none;
+        }
+
+        a:focus, *:focus {
+            outline: none;
+        }
+
+        .b-content {
+            width: 400px;
+            margin: 80px auto;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .pic-box {
+            padding-bottom: 20px;
+        }
+
+        .pic-box img {
+            max-width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .pic-box p {
+            line-height: 20px;
+            font-size: 12px;
+            padding-top: 15px;
+        }
+
+        .text-box {
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .text-box .title {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .text-box .list {
+            height: 90px;
+        }
+
+        .text-box .list li a {
+            float: left;
+            width: 100px;
+            text-align: center;
+            line-height: 24px;
+            color: #666;
+        }
+
+        .text-box .list li .iconfont {
+            font-size: 30px;
+        }
+
+        .text-box .list li a span {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="b-content">
+    <div class="text-box">
+        <div class="title">推荐您使用以下四款官方正版浏览器</div>
+        <div class="list">
+            <ul>
+                <li>
+                    <a href="https://www.google.cn/intl/zh-CN/chrome" target="_blank">
+                        <i class="iconfont icon-chrome"></i><br>
+                        Chrome<br>
+                        <span>谷歌</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.mozilla.org/zh-CN/firefox/new" target="_blank">
+                        <i class="iconfont icon-firefox"></i><br>
+                        Firefox<br>
+                        <span>火狐</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.microsoftedgeinsider.com" target="_blank">
+                        <i class="iconfont icon-edge"></i><br>
+                        Edge<br>
+                        <span>微软</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.opera.com/zh-cn" target="_blank">
+                        <i class="iconfont icon-opera"></i><br>
+                        Opera<br>
+                        <span>欧朋</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="pic-box">
+<!--        <img src="ie/static/picture/jjyrvlop7l.png">-->
+        <p>IE已逐渐边缘化。据 StatCounter 数据显示，在全球市场中，IE 的市场份额只有 0.73%。</p>
+        <p>当前网站已不支持IE11及以下浏览器和部分古老浏览器的访问。为了保障您的账号安全和浏览体验，邀请您使用以上现代浏览器。</p>
+    </div>
+
+</div>
+
+</body>
+</html>

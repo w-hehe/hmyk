@@ -49,14 +49,14 @@ Telegram交流群：https://t.me/hongmengyunka
 
 
 ## 截图展示
-![卡片首页](images/卡片首页.png)
-![商品详情页](images/商品详情页.png)
-![商品列表](images/商品列表.png)
-![购买配置](images/购买配置.png)
-![通知配置](images/通知配置.png)
-![代理功能](images/代理功能.png)
-![优惠券功能](images/优惠券功能.png)
-![商品分类](images/商品分类.png)
+![卡片首页](images/5.png)
+![商品详情页](images/6.png)
+![商品列表](images/7.png)
+![购买配置](images/3.png)
+![通知配置](images/1.png)
+![代理功能](images/2.png)
+![优惠券功能](images/4.png)
+![商品分类](images/8.png)
 
 
 

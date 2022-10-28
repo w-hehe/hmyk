@@ -1,0 +1,118 @@
+<!doctype html>
+<html data-dpr="1" style="font-size: 36px;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>温馨提示</title>
+    <link rel="shortcut icon" href="{$site.ico}" />
+    <link rel="stylesheet" href="/content/template/default/mobile/css/order_detail.css">
+    <style>
+        #order_details{
+            background: unset;
+        }
+        .btn{
+            -webkit-animation-name: glowing-primary;
+            animation-name: glowing-primary;
+            border-color: #088ef0;
+            background: -webkit-gradient(linear, left top, left bottom, from(#34a5f8), to(#088ef0));
+            background: linear-gradient(#34a5f8, #088ef0);
+            -webkit-animation-duration: 3s;
+            animation-duration: 3s;
+            -webkit-animation-iteration-count: infinite;
+            animation-iteration-count: infinite;
+            -webkit-animation-name: glowing;
+            animation-name: glowing;
+            border-style: solid;
+            border-width: 1px;
+            line-height: 38px;
+
+            -webkit-box-shadow: inset 0px 1px 0px rgb(255 255 255 / 30%), 0 1px 2px rgb(0 0 0 / 15%);
+            box-shadow: inset 0px 1px 0px rgb(255 255 255 / 30%), 0 1px 2px rgb(0 0 0 / 15%);
+            border-radius: 4px;
+            color: #FFF;
+            font-weight: 300;
+            font-size: 16px;
+            font-family: "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            text-decoration: none;
+            text-align: center;
+            height: 40px;
+            padding: 0 40px;
+            display: inline-block;
+            appearance: none;
+            cursor: pointer;
+            border: none;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            -webkit-transition-property: all;
+            transition-property: all;
+            -webkit-transition-duration: .3s;
+            transition-duration: .3s;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="order_details" class="Router order-detail" style="min-height: 17.0667rem; overflow: unset;">
+    <!--<div id="hides" style="background: rgb(42, 98, 255);">
+        <div class="wrap_hide imgSize lan">
+            <div class="hide_left_box" onclick="javascript:history.go(-1);">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAABgFBMVEX///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8P5Yj7AAAAf3RSTlMASB7L0gEDQjJ11DkE3fU7OAJzRAXnLu3XNzow8dDaeS/Y3ODy49sx+Bje1fRw2f4Ggy18Rkxq7OXKTm32aagPNntW4mUb7h1JHxdx6syXZhR3QBJkKfC9SiRFV+Ru4Svfcj901kf6erU1+z7Epn5Bf+uF04Z2s2gz0ZglkF0RRUKWswAAAY5JREFUeF7d0tVXQkEQx/FRuRcQFUEFFRW7u7C7u7u7u2v/dQ8cz8x95Le+ePy+f87s7C79xboX64c9mjbQpVSBc0zLZharcJephOfOV5Fu5zTmJqqfnPhctmoBtS6xS9ugTRarmkHbkyO2F7QZ1WKDqM0TO4vua7FO1KYzrfEamHWJPRr3YNYttrTKxOy5vFFlewJmr/PZFqI2pZxtVrMJ2gKxnQZmD4vEThPWSJrsOwDapgm2LX2oDbHtD5bFRtXoIEVqG1Lc8klrXFRNXnjLwtav9Joiwx5SmvlppkJpRz6lH9X/Bs+3atscMjLTNK3NTkSNFv1kb4yJspVVCrfWwrh8ndBSNlhXbsLavsU6qcqA9Y7oXQ+q94pF75uodleLdiag2nXAuiOYiuqMeNalx7WoPrWxPmuAtUN0TQN88kC24q7gW8u16BsT1T6LrjPg2TaLJjSfRd/BOvde9AN88kC86EcT1SUVjDschOaQ2c8E98LaywD/qUUu0qjkNYLfTNLp/cOvbJ9f9P/6BmNzuVa1ptNJAAAAAElFTkSuQmCC" class="hide_left">
+            </div>
+            温馨提示
+        </div>
+
+
+
+
+
+    </div>-->
+
+    <input type="hidden" id="url" value="<?php echo $goods_url; ?>" />
+    <div style="text-align: center;">
+        <button id="copy" class="btn">复制商品链接</button>
+        <button id="open-weixin" class="btn">唤起微信</button>
+    </div>
+
+    <img src="/content/plugin/wxpay_pay/jsapi-msg.png" style="max-width: 100%; max-height: 100%; margin-top: 15px;">
+
+</div>
+<textarea id="kami-value" style="display: none;"></textarea>
+<script src="/assets/shop/dist/jquery.js"></script>
+<script src="/content/template/default/js/layui.js"></script>
+<script src="/assets/shop/dist/clipboard.min.js"></script>
+<script src="/content/template/default/js/main.js"></script>
+<script>
+
+    // document.write('<script src="/assets/shop/dist/clipboard.min.js"><\/script>');
+
+    window.onload = function () {
+        var goods_url = $('#url').val();
+        var clipboard = new Clipboard('#copy', {
+            text: function () {
+                return goods_url;
+            }
+        });
+        clipboard.on('success', function (e) {
+            layer.msg("复制成功");
+        });
+
+        clipboard.on('error', function (e) {
+            layer.msg("复制失败");
+            console.log(e);
+        });
+
+        $('#open-weixin').click(function(){
+            location.href="weixin://";
+        })
+
+
+    }
+
+</script>
+
+</body>
+</html>

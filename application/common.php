@@ -11,6 +11,20 @@ use think\exception\HttpResponseException;
 define('HMURL', 'http://www.hmapi.me/');
 define('YS', 'https://blog.ysxue.net/');
 
+/**
+ * 判断是否是ie浏览器
+ * @return bool
+ */
+function isIe() {
+    $userbrowser = $_SERVER['HTTP_USER_AGENT'];
+    if(preg_match( '/MSIE/i', $userbrowser ) ) {
+        return true;
+    }
+    if(strpos($userbrowser,"Triden")) {
+        return true;
+    }
+    return false;
+}
 
 function includeAction(){
     $active_plugins = Db::name('options')->where(['option_name' => 'active_plugin'])->value('option_content');

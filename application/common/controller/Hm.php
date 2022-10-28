@@ -81,6 +81,27 @@ class Hm{
                 ];
                 $pays[] = 'card';
             }
+            if(in_array('ecny', $val['pay_type']) && !in_array('ecny', $pays)) {
+                $data[] = [
+                    'name' => '数字人民币',
+                    'key' => 'ecny'
+                ];
+                $pays[] = 'ecny';
+            }
+            if(in_array('erc20', $val['pay_type']) && !in_array('erc20', $pays)) {
+                $data[] = [
+                    'name' => 'USDT - ERC20',
+                    'key' => 'erc20'
+                ];
+                $pays[] = 'erc20';
+            }
+            if(in_array('trc20', $val['pay_type']) && !in_array('trc20', $pays)) {
+                $data[] = [
+                    'name' => 'USDT - TRC20',
+                    'key' => 'trc20'
+                ];
+                $pays[] = 'trc20';
+            }
 
         }
 
@@ -163,38 +184,64 @@ class Hm{
 
 
         $insert_sold = [];
+        $delete_cdk = [];
+        $sku_ids = "";
+        if(!empty($order['buy_info'])){
+            $buy_info = json_decode($order['buy_info'], true);
+            $sku_ids = empty($buy_info['sku_ids']) ? "" : $buy_info['sku_ids'];
+        }
         foreach($cdkey as $val){
             $kami[] = $val['cdk'];
             if(isset($val['id'])) $delete_cdk[] = $val['id'];
             $insert_sold[] = [
                 'order_id' => $order['id'],
                 'content' => $val['cdk'],
-                'create_time' => $timestamp
+                'create_time' => $timestamp,
+                'sku_ids' => $sku_ids,
             ];
         }
         db::name('sold')->insertAll($insert_sold);
-        if($goods['goods_type'] == 'alone') db::name('cdkey')->where(['id' => ['in', implode(',', $delete_cdk)]])->delete(); //删除独立卡密库存
-        if($goods['goods_type'] == 'fixed') db::name('cdkey')->where(['goods_id' => $goods['id']])->setDec('num', $order['buy_num']);
+        if($goods['goods_type'] == 'alone' && count($delete_cdk) > 0){ //删除独立卡密数据
+            db::name('cdkey')->where(['id' => ['in', implode(',', $delete_cdk)]])->delete();
+        }
+        if($goods['goods_type'] == 'fixed'){ // 减去固定卡密数量
+            db::name('cdkey')->where(['goods_id' => $goods['id']])->setDec('num', $order['buy_num']);
+        }
         db::name('order')->where(['id' => $order['id']])->update($order_update); //更新订单状态
         if($status == true){
             db::name('goods')->where(['id' => $goods['id']])->setInc('sales', $order['buy_num']); //更新商品销量
             db::name('goods')->where(['id' => $goods['id']])->setInc('sales_money', $order['money']); //更新商品销售额
         }
+        $order['pay_time'] = $timestamp;
 
         includeAction();
-        $order['pay_time'] = $timestamp;
         doAction('order_notify', $order, $goods);
 
         $data = [
             'out_trade_no' => $order['order_no'],
             'cdk' => $kami,
-            'stock' => '版本停用',
+            'stock' => self::getGoodsStock($goods['id'], $goods['goods_type'], $sku_ids),
             'pay_time' => $timestamp
         ];
         return ['code' => 200, 'msg' => 'success', 'data' => $data];
-
-
     }
+
+    /**
+     * 获取商品库存
+     */
+    static public function getGoodsStock($goods_id, $goods_type, $sku_ids = null){
+        $where = ['goods_id' => $goods_id];
+        if($goods_type == 'manual'){
+
+        }else{
+            if($sku_ids != null){
+                $where['sku_ids'] = $sku_ids;
+            }
+        }
+        $stock = db::name('cdkey')->where($where)->sum('num');
+        return $stock;
+    }
+
 
     /**
      * 构造表单并提交
@@ -235,11 +282,9 @@ class Hm{
         $price_key = array_column($goods['price'], 'grade_id');
         array_multisort($price_key,SORT_ASC,$goods['price']);
 
-//        print_r($goods);die;
         foreach($goods['price'] as $key => $val){
             $item = $val;
             if($item['grade_id'] == 0){
-                // $goods['price'][$key]['price'] = sprintf("%.2f", $item['price'] - sprintf("%.2f",floor(($item['price'] * ($user['discount'] / 100)) * 100) / 100));
                 if(!empty($user['discount'])){
                     $item['price'] = sprintf("%.2f", $item['price'] - sprintf("%.2f",floor(($item['price'] * ($user['discount'] / 100)) * 100) / 100));
                     $goods['price'][$key]['price'] = $item['price'];
@@ -252,12 +297,6 @@ class Hm{
             }
 
         }
-
-
-
-//        if(!empty($user['discount']) && empty($goods['real_price'])){
-//            $goods['real_price'] = sprintf("%.2f", $goods['price'] - sprintf("%.2f",floor(($goods['price'] * ($user['discount'] / 100)) * 100) / 100));
-//        }
 
         $inputs = [];
         if($goods['attach_id'] > 0){ //附加选项
@@ -305,6 +344,7 @@ class Hm{
     static public function getGoodsInfo($goods_id, $agent, $options = null){
 
         if(!isset($goods_model)) $goods_model = new \app\api\model\Goods;
+
         $goods = $goods_model->alias('g')
             ->join('cdkey c', 'g.id=c.goods_id')
             ->field('g.sales, g.details, g.dock_id, g.goods_type, g.shelf, g.id, g.name, g.images, g.eject, g.buy_msg, g.sku, g.attach_id, g.inputs, g.category_id, sum(c.num) stock')

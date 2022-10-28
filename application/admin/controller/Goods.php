@@ -121,6 +121,10 @@ class Goods extends Backend {
         $params = $this->request->param();
         $specification = db::name('specification')->select();
         if($this->request->isPost()) {
+
+            $stock_num = db::name('cdkey')->where(['goods_id' => $ids])->sum('num');
+            if($stock_num > 0 && $row['goods_type'] != $params['row']['goods_type']) $this->error('库存未清空，无法更改商品类型！');
+
             db::startTrans();
             try {
                 $sku = $params['sku'];
@@ -129,8 +133,6 @@ class Goods extends Backend {
                     $sku_type = is_array($val) ? 'many' : 'one'; //单规格或多规格
                     break;
                 }
-
-//                echo $sku_type . "\n\n"; print_r($params);die;
 
                 if($sku_type == 'many' && !empty($params['sku_value'])){
                     $sku_value = [];
@@ -181,11 +183,15 @@ class Goods extends Backend {
                     if($params['goods_type'] != 'manual') $update['stock'] = 0;
                 }
                 db::name('goods')->where(['id' => $ids])->update($update); //修改商品信息
+//                print_r($row);
+//                print_r($sku);die;
 
 //                print_r($specification);die;
                 //处理代理的购买价格
                 $price_insert_sku = [];
+                $update_sku_ids = null;
                 foreach($sku['price'] as $key => $val){ //规格列表
+                    $update_sku_ids = $update_sku_ids == null ? $key : $update_sku_ids;
                     $price_insert_sku[$key]['sku_ids'] = $key;
                     $price_insert_sku[$key]['sku'] = '';
                     $sku_ids = explode(',', $key);
@@ -209,6 +215,15 @@ class Goods extends Backend {
                     }
                     $price_insert_sku[$key]['sku'] = rtrim($price_insert_sku[$key]['sku'], ',');
                 }
+
+                if(empty($row['sku']) && $sku_type == 'many'){
+                    $update = [
+                        'sku_ids' => $update_sku_ids
+                    ];
+                    db::name('cdkey')->where(['goods_id' => $ids])->update($update);
+                }
+
+
                 $price_insert = [];
                 $i = 0;
                 foreach($sku['price'] as $key => $val){
@@ -685,6 +700,7 @@ class Goods extends Backend {
     //删除库存
     public function stock_del(){
         $ids = $this->request->param('ids');
+
         db::name('cdkey')->whereIn('id', $ids)->delete();
         $this->success('删除成功');
     }
@@ -695,6 +711,16 @@ class Goods extends Backend {
     public function ept(){
         $id = $this->request->param('id');
         db::name('cdkey')->where(['goods_id' => $id])->delete();
+        return  json(['code' => 200, 'msg' => '操作成功']);
+    }
+
+    /**
+     * 清空商品sku的库存
+     */
+    public function ept_sku(){
+        $price_id = $this->request->param('price_id');
+        $price = db::name('price')->where(['id' => $price_id])->find();
+        db::name('cdkey')->where(['goods_id' => $price['goods_id'], 'sku_ids' => $price['sku_ids']])->delete();
         return  json(['code' => 200, 'msg' => '操作成功']);
     }
 
@@ -724,16 +750,13 @@ class Goods extends Backend {
      */
     public function repeat(){
         $id = $this->request->param('id');
-        $where = [
-            'goods_id' => $id
-        ];
+        $where = ['goods_id' => $id];
         db::startTrans();
         try {
             $goods = db::name('goods')->where(['id' => $id])->find();
             if(!$goods){
                 throw new \Exception("商品不存在！");
             }
-
             $res = db::name('cdkey')->where($where)->field('id, cdk')->select();
             $cdk = [];
             foreach($res as $val){
@@ -743,25 +766,121 @@ class Goods extends Backend {
                     $cdk[] = $val['cdk'];
                 }
             }
-
-            $stock = count($cdk);
-            if($goods['goods_type'] == '0'){ //卡密商品
-                db::name('goods')->where(['id' => $id])->update(['stock' => $stock]);
-            }
-
-
             db::commit();
         }catch (\Exception $e){
             db::rollback();
-            return json(['code' => 400, 'msg' => '操作失败']);
+            return json(['code' => 400, 'msg' => $e->getMessage()]);
         }
-
         return  json(['code' => 200, 'msg' => '操作成功']);
-        print_r($res);die;
+
     }
 
     /**
-     * 查看库存
+     * 清除sku重复库存
+     */
+    public function repeat_sku(){
+        $price_id = $this->request->param('price_id');
+        $price = db::name('price')->where(['id' => $price_id])->find();
+        db::startTrans();
+        try {
+            $where = [
+                'goods_id' => $price['goods_id'],
+                'sku_ids' => $price['sku_ids']
+            ];
+            $res = db::name('cdkey')->where($where)->field('id, cdk')->select();
+            $cdk = [];
+            foreach($res as $val){
+                if(in_array($val['cdk'], $cdk)){
+                    db::name('cdkey')->where(['id' => $val['id']])->delete();
+                }else{
+                    $cdk[] = $val['cdk'];
+                }
+            }
+            db::commit();
+        }catch (\Exception $e){
+            db::rollback();
+            return json(['code' => 400, 'msg' => $e->getMessage()]);
+        }
+        return  json(['code' => 200, 'msg' => '操作成功']);
+    }
+
+    /**
+     * 多规格库存
+     */
+    public function stock_sku(){
+        $goods_id = $this->request->param('ids');
+        //设置过滤方法
+        $this->request->filter(['strip_tags', 'trim']);
+        if ($this->request->isAjax()) {
+            $goods_id = $this->request->param('goods_id');
+            $result = db::name('price')->where(['goods_id' => $goods_id, 'grade_id' => 0])->field('id, sku, sku_ids')->select();
+            $list = [];
+            foreach($result as $val){
+                $stock = db::name('cdkey')->where(['goods_id' => $goods_id, 'sku_ids' => $val['sku_ids']])->sum('num');
+                $list[] = [
+                    'price_id' => $val['id'],
+                    'sku' => $val['sku'],
+                    'sku_ids' => $val['sku_ids'],
+                    'stock' => $stock
+                ];
+            }
+            $result = ["rows" => $list];
+            return json($result);
+        }
+
+        $this->assign([
+            'goods_id' => $goods_id
+        ]);
+        return $this->view->fetch();
+    }
+
+    //管理sku库存
+    public function stock_sku_manage(){
+
+        $price_id = $this->request->param('ids');
+
+        //设置过滤方法
+        $this->request->filter(['strip_tags', 'trim']);
+        if ($this->request->isAjax()) {
+            $post = $this->request->param();
+            $price_id = $post['price_id'];
+            if(empty($post['status']) || $post['status'] == 'ws'){ //未售
+                $result = db::name('price')->where(['id' => $price_id])->find();
+                $where = [
+                    'goods_id' => $result['goods_id'],
+                    'sku_ids' => $result['sku_ids']
+                ];
+                $list = db::name('cdkey')->where($where)->limit($post['offset'], $post['limit'])->select();
+                $total = db::name('cdkey')->where($where)->count();
+            }else{ //已售
+                $result = db::name('price')->where(['id' => $price_id])->find();
+                $field = "s.content, s.create_time";
+                $list = db::name('order')->alias('o')
+                    ->join('sold s', 's.order_id=o.id')
+                    ->field($field)
+                    ->where(['o.goods_id' => $result['goods_id'], 's.sku_ids' => $result['sku_ids']])
+                    ->order('o.id desc')
+                    ->limit($post['offset'], $post['limit'])
+                    ->select();
+                $total = db::name('order')->alias('o')
+                    ->join('sold s', 's.order_id=o.id')
+                    ->where(['o.goods_id' => $result['goods_id'], 's.sku_ids' => $result['sku_ids']])
+                    ->count();
+            }
+
+
+            $result = ["total" => $total, "rows" => $list];
+            return json($result);
+        }
+
+        $this->assign([
+            'price_id' => $price_id
+        ]);
+        return $this->view->fetch();
+    }
+
+    /**
+     * 单规格库存
      */
     public function stock(){
 

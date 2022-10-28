@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 官方支付宝
-Version: 2.31
+Version: 2.4.0
 Plugin URL:
 Description: 官方支付宝支付
 Author: 云商学院
@@ -61,7 +61,10 @@ function pay($order, $goods, $params = []) {
         $data['method'] = 'alipay.trade.precreate'; //接口名称  - 当面付
         $sub_type = 'sm';
     }else{
-        die('官方支付宝支付插件未开启合适的支付方式！请联系管理员处理');
+        return [
+            'code' => 400,
+            'msg' => '官方支付宝支付插件未开启合适的支付方式！请联系管理员处理'
+        ];
     }
 
     $data['biz_content'] = json_encode($biz_content); //请求参数的集合

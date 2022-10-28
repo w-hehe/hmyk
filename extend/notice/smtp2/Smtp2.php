@@ -36,13 +36,13 @@ class Smtp2 {
 
         $html = str_replace('{$create_time}', date('Y-m-d H:i:s', $data['create_time']), $html);
         if(empty($data['pay_type'])){
-            $html = str_replace('{$pay_type}', '免费商品', $html);
+            $html = str_replace('{$pay_type}', '-', $html);
         }else{
             $html = str_replace('{$pay_type}', $data['pay_type'], $html);
         }
 
         if(empty($data['pay_time'])){
-            $html = str_replace('{$pay_time}', '免费商品', $html);
+            $html = str_replace('{$pay_time}', '-', $html);
         }else{
             $html = str_replace('{$pay_time}', date('Y-m-d H:i:s', $data['pay_time']), $html);
         }
@@ -78,13 +78,13 @@ class Smtp2 {
 
         $html = str_replace('{$create_time}', date('Y-m-d H:i:s', $data['create_time']), $html);
         if(empty($data['pay_type'])){
-            $html = str_replace('{$pay_type}', '免费商品', $html);
+            $html = str_replace('{$pay_type}', '-', $html);
         }else{
             $html = str_replace('{$pay_type}', $data['pay_type'], $html);
         }
 
         if(empty($data['pay_time'])){
-            $html = str_replace('{$pay_time}', '免费商品', $html);
+            $html = str_replace('{$pay_time}', '-', $html);
         }else{
             $html = str_replace('{$pay_time}', date('Y-m-d H:i:s', $data['pay_time']), $html);
         }

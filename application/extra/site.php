@@ -4,7 +4,7 @@ return array (
   'shop_title' => '我的网站',
   'shop_pet_name' => '我的网站',
   'beian' => '',
-  'version' => '1663651756',
+  'version' => '1666851502',
   'min_cashout' => '0',
   'max_cashout_num' => '3',
   'cashout_charged' => '1',

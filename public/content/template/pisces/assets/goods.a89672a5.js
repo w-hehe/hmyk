@@ -1,0 +1,1 @@
+import{c as t}from"./footer.1784d682.js";const s="/api/v1/pisces/";function e(o){return t({url:s+"goods/goods_id/"+o,method:"get"})}function d(o){return t({url:s+"getGoodsStock",method:"post",data:o})}function n(o){return t({url:s+"goodsPay",method:"post",data:o})}export{e as a,d as b,n as g};

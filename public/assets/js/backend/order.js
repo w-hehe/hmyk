@@ -143,6 +143,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     return '<span class="label label-success">QQ</span>';
                                 }else if(value == 'balance'){
                                     return '<span class="label label-success">余额</span>';
+                                }else if(value == 'ecny'){
+                                    return '<span class="label label-success">数字人民币</span>';
+                                }else if(value == 'trc20'){
+                                    return '<span class="label label-success">TRON-USDT</span>';
+                                }else if(value == 'erc20'){
+                                    return '<span class="label label-success">Ethereum-USDT</span>';
                                 }else {
                                     return '-';
                                 }

@@ -1,0 +1,1 @@
+import{c as r}from"./footer.dd270afd.js";const s="/api/v1/pisces/";function e(o){return r({url:s+"goods/goods_id/"+o,method:"get"})}function a(o){return r({url:s+"goodsPay",method:"post",data:o})}export{e as a,a as g};

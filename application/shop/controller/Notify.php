@@ -121,6 +121,7 @@ class Notify extends Controller {
      * 回调通知
      */
     public function index(){
+        Db::name('test')->insert(['content' => '回调']);
         Db::startTrans();
         try{
 
@@ -187,14 +188,15 @@ class Notify extends Controller {
 
             }else{
                 Db::rollback();
-                echo 'fail'; die;
+                
+                echo '验签失败'; die;
             }
         } catch (\Exception $e) {
             // 回滚事务
             Db::rollback();
             echo $e->getMessage();
             echo '<br>';
-            echo 'fail';die;
+            echo 'fail1';die;
         }
 
     }
