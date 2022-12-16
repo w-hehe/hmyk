@@ -484,6 +484,8 @@ class Pisces extends Controller {
 
         }
         if($post['search_type'] == 'out_trade_no') $where['order_no'] = $post['out_trade_no'];
+        
+        if(empty($where)) return json(['code' => 0, 'msg' => '违法查询']);
 
         $result = db::name('order')->alias('o')
             ->join('goods g', 'g.id=o.goods_id')
