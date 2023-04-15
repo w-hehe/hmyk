@@ -1,1 +1,0 @@
-import{c as e}from"./footer.1784d682.js";const t="/api/v1/pisces/";function a(r){return e({url:t+"orderDetail/out_trade_no/"+r,method:"get"})}function s(r){return e({url:t+"orderSearch",method:"get",params:r})}export{a as d,s};
