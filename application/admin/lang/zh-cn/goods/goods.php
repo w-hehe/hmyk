@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'Id'             => 'ID',
+    'Category_id'    => '上级分类',
+    'Type'           => '商品类型',
+    'Attach'         => '附加选项',
+    'Wholesale'      => '批发优惠',
+    'Quota'          => '每日限购',
+    'Name'           => '名称',
+    'Agency_see'     => '仅代理可见',
+    'Invented_sales' => '虚拟销量',
+    'Cover'          => '封面图',
+    'Images'         => '图片',
+    'Is_specs'       => '是否多规格',
+    'Specs'          => '规格内容',
+    'Detail'         => '详细内容',
+    'Shelf'          => '上架',
+    'Shelf 0'        => '下架',
+    'Shelf 1'        => '上架',
+    'Sales'          => '销量',
+    'Stock'          => '库存',
+    'Start_number'   => '起拍数量',
+    'Weigh'          => '商品排序',
+    'Unit'           => '单位',
+    'Course'         => '使用教程',
+    'Pop_content'    => '弹窗内容',
+    'Create_time'    => '创建时间',
+    'Update_time'    => '修改时间'
+];

@@ -1,0 +1,191 @@
+<style type="text/css">
+    @media (max-width: 375px) {
+        .edit-form tr td input {
+            width: 100%;
+        }
+
+        .edit-form tr th:first-child, .edit-form tr td:first-child {
+            width: 20%;
+        }
+
+        .edit-form tr th:nth-last-of-type(-n+2), .edit-form tr td:nth-last-of-type(-n+2) {
+            display: none;
+        }
+    }
+
+    .edit-form table > tbody > tr td a.btn-delcfg {
+        visibility: hidden;
+    }
+
+    .edit-form table > tbody > tr:hover td a.btn-delcfg {
+        visibility: visible;
+    }
+
+    @media (max-width: 767px) {
+        .edit-form table tr th:nth-last-child(-n + 2), .edit-form table tr td:nth-last-child(-n + 2) {
+            display: none;
+        }
+
+        .edit-form table tr td .msg-box {
+            display: none;
+        }
+    }
+    .panel-intro > .panel-heading{
+        padding: 0;
+        background: #f5f5f5;
+    }
+    .panel-intro > .panel-heading .nav-tabs > li > a{
+        margin-right: 0;
+        border: unset;
+        background: none;
+    }
+    .panel-intro > .panel-heading .nav-tabs > li > a {
+
+    }
+    .panel-intro > .panel-heading .nav-tabs > li > a:hover,
+    .panel-intro > .panel-heading .nav-tabs > li > a:focus {
+        border: unset;
+        color: #7b8a8b;
+        /* background-color: #c9d4dc; */
+    }
+    .f{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .panel-intro > .panel-heading .nav-tabs > li.active > a{
+        color: #4397fd;
+    }
+    @media (min-width: 768px){
+        .form-horizontal .control-label {
+            text-align: left;
+            margin-bottom: 8px;
+            padding-top: 7px;
+        }
+    }
+    .sku-true{
+        display: none;
+    }
+</style>
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="f  col-lg-8">
+        <div class="panel panel-default panel-intro">
+            <!--            <div class="panel-heading"></div>-->
+            <div class="panel-body">
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade active in" id="tab-1">
+                        <div class="widget-body no-padding">
+                            {if condition="$goods.type == 'alone'"}
+                            {if condition="$goods.is_sku == 1"}
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">请选择为哪些规格添加库存</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    {volist name="$sku" id="vo"}
+                                    <label style="margin-right: 15px;"><input class="" name="sku[]" type="checkbox" value="{$vo.id}">&nbsp;{$vo.sku}</label>
+                                    {/volist}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">库存数据</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    <textarea class="form-control" name="stock" rows="10" placeholder="一行一个库存"></textarea>
+                                </div>
+                            </div>
+                            {/if}
+
+                            <!-- 单规格 - 独立卡密 -->
+                            {if condition="$goods.is_sku == 0"}
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">库存数据</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    <textarea class="form-control" name="stock" rows="10" placeholder="一行一个库存"></textarea>
+                                </div>
+                            </div>
+                            {/if}
+                            {/if}
+
+                            {if condition="$goods.type == 'invented'"}
+                            {if condition="$goods.is_sku == 0"}
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">库存数量</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    <input value="{$stock.num|default=''}" class="form-control" name="num" rows="10" placeholder="请输入库存数量" />
+                                </div>
+                            </div>
+                            {/if}
+                            {if condition="$goods.is_sku == 1"}
+                            <dl class="fieldlist" data-name="row[stock]" data-template="invented_stock_tpl">
+                                <dd>
+                                    <ins style="width: 100px;">属性名</ins>
+                                    <ins style="width: 100px;">库存数量</ins>
+                                </dd>
+                                <dd>
+                                </dd>
+                                <textarea name="row[stock]" class="form-control hide" cols="30" rows="5">{$data}</textarea>
+                            </dl>
+                            <!--定义模板，模板语法使用Art-Template模板语法-->
+                            <script type="text/html" id="invented_stock_tpl">
+                                <dd class="form-inline">
+                                    <input readonly type="hidden" style="width: 100px;" name="row[<%=name%>][<%=index%>][id]" class="form-control" value="<%=row['id']%>" size="10">
+                                    <input readonly type="text" style="width: 100px;" name="row[<%=name%>][<%=index%>][sku]" class="form-control" value="<%=row['sku']%>" size="10">
+                                    <input type="number" style="width: 100px;" name="row[<%=name%>][<%=index%>][stock]" class="form-control" value="<%=row['stock']%>" size="30">
+                                </dd>
+                            </script>
+                            {/if}
+                            {/if}
+
+
+                            {if condition="$goods.type == 'fixed'"}
+                                {if condition="$goods.is_sku == 0"}
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-12">库存数量</label>
+                                    <div class="col-xs-12 col-sm-12">
+                                        <input value="{$stock.num|default=''}" class="form-control" name="num" rows="10" placeholder="请输入库存数量" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-12">库存内容</label>
+                                    <div class="col-xs-12 col-sm-12">
+                                        <input value="{$stock.content|default=''}" class="form-control" name="content" rows="10" placeholder="请输入库存数据" />
+                                    </div>
+                                </div>
+                                {/if}
+                                {if condition="$goods.is_sku == 1"}
+                                <dl class="fieldlist" data-name="row[stock]" data-template="stocktpl">
+                                    <dd>
+                                        <ins style="width: 100px;">属性名</ins>
+                                        <ins style="width: 100px;">库存数量</ins>
+                                        <ins style="width: 400px;">库存内容</ins>
+                                    </dd>
+                                    <dd>
+                                    </dd>
+                                    <textarea name="row[stock]" class="form-control hide" cols="30" rows="5">{$data}</textarea>
+                                </dl>
+                                <!--定义模板，模板语法使用Art-Template模板语法-->
+                                <script type="text/html" id="stocktpl">
+                                    <dd class="form-inline">
+                                        <input readonly type="hidden" style="width: 100px;" name="row[<%=name%>][<%=index%>][id]" class="form-control" value="<%=row['id']%>" size="10">
+                                        <input readonly type="text" style="width: 100px;" name="row[<%=name%>][<%=index%>][sku]" class="form-control" value="<%=row['sku']%>" size="10">
+                                        <input type="number" style="width: 100px;" name="row[<%=name%>][<%=index%>][num]" class="form-control" value="<%=row['num']%>" size="30">
+                                        <input type="text" style="width: 400px;" name="row[<%=name%>][<%=index%>][content]" class="form-control" value="<%=row['content']%>" size="30">
+                                    </dd>
+                                </script>
+                                {/if}
+                            {/if}
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group layer-footer">
+                    <label class="control-label col-xs-12 col-sm-12"></label>
+                    <div class="col-xs-12 col-sm-12">
+                        <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+                        <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</form>
+

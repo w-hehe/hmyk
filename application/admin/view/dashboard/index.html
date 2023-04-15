@@ -1,0 +1,68 @@
+<style>
+    .list-group-item{
+        /*border-top: unset;*/
+        border-left: unset;
+        border-right: unset;
+    }
+    #jiance{
+        text-decoration: none;
+        margin-left: 15px;
+    }
+    #jiance:hover{
+        text-decoration: underline;
+    }
+</style>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+    
+        <div class="alert" role="alert" style="background: #444c69; color: #fff;">
+            系统版本：v{$version}
+            <a href="javascript:;" id="jiance" data-loading="0">检测版本</a>
+        </div>
+    </div>
+    
+    <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">广告联盟</div>
+            <div class="panel-body" style="padding: 0;">
+                <div class="list-group" style="margin-bottom: 0;">
+                    {volist name="data.advert" id="vo"}
+                    <a href="{$vo.url}" class="list-group-item" target="_blank">{$vo.content}</a>
+                    {/volist}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">官方公告</div>
+            <div class="panel-body" style="padding: 0;">
+                <div class="list-group" style="margin-bottom: 0;">
+                    <a href="javascript:;" class="list-group-item">暂无任何内容</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<input type="hidden" value="{$new_version}" id="new-version" />
+<script id="upgrade_tpl" type="text/html">
+    <div>
+        <form class="form-horizontal">
+            <fieldset style="text-align: center;" id="upgrade-text">
+                <p style="color: #f75444; font-weight: bold; font-size: 15px;">发现新版本，老版本即刻起停止维护，建议您立即更新！</p>
+                <p style="color: #f75444; font-weight: bold; font-size: 15px;">更新前请先备份网站文件及数据库，避免更新异常导致网站无法访问！</p>
+                <p style="color: #f75444; font-weight: bold; font-size: 15px;">如更新过程出现任何问题，请及时联系官方人员获取免费协助！</p>
+                <div>
+                    {volist name="data.version" id="vo"}
+                    <p>版本号：{$vo.version}</p>
+                    {/volist}
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</script>

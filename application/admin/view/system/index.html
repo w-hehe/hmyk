@@ -1,0 +1,198 @@
+<style type="text/css">
+    @media (max-width: 375px) {
+        .edit-form tr td input {
+            width: 100%;
+        }
+
+        .edit-form tr th:first-child, .edit-form tr td:first-child {
+            width: 20%;
+        }
+
+        .edit-form tr th:nth-last-of-type(-n+2), .edit-form tr td:nth-last-of-type(-n+2) {
+            display: none;
+        }
+    }
+
+    .edit-form table > tbody > tr td a.btn-delcfg {
+        visibility: hidden;
+    }
+
+    .edit-form table > tbody > tr:hover td a.btn-delcfg {
+        visibility: visible;
+    }
+
+    @media (max-width: 767px) {
+        .edit-form table tr th:nth-last-child(-n + 2), .edit-form table tr td:nth-last-child(-n + 2) {
+            display: none;
+        }
+
+        .edit-form table tr td .msg-box {
+            display: none;
+        }
+    }
+    .panel-intro > .panel-heading{
+        padding: 0;
+        background: #f5f5f5;
+    }
+    .panel-intro > .panel-heading .nav-tabs > li > a{
+        margin-right: 0;
+        border: unset;
+        background: none;
+    }
+    .panel-intro > .panel-heading .nav-tabs > li > a {
+
+    }
+    .panel-intro > .panel-heading .nav-tabs > li > a:hover,
+    .panel-intro > .panel-heading .nav-tabs > li > a:focus {
+        border: unset;
+        color: #7b8a8b;
+        /* background-color: #c9d4dc; */
+    }
+    .f{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .panel-intro > .panel-heading .nav-tabs > li.active > a{
+        color: #4397fd;
+    }
+    @media (min-width: 768px){
+        .form-horizontal .control-label {
+            text-align: left;
+            margin-bottom: 8px;
+            padding-top: 7px;
+        }
+    }
+    .sku-true{
+        display: none;
+    }
+</style>
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="f  col-lg-8">
+        <div class="panel panel-default panel-intro">
+            <div class="panel-heading">
+                {:build_heading(null, false)}
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab-1" data-toggle="tab">基础配置</a></li>
+                    <!--<li><a href="#tab-2" data-toggle="tab">规格属性</a></li>
+                    <li><a href="#tab-3" data-toggle="tab">商品详情</a></li>
+                    <li><a href="#tab-4" data-toggle="tab">营销设置</a></li>
+                    <li><a href="#tab-5" data-toggle="tab">附加选项</a></li>
+                    <li><a href="#tab-6" data-toggle="tab">更多信息</a></li>-->
+                </ul>
+            </div>
+            <div class="panel-body">
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade active in" id="tab-1">
+                        <div class="widget-body no-padding">
+                            <!--<div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">商品类型</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    {:build_radios('row[type]', ['alone'=>__('独立卡密'), 'fixed'=>__('固定卡密'), 'invented'=>'虚拟商品'])}
+                                </div>
+                            </div>-->
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">网站名称</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    <input id="c-name" class="form-control" name="name" type="text" value="{$options.name}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">网站标题</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    <input id="c-title" class="form-control" name="title" type="text" value="{$options.title}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">关键词</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    <input id="c-keywords" class="form-control" name="keywords" type="text" value="{$options.keywords}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">网站说明</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    <textarea name="description" class="form-control">{$options.description}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">Logo</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="input-group">
+                                        <input id="c-logo" class="form-control" size="50" name="logo" type="text" value="{$options.logo}">
+                                        <div class="input-group-addon no-border no-padding">
+                                            <span><button type="button" id="faupload-logo" class="btn btn-danger faupload" data-input-id="c-logo" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp" data-multiple="false" data-preview-id="p-logo"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                                            <span><button type="button" id="fachoose-logo" class="btn btn-primary fachoose" data-input-id="c-logo" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                                        </div>
+                                        <span class="msg-box n-right" for="c-logo"></span>
+                                    </div>
+                                    <ul class="row list-inline faupload-preview" id="p-logo"></ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">备案号</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    <input id="c-beian" class="form-control" name="beian" type="text" value="{$options.beian}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="tab-6">
+                        <div class="widget-body no-padding">
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">{:__('Course')}</label>
+                                <div class="col-xs-12 col-sm-12">
+                                    <textarea id="c-course" class="form-control editor" rows="5" name="row[course]" cols="50"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-12">{:__('Pop_content')}</label>
+                                <div class="col-xs-12 col-sm-12">
+            <textarea id="c-pop_content" class="form-control editor" rows="5" name="row[pop_content]"
+                      cols="50"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group layer-footer">
+                    <label class="control-label col-xs-12 col-sm-12"></label>
+                    <div class="col-xs-12 col-sm-12">
+                        <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+                        <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="f col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">其他设置</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-12">icon</label>
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="input-group">
+                            <input id="c-icon" class="form-control" size="50" name="icon" type="text" value="{$options.icon}">
+                            <div class="input-group-addon no-border no-padding">
+                                <span><button type="button" id="faupload-icon" class="btn btn-danger faupload" data-input-id="c-icon" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp" data-multiple="false" data-preview-id="p-icon"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                                <span><button type="button" id="fachoose-icon" class="btn btn-primary fachoose" data-input-id="c-icon" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                            </div>
+                            <span class="msg-box n-right" for="c-icon"></span>
+                        </div>
+                        <ul class="row list-inline faupload-preview" id="p-icon"></ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-12">自定义代码</label>
+                    <div class="col-xs-12 col-sm-12">
+                        <textarea name="custom_code" class="form-control" rows="5">{$options.custom_code}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

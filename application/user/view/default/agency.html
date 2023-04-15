@@ -1,0 +1,49 @@
+<style>
+
+    .profile-avatar-container button{
+        position:absolute;
+        top:0;left:0;width:100px;height:100px;opacity: 0;
+    }
+</style>
+<div id="content-container" class="container">
+    <div class="row">
+        <div class="" style="width: 250px; float: left;">
+            {include file="default/common/sidenav" /}
+        </div>
+        <div class="user-main" style=" float: right;">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h2 class="page-header">{:__('成为代理')}</h2>
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="">代理等级</th>
+                                <th>购买折扣</th>
+                                <th>开通价格</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist name="agency" id="vo"}
+                            <tr>
+                                <td>{$vo.name}</td>
+                                <td>{:floatval($vo.discount)}折</td>
+                                <td>&yen; {$vo.price}</td>
+                                <td class="text-center">
+                                    <form class="agency-form" method="post" action="">
+                                        <input type="hidden" name="agency_id" value="{$vo.id}" />
+                                        <button type="submit" class="btn submit-disabled disabled">开通</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {/volist}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('P_trade_no')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-p_trade_no" class="form-control" name="row[p_trade_no]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Out_trade_no')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-out_trade_no" class="form-control" name="row[out_trade_no]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Goods_type')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-goods_type" class="form-control" name="row[goods_type]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Goods_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-goods_id" data-rule="required" data-source="goods/index" class="form-control selectpage" name="row[goods_id]" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('User_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-user_id" data-rule="required" data-source="user/user/index" data-field="nickname" class="form-control selectpage" name="row[user_id]" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Goods_name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-goods_name" class="form-control" name="row[goods_name]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Goods_cover')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-goods_cover" class="form-control" name="row[goods_cover]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-create_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{:date('Y-m-d H:i:s')}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Pay_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-pay_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[pay_time]" type="text" value="{:date('Y-m-d H:i:s')}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Pay_type')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-pay_type" class="form-control" name="row[pay_type]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Specs_name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-specs_name" class="form-control" name="row[specs_name]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Sku')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-sku" class="form-control" name="row[sku]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Goods_money')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-goods_money" class="form-control" step="0.01" name="row[goods_money]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Goods_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-goods_num" class="form-control" name="row[goods_num]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Money')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-money" class="form-control" step="0.01" name="row[money]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Stock_ids')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-stock_ids" data-rule="required" data-source="stock/index" data-multiple="true" class="form-control selectpage" name="row[stock_ids]" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

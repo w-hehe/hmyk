@@ -1,0 +1,54 @@
+<style>
+    .profile-avatar-container button{
+        position:absolute;
+        top:0;left:0;width:100px;height:100px;opacity: 0;
+    }
+    .pay-type{
+
+        font-size: 13px;
+        line-height: 13px;
+        border: 1.5px solid rgba(32,35,51,.2);
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        font-weight: 500;
+        color: #010101;
+        padding: 6px 10px;
+        border-radius: 1px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border-radius: 3px;
+    }
+    .pay-type.active{
+        border-color: #4aadff;
+        background: #4aadff;
+        color: #fff;
+    }
+</style>
+<div id="content-container" class="container">
+    <div class="row">
+        <div class="" style="width: 250px; float: left;">
+            {include file="default/common/sidenav" /}
+        </div>
+        <div class="user-main" style=" float: right;">
+
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h2 class="page-header">{:__('我要推广')}</h2>
+                    <div class="form-group">
+                        <label class="form-label">邀请链接</label>
+                        <input class="form-control" type="text" id="link" value="{$link}" placeholder="邀请链接" name="link" readonly disabled>
+                        <span class="form-hint">被邀请人注册时，程序根据被邀请人IP以及邀请人IP做判断，以决定本次邀请是否有效。只要访问过此链接的游客，在30天内注册都算是有效下级</span>
+                    </div>
+
+
+                    <div class="form-group normal-footer">
+                        <button type="button" class="btn btn-primary btn-embossed" id="btn-copy">{:__('复制链接')}</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

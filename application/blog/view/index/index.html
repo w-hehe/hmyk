@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$options.title}</title>
+    <link href="__CDN__/assets/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .rich_media_title {
+            font-size: 22px;
+            line-height: 1.4;
+            margin-bottom: 14px;
+
+        }
+        a:hover{
+            text-decoration: none;
+        }
+
+        .rich_media_title {
+            font-size: 22px;
+            line-height: 1.4;
+            margin-bottom: 14px;
+
+        }
+        .blog-masthead {
+            background-color: #428bca;
+            -webkit-box-shadow: inset 0 -2px 5px rgba(0, 0, 0, .1);
+            box-shadow: inset 0 -2px 5px rgba(0, 0, 0, .1);
+        }
+        .blog-nav-item {
+            position: relative;
+            display: inline-block;
+            padding: 10px;
+            font-weight: 500;
+            color: #cdddeb;
+        }
+        .blog-nav .active {
+            color: #fff;
+        }
+        .blog-nav .active:after {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            margin-left: -5px;
+            vertical-align: middle;
+            content: " ";
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid;
+            border-left: 5px solid transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blog-masthead">
+        <div class="container">
+            <nav class="blog-nav">
+                <a class="blog-nav-item" href="{:url('/')}">网站首页</a>
+                <a class="blog-nav-item active" href="{:url('/blog')}">博客</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 20px;">
+
+        <div class="row">
+            {volist name="list" id="vo"}
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <a href="{:url('/blog/' . $vo.id)}">
+                        <img src="{$vo.cover}" alt="{$vo.title}">
+                        <div class="caption">
+                            <h4>{$vo.title}</h4>
+                            <p>{$vo.description}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {/volist}
+        </div>
+
+        {$paginate}
+    </div>
+
+</body>
+</html>

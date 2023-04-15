@@ -1,0 +1,29 @@
+<style>
+    .content{
+        min-height: unset;
+    }
+</style>
+<form id="money-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    {:token()}
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">操作方式</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[type]', ['plus'=>'增加', 'reduce'=>'减少', 'reset'=>'重设'])}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-money" class="control-label col-xs-12 col-sm-2">操作金额</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-money" class="form-control" name="row[money]" type="number" value="" placeholder="">
+        </div>
+    </div>
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

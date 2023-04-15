@@ -1,0 +1,43 @@
+<form id="setting-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('支付类型')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="checkbox">
+                <label><input name="pay_type[alipay]" type="checkbox" value="1" {if condition="isset($row.pay_type.alipay)"}checked{/if}>支付宝</label>
+                <label><input name="pay_type[wxpay]" type="checkbox" value="1" {if condition="isset($row.pay_type.wxpay)"}checked{/if}>微信支付</label>
+                <label><input name="pay_type[qqpay]" type="checkbox" value="1" {if condition="isset($row.pay_type.qqpay)"}checked{/if}>QQ支付 </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">接口地址</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-app_id" class="form-control" name="gateway_url" type="text" value="{$row.gateway_url|default=''|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">商户ID</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-app_id" class="form-control" name="appid" type="text" value="{$row.appid|default=''|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">商户密钥</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-app_id" class="form-control" name="secret_key" type="text" value="{$row.secret_key|default=''|htmlentities}">
+        </div>
+    </div>
+
+    
+
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

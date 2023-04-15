@@ -1,0 +1,137 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link href="__CDN__/assets/css/frontend.min.css" rel="stylesheet">
+    <style>
+        .wechat{margin-top:30px;}.wechat h2{margin:0 0 15px 0;padding-bottom:15px;border-bottom:1px solid #eee;position:relative;}.wechat-body{}.wechat-qrcode{margin-bottom:20px;position:relative;}.wechat-qrcode img{width:100%;border:1px solid #eee;}.wechat-qrcode .expired{position:absolute;top:0;left:0;height:100%;width:100%;opacity:.95;background:#fff url(__CDN__/assets/img/expired.png) center center no-repeat;}.wechat-qrcode .paid{position:absolute;top:0;left:0;height:100%;width:100%;opacity:.95;background:#fff url(__CDN__/assets/img/paid.png) center center no-repeat;}.wechat-scan{padding:0;}.wechat-scan img{width:100%;}.wechat-tips{height:60px;padding:8px 0 8px 125px;background:#00c800 url(__CDN__/assets/img/scan.png) 50px 12px no-repeat;background-size:36px 36px;}.wechat-tips p{margin:0;font-size:14px;line-height:22px;color:#fff;font-weight:700}.wechat-time{font-size:14px;margin-bottom:15px;position:absolute;top:15px;right:10px;font-weight:normal;display:none;}.wechat-time span{color:red;}.wechat-order{margin-bottom:5px;}.wechat-order em{font-style:normal;color:#666;}.wechat-order em.wechat-price{color:#ff3333;font-weight:bold;}@media (max-width:767px){.wechat{margin-top:20px;}}body{padding-top:70px;}body.is-dialog nav.navbar,body.is-dialog footer.footer{display:none;}body.is-dialog{padding:15px;}.wechat-qrcode{}.paytype li{border:1px solid #ddd;padding:18px 20px;margin-bottom:20px;border-radius:1px;}.paytype li img{width:100%;max-width:136px;}.paytype li.active{border:1px solid #0d95e8;}.paytype li.disabled:hover{cursor:not-allowed;border:1px solid #ddd;}.paytype li:hover{border:1px solid #0d95e8;cursor:pointer;}.wechat-qrcode img{border:none;}.nav-noborder{border-bottom:none;}.nav-noborder > li > a{font-size:14px;color:#555;}.nav-noborder > li > a:hover{border-color:#f4f6f8 #f4f6f8 #fff;background:#fff;}.nav-noborder > li.active > a,.nav-noborder > li.active > a:focus,.nav-noborder > li.active > a:hover{border-color:#fff;}.nav-noborder .label{padding:2px 5px;}.bg-white{background:#fff;}.tab-content .alert{border:none;margin-bottom:10px;}.wechat-tips{height:65px;padding:10px 0 10px 110px;border-radius:3px;}.mainbody{max-width:650px;margin:0 auto;padding:0;}.wechat-tips-alipay{background-color:#00aaee;}.coupon{float:none;display:inherit;}.coupon ul li i.btn{font-style:normal;margin-right:3px;padding:2px 5px;}@media (max-width:480px){.col-xxs-12{width:100%;}}.dropdown-license{padding:10px 0;}.dropdown-license li{cursor:default;}.dropdown-license li::after{background:#eee;margin:0px;height:1px;display:block;content:' ';}.dropdown-license li:last-child::after{display:none;}.list-license-diff dd{line-height:25px;}.compare .popover{max-width:600px;width:600px;}.nav-tabs li .label-light:hover{}
+    </style>
+</head>
+<body class="is-dialog ">
+
+<div class="mainbody">
+    <div class="row">
+        <div class="col-lg-12">
+
+
+            <div class="p-4 bg-white " style="padding-bottom: 10px!important; padding-top: 0px!important;">
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="regular-license">
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="wechat-body">
+                                            <div class="wechat-order mt-2 clearfix">
+                                                {if condition="$params.hm_type == 'goods'"}
+                                                <p>订单标题：<em>购买《 <a href="{:url('/goods/' . $order.goods_id)}"><span style="color: #18bc9c; font-weight: bold;">{$order.goods_name}</span></a> 》</em></p>
+                                                {/if}
+                                                {if condition="$params.hm_type == 'recharge'"}
+                                                <p>订单标题：<em>《 <span style="color: #18bc9c; font-weight: bold;">会员充值</span> 》</em></p>
+                                                {/if}
+                                                <p>订单编号：<em>{$order.out_trade_no}</em></p>
+                                                <p>订单价格：<em class="wechat-price">￥{$order.money}</em></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 col-xxs-12">
+                                        <div class="wechat-qrcode" id="qrcode">
+                                            <img src="{:url('index/pay/qrCode')}?qr_code={$pay_code}" style="box-shadow: 0 3px 7px rgba(0, 21, 41, 0.3);">
+                                            <div class="expired hidden"></div>
+                                            <div class="paid hidden"></div>
+                                        </div>
+                                        <div style="margin-bottom: 10px;" id="jiance">正在检测支付状态...</div>
+                                        <div class="wechat-tips wechat-tips-alipay" id="tips">
+                                            <p>请使用<span id="apptext">支付宝</span>扫一扫
+                                                <br>扫描二维码支付</p>
+                                        </div>
+<!--                                        <div class="mt-1 text-center" id="alipay-pc" style="">-->
+<!--                                        	<a href="/order/alipay?orderid=202303091321220089127167&amp;apitoken=" target="_blank" class="btn btn-light btn-block">-->
+<!--                                        		<i class="fa fa-info-circle"></i> 手机不方便扫码？点击使用PC版支付宝支付-->
+<!--                                        	</a>-->
+<!--                                        </div>-->
+                                        <div class="mt-1 text-center" id="wechat-pc" style="display:none">
+                                            <a href="javascript:" data-toggle="tooltip" data-title="微信不支持长按二维码识别支付，请通过发现>扫一扫>从相册选择进行识别" class="btn btn-light2 btn-danger alert-danger-light btn-block">
+                                                <i class="fa fa-info-circle"></i> 请扫码支付，不支持截图后长按二维码支付
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 col-xxs-12">
+                                        <ul class="paytype list-unstyled">
+                                            <li class="active" data-paytype="alipay" style="text-align: center;">
+                                                {if condition="$params.pay_type == 'alipay'"}
+                                                <img src="__CDN__/assets/img/alipay.png" alt="支付宝扫码支付">
+                                                {/if}
+                                                {if condition="$params.pay_type == 'wxpay'"}
+                                                <img src="__CDN__/assets/img/wechat.png" alt="微信扫码支付">
+                                                {/if}
+                                            </li>
+                                        </ul>
+
+                                        <span href="javascript:" class=" btn-light btn-block mb-1">
+                                            {$plugin_info.content}
+                                        </span>
+                                    </div>
+
+                                    <div class="col-xs-6"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="__CDN__/assets/libs/jquery/dist/jquery.min.js"></script>
+
+<script>
+    var j = 0;
+    var dian = '';
+    var user = "{:$user ? 1 : 0}";
+    var type = "{$params.hm_type}";
+    setInterval(function(){
+        dian = '';
+        for(var i = 0; i < j; i++){
+            dian += '.';
+        }
+        j++;
+        if(j > 3) {
+            j = 0;
+        }
+        $('#jiance').html('正在检测支付状态' + dian);
+    }, 800)
+    jiance();
+    var orderPayStatusUrl = "{:url('api/order/orderPayStatus')}?out_trade_no={$order.out_trade_no}&type={$params.hm_type}";
+    function jiance(){
+        $.get(orderPayStatusUrl, function(e){
+            if(e.code == 200){
+                if(user == 1){
+                    if(type == 'goods'){
+                        location.href = "{:url('/order')}";
+                    }
+                    if(type == 'recharge'){
+                        location.href = "{:url('/bill')}";
+                    }
+
+                }
+                if(user == 0){
+                    location.href = "{:url('/find_order')}?password=" + e.data.password
+                }
+            }else{
+                setTimeout(function(){
+                    jiance()
+                }, 1500)
+            }
+        }, 'json').error(function(){
+            setTimeout(function(){
+                jiance()
+            }, 1500)
+        })
+    }
+</script>
+
+</body>
+</html>

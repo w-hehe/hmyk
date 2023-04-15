@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Map</title>
+    <style>
+        html {
+            height: 100%
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #FFF
+        }
+    </style>
+</head>
+<body>
+<div id="mapContent" style="width:100%; height:100%"></div>
+
+<!--<script charset="utf-8" src="//api.map.baidu.com/api?ak=&v=1.3&services=true&s=1"></script>-->
+<script>
+    window.onload = function () {
+        var req = new XMLHttpRequest();
+        req.open('GET', "/addons/umeditor/index/get_map_config", false);
+        req.onreadystatechange = function () {
+            if (req.readyState == 4) {
+                try {
+                    var params = JSON.parse(req.responseText);
+                    loadScript(params.baidumapkey || '');
+                } catch (e) {
+
+                }
+            }
+        };
+        req.send(null);
+    };
+
+    function loadScript(key) {
+        var script = document.createElement("script");
+        script.src = "https://api.map.baidu.com/api?v=3.0&ak=" + (getParam("key") || key) + "&callback=initialize";
+        document.body.appendChild(script);
+    }
+
+    // window.onload = loadScript;
+
+    var centerParam = getParam('center') || '116.404413,39.903536';
+    var zoomParam = getParam('zoom') || 11;
+    var widthParam = getParam('width') || 558;
+    var heightParam = getParam('height') || 360;
+    var markersParam = getParam('markers') || '';
+
+    //创建和初始化地图函数：
+    function initialize() {
+        var mapContent = document.getElementById('mapContent');
+        mapContent.style.width = widthParam + 'px';
+        mapContent.style.height = heightParam + 'px';
+
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+
+        // 创建标注
+        if (markersParam) {
+            var markersArr = markersParam.replace(/[\s]+/g, '').split(',');
+            var point = new BMap.Point(markersArr[0], markersArr[1]);
+            var marker = new BMap.Marker(point);
+            map.addOverlay(marker); // 将标注添加到地图中
+        }
+
+        var iframe = getSelfIframe();
+        var UM = parent.UM;
+        var editor = getEditor();
+        if (iframe && UM && editor) { //在编辑状态下
+            setMapListener();//地图改变修改外层的iframe标签src属性
+        } else {
+            // document.focus();
+        }
+
+    }
+
+    //创建地图函数：
+    function createMap() {
+        var map = new BMap.Map("mapContent");//在百度地图容器中创建一个地图
+        var centerArr = centerParam.replace(/[\s]+/g, '').split(',');
+        var point = new BMap.Point(centerArr[0], centerArr[1]);//定义一个中心点坐标
+        map.centerAndZoom(point, zoomParam);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent() {
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+    //地图控件添加函数：
+    function addMapControl() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE});
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1});
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
+        map.addControl(ctrl_sca);
+    }
+
+    //获取URL参数
+    function getParam(name) {
+        return location.href.match(new RegExp('[?&]' + name + '=([^?&]+)', 'i')) ? decodeURIComponent(RegExp.$1) : '';
+    }
+
+    //执行搜索
+    function search(address) {
+        if (!map) return;
+        var local = new BMap.LocalSearch(map, {
+            renderOptions: {
+                map: map,
+                autoViewport: true,
+                selectFirstResult: false
+            }
+        });
+        local.search(address);
+    }
+
+    function setMapListener() {
+        var timer;
+
+        map.addEventListener('moveend', mapListenerHandler);
+        map.addEventListener('zoomend', mapListenerHandler);
+        marker.addEventListener('dragend', mapListenerHandler);
+
+        function mapListenerHandler() {
+            var zoom = map.getZoom(),
+                center = map.getCenter(),
+                marker = window.marker.point;
+
+            iframe.src = iframe.src.replace(new RegExp('([?#&])center=([^?#&]+)', 'i'), '$1center=' + center.lng + ',' + center.lat).replace(new RegExp('([?#&])markers=([^?#&]+)', 'i'), '$1markers=' + marker.lng + ',' + marker.lat).replace(new RegExp('([?#&])zoom=([^?#&]+)', 'i'), '$1zoom=' + zoom);
+            editor.fireEvent('saveScene');
+            saveScene(editor);
+        }
+
+        function saveScene() {
+            if (!timer) {
+                timer = setTimeout(function () {
+                    editor.fireEvent('savescene');
+                    editor.fireEvent('contentchange');
+                    timer = null;
+                }, 1000);
+            }
+        }
+    }
+
+    function getSelfIframe() {
+        var iframes = parent.document.getElementsByTagName('iframe');
+        for (var key in iframes) {
+            if (iframes[key].contentWindow == window) {
+                return iframes[key];
+            }
+        }
+        return null;
+    }
+
+    function getEditor() {
+        try {
+            var parentNode = iframe.parentNode;
+            while (parentNode && parentNode.tagName && parentNode.tagName.toLowerCase() != 'body') {
+                if (parentNode.className && parentNode.className.indexOf('edui-body-container') != -1) {
+                    return UM.getEditor(parentNode.nextSibling.id ? parentNode.nextSibling.id : parentNode.id);
+                }
+                parentNode = parentNode.parentNode;
+            }
+        } catch (e) {
+
+        }
+        return null;
+    }
+</script>
+</body>
+</html>

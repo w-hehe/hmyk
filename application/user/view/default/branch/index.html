@@ -1,0 +1,88 @@
+
+<div id="content-container" class="container">
+    <div class="row">
+        <div class="" style="width: 250px; float: left;">
+            {include file="default/common/sidenav" /}
+        </div>
+        <div class="user-main" style=" float: right;">
+
+
+            <div class="panel panel-default panel-intro">
+                <h2 class="page-header">我的下级</h2>
+                <div class="panel-heading">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab-1" data-toggle="tab" aria-expanded="false">一级</a></li>
+                        <li class=""><a href="#tab-2" data-toggle="tab" aria-expanded="false">二级</a></li>
+                        <li class=""><a href="#tab-3" data-toggle="tab" aria-expanded="false">三级</a></li>
+                    </ul>
+                </div>
+                <div class="panel-body">
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane fade active in" id="tab-1">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">账号</th>
+                                    <th class="text-center">注册时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="p1" id="vo"}
+                                <tr>
+                                    <td class="text-center">{$vo.username}</td>
+                                    <td class="text-center">{:date('Y-m-d H:i:s', $vo.createtime)}</td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                            {:$p1->render()}
+                        </div>
+                        <div class="tab-pane fade" id="tab-2">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">账号</th>
+                                    <th class="text-center">注册时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="p2" id="vo"}
+                                <tr>
+                                    <td class="text-center">{$vo.username}</td>
+                                    <td class="text-center">{:date('Y-m-d H:i:s', $vo.createtime)}</td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                                </tbody>
+                            </table>
+                            {:$p2->render()}
+                        </div>
+                        <div class="tab-pane fade" id="tab-3">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">账号</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="p3" id="vo"}
+                                <tr>
+                                    <td class="text-center">{$vo.username}</td>
+                                    <td class="text-center">{:date('Y-m-d H:i:s', $vo.createtime)}</td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                                </tbody>
+                            </table>
+                            {:$p3->render()}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>

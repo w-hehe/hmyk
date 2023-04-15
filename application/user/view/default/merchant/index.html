@@ -1,0 +1,113 @@
+<style>
+
+    .profile-avatar-container button{
+        position:absolute;
+        top:0;left:0;width:100px;height:100px;opacity: 0;
+    }
+    #course-template img{
+        width: 100%;
+    }
+
+</style>
+
+
+<div id="content-container" class="container">
+    <div class="row">
+        <div class="" style="width: 250px; float: left;">
+            {include file="default/common/sidenav" /}
+        </div>
+        <div class="user-main" style=" float: right;">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h2 class="page-header">开通分站</h2>
+                    <div id="code"></div>
+                    <div class="">
+                        <textarea id="grade-json" style="display: none;">{$grade_json}</textarea>
+                        <form id="open-merchant" class="post-form" role="form" method="POST" action="">
+                            <div class="form-group">
+                                <label for="grade_id" class="control-label">分站类型</label>
+                                <div class="">
+                                    <select name="grade_id" id="grade_id" class="form-control" style="" name="grade_id">
+                                        <option value="">请选择需要开通的分站类型</option>
+                                        {volist name="list" id="vo"}
+                                        <option value="{$vo.id}">{$vo.name} -- &yen; {$vo.money}</option>
+                                        {/volist}
+                                    </select>
+                                    {volist name="list" id="vo"}
+                                    <div class="alert alert-warning-light hide alert-grade" id="alert-{$vo.id}" style="margin-top: 20px; padding: 10px;">
+                                        分站返佣：{$vo.rebate}%<br>
+                                        独立域名：{:empty($vo.domain) ? '不支持' : '支持'}
+                                    </div>
+                                    {/volist}
+                                </div>
+                            </div>
+                            <div class="form-group hide bangding" id="domain-0">
+                                <label class="control-label">绑定域名</label>
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" name="prefix" class="form-control" placeholder="域名前缀，仅支持数字和字母" style="width: 200px;">
+                                    </div>
+                                    <div class="form-group">
+                                        <select name="domain_id" id="domain-list" class="form-control" style="width: 200px;">
+                                            {volist name="domain_list" id="vo"}
+                                            <option value="{$vo.id}">.{$vo.domain}</option>
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group hide bangding" id="domain-1">
+                                <label class="control-label">绑定域名</label>
+                                <div>
+                                    <input type="text" name="top_domain" class="form-control" placeholder="请输入您的独立域名，不懂勿拍。提交后请联系站长开通" >
+                                </div>
+                            </div>
+                            <div class="form-group mb-2" style="margin-bottom:0">
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-embossed submit-disabled disabled">确认开通</button>
+                                </div>
+                            </div>
+
+
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h2 class="page-header">{:__('我的分站')}</h2>
+                    <div class="">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>标题</th>
+                                <th>域名</th>
+<!--                                <th>管理后台</th>-->
+                                <th class="text-center">分站等级</th>
+                                <th class="text-center">开通时间</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            {volist name="merchant" id="vo"}
+                            <tr>
+                                <td>{$vo.title}</td>
+                                <td><a href="//{$vo.domain}" target="_blank">{$vo.domain}</a></td>
+<!--                                <td><a href="//{$vo.domain}/merchant/admin" target="_blank">{$vo.domain}/merchant/admin</a></td>-->
+                                <td class="text-center">{$vo.grade.name}</td>
+                                <td class="text-center">{:date('Y-m-d H:i:s', $vo.create_time)}</td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                        {$merchant->render()}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

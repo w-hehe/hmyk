@@ -1,0 +1,178 @@
+<style>
+    .count{
+        border: 1.5px solid #e9ecef;
+        display: inline-block;
+        border-radius: .25rem;
+    }
+    .count__ctrl{
+        padding: 1px 15px;
+        background: #e9ecef;
+    }
+    .count__num{
+        padding: 0 10px;
+    }
+
+    .form {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap
+    }
+    .form div.form-group div.email-input {
+        margin-bottom: 10px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap
+    }
+    .form div.form-group div.email-input input {
+        height: 38px;
+        border: 2px solid #f3f3f4;
+        color: #010101;
+        width: 100%;
+        padding-left: 20px;
+        background: #f3f3f4;
+        -webkit-box-shadow: none;
+        box-shadow: none
+    }
+    .form div.form-group div.email-input input::-webkit-input-placeholder {
+        font-size: 14px;
+        color: rgba(32,35,51,.7)
+    }
+    .form div.form-group div.email-input input::-moz-placeholder {
+        font-size: 14px;
+        color: rgba(32,35,51,.7)
+    }
+    .form div.form-group div.email-input input:-ms-input-placeholder {
+        font-size: 14px;
+        color: rgba(32,35,51,.7)
+    }
+    .form div.form-group div.email-input input::-ms-input-placeholder {
+        font-size: 14px;
+        color: rgba(32,35,51,.7)
+    }
+    .form div.form-group div.email-input input::placeholder {
+        font-size: 14px;
+        color: rgba(32,35,51,.7)
+    }
+    .form div.form-group div.email-input input:active,
+    .form div.form-group div.email-input input:focus,
+    .form div.form-group div.email-input input:hover {
+        border-color: #067aff;
+        background: 0 0
+    }
+    .form div.form-group div.email-input button.subscribe-btn {
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        padding: 0;
+        margin: 0 0 0 5px;
+        border: none;
+        background: #067aff;
+        height: 48px;
+        width: 48px;
+        border-radius: 1px;
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-transition: all .27s ease;
+        -o-transition: all .27s ease;
+        transition: all .27s ease
+    }
+    .form div.form-group div.email-input button.subscribe-btn svg {
+        width: 20px;
+        height: 20px;
+        stroke: #fff
+    }
+    .form div.form-group div.email-input button.subscribe-btn:active,
+    .form div.form-group div.email-input button.subscribe-btn:focus,
+    .form div.form-group div.email-input button.subscribe-btn:hover {
+        background-position: right center
+    }
+    .form div.form-group div.subscribe-tos span {
+        display: block;
+        font-size: 11px;
+        color: #010101;
+        line-height: 1.4;
+        font-weight: 400
+    }
+    .form div.form-group div.subscribe-tos span a {
+        color: #067aff;
+        font-weight: 500;
+        text-decoration: none
+    }
+</style>
+<div class="page-container product" style="margin-top: 80px;">
+
+    <!-- ~~~~~~~~~~~~~~~~~ Product page details section [START] ~~~~~~~~~~~~~~~~~ -->
+    <div class="page-section prod-details" style="margin-bottom: 40px;">
+<!--        <div class="page-margin">-->
+            <div class="page-margin__content">
+                <div class="prod-details__body">
+                    <div class="row">
+
+                        <div class="top-sticky-block-b-wrap top-sticky-block" style="max-width: 500px; margin: 0 auto; margin-top: 40px;">
+                            <div class="prod-details__offering" style="padding-bottom: 10px;">
+                                <div class="prod-offering">
+                                    <div class="prod-offering__benefits">
+                                        <span style="font-size: 22px; font-weight: bold;">登录</span>
+                                        <span class="text" style="float: right; font-size: 14px; "><a href="{:url('/register')}" style="text-decoration: none;">还没有账号？去注册</a></span>
+                                    </div>
+
+                                    <div class="prod-offering__rating">
+                                        <span class="rating"></span>
+                                    </div>
+                                    <form name="form" id="login-form" class="form form-vertical" method="POST" action="">
+                                        {:token()}
+                                        <div class="form-group flex-1">
+                                            <div class="input-title" style="margin-bottom: 5px;">账号：</div>
+                                            <div class="email-input">
+                                                <input class="form-control" name="account" type="text" placeholder="账号/邮箱">
+                                            </div>
+                                            <div class="input-title" style="margin-bottom: 5px; margin-top: 20px;">密码：</div>
+                                            <div class="email-input">
+                                                <input class="form-control" type="password" name="password" placeholder="登录密码">
+                                            </div>
+                                            <div class="subscribe-tos" style="margin-bottom: 15px;">
+                                                <span>
+                                                    <a href="#" style="float: right;">忘记密码？</a>
+                                                </span>
+                                            </div>
+                                            <div class="prod-offering__cart-btn" style="margin-top: 40px; margin-bottom: 0;">
+                                                <button type="submit" class="btn btn-primary btn-icon btn-lg btn-block">
+                                                    <span class="text">立即登录</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--        </div>-->
+    </div>
+    <!-- ~~~~~~~~~~~~~~~~~ Product page details section [END] ~~~~~~~~~~~~~~~~~ -->
+
+</div>
+<script>
+    window.onload = function(){
+        var script = document.createElement('script');
+        script.setAttribute('type','text/javascript');
+        script.setAttribute('src',"__CDN__/template/default/js/pages/product-details/script.master.js");
+        document.getElementsByTagName('head')[0].appendChild(script);
+    }
+</script>
