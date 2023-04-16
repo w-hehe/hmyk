@@ -72,20 +72,26 @@ class Stock extends Backend {
         if (false === $this->request->isPost()) {
             $this->error(__("Invalid parameters"));
         }
-        $ids = $ids ?: $this->request->post("ids");
+        $ids = $this->request->post("ids");
         if (empty($ids)) {
             $this->error(__('Parameter %s can not be empty', 'ids'));
         }
-        $stock = db::name('stock')->where(['id' => $ids])->find();
-        if($stock){
-            db::name('stock')->where(['id' => $stock['id']])->delete();
-            if($stock['sale_time'] == null){
-                if($stock['num'] > 0){
-                    db::name('sku')->where(['id' => $stock['sku_id']])->setDec('stock', $stock['num']);
-                    db::name('goods')->where(['id' => $stock['goods_id']])->setDec('stock', $stock['num']);
+        $ids_arr = explode(',', $ids);
+
+        foreach($ids_arr as $ids){
+            $stock = db::name('stock')->where(['id' => $ids])->find();
+            if($stock){
+                db::name('stock')->where(['id' => $stock['id']])->delete();
+                if($stock['sale_time'] == null){
+                    if($stock['num'] > 0){
+                        db::name('sku')->where(['id' => $stock['sku_id']])->setDec('stock', $stock['num']);
+                        db::name('goods')->where(['id' => $stock['goods_id']])->setDec('stock', $stock['num']);
+                    }
                 }
             }
         }
+
+
         $this->success('删除成功');
 
     }
@@ -112,6 +118,11 @@ class Stock extends Backend {
     $this->request->filter(['strip_tags', 'trim']);
     if (false === $this->request->isAjax()) {
         $goods_id = $this->request->param('ids');
+
+        $sku = db::name('sku')->where(['goods_id' => $goods_id])->select();
+        $this->assign([
+            'sku' => $sku
+        ]);
         $this->assign('goods_id', $goods_id);
         return $this->view->fetch();
     }

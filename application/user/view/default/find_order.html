@@ -23,6 +23,9 @@
         background: #4aadff;
         color: #fff;
     }
+    .course-div img{
+        max-width: 100%;
+    }
 </style>
 <div id="content-container" class="container">
     <div class="row">
@@ -36,10 +39,18 @@
                 <div class="panel-body">
                     <h2 class="page-header">{:__('查询订单')}</h2>
                     <form class="balance-form" method="get" action="">
+                        {if condition="in_array('email', $options.buy_input)"}
                         <div class="form-group">
+                            <label class="form-label">电子邮箱</label>
+                            <input class="form-control" type="text" value="{$email}" placeholder="请输入游客下单时填写的电子邮箱" name="email">
+                        </div>
+                        {/if}
+                        {if condition="in_array('password', $options.buy_input)"}
+                        <div class="form-group">
+                            <label class="form-label">查单密码</label>
                             <input class="form-control" type="text" value="{$password}" placeholder="请输入游客下单时填写的查单密码" name="password">
                         </div>
-
+                        {/if}
 
                         <div class="form-group normal-footer">
                             <button type="submit" class="btn btn-primary btn-embossed">{:__('立即查询')}</button>
@@ -94,7 +105,7 @@
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                                 <h4 class="modal-title">使用教程</h4>
                                             </div>
-                                            <div class="modal-body">{$vo.goods.course}</div>
+                                            <div class="modal-body course-div">{$vo.goods.course}</div>
                                         </div>
                                     </div>
                                 </div>

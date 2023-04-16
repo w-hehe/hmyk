@@ -1,5 +1,17 @@
-此处暂时只显示附加数据<br>
-
+<h3>附件数据</h3>
+{if condition="$row.attach"}
 {volist name="row.attach" id="vo"}
 {$vo.title}：{$vo.value} <br>
 {/volist}
+{else /}
+附件数据为空<br><br>
+{/if}
+
+<h3>发货内容</h3>
+{if condition="$deliver"}
+{volist name="deliver" id="vo"}
+{$vo.content} <br>
+{/volist}
+{else /}
+发货内容为空<br>
+{/if}

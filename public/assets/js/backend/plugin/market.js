@@ -60,7 +60,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             field: 'price',
                             title: __('价格'),
                             formatter:function (value, row, index){
-                                return '<span style="font-weight: bold; color: #f75444;">&yen;' + value + '</span>';
+                                if(value == 0){
+                                    return '<span style=" color: #18bc9c;">免费</span>';
+                                }else{
+                                    return '<span style="color: #f75444;">&yen; ' + value + '</span>';
+                                }
+
                             }
                         },
                         {field: 'version', title: __('插件版本'), operate: 'LIKE'},

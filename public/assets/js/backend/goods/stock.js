@@ -64,7 +64,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 searchFormTemplate: 'customformtpl',
                 columns: [
                     [
-                        // {checkbox: true},
+                        {checkbox: true},
                         {field: 'sku.sku', title: __('规格')},
                         {field: 'content', title: __('库存内容')},
                         {field: 'create_time', title: __('添加时间'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},

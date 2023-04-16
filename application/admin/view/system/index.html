@@ -73,11 +73,11 @@
                 {:build_heading(null, false)}
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab-1" data-toggle="tab">基础配置</a></li>
-                    <!--<li><a href="#tab-2" data-toggle="tab">规格属性</a></li>
-                    <li><a href="#tab-3" data-toggle="tab">商品详情</a></li>
-                    <li><a href="#tab-4" data-toggle="tab">营销设置</a></li>
-                    <li><a href="#tab-5" data-toggle="tab">附加选项</a></li>
-                    <li><a href="#tab-6" data-toggle="tab">更多信息</a></li>-->
+                    <li><a href="#tab-2" data-toggle="tab">购买配置</a></li>
+<!--                    <li><a href="#tab-3" data-toggle="tab">商品详情</a></li>-->
+<!--                    <li><a href="#tab-4" data-toggle="tab">营销设置</a></li>-->
+<!--                    <li><a href="#tab-5" data-toggle="tab">附加选项</a></li>-->
+<!--                    <li><a href="#tab-6" data-toggle="tab">更多信息</a></li>-->
                 </ul>
             </div>
             <div class="panel-body">
@@ -138,19 +138,15 @@
                         </div>
                     </div>
                     
-                    <div class="tab-pane fade" id="tab-6">
+                    <div class="tab-pane fade" id="tab-2">
                         <div class="widget-body no-padding">
                             <div class="form-group">
-                                <label class="control-label col-xs-12 col-sm-12">{:__('Course')}</label>
+                                <label class="control-label col-xs-12 col-sm-12">游客下单必填项</label>
                                 <div class="col-xs-12 col-sm-12">
-                                    <textarea id="c-course" class="form-control editor" rows="5" name="row[course]" cols="50"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-xs-12 col-sm-12">{:__('Pop_content')}</label>
-                                <div class="col-xs-12 col-sm-12">
-            <textarea id="c-pop_content" class="form-control editor" rows="5" name="row[pop_content]"
-                      cols="50"></textarea>
+                                    <div class="checkbox">
+                                        <label><input name="buy_input[]" type="checkbox" value="email" {if condition="in_array('email', $options.buy_input)"}checked{/if}>电子邮箱</label>
+                                        <label><input name="buy_input[]" type="checkbox" value="password" {if condition="in_array('password', $options.buy_input)"}checked{/if}>查单密码</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

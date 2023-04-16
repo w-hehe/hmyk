@@ -28,7 +28,18 @@ class Notify extends Frontend {
             }
         }else{
             $order = db::name('goods_order')->where(['out_trade_no' => $params['out_trade_no']])->find();
-            $this->redirect(url('/find_order') . '?password=' . $order['password']);
+
+            if(empty($order['email']) && !empty($order['password'])){
+                $this->redirect(url('/find_order') . '?password=' . $order['password']);die;
+            }
+            if(!empty($order['email']) && empty($order['password'])){
+                $this->redirect(url('/find_order') . '?email=' . $order['email']);die;
+            }
+            if(!empty($order['email']) && !empty($order['password'])){
+                $this->redirect(url('/find_order') . '?email=' . $order['email'] . '&password=' . $order['password']);die;
+            }
+
+
         }
         
         
@@ -131,8 +142,10 @@ class Notify extends Frontend {
      * 5，返佣给上级
      */
     protected function notifyGoodsSuccess($goods, $order) {
-        
         db::name('goods_order')->where(['id' => $order['id']])->update(['pay_time' => $this->timestamp]);
+        if($order['user_id']){
+            $order['email'] = db::name('user')->where(['id' => $order['user_id']])->value('email');
+        }
         if ($goods['type'] == 'alone') { //更新库存表并写入发货表
             $stock = db::name('stock')->field('id, content')->where(['sku_id' => $order['sku_id']])->whereNull('sale_time')->limit($order['goods_num'])->select();
             $stock_ids = array_column($stock, 'id');
@@ -146,6 +159,7 @@ class Notify extends Frontend {
                 ];
             }
             db::name('deliver')->insertAll($deliver);
+            doAction('send_goods', $order, $deliver);
         }
         if ($goods['type'] == 'fixed') { //更新库存表并写入发货表
             $stock = db::name('stock')->where(['sku_id' => $order['sku_id']])->limit($order['goods_num'])->find();
@@ -160,6 +174,7 @@ class Notify extends Frontend {
             }
             db::name('deliver')->insertAll($deliver); //写入发货表
             db::name('stock')->where(['id' => $stock['id']])->setDec('num', $order['goods_num']); //更新库存表
+            doAction('send_goods', $order, $deliver);
         }
         if ($goods['type'] == 'invented') {
             if ($goods['is_sku'] == 0) {

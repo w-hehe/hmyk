@@ -34,7 +34,8 @@ class Pay extends Frontend {
         $params = $this->request->param();
         $password = empty($params['password']) ? null : $params['password'];
         if(!$this->user){
-            if(empty($password)) return json(['code' => 400, 'msg' => '游客下单需输入查单密码']);
+            if(in_array('email', $this->options['buy_input']) && empty($params['email'])) return json(['code' => 400, 'msg' => '游客下单需输入电子邮件']);
+            if(in_array('password', $this->options['buy_input']) && empty($password)) return json(['code' => 400, 'msg' => '游客下单需输入查单密码']);
         }
 
 
@@ -47,7 +48,7 @@ class Pay extends Frontend {
             $ip = request()->ip();
             if($goods['quota'] > 0){
                 if($params['num'] > $goods['quota']) exception("该商品每日限购{$goods['quota']}个");
-                $ip_order_num = db::name('goods_order')->where(['ip' => $ip])->whereTime('pay_time', 'today')->whereNotNull('pay_time')->count();
+                $ip_order_num = db::name('goods_order')->where(['ip' => $ip, 'goods_id' => $goods['id']])->whereTime('pay_time', 'today')->whereNotNull('pay_time')->count();
                 if($ip_order_num + $params['num'] > $goods['quota']) exception("该商品每日限购{$goods['quota']}个，您今日已购买过{$ip_order_num}个");
             }
 
@@ -111,6 +112,7 @@ class Pay extends Frontend {
                 'attach' => empty($params['attach']) ? null : json_encode($params['attach']),
                 'pay_type' => empty($params['pay_type']) || $orderMoney == 0 ? null : $params['pay_type'],
                 'sku_id' => empty($params['sku_id']) ? $goods['sku'][0]['id'] : $params['sku_id'],
+                'email' => empty($params['email']) ? null : trim($params['email']),
                 'password' => $password,
             ];
             $sku = db::name('sku')->where(['id' => $params['sku_id']])->find();
@@ -159,9 +161,9 @@ class Pay extends Frontend {
         }
 
         if($orderMoney == 0){
-            if ($result == true) {
+            if ($result) {
                 return json(['code' => 201, 'msg' => '购买成功', 'data' => [
-                    'url' => $this->user ? url('/order') : url('/find_order') . '?password=' . $params['password']
+                    'url' => $this->user ? url('/order') : url('/index/notify/ret') . '?hm_type=goods&out_trade_no=' . $out_trade_no
                 ]]);
             } else {
                 return json(['code' => 400, 'msg' => '购买失败']);
@@ -169,8 +171,10 @@ class Pay extends Frontend {
         }
         if($orderMoney > 0){
             if ($params['pay_type'] == 'balance') {
-                if ($result == true) {
-                    return json(['code' => 201, 'msg' => '购买成功']);
+                if ($result) {
+                    return json(['code' => 201, 'msg' => '购买成功', 'data' => [
+                        'url' => url('/index/notify/ret') . '?hm_type=goods&out_trade_no=' . $out_trade_no
+                    ]]);
                 } else {
                     return json(['code' => 400, 'msg' => '购买失败']);
                 }
@@ -208,6 +212,7 @@ class Pay extends Frontend {
      */
     protected function notifyGoodsSuccess($goods, $out_trade_no) {
         $order = db::name('goods_order')->where(['out_trade_no' => $out_trade_no])->find();
+        if($this->user) $order['email'] = $this->user['email'];
         db::name('goods_order')->where(['id' => $order['id']])->update(['pay_time' => $this->timestamp]);
         if ($goods['type'] == 'alone') { //更新库存表并写入发货表
             $stock = db::name('stock')->field('id, content')->where(['sku_id' => $order['sku_id']])->whereNull('sale_time')->limit($order['goods_num'])->select();
@@ -222,6 +227,7 @@ class Pay extends Frontend {
                 ];
             }
             db::name('deliver')->insertAll($deliver);
+            doAction('send_goods', $order, $deliver);
         }
         if ($goods['type'] == 'fixed') { //更新库存表并写入发货表
             $stock = db::name('stock')->where(['sku_id' => $order['sku_id']])->limit($order['goods_num'])->find();
@@ -236,6 +242,7 @@ class Pay extends Frontend {
             }
             db::name('deliver')->insertAll($deliver); //写入发货表
             db::name('stock')->where(['id' => $stock['id']])->setDec('num', $order['goods_num']); //更新库存表
+            doAction('send_goods', $order, $deliver);
         }
         if ($goods['type'] == 'invented') {
             if ($goods['is_sku'] == 0) {

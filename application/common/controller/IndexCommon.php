@@ -125,6 +125,9 @@ class IndexCommon extends Controller
         foreach($options as $val){
             $this->options[$val['name']] = $val['value'];
         }
+        $this->options['buy_input'] = empty($this->options['buy_input']) ? [] : unserialize($this->options['buy_input']);
+
+//        halt($this->options);
 
         $host = Network::getHostDomain(false);
 //        echo $host;die;
@@ -214,12 +217,12 @@ class IndexCommon extends Controller
                         'tconfig' => $tconfig
                     ];
                 }
-                if(empty($tmp)){
-                    $path = ROOT_PATH . 'application/index/view/error.html';
-                    $title = "未开启设备为手机的前台模板";
-                    $content = "当前站点未启用任何手机端前台模板，请管理人员前往【后台面板 - 插件管理 - 我的插件 - 模板插件配置】中选择开启手机设备。";
-                    include_once $path;die;
-                }
+            }
+            if(empty($tmp)){
+                $path = ROOT_PATH . 'application/index/view/error.html';
+                $title = "未开启设备为手机的前台模板";
+                $content = "当前站点未启用任何手机端前台模板，请管理人员前往【后台面板 - 插件管理 - 我的插件 - 模板插件配置】中选择开启手机设备。";
+                include_once $path;die;
             }
         }
 
@@ -232,12 +235,12 @@ class IndexCommon extends Controller
                         'tconfig' => $tconfig
                     ];
                 }
-                if(empty($tmp)){
-                    $path = ROOT_PATH . 'application/index/view/error.html';
-                    $title = "未开启设备为电脑的前台模板";
-                    $content = "当前站点未启用任何电脑端前台模板，请管理人员前往【后台面板 - 插件管理 - 我的插件 - 模板插件配置】中选择开启电脑设备。";
-                    include_once $path;die;
-                }
+            }
+            if(empty($tmp)){
+                $path = ROOT_PATH . 'application/index/view/error.html';
+                $title = "未开启设备为电脑的前台模板";
+                $content = "当前站点未启用任何电脑端前台模板，请管理人员前往【后台面板 - 插件管理 - 我的插件 - 模板插件配置】中选择开启电脑设备。";
+                include_once $path;die;
             }
         }
 

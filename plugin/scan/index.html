@@ -115,10 +115,9 @@
                     if(type == 'recharge'){
                         location.href = "{:url('/bill')}";
                     }
-
                 }
                 if(user == 0){
-                    location.href = "{:url('/find_order')}?password=" + e.data.password
+                    location.href = "{:url('/index/notify/ret')}?hm_type=goods&out_trade_no=" + e.data.out_trade_no
                 }
             }else{
                 setTimeout(function(){

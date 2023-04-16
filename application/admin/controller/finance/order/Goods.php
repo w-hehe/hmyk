@@ -204,6 +204,12 @@ class Goods extends Backend {
         if (false === $this->request->isPost()) {
             
             $row['attach'] = json_decode($row['attach'], true);
+
+            $deliver = db::name('deliver')->where(['order_id' => $ids])->select();
+
+            $this->assign([
+                'deliver' => $deliver
+            ]);
             
             $this->view->assign('row', $row);
             

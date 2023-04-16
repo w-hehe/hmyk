@@ -28,7 +28,7 @@ class Order extends Api {
 
         if($order['pay_time']){
             return json(['code' => 200, 'msg' => '已支付', 'data' => [
-                'password' => empty($order['password']) ? '' : $order['password']
+                'out_trade_no' => $order['out_trade_no']
             ]]);
         }else{
             return json(['code' => 400, 'msg' => '未支付']);

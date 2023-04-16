@@ -275,7 +275,7 @@
                                         <dd class="form-inline">
                                             <input style="width: 30%;" type="text" name="row[<%=name%>][<%=index%>][title]" class="form-control" value="<%=row['title']%>">
                                             <input style="width: 40%;" type="text" name="row[<%=name%>][<%=index%>][placeholder]" class="form-control" value="<%=row['placeholder']%>">
-                                            <input style="width: 10%; margin-top: 12px;" type="checkbox" name="row[<%=name%>][<%=index%>][checked]">
+                                            <input style="width: 10%; margin-top: 12px;" type="checkbox" name="row[<%=name%>][<%=index%>][checked]" <% if(row['checked'] == 'on'){ %> checked <% } %>>
                                             <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
                                         </dd>
                                     </script>

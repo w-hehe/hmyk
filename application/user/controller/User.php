@@ -118,15 +118,24 @@ class User extends Frontend {
         $list = [];
         $paginate = '';
         $password = '';
+        $email = '';
         $total = -1;
-        if($this->request->has('password')){
+        if($this->request->has('password') || $this->request->has('email')){
             $params = $this->request->param();
-            $password = trim($params['password']);
-            if(empty($params['password'])) $this->error('请输入查单密码');
-
+            $where = [];
+            if(in_array('email', $this->options['buy_input'])){
+                if(empty($params['email'])) $this->error('请输入电子邮箱');
+                $where['email'] = $params['email'];
+                $email = $params['email'];
+            }
+            if(in_array('password', $this->options['buy_input'])){
+                if(empty($params['email'])) $this->error('请输入查单密码');
+                $where['password'] = $params['password'];
+                $password = $params['password'];
+            }
 
             $model = new GoodsOrder();
-            $result = $model->with(['goods', 'deliver'])->where(['password' => $password])->whereNotNull('pay_time')->order('id desc')->paginate(10, false, ['query' => $params]);
+            $result = $model->with(['goods', 'deliver'])->where($where)->whereNotNull('pay_time')->order('id desc')->paginate(10, false, ['query' => $params]);
             $list = $result->items();
             foreach ($list as &$val) {
                 $val['pay_type'] = payTypeText($val['pay_type']);
@@ -142,6 +151,7 @@ class User extends Frontend {
             'list' => $list,
             'paginate' => $paginate,
             'password' => $password,
+            'email' => $email,
             'total' => $total
         ]);
         return view('default/find_order');

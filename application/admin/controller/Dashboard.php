@@ -7,6 +7,7 @@ use app\admin\model\User;
 use app\common\controller\Backend;
 use app\common\model\Attachment;
 use fast\Date;
+use think\Cache;
 use think\Db;
 
 /**
@@ -21,28 +22,25 @@ class Dashboard extends Backend {
      * 查看
      */
     public function index() {
-
-        $user_id = $this->uid;
-        
         $version = db::name('options')->where(['name' => 'version'])->value('value');
-
-        $data = [
-            'user_id' => $user_id,
-            'version' => $version
-        ];
-
-        $result = json_decode(hmCurl(API . 'api/dashboard/index', http_build_query($data)), true);
-        
-        // echo '<pre>'; print_r($result);die;
-
+        if(Cache::has('dashboard')){
+            $result = Cache::get('dashboard');
+        }else{
+            $user_id = $this->uid;
+            $data = [
+                'user_id' => $user_id,
+                'version' => $version
+            ];
+            $result = json_decode(hmCurl(API . 'api/dashboard/index', http_build_query($data)), true);
+            if($result){
+                Cache::set('dashboard', $result, 3600); //缓存一小时
+            }
+        }
         $this->assign([
             'data' => $result['data'],
             'version' => $version,
             'new_version' => empty($result['data']['version']) ? 0 : 1,
         ]);
-
-//        echo '<pre>'; print_r($result);die;
-
         return $this->view->fetch();
     }
 

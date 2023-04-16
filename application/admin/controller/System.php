@@ -35,6 +35,7 @@ class System extends Backend {
             foreach($res as $val){
                 $options[$val['name']] = $val['value'];
             }
+            $options['buy_input'] = unserialize($options['buy_input']);
             $this->assign([
                 'options' => $options
             ]);
@@ -45,6 +46,11 @@ class System extends Backend {
             $this->error(__('Parameter %s can not be empty', ''));
         }
         if(isset($params['row'])) unset($params['row']);
+
+        $params['buy_input'] = array_filter($params['buy_input']);
+        $params['buy_input'] = serialize($params['buy_input']);
+
+//        print_r($params);die;
 
         $result = false;
         Db::startTrans();

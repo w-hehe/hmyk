@@ -111,6 +111,7 @@ class Frontend extends Controller
         foreach($options as $val){
             $this->options[$val['name']] = $val['value'];
         }
+        $this->options['buy_input'] = empty($this->options['buy_input']) ? [] : unserialize($this->options['buy_input']);
 
         $host = Network::getHostDomain(false);
         $this->merchant = db::name('merchant')->where(['domain' => $host])->find();
