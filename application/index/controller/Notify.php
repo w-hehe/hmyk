@@ -11,14 +11,12 @@ class Notify extends Frontend {
 
     protected $noNeedRight = ['*'];
     protected $noNeedLogin = ['*'];
-    
-    
-    
+
+
+
     public function ret(){
         $params = $this->request->param();
-        
-        
-        
+
         if($this->user){
             if($params['hm_type'] == 'goods'){
                 $this->redirect(url('/order')); die;
@@ -29,67 +27,69 @@ class Notify extends Frontend {
         }else{
             $order = db::name('goods_order')->where(['out_trade_no' => $params['out_trade_no']])->find();
 
-            if(empty($order['email']) && !empty($order['password'])){
-                $this->redirect(url('/find_order') . '?password=' . $order['password']);die;
+            $u = '';
+            if(!empty($order['mobile'])){
+                $u .= "mobile={$order['mobile']}&";
             }
-            if(!empty($order['email']) && empty($order['password'])){
-                $this->redirect(url('/find_order') . '?email=' . $order['email']);die;
+            if(!empty($order['email'])){
+                $u .= "email={$order['email']}&";
             }
-            if(!empty($order['email']) && !empty($order['password'])){
-                $this->redirect(url('/find_order') . '?email=' . $order['email'] . '&password=' . $order['password']);die;
+            if(!empty($order['password'])){
+                $u .= "password={$order['password']}&";
             }
+            $u = rtrim($u, '&');
 
-
+            $this->redirect(url('/find_order') . '?' . $u);die;
         }
-        
-        
-        
-        
+
+
+
+
     }
-    
-    
+
+
 
 
 
 
     public function index(){
-        
+
         $insert = [
             'name' => '异步回调',
             'content' => '异步回调',
             'create_time' => date('Y-m-d H:i:s', $this->timestamp)
         ];
         db::name('test')->insert($insert);
-        
+
         $params = $this->request->param();
-        
+
         unset($params['hm_type']);
         unset($params['plugin']);
-            
+
         $plugin = $this->request->param('plugin');
         $hm_type = $this->request->param('hm_type');
-        
-        
-        
+
+
+
         include_once ROOT_PATH . "plugin/{$plugin}/{$plugin}.php";
-        
+
         $result = checkSign($params);
-        
-        
+
+
         if($result){
-            
+
             $order = db::name($hm_type . '_order')->where(['out_trade_no' => $result['out_trade_no']])->find();
-           
+
             if(!$order || $order['pay_time']){
                 echo 'ok';die;
             }
             try{
-                
+
                 if($hm_type == 'recharge'){ //充值回调
                     db::name('recharge_order')->where(['id' => $order['id']])->update(['pay_time' => $this->timestamp, 'trade_no' => $result['trade_no']]);
                     $user = db::name('user')->where(['id' => $order['user_id']])->find();
                     db::name('user')->where(['id' => $order['user_id']])->setInc('money', $order['money']);
-                    
+
                     $bill_insert = [
                         'create_time' => $this->timestamp,
                         'user_id' => $user['id'],
@@ -107,32 +107,32 @@ class Notify extends Frontend {
                     $this->notifyGoodsSuccess($goods, $order);
                     echo 'ok';die;
                 }
-                
+
             }catch(\Exception $e){
-                
+
                 $insert = [
                     'name' => '代码错误',
                     'content' => $e->getMessage() . '---' . $e->getLine(),
                     'create_time' => date('Y-m-d H:i:s', $this->timestamp)
                 ];
                 db::name('test')->insert($insert);
-                
+
             }
-            
+
         }else{
-            
+
             $insert = [
                 'name' => '验签失败',
                 'content' => '验签失败',
                 'create_time' => date('Y-m-d H:i:s', $this->timestamp)
             ];
             db::name('test')->insert($insert);
-            
+
         }
-  
+
     }
-    
-    
+
+
     /**
      * 执行购买商品的回调操作
      * 1，写入发货表，更新库存表
@@ -163,7 +163,7 @@ class Notify extends Frontend {
         }
         if ($goods['type'] == 'fixed') { //更新库存表并写入发货表
             $stock = db::name('stock')->where(['sku_id' => $order['sku_id']])->limit($order['goods_num'])->find();
-            
+
             $deliver = [];
             for ($i = 0; $i < $order['goods_num']; $i++) {
                 $deliver[] = [
@@ -224,7 +224,11 @@ class Notify extends Frontend {
          * 2，返佣给上级
          * 3，记录余额账单
          */
+        if(empty($order['user_id'])) {
+            return true;
+        }
         $user = db::name('user')->where(['id' => $order['user_id']])->find();
+
         //给上级返佣、记录余额账单
         $bill_insert = [
             'create_time' => $this->timestamp,

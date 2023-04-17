@@ -115,9 +115,21 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
         order: function(){
             require(['../libs/clipboard/dist/clipboard.min', '../libs/jquery.qrcode/jquery.qrcode.min'], function (Clipboard) {
 
+                $('.qrcode-text').click(function(){
+                    let contentId = $(this).data('content-id');
+                    $('#' + contentId + '-btn').hide();
+                    $('#' + contentId).show();
+                    var id = $(this).data('id');
+                    $('#' + id + '-btn').show();
+                    $('#' + id).empty();
+                })
+
                 $('.text-qrcode').click(function(){
                     var id = $(this).data('id');
+                    $('#' + id + '-btn').hide();
                     var contentId = $(this).data('content-id');
+                    $('#' + contentId).hide();
+                    $('#' + contentId + '-btn').show();
                     $('#' + id).empty();
                     $('#' + id).qrcode($('#' + contentId).html());
                 })
@@ -168,9 +180,21 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
         findorder: function(){
             require(['../libs/clipboard/dist/clipboard.min', '../libs/jquery.qrcode/jquery.qrcode.min'], function (Clipboard) {
 
+                $('.qrcode-text').click(function(){
+                    let contentId = $(this).data('content-id');
+                    $('#' + contentId + '-btn').hide();
+                    $('#' + contentId).show();
+                    var id = $(this).data('id');
+                    $('#' + id + '-btn').show();
+                    $('#' + id).empty();
+                })
+
                 $('.text-qrcode').click(function(){
                     var id = $(this).data('id');
+                    $('#' + id + '-btn').hide();
                     var contentId = $(this).data('content-id');
+                    $('#' + contentId).hide();
+                    $('#' + contentId + '-btn').show();
                     $('#' + id).empty();
                     $('#' + id).qrcode($('#' + contentId).html());
                 })

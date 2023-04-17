@@ -23,6 +23,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 pk: 'id',
                 sortName: 'id',
                 fixedColumns: true,
+                commonSearch: false,
                 fixedRightNumber: 1,
                 columns: [
                     [

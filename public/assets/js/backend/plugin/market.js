@@ -336,7 +336,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     });
                 } else {
                     Fast.api.ajax({
-                        url: Config.api_url + 'api/user/index',
+                        // url: Config.api_url + 'api/user/index',
+                        url: 'plugin/market/user',
                         data: {
                             uid: userinfo.id,
                             token: userinfo.token,

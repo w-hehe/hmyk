@@ -35,6 +35,11 @@ class Market extends Backend
         return hmCurl(API . 'api/user/login', http_build_query($params), 1);
     }
 
+    public function user(){
+        $params = $this->request->param();
+        return hmCurl(API . 'api/user/index', http_build_query($params), 1);
+    }
+
     /**
      * 插件列表
      */

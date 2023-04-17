@@ -181,7 +181,6 @@ class IndexCommon extends Controller
                 if($info['type'] == 'basic'){
                     include_once(ROOT_PATH . 'plugin/' . $plugin . '/' . $plugin . '.php');
                 }
-
             }
         }
 

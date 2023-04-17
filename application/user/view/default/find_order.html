@@ -39,6 +39,12 @@
                 <div class="panel-body">
                     <h2 class="page-header">{:__('查询订单')}</h2>
                     <form class="balance-form" method="get" action="">
+                        {if condition="in_array('mobile', $options.buy_input)"}
+                        <div class="form-group">
+                            <label class="form-label">手机号码</label>
+                            <input class="form-control" type="text" value="{$mobile}" placeholder="请输入游客下单时填写的电子邮箱" name="mobile">
+                        </div>
+                        {/if}
                         {if condition="in_array('email', $options.buy_input)"}
                         <div class="form-group">
                             <label class="form-label">电子邮箱</label>
@@ -133,26 +139,28 @@
                                                         {if condition="$vo.goods_type == 'alone'"}
                                                         {volist name="$vo.deliver" id="v" key="k"}
                                                         <div class="links-group">
-                                                            <h5 style="margin-top: 0;">第{$k}个</h5>
-                                                            <span style="word-break: break-all;" id="content-{$vo.id}-{$v.id}">{$v.content}</span>
-                                                            <div id="qrcode-{$vo.id}-{$v.id}"></div>
-                                                            <div class="links-group__links" style="margin-top: 10px;">
+                                                            <h5 style="margin-top: 0;">
+                                                                第{$k}个
                                                                 <a class="btn-copy" data-id="content-{$vo.id}-{$v.id}" style="margin-right: 10px; cursor:pointer;">复制卡密</a>
-                                                                <a class="text-qrcode" data-id="qrcode-{$vo.id}-{$v.id}" data-content-id="content-{$vo.id}-{$v.id}" style="cursor:pointer;">转换为二维码</a>
-                                                            </div>
+                                                                <a class="text-qrcode" id="qrcode-{$vo.id}-{$v.id}-btn" data-id="qrcode-{$vo.id}-{$v.id}" data-content-id="content-{$vo.id}-{$v.id}" style="cursor:pointer;">转换为二维码</a>
+                                                                <a class="qrcode-text" id="content-{$vo.id}-{$v.id}-btn" style="display: none;" data-id="qrcode-{$vo.id}-{$v.id}" data-content-id="content-{$vo.id}-{$v.id}" style="cursor:pointer;">转换为文字</a>
+                                                            </h5>
+                                                            <span style="word-break: break-all;" id="content-{$vo.id}-{$v.id}">{$v.content}</span>
+                                                            <div id="qrcode-{$vo.id}-{$v.id}" class="qr-code"></div>
                                                         </div>
                                                         {/volist}
                                                         {/if}
                                                         {if condition="$vo.goods_type == 'fixed'"}
                                                         {volist name="$vo.deliver" id="v" key="k"}
                                                         <div class="links-group">
-                                                            <h5 style="margin-top: 0;">第{$k}个</h5>
-                                                            <span style="word-break: break-all;" id="content-{$vo.id}-{$v.id}">{$v.content}</span>
-                                                            <div id="qrcode-{$vo.id}-{$v.id}"></div>
-                                                            <div class="links-group__links" style="margin-top: 10px;">
+                                                            <h5 style="margin-top: 0;">
+                                                                第{$k}个
                                                                 <a class="btn-copy" data-id="content-{$vo.id}-{$v.id}" style="margin-right: 10px; cursor:pointer;">复制卡密</a>
-                                                                <a class="text-qrcode" data-id="qrcode-{$vo.id}-{$v.id}" data-content-id="content-{$vo.id}-{$v.id}" style="cursor:pointer;">转换为二维码</a>
-                                                            </div>
+                                                                <a class="text-qrcode" id="qrcode-{$vo.id}-{$v.id}-btn" data-id="qrcode-{$vo.id}-{$v.id}" data-content-id="content-{$vo.id}-{$v.id}" style="cursor:pointer;">转换为二维码</a>
+                                                                <a class="qrcode-text" id="content-{$vo.id}-{$v.id}-btn" style="display: none;" data-id="qrcode-{$vo.id}-{$v.id}" data-content-id="content-{$vo.id}-{$v.id}" style="cursor:pointer;">转换为文字</a>
+                                                            </h5>
+                                                            <span style="word-break: break-all;" id="content-{$vo.id}-{$v.id}">{$v.content}</span>
+                                                            <div id="qrcode-{$vo.id}-{$v.id}" class="qr-code"></div>
                                                         </div>
                                                         {/volist}
                                                         {/if}
@@ -200,3 +208,9 @@
         </div>
     </div>
 </div>
+<style>
+    .qr-code canvas{
+        width: 190px;
+        height: 190px;
+    }
+</style>

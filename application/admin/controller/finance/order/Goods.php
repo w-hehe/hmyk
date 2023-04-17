@@ -14,6 +14,9 @@ use think\exception\ValidateException;
  */
 class Goods extends Backend {
 
+    protected $relationSearch = true;
+    protected $searchFields = ['out_trade_no', 'goods_name', 'user.username'];
+
     /**
      * Goods模型对象
      * @var \app\admin\model\finance\order\Goods
@@ -23,6 +26,23 @@ class Goods extends Backend {
     public function _initialize() {
         parent::_initialize();
         $this->model = new \app\admin\model\finance\order\Goods;
+
+        $options = [];
+        $optionsResult = db::name('options')->select();
+        foreach($optionsResult as $val){
+            $options[$val['name']] = $val['value'];
+        }
+
+        $active_plugins = $options['active_plugin'];
+        $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
+        if ($active_plugins && is_array($active_plugins)) {
+            foreach($active_plugins as $plugin) {
+                $info = include_once(ROOT_PATH . 'plugin/' . $plugin . '/info.php');
+                if($info['type'] == 'basic'){
+                    include_once(ROOT_PATH . 'plugin/' . $plugin . '/' . $plugin . '.php');
+                }
+            }
+        }
 
     }
 
@@ -270,8 +290,10 @@ class Goods extends Backend {
                 $row->validateFailException()->validate($validate);
             }
             $fd = db::name('deliver')->where(['order_id' => $ids])->find();
+            $deliver = [];
             if($fd){
                 $result = db::name('deliver')->where(['id' => $fd['id']])->update(['content' => $params['content']]);
+                $deliver[] = ['content' => $params['content']];
             }else{
                 $insert = [
                     'order_id' => $ids,
@@ -279,8 +301,12 @@ class Goods extends Backend {
                     'create_time' => time()
                 ];
                 $result = db::name('deliver')->insert($insert);
+                $deliver[] = $insert;
+
             }
+            doAction('send_goods', $row, $deliver);
             Db::commit();
+
         } catch (ValidateException | PDOException | Exception $e) {
             Db::rollback();
             $this->error($e->getMessage());

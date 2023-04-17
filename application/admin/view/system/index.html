@@ -141,9 +141,10 @@
                     <div class="tab-pane fade" id="tab-2">
                         <div class="widget-body no-padding">
                             <div class="form-group">
-                                <label class="control-label col-xs-12 col-sm-12">游客下单必填项</label>
+                                <label class="control-label col-xs-12 col-sm-12">游客下单必填项（同步查单处配置）</label>
                                 <div class="col-xs-12 col-sm-12">
                                     <div class="checkbox">
+                                        <label><input name="buy_input[]" type="checkbox" value="mobile" {if condition="in_array('mobile', $options.buy_input)"}checked{/if}>手机号码</label>
                                         <label><input name="buy_input[]" type="checkbox" value="email" {if condition="in_array('email', $options.buy_input)"}checked{/if}>电子邮箱</label>
                                         <label><input name="buy_input[]" type="checkbox" value="password" {if condition="in_array('password', $options.buy_input)"}checked{/if}>查单密码</label>
                                     </div>

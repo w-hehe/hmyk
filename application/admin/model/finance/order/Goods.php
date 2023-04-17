@@ -29,7 +29,7 @@ class Goods extends Model
     ];
     
     public function user(){
-        return $this->hasOne('app\admin\model\User', 'id', 'user_id');
+        return $this->belongsTo('app\admin\model\User', 'user_id', 'id', [], 'LEFT')->setEagerlyType(false);
     }
     
 

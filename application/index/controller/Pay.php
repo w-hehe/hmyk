@@ -34,6 +34,7 @@ class Pay extends Frontend {
         $params = $this->request->param();
         $password = empty($params['password']) ? null : $params['password'];
         if(!$this->user){
+            if(in_array('mobile', $this->options['buy_input']) && empty($params['mobile'])) return json(['code' => 400, 'msg' => '游客下单需输入手机号码']);
             if(in_array('email', $this->options['buy_input']) && empty($params['email'])) return json(['code' => 400, 'msg' => '游客下单需输入电子邮件']);
             if(in_array('password', $this->options['buy_input']) && empty($password)) return json(['code' => 400, 'msg' => '游客下单需输入查单密码']);
         }
@@ -56,7 +57,7 @@ class Pay extends Frontend {
             $goods = $this->goodsDetail($goods, $agency);
             /**
              * 写入订单前准备
-             *    1，验证附加选项
+             *  1，验证附加选项
              *  2，验证商品规格
              *  3，验证商品库存
              *  4，验证优惠券
@@ -80,7 +81,6 @@ class Pay extends Frontend {
             }
 
             // 3，验证商品库存
-            //            print_r($goods);die;
             if ($goods['is_sku'] == 0) {
                 $stockNum = db::name('sku')->where(['id' => $goods['sku'][0]['id']])->value('stock');
             }
@@ -92,6 +92,22 @@ class Pay extends Frontend {
                 exception('库存不足');
             }
             // 4，验证优惠券
+
+            // 5，处理批发优惠
+            // 按照weight字段进行升序排序
+
+            if($goods['wholesale']){
+                $wholesale = $goods['wholesale'];
+                $weights = array_column($goods['wholesale'], "number");
+                array_multisort($weights, SORT_DESC, $wholesale);
+                foreach($wholesale as $val){
+                    if($params['num'] >= $val['number']){
+                        $goodsMoney -= $val['offer'];
+                        break;
+                    }
+                }
+            }
+
 
             // 写入订单
             $orderMoney = $params['num'] * $goodsMoney;
@@ -112,6 +128,7 @@ class Pay extends Frontend {
                 'attach' => empty($params['attach']) ? null : json_encode($params['attach']),
                 'pay_type' => empty($params['pay_type']) || $orderMoney == 0 ? null : $params['pay_type'],
                 'sku_id' => empty($params['sku_id']) ? $goods['sku'][0]['id'] : $params['sku_id'],
+                'mobile' => empty($params['mobile']) ? null : trim($params['mobile']),
                 'email' => empty($params['email']) ? null : trim($params['email']),
                 'password' => $password,
             ];
@@ -143,7 +160,7 @@ class Pay extends Frontend {
                     doAction('goods_pay_before', $goods, $order_insert);
 //                    echo $goods['name'];die;
                     $result = pay([
-                        'subject' => $goods['name'],
+                        'subject' => trim($goods['name']),
                         'out_trade_no' => $out_trade_no,
                         'money' => $orderMoney,
                         'hm_type' => 'goods',
@@ -255,6 +272,9 @@ class Pay extends Frontend {
         }
         db::name('goods')->where(['id' => $goods['id']])->setDec('stock', $order['goods_num']); //更新商品库存字段
         db::name('goods')->where(['id' => $goods['id']])->setInc('sales', $order['goods_num']); //更新商品销量字段
+        if($goods['invented_sales']){
+            db::name('goods')->where(['id' => $goods['id']])->setInc('invented_sales', $order['goods_num']); //更新商品虚拟销量字段
+        }
         db::name('goods_order')->where(['id' => $order['id']])->update(['pay_time' => $this->timestamp]); //更新订单状态
         db::name('sku')->where(['id' => $order['sku_id']])->setDec('stock', $order['goods_num']); //更新库存表
 

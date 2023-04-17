@@ -11,7 +11,7 @@
  Target Server Version : 50726 (5.7.26)
  File Encoding         : 65001
 
- Date: 16/04/2023 23:15:58
+ Date: 17/04/2023 23:33:42
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'b01ac0e226d8377c3f02f933ca3d2f73', 'ab900d', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1681633606, '127.0.0.1', 1491635035, 1681633606, 'dd2de1b8-ad8b-43c0-9fac-6030982347a1', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'b01ac0e226d8377c3f02f933ca3d2f73', 'ab900d', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1681717960, '127.0.0.1', 1491635035, 1681717960, 'b77a131f-9af7-4363-a661-9109c2c0c36a', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_admin_log
@@ -62,14 +62,13 @@ CREATE TABLE `hm_admin_log`  (
   `createtime` bigint(16) NULL DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `name`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员日志表' ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员日志表' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of hm_admin_log
 -- ----------------------------
-INSERT INTO `hm_admin_log` VALUES (1, 1, 'admin', '/admin/plugin/myplugin/status/cmd/enable', '', '{\"action\":\"\",\"ids\":\"send_goods_email\",\"params\":\"\",\"cmd\":\"enable\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1681658091);
-INSERT INTO `hm_admin_log` VALUES (2, 1, 'admin', '/admin/plugin/myplugin/status/cmd/enable', '', '{\"action\":\"\",\"ids\":\"sheshou\",\"params\":\"\",\"cmd\":\"enable\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1681658092);
-INSERT INTO `hm_admin_log` VALUES (3, 1, 'admin', '/admin/plugin/myplugin/status/cmd/enable', '', '{\"action\":\"\",\"ids\":\"shuiping\",\"params\":\"\",\"cmd\":\"enable\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1681658094);
+INSERT INTO `hm_admin_log` VALUES (1, 1, 'admin', '/admin/plugin/myplugin/status/cmd/enable', '', '{\"action\":\"\",\"ids\":\"sheshou\",\"params\":\"\",\"cmd\":\"enable\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1681745582);
+INSERT INTO `hm_admin_log` VALUES (2, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/sheshou/ids/3', '', '{\"plugin_name\":\"sheshou\",\"ids\":\"3\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1681745584);
 
 -- ----------------------------
 -- Table structure for hm_area
@@ -546,22 +545,21 @@ CREATE TABLE `hm_goods`  (
   `create_time` bigint(16) UNSIGNED NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` bigint(16) UNSIGNED NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '商品表' ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '商品表' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of hm_goods
 -- ----------------------------
-INSERT INTO `hm_goods` VALUES (1, 1, 'alone', '[{\"title\":\"\\u8d26\\u53f7\",\"placeholder\":\"\\u8bf7\\u8f93\\u5165\\u8d26\\u53f7\"},{\"title\":\"\\u5bc6\\u7801\",\"placeholder\":\"\\u8bf7\\u8f93\\u5165\\u5bc6\\u7801\"},{\"title\":\"\\u8054\\u7cfb\\u65b9\\u5f0f\",\"placeholder\":\"\\u8bf7\\u8f93\\u5165\\u8054\\u7cfb\\u65b9\\u5f0f\"}]', '[]', NULL, '惟有长江水，无语东流。 不忍登高临远，望故乡渺邈，归思难收。', 0, NULL, '/uploads/20230416/81821c7d8aa202b64e1e5c88a3222143.jpeg', NULL, 0, NULL, NULL, 1, 0, 0, NULL, 1, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `hm_goods` VALUES (1, 1, 'alone', '[{\"title\":\"\\u8d26\\u53f7\",\"placeholder\":\"\\u8bf7\\u8f93\\u5165\\u8d26\\u53f7\"},{\"title\":\"\\u5bc6\\u7801\",\"placeholder\":\"\\u8bf7\\u8f93\\u5165\\u5bc6\\u7801\"},{\"title\":\"\\u8054\\u7cfb\\u65b9\\u5f0f\",\"placeholder\":\"\\u8bf7\\u8f93\\u5165\\u8054\\u7cfb\\u65b9\\u5f0f\"}]', '[]', NULL, '惟有长江水，无语东流。 不忍登高临远，望故乡渺邈，归思难收。', 0, NULL, '/uploads/20230416/81821c7d8aa202b64e1e5c88a3222143.jpeg', NULL, 0, NULL, NULL, 1, 7, 0, NULL, 1, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `hm_goods` VALUES (2, 1, 'alone', '[]', '[]', NULL, '渐霜风凄紧，关河冷落，残照当楼。是处红衰翠减，苒苒物华休。', 0, NULL, '/uploads/20230415/a9ec76f4539cecbfbe5cee120760d5d8.jpeg', NULL, 1, NULL, NULL, 1, 0, 0, NULL, 2, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `hm_goods` VALUES (3, 1, 'alone', '[]', '[]', NULL, '忍把浮名，换了浅斟低唱！', 0, NULL, '/uploads/20230415/dcdd4a2265c8edb84b09ab3e8e770c10.jpg', NULL, 1, NULL, NULL, 1, 0, 0, NULL, 3, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `hm_goods` VALUES (4, 1, 'alone', '[]', '[]', NULL, '且恁偎红倚翠，风流事，平生畅。青春都一饷。', 0, NULL, '/uploads/20230415/cf8e64517aaa7e7c4b97e9b44b0215c9.jpeg', NULL, 1, NULL, NULL, 1, 0, 0, NULL, 4, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `hm_goods` VALUES (5, 1, 'alone', '[]', '[]', NULL, '烟花巷陌，依约丹青屏障。幸有意中人，堪寻访。', 0, NULL, '/uploads/20230415/aac468e3080243c2f560d4133da254c6.jpeg', NULL, 1, NULL, NULL, 1, 0, 0, NULL, 5, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `hm_goods` VALUES (6, 1, 'alone', '[]', '[]', NULL, '未遂风云便，争不恣狂荡。何须论得丧？才子词人，自是白衣卿相。', 0, NULL, '/uploads/20230416/2d1a509c088b49ab0a11199652ea7aad.jpg', NULL, 1, NULL, NULL, 1, 0, 0, NULL, 6, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `hm_goods` VALUES (7, 1, 'alone', '[]', '[]', NULL, '皓齿信难开，沉吟碧云间。勾践徵绝艳，扬蛾入吴关。', 0, NULL, '/uploads/20230415/a0dd4db2460620ff2cb56a0caa58e54e.jpeg', NULL, 1, NULL, NULL, 1, 0, 0, NULL, 7, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `hm_goods` VALUES (8, 1, 'alone', '[]', '[]', NULL, '黄金榜上，偶失龙头望。明代暂遗贤，如何向？', 0, NULL, '/uploads/20230415/99fec839cddce79594194fb92f222e85.jpeg', NULL, 1, NULL, NULL, 1, 0, 0, NULL, 8, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `hm_goods` VALUES (8, 1, 'alone', '[]', '[]', NULL, '黄金榜上，偶失龙头望。明代暂遗贤，如何向？', 0, NULL, '/uploads/20230415/99fec839cddce79594194fb92f222e85.jpeg', NULL, 1, NULL, NULL, 1, 3, 0, NULL, 8, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `hm_goods` VALUES (9, 1, 'invented', '[]', '[]', NULL, '寥落古行宫，宫花寂寞红。 白头宫女在，闲坐说玄宗。', 0, NULL, '/uploads/20230415/38816bd05d729f6e996926c19e4569a1.jpeg', NULL, 0, NULL, NULL, 1, 5, 0, NULL, 9, NULL, '<p><img src=\"http://hm.test.com/uploads/20230415/99fec839cddce79594194fb92f222e85.jpeg\" style=\"\"/></p><p><img src=\"http://hm.test.com/uploads/20230415/443bab862352dad8111896ede9a7cfaa.png\" style=\"\"/></p><p><br/></p>', NULL, NULL, NULL);
-INSERT INTO `hm_goods` VALUES (10, 1, 'alone', '[]', '[]', NULL, '江汉曾为客，相逢每醉还。 浮云一别后，流水十年间', 0, NULL, '/uploads/20230415/738d8b03cb8ee9fd9ea63e8f95aba5ee.jpeg', NULL, 1, NULL, '<p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">在玩家咸鱼之王的爬塔过程中，选择一个最强的阵容是非常重要的。咸鱼之王爬塔的核心在于团队协作和技能组合。因此，在选择阵容时，应该考虑到角色之间的互补性和配合效果。从战术和技能的角度出发，我们可以提出一些最佳的建议。</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\"><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span></p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">首先，<span style=\"box-sizing: inherit; font-weight: bolder;\">阵容中必须有一个坦克</span>，拥有高生命值和防御能力。这个角色的主要职责是在攻击时吸引敌人的火力，并保护其他队员免受伤害。在咸鱼之王中，最好的坦克角色是凯恩和阿瑞斯。</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\"><img src=\"http://hm.test.com/uploads/20230414/c2e714fa01c4a09d0a45cbaa2e8c46bb.png\" title=\"image.png\"/></p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">其次，<span style=\"box-sizing: inherit; font-weight: bolder;\">阵容中应该有一个治愈角色</span>，可以为队友提供治疗和复活。在爬塔的过程中，队友之间的伤害是不可避免的，因此，治愈角色是非常必要的。最好的治愈角色是皮皮和卡瓦。</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">第三，<span style=\"box-sizing: inherit; font-weight: bolder;\">阵容中应该有一个输出伤害高的角色</span>，可以给敌人造成巨大的伤害。这种角色的攻击力应该高，并且应该具有多种技能。最好的输出角色是魔剑士和狂战士。</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">最后，<span style=\"box-sizing: inherit; font-weight: bolder;\">阵容中应该有一个控制角色</span>，可以让敌人进入眩晕或冰冻状态，使他们无法攻击。这样可以为队友提供宝贵的时间，并减少受到的伤害。最好的控制角色是萨满和冰霜女巫。</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">总的来说，<span style=\"box-sizing: inherit; font-weight: bolder;\">一个最强的阵容应该由坦克、治愈、输出和控制四种角色组成。</span>它们之间的互补性和配合效果非常重要。只有在角色选择和技能组合方面取得正确平衡，才能在咸鱼之王爬塔中取得胜利。同时，还应该不断地提高角色的技能等级和装备等级，以提高整个团队的实力。</p>', 1, 16, 0, NULL, 10, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `hm_goods` VALUES (11, 7, 'fixed', '[{\"title\":\"1\",\"placeholder\":\"111\",\"checked\":\"on\"},{\"title\":\"2\",\"placeholder\":\"222\"}]', '[]', NULL, '天不生我李淳罡,剑道万古长如夜', 0, NULL, '/uploads/20230415/a0dd4db2460620ff2cb56a0caa58e54e.jpeg', NULL, 0, NULL, NULL, 1, 1, 0, NULL, 11, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `hm_goods` VALUES (10, 1, 'alone', '[]', '[{\"number\":\"10\",\"offer\":\"0.5\"},{\"number\":\"20\",\"offer\":\"1\"}]', NULL, '江汉曾为客，相逢每醉还。 浮云一别后，流水十年间', 0, NULL, '/uploads/20230415/738d8b03cb8ee9fd9ea63e8f95aba5ee.jpeg', NULL, 1, NULL, '<p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">在玩家咸鱼之王的爬塔过程中，选择一个最强的阵容是非常重要的。咸鱼之王爬塔的核心在于团队协作和技能组合。因此，在选择阵容时，应该考虑到角色之间的互补性和配合效果。从战术和技能的角度出发，我们可以提出一些最佳的建议。</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\"><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span><span style=\"font-family: Hind, sans-serif; letter-spacing: 0.15px; white-space: normal;\">aaaaaaa</span></p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">首先，<span style=\"box-sizing: inherit; font-weight: bolder;\">阵容中必须有一个坦克</span>，拥有高生命值和防御能力。这个角色的主要职责是在攻击时吸引敌人的火力，并保护其他队员免受伤害。在咸鱼之王中，最好的坦克角色是凯恩和阿瑞斯。</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\"><img src=\"http://hm.test.com/uploads/20230414/c2e714fa01c4a09d0a45cbaa2e8c46bb.png\" title=\"image.png\"/></p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">其次，<span style=\"box-sizing: inherit; font-weight: bolder;\">阵容中应该有一个治愈角色</span>，可以为队友提供治疗和复活。在爬塔的过程中，队友之间的伤害是不可避免的，因此，治愈角色是非常必要的。最好的治愈角色是皮皮和卡瓦。</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">第三，<span style=\"box-sizing: inherit; font-weight: bolder;\">阵容中应该有一个输出伤害高的角色</span>，可以给敌人造成巨大的伤害。这种角色的攻击力应该高，并且应该具有多种技能。最好的输出角色是魔剑士和狂战士。</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">最后，<span style=\"box-sizing: inherit; font-weight: bolder;\">阵容中应该有一个控制角色</span>，可以让敌人进入眩晕或冰冻状态，使他们无法攻击。这样可以为队友提供宝贵的时间，并减少受到的伤害。最好的控制角色是萨满和冰霜女巫。</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; overflow-wrap: break-word; letter-spacing: 0.15px; hyphens: auto; overflow: unset; text-overflow: unset; display: -webkit-box; -webkit-line-clamp: unset; -webkit-box-orient: unset; font-family: Hind, sans-serif; white-space: normal;\">总的来说，<span style=\"box-sizing: inherit; font-weight: bolder;\">一个最强的阵容应该由坦克、治愈、输出和控制四种角色组成。</span>它们之间的互补性和配合效果非常重要。只有在角色选择和技能组合方面取得正确平衡，才能在咸鱼之王爬塔中取得胜利。同时，还应该不断地提高角色的技能等级和装备等级，以提高整个团队的实力。</p>', 1, 26, 0, NULL, 10, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for hm_goods_category
@@ -624,6 +622,7 @@ CREATE TABLE `hm_goods_order`  (
   `goods_num` int(10) NULL DEFAULT NULL,
   `money` decimal(10, 2) NULL DEFAULT NULL,
   `attach` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `mobile` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
@@ -735,17 +734,17 @@ CREATE TABLE `hm_options`  (
 INSERT INTO `hm_options` VALUES (1, 'rebeat_1', '10', '一级返佣');
 INSERT INTO `hm_options` VALUES (2, 'rebeat_2', '5', '二级返佣');
 INSERT INTO `hm_options` VALUES (3, 'rebeat_3', '2', '三级返佣');
-INSERT INTO `hm_options` VALUES (4, 'version', '1.0.9', '数据表版本');
+INSERT INTO `hm_options` VALUES (4, 'version', '1.1.0', '数据表版本');
 INSERT INTO `hm_options` VALUES (5, 'name', '红盟云卡', '网站名称');
 INSERT INTO `hm_options` VALUES (6, 'title', '为中华之崛起而读书', '网站标题');
 INSERT INTO `hm_options` VALUES (7, 'keywords', '基于Thinkphp开发的开源商城系统', '关键词');
 INSERT INTO `hm_options` VALUES (8, 'description', '基于Thinkphp开发的开源商城系统', '网站说明');
 INSERT INTO `hm_options` VALUES (9, 'logo', '/template/default/images/dist/logo-blue.png', '网站Logo');
-INSERT INTO `hm_options` VALUES (10, 'active_plugin', 'a:1:{i:2;s:4:\"scan\";}', '启用的插件');
+INSERT INTO `hm_options` VALUES (10, 'active_plugin', 'a:1:{i:1;s:4:\"scan\";}', '启用的插件');
 INSERT INTO `hm_options` VALUES (11, 'beian', '', '备案号');
 INSERT INTO `hm_options` VALUES (12, 'icon', '/assets/img/favicon.png', 'icon');
 INSERT INTO `hm_options` VALUES (13, 'custom_code', '<script>\r\nconsole.log(\'红盟云卡下载地址：https://blog.ysxue.net/\');\r\n</script>', '自定义代码');
-INSERT INTO `hm_options` VALUES (14, 'buy_input', 'a:2:{i:0;s:5:\"email\";i:1;s:8:\"password\";}', '游客下单必填项');
+INSERT INTO `hm_options` VALUES (14, 'buy_input', 'a:1:{i:0;s:5:\"email\";}', '游客下单必填项');
 
 -- ----------------------------
 -- Table structure for hm_order_agency
@@ -795,7 +794,7 @@ CREATE TABLE `hm_sku`  (
   `price` varchar(800) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '价格',
   `stock` int(10) NULL DEFAULT 0 COMMENT '库存',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 44 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 45 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hm_sku
@@ -837,10 +836,11 @@ INSERT INTO `hm_sku` VALUES (34, 8, 'ccc', '{\"code\":\"\",\"crossed_price\":\"\
 INSERT INTO `hm_sku` VALUES (35, 8, 'ddd', '{\"code\":\"\",\"crossed_price\":\"\",\"cost_price\":\"\",\"sale_price\":\"\",\"agency_price_1\":\"\",\"agency_price_2\":\"\",\"agency_price_3\":\"\",\"agency_price_4\":\"\"}', 0);
 INSERT INTO `hm_sku` VALUES (36, 8, 'eee', '{\"code\":\"\",\"crossed_price\":\"\",\"cost_price\":\"\",\"sale_price\":\"\",\"agency_price_1\":\"\",\"agency_price_2\":\"\",\"agency_price_3\":\"\",\"agency_price_4\":\"\"}', 0);
 INSERT INTO `hm_sku` VALUES (37, 9, NULL, '{\"crossed_price\":\"\",\"cost_price\":\"\",\"sale_price\":\"\",\"agency_price_1\":\"\",\"agency_price_2\":\"\",\"agency_price_3\":\"\",\"agency_price_4\":\"\"}', 0);
-INSERT INTO `hm_sku` VALUES (39, 10, '1111', '{\"crossed_price\":\"\",\"cost_price\":\"\",\"sale_price\":\"2.00\",\"agency_price_1\":\"\",\"agency_price_2\":\"\",\"agency_price_3\":\"\",\"agency_price_4\":\"\"}', 0);
+INSERT INTO `hm_sku` VALUES (39, 10, '1111', '{\"crossed_price\":\"\",\"cost_price\":\"\",\"sale_price\":\"10.00\",\"agency_price_1\":\"\",\"agency_price_2\":\"\",\"agency_price_3\":\"\",\"agency_price_4\":\"\"}', 0);
 INSERT INTO `hm_sku` VALUES (40, 10, '22233', '{\"crossed_price\":\"\",\"cost_price\":\"\",\"sale_price\":\"\",\"agency_price_1\":\"\",\"agency_price_2\":\"\",\"agency_price_3\":\"\",\"agency_price_4\":\"\"}', 0);
 INSERT INTO `hm_sku` VALUES (42, 10, '123', '{\"crossed_price\":\"\",\"cost_price\":\"\",\"sale_price\":\"\",\"agency_price_1\":\"\",\"agency_price_2\":\"\",\"agency_price_3\":\"\",\"agency_price_4\":\"\"}', 0);
 INSERT INTO `hm_sku` VALUES (43, 11, NULL, '{\"crossed_price\":\"\",\"cost_price\":\"\",\"sale_price\":\"\",\"agency_price_1\":\"\",\"agency_price_2\":\"\",\"agency_price_3\":\"\",\"agency_price_4\":\"\"}', 0);
+INSERT INTO `hm_sku` VALUES (44, 12, NULL, '{\"crossed_price\":\"\",\"cost_price\":\"\",\"sale_price\":\"\",\"agency_price_1\":\"\",\"agency_price_2\":\"\",\"agency_price_3\":\"\",\"agency_price_4\":\"\"}', 0);
 
 -- ----------------------------
 -- Table structure for hm_sms
@@ -1109,9 +1109,7 @@ CREATE TABLE `hm_user_token`  (
 -- ----------------------------
 INSERT INTO `hm_user_token` VALUES ('063917baea5d24d4b07fc35a64cae9e9087bc8e2', 2, 1679907008, 1682499008);
 INSERT INTO `hm_user_token` VALUES ('09a00cc8891817a231d3e1595d485b78958179c9', 2, 1679408002, 1682000002);
-INSERT INTO `hm_user_token` VALUES ('0b04a69ffaf860a3cc743ed89d726e2640e62d55', 2, 1679065147, 1681657147);
 INSERT INTO `hm_user_token` VALUES ('0ef63c4f972c3e5b68cac466f7ac64be8003b94b', 2, 1679826460, 1682418460);
-INSERT INTO `hm_user_token` VALUES ('13df32be368c4d999d1dc9148c848b2337a2e5a4', 3, 1679058406, 1681650406);
 INSERT INTO `hm_user_token` VALUES ('15d0efbe4ce54f2c3fdf7f07902696d716019d12', 1, 1681476339, 1684068339);
 INSERT INTO `hm_user_token` VALUES ('37a7a079d9ff22ac75bb610cb28043ba32b66032', 2, 1680155722, 1682747722);
 INSERT INTO `hm_user_token` VALUES ('3a8961cbbcbda0df0b86bdedfd1a8761a5a76133', 2, 1679128526, 1681720526);
@@ -1119,29 +1117,21 @@ INSERT INTO `hm_user_token` VALUES ('3bed1c9df5cc35feea813c1784f30824e344b677', 
 INSERT INTO `hm_user_token` VALUES ('42b1283429478f75456c10175646717fdad91adb', 2, 1680262287, 1682854287);
 INSERT INTO `hm_user_token` VALUES ('53e3c8800046a8d6c5898e7f019ee9bf2e247638', 2, 1679206872, 1681798872);
 INSERT INTO `hm_user_token` VALUES ('595b3fd575ed6df66b0550fc8c3ab638597a2b75', 10, 1680364745, 1682956745);
-INSERT INTO `hm_user_token` VALUES ('5a1c7fcf688f7de15226889d640f04146ff96c94', 2, 1679058876, 1681650876);
-INSERT INTO `hm_user_token` VALUES ('5c80cf04a1baec8b918c024cb0b0f69440b04b87', 5, 1679058611, 1681650611);
-INSERT INTO `hm_user_token` VALUES ('69f7fe12c903518f434f09ad8012f534baf4fd1e', 2, 1679058909, 1681650909);
 INSERT INTO `hm_user_token` VALUES ('6f2458f6bb4439bbecc0efdf4a602af4712507d9', 2, 1681130964, 1683722964);
 INSERT INTO `hm_user_token` VALUES ('7a44c3addcd4ae1dd31584d55a11441df3ebc46e', 1, 1681381121, 1683973121);
 INSERT INTO `hm_user_token` VALUES ('7e21ba443e5da7b1b0e92e1ce2116e14455ce65f', 8, 1680444359, 1683036359);
 INSERT INTO `hm_user_token` VALUES ('82f4c076d12408edcd8887d132d82720eb2460f2', 12, 1680444349, 1683036349);
 INSERT INTO `hm_user_token` VALUES ('87a2cfbd92ee9e043aea94938c17f939b0b656b6', 2, 1679995783, 1682587783);
-INSERT INTO `hm_user_token` VALUES ('891099d895a7788bed73d09251c0646912b18d6b', 2, 1679058101, 1681650101);
 INSERT INTO `hm_user_token` VALUES ('897fca704a03588e6c9d6a23d891eef230928486', 2, 1680158806, 1682750806);
-INSERT INTO `hm_user_token` VALUES ('98b9c0a8b818d808aca3bf72099435acb79e19ff', 4, 1679058498, 1681650498);
-INSERT INTO `hm_user_token` VALUES ('9ce9d7c72fe02d03bd9c3ccb4933a75935708729', 5, 1679058611, 1681650611);
 INSERT INTO `hm_user_token` VALUES ('ac7b0c5f27a99f8c1aeded80a33612a978e13e2b', 2, 1679535411, 1682127411);
 INSERT INTO `hm_user_token` VALUES ('acfbf9ffefd1df4fc00faaec949dfb296dee16e1', 2, 1679657616, 1682249616);
 INSERT INTO `hm_user_token` VALUES ('b1ad04a203ad66ae317c5cd284dd8e28007744cb', 2, 1681116153, 1683708153);
 INSERT INTO `hm_user_token` VALUES ('b35fd128c379341fd05e0ca65499a1f4d33d1d4a', 2, 1680053680, 1682645680);
 INSERT INTO `hm_user_token` VALUES ('be1175c4a759cd38d4d00c132682a790d4c60094', 2, 1679578547, 1682170547);
-INSERT INTO `hm_user_token` VALUES ('c31b2f2fe0a8cf71214f99266f0a7a4dd39151c8', 2, 1679059078, 1681651078);
 INSERT INTO `hm_user_token` VALUES ('c463312698c16238c410e8f5cceaa595ff54e1e0', 1, 1681455740, 1684047740);
 INSERT INTO `hm_user_token` VALUES ('c747c929c8789d97ce9b921f9bbfd66a0c9875e7', 2, 1679755103, 1682347103);
 INSERT INTO `hm_user_token` VALUES ('e2640b4952f6e485666eaa772c43ba00c283b8c2', 8, 1680436274, 1683028274);
 INSERT INTO `hm_user_token` VALUES ('e398b04f20db46189304ce5ae87005ad0300321d', 11, 1680362443, 1682954443);
-INSERT INTO `hm_user_token` VALUES ('e3f35376641014245b6d4b4ec3f9a6bf2d38f5e1', 2, 1679058951, 1681650951);
 INSERT INTO `hm_user_token` VALUES ('f587667bdb9b2eefe337ec76798e05c189a5160d', 13, 1681288854, 1683880854);
 INSERT INTO `hm_user_token` VALUES ('f9aee7244d65bed0efd89113ede6841880f410a5', 14, 1681296435, 1683888435);
 INSERT INTO `hm_user_token` VALUES ('fc04b47dd043db51edf630c9b132f80181b00156', 2, 1679571414, 1682163414);

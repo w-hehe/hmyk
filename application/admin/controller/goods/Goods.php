@@ -15,6 +15,7 @@ use think\exception\ValidateException;
  */
 class Goods extends Backend {
 
+    protected $searchFields = ['name'];
     /**
      * Goods模型对象
      * @var \app\admin\model\goods\Goods

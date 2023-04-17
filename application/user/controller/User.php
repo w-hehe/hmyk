@@ -119,17 +119,23 @@ class User extends Frontend {
         $paginate = '';
         $password = '';
         $email = '';
+        $mobile = '';
         $total = -1;
         if($this->request->has('password') || $this->request->has('email')){
             $params = $this->request->param();
             $where = [];
+            if(in_array('mobile', $this->options['buy_input'])){
+                if(empty($params['mobile'])) $this->error('请输入手机号码');
+                $where['mobile'] = $params['mobile'];
+                $mobile = $params['mobile'];
+            }
             if(in_array('email', $this->options['buy_input'])){
                 if(empty($params['email'])) $this->error('请输入电子邮箱');
                 $where['email'] = $params['email'];
                 $email = $params['email'];
             }
             if(in_array('password', $this->options['buy_input'])){
-                if(empty($params['email'])) $this->error('请输入查单密码');
+                if(empty($params['password'])) $this->error('请输入查单密码');
                 $where['password'] = $params['password'];
                 $password = $params['password'];
             }
@@ -151,6 +157,7 @@ class User extends Frontend {
             'list' => $list,
             'paginate' => $paginate,
             'password' => $password,
+            'mobile' => $mobile,
             'email' => $email,
             'total' => $total
         ]);
