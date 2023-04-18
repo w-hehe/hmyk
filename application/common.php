@@ -11,6 +11,40 @@ define('API', 'http://banain.ysxue.net/');
 
 
 
+function curlJson($url, $data = null, $json = true, $header = []) {
+
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    if (!empty($data)) {
+        if ($json && is_array($data)) {
+            $data = json_encode($data);
+        }
+        curl_setopt($curl, CURLOPT_POST, 1);
+        // echo $data;
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        if ($json) { //发送JSON数据
+
+            curl_setopt($curl, CURLOPT_HEADER, 0);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            // curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
+        }
+    }
+
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $res = curl_exec($curl);
+    $errorno = curl_errno($curl);
+    if ($errorno) {
+        return ['errorno' => false, 'errmsg' => $errorno];
+    }
+    curl_close($curl);
+
+    return $res;
+    return json_decode($res, true);
+}
+
 
 
 /**

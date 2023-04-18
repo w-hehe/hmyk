@@ -206,7 +206,7 @@
                             <div class="form-group sku-false">
                                 <label class="control-label col-xs-12 col-sm-12">{$vo.name}</label>
                                 <div class="col-xs-12 col-sm-12">
-                                    <input id="c-agency_price_{$vo.id}" class="form-control" name="row[agency_price_{$vo.id}]" value="{:$row.is_sku ? '' : $row['price']['agency_price_' . $vo.id]}" type="number" placeholder="请输入{$vo.name}购买的价格">
+                                    <input id="c-agency_price_{$vo.id}" class="form-control" name="row[agency_price_{$vo.id}]" value="{:$row.is_sku ? '' : (isset($row['price']['agency_price_' . $vo.id]) ? $row['price']['agency_price_' . $vo.id] : '')}" type="number" placeholder="请输入{$vo.name}购买的价格">
                                 </div>
                             </div>
                             {/volist}

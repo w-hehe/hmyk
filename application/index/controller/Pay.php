@@ -153,18 +153,19 @@ class Pay extends Frontend {
                     $result = $this->notifyGoodsSuccess($goods, $out_trade_no);
                 } else {
                     // 发起支付
-                    
+
                     $payPlugin = selectPayPlugin($this->plugin, $params['pay_type']);
-                    
+
                     include_once ROOT_PATH . 'plugin/' . $payPlugin['english_name'] . '/' . $payPlugin['english_name'] . '.php';
                     doAction('goods_pay_before', $goods, $order_insert);
-//                    echo $goods['name'];die;
+                    //                    echo $goods['name'];die;
                     $result = pay([
                         'subject' => trim($goods['name']),
                         'out_trade_no' => $out_trade_no,
                         'money' => $orderMoney,
                         'hm_type' => 'goods',
-                        'pay_type' => $params['pay_type']
+                        'pay_type' => $params['pay_type'],
+                        'client_ip' => request()->ip(),
                     ], $payPlugin['info']);
                     // print_r($result);die;
                 }
@@ -173,8 +174,8 @@ class Pay extends Frontend {
             db::commit();
         } catch (\Exception $e) {
             db::rollback();
-            			return json(['code' => 400, 'msg' => $e->getMessage()]);
-//            return json(['code' => 400, 'msg' => $e->getMessage() . ' - ' . $e->getLine()]);
+            return json(['code' => 400, 'msg' => $e->getMessage()]);
+            //            return json(['code' => 400, 'msg' => $e->getMessage() . ' - ' . $e->getLine()]);
         }
 
         if($orderMoney == 0){

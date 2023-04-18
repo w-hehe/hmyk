@@ -121,7 +121,7 @@ class User extends Frontend {
         $email = '';
         $mobile = '';
         $total = -1;
-        if($this->request->has('password') || $this->request->has('email')){
+        if($this->request->has('password') || $this->request->has('email') || $this->request->has('mobile')){
             $params = $this->request->param();
             $where = [];
             if(in_array('mobile', $this->options['buy_input'])){

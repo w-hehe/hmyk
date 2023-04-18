@@ -11,7 +11,7 @@
  Target Server Version : 50726 (5.7.26)
  File Encoding         : 65001
 
- Date: 17/04/2023 23:33:42
+ Date: 18/04/2023 16:31:13
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'b01ac0e226d8377c3f02f933ca3d2f73', 'ab900d', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1681717960, '127.0.0.1', 1491635035, 1681717960, 'b77a131f-9af7-4363-a661-9109c2c0c36a', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'b01ac0e226d8377c3f02f933ca3d2f73', 'ab900d', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1681797208, '127.0.0.1', 1491635035, 1681797208, 'ee4ef9b7-1db0-48fb-a1ad-7301bcfc0846', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_admin_log
@@ -62,13 +62,11 @@ CREATE TABLE `hm_admin_log`  (
   `createtime` bigint(16) NULL DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `name`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员日志表' ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员日志表' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of hm_admin_log
 -- ----------------------------
-INSERT INTO `hm_admin_log` VALUES (1, 1, 'admin', '/admin/plugin/myplugin/status/cmd/enable', '', '{\"action\":\"\",\"ids\":\"sheshou\",\"params\":\"\",\"cmd\":\"enable\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1681745582);
-INSERT INTO `hm_admin_log` VALUES (2, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/sheshou/ids/3', '', '{\"plugin_name\":\"sheshou\",\"ids\":\"3\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1681745584);
 
 -- ----------------------------
 -- Table structure for hm_area
@@ -463,7 +461,7 @@ CREATE TABLE `hm_config`  (
 INSERT INTO `hm_config` VALUES (1, 'name', 'basic', 'Site name', '请填写站点名称', 'string', '', '我的网站', '', 'required', '', '');
 INSERT INTO `hm_config` VALUES (2, 'beian', 'basic', 'Beian', '粤ICP备15000000号-1', 'string', '', '', '', '', '', '');
 INSERT INTO `hm_config` VALUES (3, 'cdnurl', 'basic', 'Cdn url', '如果全站静态资源使用第三方云储存请配置该值', 'string', '', '', '', '', '', '');
-INSERT INTO `hm_config` VALUES (4, 'version', 'basic', 'Version', '如果静态资源有变动请重新配置该值', 'string', '', '1681373627', '', 'required', '', '');
+INSERT INTO `hm_config` VALUES (4, 'version', 'basic', 'Version', '如果静态资源有变动请重新配置该值', 'string', '', '1681797222', '', 'required', '', '');
 INSERT INTO `hm_config` VALUES (5, 'timezone', 'basic', 'Timezone', '', 'string', '', 'Asia/Shanghai', '', 'required', '', '');
 INSERT INTO `hm_config` VALUES (6, 'forbiddenip', 'basic', 'Forbidden ip', '一行一条记录', 'text', '', '', '', '', '', '');
 INSERT INTO `hm_config` VALUES (7, 'languages', 'basic', 'Languages', '', 'array', '', '{\"backend\":\"zh-cn\",\"frontend\":\"zh-cn\"}', '', 'required', '', '');
@@ -545,7 +543,7 @@ CREATE TABLE `hm_goods`  (
   `create_time` bigint(16) UNSIGNED NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` bigint(16) UNSIGNED NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '商品表' ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '商品表' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of hm_goods
@@ -734,7 +732,7 @@ CREATE TABLE `hm_options`  (
 INSERT INTO `hm_options` VALUES (1, 'rebeat_1', '10', '一级返佣');
 INSERT INTO `hm_options` VALUES (2, 'rebeat_2', '5', '二级返佣');
 INSERT INTO `hm_options` VALUES (3, 'rebeat_3', '2', '三级返佣');
-INSERT INTO `hm_options` VALUES (4, 'version', '1.1.0', '数据表版本');
+INSERT INTO `hm_options` VALUES (4, 'version', '1.1.03', '数据表版本');
 INSERT INTO `hm_options` VALUES (5, 'name', '红盟云卡', '网站名称');
 INSERT INTO `hm_options` VALUES (6, 'title', '为中华之崛起而读书', '网站标题');
 INSERT INTO `hm_options` VALUES (7, 'keywords', '基于Thinkphp开发的开源商城系统', '关键词');
@@ -744,7 +742,7 @@ INSERT INTO `hm_options` VALUES (10, 'active_plugin', 'a:1:{i:1;s:4:\"scan\";}',
 INSERT INTO `hm_options` VALUES (11, 'beian', '', '备案号');
 INSERT INTO `hm_options` VALUES (12, 'icon', '/assets/img/favicon.png', 'icon');
 INSERT INTO `hm_options` VALUES (13, 'custom_code', '<script>\r\nconsole.log(\'红盟云卡下载地址：https://blog.ysxue.net/\');\r\n</script>', '自定义代码');
-INSERT INTO `hm_options` VALUES (14, 'buy_input', 'a:1:{i:0;s:5:\"email\";}', '游客下单必填项');
+INSERT INTO `hm_options` VALUES (14, 'buy_input', 'a:2:{i:0;s:5:\"email\";i:1;s:8:\"password\";}', '游客下单必填项');
 
 -- ----------------------------
 -- Table structure for hm_order_agency
@@ -991,7 +989,7 @@ CREATE TABLE `hm_user_agency`  (
   `updatetime` bigint(16) NULL DEFAULT NULL COMMENT '更新时间',
   `deletetime` bigint(16) NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '#用户 - 代理等级' ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '#用户 - 代理等级' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of hm_user_agency
@@ -1000,6 +998,7 @@ INSERT INTO `hm_user_agency` VALUES (1, '普通代理', 9.50, 15.00, 4, 16789696
 INSERT INTO `hm_user_agency` VALUES (2, '精英代理', 8.00, 50.00, 3, 1678969642, 1678969642, NULL);
 INSERT INTO `hm_user_agency` VALUES (3, '至尊代理', 6.50, 100.00, 2, 1678969661, 1678969661, NULL);
 INSERT INTO `hm_user_agency` VALUES (4, '合作商', 5.00, 180.00, 1, 1678969668, 1678969668, NULL);
+INSERT INTO `hm_user_agency` VALUES (5, '测试等级', 0.00, 0.00, 5, 1681751383, 1681751383, NULL);
 
 -- ----------------------------
 -- Table structure for hm_user_group
@@ -1112,7 +1111,6 @@ INSERT INTO `hm_user_token` VALUES ('09a00cc8891817a231d3e1595d485b78958179c9', 
 INSERT INTO `hm_user_token` VALUES ('0ef63c4f972c3e5b68cac466f7ac64be8003b94b', 2, 1679826460, 1682418460);
 INSERT INTO `hm_user_token` VALUES ('15d0efbe4ce54f2c3fdf7f07902696d716019d12', 1, 1681476339, 1684068339);
 INSERT INTO `hm_user_token` VALUES ('37a7a079d9ff22ac75bb610cb28043ba32b66032', 2, 1680155722, 1682747722);
-INSERT INTO `hm_user_token` VALUES ('3a8961cbbcbda0df0b86bdedfd1a8761a5a76133', 2, 1679128526, 1681720526);
 INSERT INTO `hm_user_token` VALUES ('3bed1c9df5cc35feea813c1784f30824e344b677', 2, 1680856000, 1683448000);
 INSERT INTO `hm_user_token` VALUES ('42b1283429478f75456c10175646717fdad91adb', 2, 1680262287, 1682854287);
 INSERT INTO `hm_user_token` VALUES ('53e3c8800046a8d6c5898e7f019ee9bf2e247638', 2, 1679206872, 1681798872);

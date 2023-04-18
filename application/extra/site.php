@@ -4,7 +4,7 @@ return array (
   'name' => '我的网站',
   'beian' => '',
   'cdnurl' => '',
-  'version' => '1681373627',
+  'version' => '1681797222',
   'timezone' => 'Asia/Shanghai',
   'forbiddenip' => '',
   'languages' => 

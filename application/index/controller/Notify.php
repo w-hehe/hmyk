@@ -19,14 +19,31 @@ class Notify extends Frontend {
 
         if($this->user){
             if($params['hm_type'] == 'goods'){
+                if(isset($params['out_trade_no'])){
+                    $order = db::name('goods_order')->where(['out_trade_no' => $params['out_trade_no']])->find();
+                    if(empty($order['pay_time'])){
+                        sleep(1);
+                        $this->redirect('/index/notify/ret/hm_type/' . $params['hm_type'] . '/out_trade_no/' . $params['out_trade_no']);die;
+                    }
+                }
                 $this->redirect(url('/order')); die;
             }
             if($params['hm_type'] == 'recharge'){
+                if(isset($params['out_trade_no'])){
+                    $order = db::name('recharge_order')->where(['out_trade_no' => $params['out_trade_no']])->find();
+                    if(empty($order['pay_time'])){
+                        sleep(1);
+                        $this->redirect('/index/notify/ret/hm_type/' . $params['hm_type'] . '/out_trade_no/' . $params['out_trade_no']);die;
+                    }
+                }
                 $this->redirect(url('/bill')); die;
             }
         }else{
             $order = db::name('goods_order')->where(['out_trade_no' => $params['out_trade_no']])->find();
-
+            if(empty($order['pay_time'])){
+                sleep(1);
+                $this->redirect('/index/notify/ret/out_trade_no/' . $params['out_trade_no']);die;
+            }
             $u = '';
             if(!empty($order['mobile'])){
                 $u .= "mobile={$order['mobile']}&";
@@ -61,6 +78,9 @@ class Notify extends Frontend {
         ];
         db::name('test')->insert($insert);
 
+
+
+
         $params = $this->request->param();
 
         unset($params['hm_type']);
@@ -75,13 +95,18 @@ class Notify extends Frontend {
 
         $result = checkSign($params);
 
+        if($plugin == 'vmqpay'){
+            $eo = 'success';
+        }else{
+            $eo = 'ok';
+        }
 
         if($result){
 
             $order = db::name($hm_type . '_order')->where(['out_trade_no' => $result['out_trade_no']])->find();
 
             if(!$order || $order['pay_time']){
-                echo 'ok';die;
+                echo $eo;die;
             }
             try{
 
@@ -99,13 +124,13 @@ class Notify extends Frontend {
                         'content' => '余额充值'
                     ];
                     db::name('bill')->insert($bill_insert);
-                    echo 'ok'; die;
+                    echo $eo;die;
                 }
                 if($hm_type == 'goods'){ //商品回调
                     db::name('goods_order')->where(['id' => $order['id']])->update(['pay_time' => $this->timestamp, 'trade_no' => $result['trade_no']]);
                     $goods = db::name('goods')->where(['id' => $order['goods_id']])->find();
                     $this->notifyGoodsSuccess($goods, $order);
-                    echo 'ok';die;
+                    echo $eo;die;
                 }
 
             }catch(\Exception $e){
