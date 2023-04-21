@@ -3,8 +3,7 @@
     {:hook('user_sidenav_before')}
     <ul class="list-group">
         <li class="list-group-heading">账号管理</li>
-        <li class="list-group-item {:check_nav_active('user/index')}"> <a href="{:url('/user')}"><i class="fa fa-user-circle fa-fw"></i> 我的主页</a> </li>
-        <li class="list-group-item {:check_nav_active('user/profile')}"> <a href="{:url('/profile')}"><i class="fa fa-user-o fa-fw"></i> 个人资料</a> </li>
+        <li class="list-group-item {:check_nav_active('user/index')}"> <a href="{:url('/user')}"><i class="fa fa-user-circle fa-fw"></i> 个人中心</a> </li>
         <li class="list-group-item {:check_nav_active('user/changepwd')}"> <a href="{:url('/changepwd')}"><i class="fa fa-key fa-fw"></i> 修改密码</a> </li>
     </ul>
     <ul class="list-group">

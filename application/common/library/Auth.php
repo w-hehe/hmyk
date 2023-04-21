@@ -207,6 +207,7 @@ class Auth
     public function login($account, $password, $is_main, $merchant)
     {
         $field = Validate::is($account, 'email') ? 'email' : (Validate::regex($account, '/^1\d{10}$/') ? 'mobile' : 'username');
+        $field = $field == 'mobile' ? 'username' : $field;
         $where = [
             $field => $account,
             'merchant_id' => $is_main ? 0 : $merchant['id']

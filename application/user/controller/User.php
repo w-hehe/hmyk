@@ -287,6 +287,12 @@ class User extends Frontend {
             if (!$result) {
                 $this->error(__($validate->getError()), null, ['token' => $this->request->token()]);
             }
+
+           if(Validate::is($username, 'email')){
+               $this->error('账号不能是邮箱格式');
+           }
+
+
             if ($password != $repassword) $this->error('两次密码输入不一致', null, ['token' => $this->request->token()]);
 
             $p1 = Cookie::has('invite_u') ? Cookie::get('invite_u') : 0;

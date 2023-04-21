@@ -87,23 +87,21 @@ function doAction($hook, &...$args) {
  */
 function selectPayPlugin($plugin, $pay_type){
     $plugin_list = [];
-    // print_r($plugin);
     foreach($plugin as $val){
         if($val['type'] == 'pay') {
             $setting = include_once ROOT_PATH . 'plugin/' . $val['english_name'] . '/setting.php';
-            // print_r($setting);
-            foreach($setting['pay_type'] as $k => $v){
-                if($pay_type == $k){
-                    $plugin_list[] = [
-                        'english_name' => $val['english_name'],
-                        'info' => $setting
-                    ];
+            if($setting['pay_type']){
+                foreach($setting['pay_type'] as $k => $v){
+                    if($pay_type == $k){
+                        $plugin_list[] = [
+                            'english_name' => $val['english_name'],
+                            'info' => $setting
+                        ];
+                    }
                 }
             }
-
         }
     }
-    // print_r($plugin_list);die;
     return $plugin_list[mt_rand(0, count($plugin_list) - 1)];
 }
 

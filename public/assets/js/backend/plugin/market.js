@@ -28,8 +28,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             title: __('插件名称'),
                             operate: 'LIKE'
                         },
-                        {field: 'description', title: __('介绍'), operate: 'LIKE'},
                         {field: 'images', width: 200, title: __('演示图'), operate: false, events: Table.api.events.image, formatter: Table.api.formatter.images},
+                        {field: 'description', title: __('介绍'), operate: 'LIKE'},
                         {
                             field: 'demo_url',
                             title: __('演示地址'),

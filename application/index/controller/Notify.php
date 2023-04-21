@@ -253,6 +253,7 @@ class Notify extends Frontend {
             return true;
         }
         $user = db::name('user')->where(['id' => $order['user_id']])->find();
+        db::name('user')->where(['id' => $order['user_id']])->setInc('consume', $order['money']);
 
         //给上级返佣、记录余额账单
         $bill_insert = [

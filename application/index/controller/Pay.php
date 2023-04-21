@@ -107,6 +107,10 @@ class Pay extends Frontend {
                     }
                 }
             }
+            // 6，验证起拍数量
+            if($params['num'] < $goods['start_number']) {
+                exception("该商品最低购买数量：{$goods['start_number']}");
+            }
 
 
             // 写入订单
@@ -175,7 +179,7 @@ class Pay extends Frontend {
         } catch (\Exception $e) {
             db::rollback();
             return json(['code' => 400, 'msg' => $e->getMessage()]);
-            //            return json(['code' => 400, 'msg' => $e->getMessage() . ' - ' . $e->getLine()]);
+//            return json(['code' => 400, 'msg' => $e->getMessage() . ' - ' . $e->getLine()]);
         }
 
         if($orderMoney == 0){
@@ -313,7 +317,12 @@ class Pay extends Frontend {
          * 2，返佣给上级
          * 3，记录余额账单
          */
+        if(empty($order['user_id'])) {
+            return true;
+        }
+//        print_r($order);die;
         $user = db::name('user')->where(['id' => $order['user_id']])->find();
+        db::name('user')->where(['id' => $order['user_id']])->setInc('consume', $order['money']);
         //给上级返佣、记录余额账单
         $bill_insert = [
             'create_time' => $this->timestamp,

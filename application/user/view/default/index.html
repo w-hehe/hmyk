@@ -19,10 +19,7 @@
         <div class="user-main" style=" float: right;">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h2 class="page-header">
-                        {:__('Member center')}
-                        <a href="{:url('/profile')}" class="btn btn-primary pull-right"><i class="fa fa-pencil"></i> {:__('Profile')}</a>
-                    </h2>
+                    <h2 class="page-header">个人中心</h2>
                     <div class="row user-baseinfo">
                         <div class="col-md-3 col-sm-3 col-xs-2 text-center user-center">
                             <a href="{:url('/profile')}" title="{:__('Click to edit')}">
@@ -30,15 +27,9 @@
                             </a>
                         </div>
                         <div class="col-md-9 col-sm-9 col-xs-10">
-                            <!-- Content -->
                             <div class="ui-content">
-                                <!-- Heading -->
-                                <h4><a href="{:url('/profile')}">{$user.nickname|htmlentities}</a></h4>
-                                <!-- Paragraph -->
-                                <p class="text-muted">
-                                    {$user.bio|default=__("This guy hasn't written anything yet")|htmlentities}
-                                </p>
-                                <!-- Success -->
+                                <h4><a href="javascript:;">账号：{$user.username|htmlentities}</a></h4>
+                                <p class="text-muted">邮箱：{$user.email|default=''|htmlentities}</p>
                             </div>
                         </div>
 

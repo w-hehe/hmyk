@@ -27,9 +27,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'id', title: __('Id')},
                         {field: 'avatar', title: __('Avatar'), events: Table.api.events.image, formatter: Table.api.formatter.image, operate: false},
                         {field: 'username', title: __('账号'), operate: 'LIKE'},
-                        {field: 'nickname', title: __('Nickname'), operate: 'LIKE'},
                         {field: 'email', title: __('Email'), operate: 'LIKE'},
-                        {field: 'mobile', title: __('Mobile'), operate: 'LIKE'},
+                        // {field: 'mobile', title: __('Mobile'), operate: 'LIKE'},
                         {
                             field: 'agency',
                             title: __('代理等级'),

@@ -162,7 +162,6 @@ class User extends Api
     {
         $user = $this->auth->getUser();
         $username = $this->request->post('username');
-        $nickname = $this->request->post('nickname');
         $bio = $this->request->post('bio');
         $avatar = $this->request->post('avatar', '', 'trim,strip_tags,htmlspecialchars');
         if ($username) {
@@ -172,13 +171,7 @@ class User extends Api
             }
             $user->username = $username;
         }
-        if ($nickname) {
-            $exists = \app\common\model\User::where('nickname', $nickname)->where('id', '<>', $this->auth->id)->find();
-            if ($exists) {
-                $this->error(__('Nickname already exists'));
-            }
-            $user->nickname = $nickname;
-        }
+
         $user->bio = $bio;
         $user->avatar = $avatar;
         $user->save();
