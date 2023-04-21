@@ -235,7 +235,7 @@ class Frontend extends Controller
                 }
             }
         }
-        return $cost;
+        return empty($cost) ? 0 : $cost;
     }
 
 

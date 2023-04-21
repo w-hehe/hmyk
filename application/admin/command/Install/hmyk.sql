@@ -11,7 +11,7 @@
  Target Server Version : 50726 (5.7.26)
  File Encoding         : 65001
 
- Date: 21/04/2023 21:13:48
+ Date: 21/04/2023 22:51:30
 */
 
 SET NAMES utf8mb4;
@@ -62,11 +62,19 @@ CREATE TABLE `hm_admin_log`  (
   `createtime` bigint(16) NULL DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `name`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员日志表' ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员日志表' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of hm_admin_log
 -- ----------------------------
+INSERT INTO `hm_admin_log` VALUES (1, 1, 'admin', '/admin/dashboard/tongji', '控制台', '{\"shijian\":\"zuotian\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1682082848);
+INSERT INTO `hm_admin_log` VALUES (2, 1, 'admin', '/admin/dashboard/tongji', '控制台', '{\"shijian\":\"7tian\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1682082849);
+INSERT INTO `hm_admin_log` VALUES (3, 1, 'admin', '/admin/dashboard/tongji', '控制台', '{\"shijian\":\"30tian\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1682082849);
+INSERT INTO `hm_admin_log` VALUES (4, 1, 'admin', '/admin/dashboard/tongji', '控制台', '{\"shijian\":\"zuotian\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1682082850);
+INSERT INTO `hm_admin_log` VALUES (5, 1, 'admin', '/admin/dashboard/tongji', '控制台', '{\"shijian\":\"today\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1682082850);
+INSERT INTO `hm_admin_log` VALUES (6, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/default/ids/14', '', '{\"plugin_name\":\"default\",\"ids\":\"14\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1682082866);
+INSERT INTO `hm_admin_log` VALUES (7, 1, 'admin', '/admin/plugin/myplugin/status/cmd/enable', '', '{\"action\":\"\",\"ids\":\"shuiping\",\"params\":\"\",\"cmd\":\"enable\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1682082871);
+INSERT INTO `hm_admin_log` VALUES (8, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/shuiping/ids/9', '', '{\"plugin_name\":\"shuiping\",\"ids\":\"9\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36', 1682082873);
 
 -- ----------------------------
 -- Table structure for hm_area
@@ -543,7 +551,7 @@ CREATE TABLE `hm_goods`  (
   `create_time` bigint(16) UNSIGNED NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` bigint(16) UNSIGNED NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '商品表' ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '商品表' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of hm_goods
@@ -732,13 +740,13 @@ CREATE TABLE `hm_options`  (
 INSERT INTO `hm_options` VALUES (1, 'rebeat_1', '10', '一级返佣');
 INSERT INTO `hm_options` VALUES (2, 'rebeat_2', '5', '二级返佣');
 INSERT INTO `hm_options` VALUES (3, 'rebeat_3', '2', '三级返佣');
-INSERT INTO `hm_options` VALUES (4, 'version', '1.1.05', '数据表版本');
+INSERT INTO `hm_options` VALUES (4, 'version', '1.1.06', '数据表版本');
 INSERT INTO `hm_options` VALUES (5, 'name', '红盟云卡', '网站名称');
 INSERT INTO `hm_options` VALUES (6, 'title', '为中华之崛起而读书', '网站标题');
 INSERT INTO `hm_options` VALUES (7, 'keywords', '基于Thinkphp开发的开源商城系统', '关键词');
 INSERT INTO `hm_options` VALUES (8, 'description', '基于Thinkphp开发的开源商城系统', '网站说明');
 INSERT INTO `hm_options` VALUES (9, 'logo', '/template/default/images/dist/logo-blue.png', '网站Logo');
-INSERT INTO `hm_options` VALUES (10, 'active_plugin', 'a:2:{i:3;s:4:\"scan\";i:4;s:8:\"shuiping\";}', '启用的插件');
+INSERT INTO `hm_options` VALUES (10, 'active_plugin', 'a:1:{i:3;s:4:\"scan\";}', '启用的插件');
 INSERT INTO `hm_options` VALUES (11, 'beian', '', '备案号');
 INSERT INTO `hm_options` VALUES (12, 'icon', '/assets/img/favicon.png', 'icon');
 INSERT INTO `hm_options` VALUES (13, 'custom_code', '<script>\r\nconsole.log(\'红盟云卡下载地址：https://blog.ysxue.net/\');\r\n</script>', '自定义代码');
