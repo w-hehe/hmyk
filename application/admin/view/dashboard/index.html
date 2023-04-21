@@ -11,6 +11,9 @@
     #jiance:hover{
         text-decoration: underline;
     }
+    .card{
+        height: 100px;
+    }
 </style>
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">
@@ -23,7 +26,6 @@
     
     <div class="col-xs-12 col-sm-6 col-md-6">
         <div class="panel panel-default">
-            <!-- Default panel contents -->
             <div class="panel-heading">广告联盟</div>
             <div class="panel-body" style="padding: 0;">
                 <div class="list-group" style="margin-bottom: 0;">
@@ -46,6 +48,51 @@
             </div>
 
         </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-8 col-md-8" style="margin-bottom: 20px;">
+        <div style="background: #fff; padding: 10px 10px 10px 10px;">
+            <div class="fixed-table-toolbar">
+                <div class="bs-bars pull-left">
+                    <div id="toolbar" class="toolbar">
+<!--                        <a href="javascript:;" class="btn btn-primary btn-refresh" title="刷新" data-force-refresh="false"><i class="fa fa-refresh"></i> </a>-->
+                        <div class="btn-group">
+                            <a href="javascript:;" class="btn btn-info btn-shijian active" data-type="today">今天</a>
+                            <a href="javascript:;" class="btn btn-info btn-shijian" data-type="zuotian">昨天</a>
+                            <a href="javascript:;" class="btn btn-info btn-shijian" data-type="7tian">最近7天</a>
+                            <a href="javascript:;" class="btn btn-info btn-shijian" data-type="30tian">最近30天</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="echart" class="btn-refresh" style="height:300px;width:100%;"></div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4">
+<!--        <div style="background: #fff; height: auto;padding-top: 10px;">-->
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="badge" id="add-user">{$tongji.add_user}</span>
+                    新增用户
+                </li>
+                <li class="list-group-item">
+                    <span class="badge" id="order-num">{$tongji._order_num}</span>
+                    订单数量
+                </li>
+                <li class="list-group-item">
+                    <span class="badge" id="order-money">{$tongji._order_money}</span>
+                    订单金额
+                </li>
+                <li class="list-group-item">
+                    <span class="badge" id="cost">{$tongji._cost}</span>
+                    成本支出
+                </li>
+                <li class="list-group-item">
+                    <span class="badge" id="lirun">{$tongji._lirun}</span>
+                    销售利润
+                </li>
+            </ul>
+<!--        </div>-->
     </div>
 </div>
 

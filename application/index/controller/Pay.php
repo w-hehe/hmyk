@@ -126,7 +126,7 @@ class Pay extends Frontend {
                 'goods_type' => $goods['type'],
                 'create_time' => $this->timestamp,
                 'goods_money' => $goodsMoney,
-                'goods_cost' => $goodsCost,
+                'goods_cost' => $goodsCost * $params['num'],
                 'goods_num' => $params['num'],
                 'money' => $orderMoney,
                 'attach' => empty($params['attach']) ? null : json_encode($params['attach']),

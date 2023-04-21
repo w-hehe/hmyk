@@ -26,7 +26,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 columns: [
                     [
                         {checkbox: true},
-                        {field: 'id', title: __('Id'), width: 80},
+                        // {field: 'id', title: __('Id'), width: 80},
                         {field: 'cover', title: __('封面'), width: 70, events: Table.api.events.image, formatter: Table.api.formatter.images},
                         {field: 'name', title: __('Name'), operate: 'LIKE', align: 'left'},
                         {
@@ -245,7 +245,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Table.api.bindevent(table);
         },
         add: function () {
-            Controller.api.bindevent();
+            // Controller.api.bindevent();
+            Form.api.bindevent($("form[role=form]"), function (data, ret) {
+                Toastr.success('添加成功');
+                var obj = top.window.$("ul.nav-addtabs li.active");
+                obj.find(".fa-remove").trigger("click");
+            });
             $('input[name="row[is_sku]"]').change(function(){
                 if($(this).val() == 0){
                     $('.sku-false').show();
