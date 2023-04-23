@@ -44,6 +44,7 @@ class Pay extends Frontend {
         db::startTrans();
         try {
             $params['num'] = empty($params['num']) ? 1 : intval($params['num']);
+            $params['num'] = $params['num'] < 1 ? 1 : $params['num'];
             $model_goods = new \app\index\model\Goods();
             $goods = $model_goods->with(['sku'])->where(['id' => $params['goods_id']])->find()->toArray();
             $ip = request()->ip();

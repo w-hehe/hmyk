@@ -355,7 +355,7 @@ class Goods extends Backend {
                 db::name('sku')->whereIn('id', $sku_diff)->delete();
             }
 
-//            print_r($sku_diff);
+//            print_r($sku_diff);die;
 //            print_r($price); die;
 //            print_r($sku);die;
 
@@ -366,6 +366,7 @@ class Goods extends Backend {
                     unset($val['name']);
                 }
                 if(empty($val['id'])){
+//                    echo 1;die;
                     unset($val['id']);
                     $sku_insert = [
                         'goods_id' => $ids,
@@ -374,16 +375,25 @@ class Goods extends Backend {
                     ];
                     db::name('sku')->insert($sku_insert);
                 }else{
-                    $sku_id = $val['id'];
-                    unset($val['id']);
-                    $sku_update = [
-                        'sku' => $sku_name,
-                        'price' => json_encode($val),
-                    ];
-                    db::name('sku')->where(['id' => $sku_id])->update($sku_update);
+                    $s = db::name('sku')->where(['id' => $val['id']])->find();
+                    if($s){
+                        $sku_id = $val['id'];
+                        unset($val['id']);
+                        $sku_update = [
+                            'sku' => $sku_name,
+                            'price' => json_encode($val),
+                        ];
+                        db::name('sku')->where(['id' => $sku_id])->update($sku_update);
+                    }else{
+                        $sku_insert = [
+                            'goods_id' => $ids,
+                            'price' => json_encode($val),
+                        ];
+                        db::name('sku')->insert($sku_insert);
+                    }
+
                 }
             }
-
 
             $result = db::name('goods')->where(['id' => $ids])->update($update);
             Db::commit();
