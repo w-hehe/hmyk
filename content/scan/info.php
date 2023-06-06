@@ -7,7 +7,7 @@ return [
     'author' => '官方',
     'author_url' => '',
     'demo_url' => '',
-    'version' => '1.0.1',
+    'version' => '1.0.2',
     'support' => '3.0.0',
     'type' => 'scan',
     'unload' => false

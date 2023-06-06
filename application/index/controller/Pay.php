@@ -161,7 +161,7 @@ class Pay extends Frontend {
 
                     $payPlugin = selectPayPlugin($this->plugin, $params['pay_type']);
 
-                    include_once ROOT_PATH . 'plugin/' . $payPlugin['english_name'] . '/' . $payPlugin['english_name'] . '.php';
+                    include_once ROOT_PATH . 'content/' . $payPlugin['english_name'] . '/' . $payPlugin['english_name'] . '.php';
                     doAction('goods_pay_before', $goods, $order_insert);
                     //                    echo $goods['name'];die;
                     $result = pay([

@@ -4,7 +4,7 @@
 
 function pay($param, $info = null) {
     if($info == null){
-        $plugin_path = ROOT_PATH . "plugin/epay/";
+        $plugin_path = ROOT_PATH . "content/epay/";
         $info = include_once "{$plugin_path}setting.php";
     }
 
@@ -39,7 +39,7 @@ function pay($param, $info = null) {
  * 验签
  */
 function checkSign($params = null){
-    $plugin_path = ROOT_PATH . "plugin/epay/";
+    $plugin_path = ROOT_PATH . "content/epay/";
     $info = include_once "{$plugin_path}setting.php";
 
     $sign = $params['sign'];

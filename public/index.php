@@ -13,6 +13,12 @@
 // 定义应用目录
 define('APP_PATH', __DIR__ . '/../application/');
 
+
+if(PHP_VERSION < 7.2 || PHP_VERSION > 7.5){
+    echo '<h1>不兼容当前【php' . PHP_VERSION . '】版本，建议使用【php7.4】版本</h1>';die;
+}
+
+
 // 判断是否安装
 if (!is_file(APP_PATH . 'admin/command/Install/install.lock')) {
     header("location:./install.php");

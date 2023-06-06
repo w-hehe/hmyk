@@ -37,9 +37,9 @@ class Goods extends Backend {
         $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
         if ($active_plugins && is_array($active_plugins)) {
             foreach($active_plugins as $plugin) {
-                $info = include_once(ROOT_PATH . 'plugin/' . $plugin . '/info.php');
+                $info = include_once(ROOT_PATH . 'content/' . $plugin . '/info.php');
                 if($info['type'] == 'basic'){
-                    include_once(ROOT_PATH . 'plugin/' . $plugin . '/' . $plugin . '.php');
+                    include_once(ROOT_PATH . 'content/' . $plugin . '/' . $plugin . '.php');
                 }
             }
         }

@@ -7,7 +7,7 @@ return [
     'author' => '驳手',
     'author_url' => '',
     'demo_url' => '',
-    'version' => '1.0.0',
+    'version' => '1.0.1',
     'support' => '3.0.0',
     'type' => 'pay',
     'unload' => false

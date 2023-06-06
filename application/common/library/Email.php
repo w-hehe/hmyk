@@ -60,6 +60,9 @@ class Email
         }
         $this->options = array_merge($this->options, $options);
         $secureArr = [0 => '', 1 => 'tls', 2 => 'ssl'];
+
+        var_dump($this->options['mail_verify_type']);die;
+
         $secure = isset($secureArr[$this->options['mail_verify_type']]) ? $secureArr[$this->options['mail_verify_type']] : '';
 
         $logger = isset($this->options['debug']) && $this->options['debug'] ? new Log : null;

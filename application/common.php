@@ -89,7 +89,7 @@ function selectPayPlugin($plugin, $pay_type){
     $plugin_list = [];
     foreach($plugin as $val){
         if($val['type'] == 'pay') {
-            $setting = include_once ROOT_PATH . 'plugin/' . $val['english_name'] . '/setting.php';
+            $setting = include_once ROOT_PATH . 'content/' . $val['english_name'] . '/setting.php';
             if($setting['pay_type']){
                 foreach($setting['pay_type'] as $k => $v){
                     if($pay_type == $k){
@@ -113,7 +113,7 @@ function getPayList($plugin){
     $pay_list = [];
     foreach($plugin as $val){
         if($val['type'] == 'pay') {
-            $setting = include_once ROOT_PATH . 'plugin/' . $val['english_name'] . '/setting.php';
+            $setting = include_once ROOT_PATH . 'content/' . $val['english_name'] . '/setting.php';
             if(!empty($setting['pay_type'])){
                 foreach($setting['pay_type'] as $key => $val){
                     $pay_list[] = $key;

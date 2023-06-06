@@ -38,7 +38,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             align: 'left',
                             formatter: function(value, row, index){
                                 if(row.sku){
-                                    return value + ' >> ' + row.sku_name + '：' + row.sku;
+                                    return '<div style="white-space: normal; width: max-content; max-width: 300px;">' + value + ' >>&nbsp; ' + row.sku_name + '：' + row.sku + '</div>';
                                 }else{
                                     return value;
                                 }
@@ -47,6 +47,24 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'money', title: __('订单金额'), operate:'BETWEEN'},
                         {field: 'goods_num', title: __('购买数量')},
                         {field: 'goods_money', title: __('商品单价'), operate:'BETWEEN'},
+                        {
+                            field: 'id', 
+                            title: __('下单信息'),
+                            align: 'left',
+                            formatter: function(value, row, index){
+                                var str = '';
+                                if(row.mobile){
+                                    str += '手机号码：' + row.mobile + '<br>';
+                                }
+                                if(row.email){
+                                    str += '电子邮箱：' + row.email + '<br>';
+                                }
+                                if(row.password){
+                                    str += '查单密码：' + row.password + '<br>';
+                                }
+                                return str;
+                            }
+                        },
                         {field: 'create_time', title: __('创建时间'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
                         {field: 'pay_time', title: __('付款时间'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
                         {

@@ -46,7 +46,7 @@ class Myplugin extends Backend
 
             $data = "<?php \n" . "return " . var_export_short($params) . "\n" . "?>";
 
-            $path = ROOT_PATH . 'plugin' . '/' . $plugin_name . '/' . 'setting.php';
+            $path = ROOT_PATH . 'content' . '/' . $plugin_name . '/' . 'setting.php';
 
             $res = file_put_contents($path, $data);
 
@@ -56,8 +56,8 @@ class Myplugin extends Backend
                 $this->error('配置失败');
             }
         }
-        $pluginPath = ROOT_PATH . 'plugin' . '/' . $params['plugin_name'] . '/' . 'setting.html';
-        $path = ROOT_PATH . 'plugin' . '/' . $plugin_name . '/' . 'setting.php';
+        $pluginPath = ROOT_PATH . 'content' . '/' . $params['plugin_name'] . '/' . 'setting.html';
+        $path = ROOT_PATH . 'content' . '/' . $plugin_name . '/' . 'setting.php';
         $row = file_exists($path) ? include_once $path : [];
 
 //        echo '<pre>'; print_r($row);die;
@@ -75,7 +75,7 @@ class Myplugin extends Backend
     public function index() {
 
         $pluginFiles = [];
-        $pluginPath = ROOT_PATH . 'plugin';
+        $pluginPath = ROOT_PATH . 'content';
         $pluginDir = @dir($pluginPath);
 
         if ($pluginDir){
@@ -157,7 +157,7 @@ class Myplugin extends Backend
         if(empty($params['plugin_name'])){
             $this->error('插件未找到');
         }
-        $plugin_path = ROOT_PATH . 'plugin/' . $params['plugin_name'];
+        $plugin_path = ROOT_PATH . 'content/' . $params['plugin_name'];
         rmdirs($plugin_path);
         $this->success();
     }

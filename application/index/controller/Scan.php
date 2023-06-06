@@ -37,7 +37,7 @@ class Scan extends IndexCommon {
         }
 
 //        echo $this->scan_template;die;
-        $plugin_path = ROOT_PATH . "plugin/" . $this->scan_template;
+        $plugin_path = ROOT_PATH . "content/" . $this->scan_template;
         $info = include_once "{$plugin_path}/setting.php";
 
 //        var_dump($order);die;

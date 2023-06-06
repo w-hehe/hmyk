@@ -56,7 +56,7 @@ class Market extends Backend
             $result = json_decode(hmCurl(API . 'api/plugin/index', http_build_query($data)), true);
 
             $pluginFiles = [];
-            $pluginPath = ROOT_PATH . 'plugin';
+            $pluginPath = ROOT_PATH . 'content';
             $pluginDir = @dir($pluginPath);
 
             if ($pluginDir){
@@ -167,11 +167,11 @@ class Market extends Backend
                 if(file_exists($toPath . '/' . 'setting.php')){
                     unlink($toPath . '/' . 'setting.php');
                 }
-                copydirs($toPath, ROOT_PATH . 'plugin/' . $data['english_name']);
+                copydirs($toPath, ROOT_PATH . 'content/' . $data['english_name']);
                 rmdirs($toPath);
                 $this->success('升级成功');
             }else{ //安装
-                $toPath = ROOT_PATH . 'plugin/' . $data['english_name'];
+                $toPath = ROOT_PATH . 'content/' . $data['english_name'];
                 try {
                     //解压文件到toPath路径下
                     $zip->extractTo($toPath);

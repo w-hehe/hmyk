@@ -68,7 +68,7 @@ class IndexCommon extends Controller
 
     public function __construct(Request $request = null)
     {
-        config('template.view_path', ROOT_PATH . 'plugin/');
+        config('template.view_path', ROOT_PATH . 'content/');
         parent::__construct($request);
     }
 
@@ -176,13 +176,14 @@ class IndexCommon extends Controller
         $active_plugins = empty($active_plugins) ? [] : unserialize($active_plugins);
         if ($active_plugins && is_array($active_plugins)) {
             foreach($active_plugins as $plugin) {
-                $info = include_once(ROOT_PATH . 'plugin/' . $plugin . '/info.php');
+                $info = include_once(ROOT_PATH . 'content/' . $plugin . '/info.php');
                 $this->plugin[] = $info;
                 if($info['type'] == 'basic'){
-                    include_once(ROOT_PATH . 'plugin/' . $plugin . '/' . $plugin . '.php');
+                    include_once(ROOT_PATH . 'content/' . $plugin . '/' . $plugin . '.php');
                 }
             }
         }
+
 
 
         foreach($this->plugin as $val){
@@ -200,7 +201,7 @@ class IndexCommon extends Controller
         if(empty($template)){
             $path = ROOT_PATH . 'application/index/view/error.html';
             $title = "未启用前台模板";
-            $content = "当前站点未启用任何前台模板，请管理人员前往【后台面板 - 插件管理 - 我的插件】中选择启用至少一个模板插件。";
+            $content = "当前站点未启用任何前台模板，请管理人员前往【<a href='/admin' target='_blank' style='color: #0992da;'>后台面板</a> - 插件管理 - 我的插件】中选择启用至少一个模板插件。<br><br>如提示404错误信息，<a href='https://blog.ysxue.net/175.html' target='_blank' style='color: #0992da;'>请配置网站伪静态为thinkphp</a>";
             include_once $path;die;
         }
 
@@ -209,7 +210,7 @@ class IndexCommon extends Controller
         $tmp = [];
         if($this->is_mobile){ //手机
             foreach($template as $val){
-                $tconfig = file_exists(ROOT_PATH . 'plugin/' . $val . '/setting.php') ? include_once ROOT_PATH . 'plugin/' . $val . '/setting.php' : [];
+                $tconfig = file_exists(ROOT_PATH . 'content/' . $val . '/setting.php') ? include_once ROOT_PATH . 'content/' . $val . '/setting.php' : [];
                 if(empty($tconfig['eq']) || in_array('mobile', $tconfig['eq'])){
                     $tmp[] = [
                         'english_name' => $val,
@@ -227,7 +228,7 @@ class IndexCommon extends Controller
 
         if(!$this->is_mobile){ //电脑
             foreach($template as $val){
-                $tconfig = file_exists(ROOT_PATH . 'plugin/' . $val . '/setting.php') ? include_once ROOT_PATH . 'plugin/' . $val . '/setting.php' : [];
+                $tconfig = file_exists(ROOT_PATH . 'content/' . $val . '/setting.php') ? include_once ROOT_PATH . 'content/' . $val . '/setting.php' : [];
                 if(empty($tconfig['eq']) || in_array('pc', $tconfig['eq'])){
                     $tmp[] = [
                         'english_name' => $val,
@@ -250,8 +251,8 @@ class IndexCommon extends Controller
 
         $params = $this->request->param();
 
-        if(file_exists(ROOT_PATH . 'plugin/' . $this->template . '/module.php')){
-            include_once ROOT_PATH . 'plugin/' . $this->template . '/module.php';
+        if(file_exists(ROOT_PATH . 'content/' . $this->template . '/module.php')){
+            include_once ROOT_PATH . 'content/' . $this->template . '/module.php';
         }
 
 
@@ -265,11 +266,6 @@ class IndexCommon extends Controller
             include_once $path;die;
         }
 
-
-        // 如果有使用模板布局
-        if ($this->layout) {
-            $this->view->engine->layout($this->template . 'layout/' . $this->layout);
-        }
 
     }
 

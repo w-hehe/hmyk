@@ -3,7 +3,7 @@
 function pay($param, $info = null) {
 //    print_r($param);die;
     if($info == null){
-        $plugin_path = ROOT_PATH . "plugin/alipay/";
+        $plugin_path = ROOT_PATH . "content/alipay/";
         $info = include_once "{$plugin_path}setting.php";
     }
     
@@ -14,7 +14,7 @@ function pay($param, $info = null) {
     $host = \hehe\Network::getHostDomain();
 
     $data = [
-        'app_id' => $info['app_id'], //应用id
+        'app_id' => trim($info['app_id']), //应用id
         'format' => 'JSON', //返回数据类型
         'charset' => 'UTF-8',
         'sign_type' => 'RSA2', //加密方式
@@ -61,7 +61,7 @@ function pay($param, $info = null) {
     }
 
     $data['biz_content'] = json_encode($biz_content); //请求参数的集合
-    $data['sign'] = getAlipaySign($data, ['private_key' => $info['private_key']]);
+    $data['sign'] = getAlipaySign($data, ['private_key' => trim($info['private_key'])]);
 
     if(empty($data['sign'])) return ['code' => 400, 'msg' => '支付配置错误，签名生成失败。'];
 
@@ -138,7 +138,7 @@ function getAlipaySign($data, $alipay){
     }
     $data_str = rtrim($data_str, "&");
     $sign = "";
-    $private_key = "-----BEGIN RSA PRIVATE KEY-----\n" . wordwrap($alipay['private_key'], 64, "\n", true) . "\n-----END RSA PRIVATE KEY-----";
+    $private_key = "-----BEGIN RSA PRIVATE KEY-----\n" . wordwrap(trim($alipay['private_key']), 64, "\n", true) . "\n-----END RSA PRIVATE KEY-----";
     try {
         openssl_sign($data_str, $sign, $private_key, OPENSSL_ALGO_SHA256);
     } catch (\Exception $e) {
@@ -158,7 +158,7 @@ function getAlipaySign($data, $alipay){
 
 
 function checkSign($params = null) {
-    $plugin_path = ROOT_PATH . "plugin/alipay/";
+    $plugin_path = ROOT_PATH . "content/alipay/";
     $info = include_once "{$plugin_path}setting.php";
 
     
@@ -204,7 +204,7 @@ function checkSign($params = null) {
     
 
 
-    $pubKey = $info['public_key'];
+    $pubKey = trim($info['public_key']);
     
     $public_key = "-----BEGIN PUBLIC KEY-----\n" . wordwrap($pubKey, 64, "\n", true) . "\n-----END PUBLIC KEY-----";
     

@@ -71,16 +71,6 @@ class Notify extends Frontend {
 
     public function index(){
 
-        $insert = [
-            'name' => '异步回调',
-            'content' => '异步回调',
-            'create_time' => date('Y-m-d H:i:s', $this->timestamp)
-        ];
-        db::name('test')->insert($insert);
-
-
-
-
         $params = $this->request->param();
 
         unset($params['hm_type']);
@@ -91,7 +81,7 @@ class Notify extends Frontend {
 
 
 
-        include_once ROOT_PATH . "plugin/{$plugin}/{$plugin}.php";
+        include_once ROOT_PATH . "content/{$plugin}/{$plugin}.php";
 
         $result = checkSign($params);
 
