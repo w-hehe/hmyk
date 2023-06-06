@@ -11,7 +11,7 @@
  Target Server Version : 50651 (5.6.51-log)
  File Encoding         : 65001
 
- Date: 06/06/2023 13:10:23
+ Date: 06/06/2023 13:53:23
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', '965e0f8fbbf677c24e8a7f17214039b7', 'ba92d9', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1686013433, '127.0.0.1', 1491635035, 1686013433, 'd96061fe-15e4-4477-a325-3bd3928c6231', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'bd1a633d31dcfc8eb0f84e87735e48ef', '7cb86c', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1686013433, '127.0.0.1', 1491635035, 1686013433, 'd96061fe-15e4-4477-a325-3bd3928c6231', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_admin_log
@@ -701,7 +701,7 @@ CREATE TABLE `hm_options`  (
 INSERT INTO `hm_options` VALUES (1, 'rebeat_1', '10', '一级返佣');
 INSERT INTO `hm_options` VALUES (2, 'rebeat_2', '5', '二级返佣');
 INSERT INTO `hm_options` VALUES (3, 'rebeat_3', '2', '三级返佣');
-INSERT INTO `hm_options` VALUES (4, 'version', '1.1.1', '数据表版本');
+INSERT INTO `hm_options` VALUES (4, 'version', '1.1.12', '数据表版本');
 INSERT INTO `hm_options` VALUES (5, 'name', '红盟云卡', '网站名称');
 INSERT INTO `hm_options` VALUES (6, 'title', '为中华之崛起而读书', '网站标题');
 INSERT INTO `hm_options` VALUES (7, 'keywords', '基于Thinkphp开发的开源商城系统', '关键词');

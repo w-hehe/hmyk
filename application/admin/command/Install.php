@@ -138,7 +138,7 @@ class Install extends Command
             } catch (\Exception $e) {
                 return $output(0, $e->getMessage());
             }
-            return $output(1, __('Install Successed'), null, ['adminName' => $adminName]);
+            return $output(1, __('Install Successed'), null, ['adminName' => 'admin']);
         }
         $errInfo = '';
         try {
