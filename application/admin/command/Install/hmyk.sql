@@ -11,7 +11,7 @@
  Target Server Version : 50651 (5.6.51-log)
  File Encoding         : 65001
 
- Date: 06/06/2023 13:53:23
+ Date: 13/06/2023 13:17:39
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'bd1a633d31dcfc8eb0f84e87735e48ef', '7cb86c', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1686013433, '127.0.0.1', 1491635035, 1686013433, 'd96061fe-15e4-4477-a325-3bd3928c6231', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'bd1a633d31dcfc8eb0f84e87735e48ef', '7cb86c', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1686617963, '127.0.0.1', 1491635035, 1686617963, 'b446e4ad-a200-4d9b-b10b-b077334f6ef5', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_admin_log
@@ -62,11 +62,26 @@ CREATE TABLE `hm_admin_log`  (
   `createtime` bigint(16) NULL DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `name`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员日志表' ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员日志表' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of hm_admin_log
 -- ----------------------------
+INSERT INTO `hm_admin_log` VALUES (1, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632814);
+INSERT INTO `hm_admin_log` VALUES (2, 1, 'admin', '/admin/plugin/market/isbuy', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"toekn\":\"9d8db9e2-95f5-43c0-a766-79ac800a1649\",\"out_trade_no\":\"20230613130654601432263\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632846);
+INSERT INTO `hm_admin_log` VALUES (3, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632851);
+INSERT INTO `hm_admin_log` VALUES (4, 1, 'admin', '/admin/plugin/myplugin/status/cmd/disable', '', '{\"action\":\"\",\"ids\":\"tianxie\",\"params\":\"\",\"cmd\":\"disable\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632857);
+INSERT INTO `hm_admin_log` VALUES (5, 1, 'admin', '/admin/plugin/myplugin/status/cmd/enable', '', '{\"action\":\"\",\"ids\":\"tianxie\",\"params\":\"\",\"cmd\":\"enable\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632862);
+INSERT INTO `hm_admin_log` VALUES (6, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/tianxie/ids/15', '', '{\"plugin_name\":\"tianxie\",\"ids\":\"15\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632902);
+INSERT INTO `hm_admin_log` VALUES (7, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632906);
+INSERT INTO `hm_admin_log` VALUES (8, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/tianxie/ids/15', '', '{\"plugin_name\":\"tianxie\",\"ids\":\"15\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632999);
+INSERT INTO `hm_admin_log` VALUES (9, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633006);
+INSERT INTO `hm_admin_log` VALUES (10, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/tianxie/ids/15', '', '{\"plugin_name\":\"tianxie\",\"ids\":\"15\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633035);
+INSERT INTO `hm_admin_log` VALUES (11, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633152);
+INSERT INTO `hm_admin_log` VALUES (12, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/tianxie/ids/15', '', '{\"plugin_name\":\"tianxie\",\"ids\":\"15\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633207);
+INSERT INTO `hm_admin_log` VALUES (13, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633215);
+INSERT INTO `hm_admin_log` VALUES (14, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/tianxie/ids/15', '', '{\"plugin_name\":\"tianxie\",\"ids\":\"15\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633247);
+INSERT INTO `hm_admin_log` VALUES (15, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633260);
 
 -- ----------------------------
 -- Table structure for hm_area
@@ -693,7 +708,7 @@ CREATE TABLE `hm_options`  (
   `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `remarks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '配置' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hm_options
@@ -701,8 +716,8 @@ CREATE TABLE `hm_options`  (
 INSERT INTO `hm_options` VALUES (1, 'rebeat_1', '10', '一级返佣');
 INSERT INTO `hm_options` VALUES (2, 'rebeat_2', '5', '二级返佣');
 INSERT INTO `hm_options` VALUES (3, 'rebeat_3', '2', '三级返佣');
-INSERT INTO `hm_options` VALUES (4, 'version', '1.1.12', '数据表版本');
-INSERT INTO `hm_options` VALUES (5, 'name', '红盟云卡', '网站名称');
+INSERT INTO `hm_options` VALUES (4, 'version', '1.1.14', '数据表版本');
+INSERT INTO `hm_options` VALUES (5, 'name', '我的网站', '网站名称');
 INSERT INTO `hm_options` VALUES (6, 'title', '为中华之崛起而读书', '网站标题');
 INSERT INTO `hm_options` VALUES (7, 'keywords', '基于Thinkphp开发的开源商城系统', '关键词');
 INSERT INTO `hm_options` VALUES (8, 'description', '基于Thinkphp开发的开源商城系统', '网站说明');
@@ -711,7 +726,8 @@ INSERT INTO `hm_options` VALUES (10, 'active_plugin', 'a:1:{i:3;s:4:\"scan\";}',
 INSERT INTO `hm_options` VALUES (11, 'beian', '', '备案号');
 INSERT INTO `hm_options` VALUES (12, 'icon', '/assets/img/favicon.png', 'icon');
 INSERT INTO `hm_options` VALUES (13, 'custom_code', '<script>\r\nconsole.log(\'红盟云卡下载地址：https://blog.ysxue.net/\');\r\n</script>', '自定义代码');
-INSERT INTO `hm_options` VALUES (14, 'buy_input', 'a:2:{i:0;s:5:\"email\";i:1;s:8:\"password\";}', '游客下单必填项');
+INSERT INTO `hm_options` VALUES (14, 'buy_input', 'a:1:{i:0;s:5:\"email\";}', '游客下单必填项');
+INSERT INTO `hm_options` VALUES (15, 'corporate_name', '公司名称', '公司名称');
 
 -- ----------------------------
 -- Table structure for hm_order_agency
@@ -925,7 +941,7 @@ INSERT INTO `hm_user_agency` VALUES (1, '普通代理', 9.50, 15.00, 4, 16789696
 INSERT INTO `hm_user_agency` VALUES (2, '精英代理', 8.00, 50.00, 3, 1678969642, 1678969642, NULL);
 INSERT INTO `hm_user_agency` VALUES (3, '至尊代理', 6.50, 100.00, 2, 1678969661, 1678969661, NULL);
 INSERT INTO `hm_user_agency` VALUES (4, '合作商', 5.00, 180.00, 1, 1678969668, 1678969668, NULL);
-INSERT INTO `hm_user_agency` VALUES (5, '测试等级', 0.00, 0.00, 5, 1681751383, 1681751383, NULL);
+INSERT INTO `hm_user_agency` VALUES (5, '测试等级', 9.80, 0.00, 5, 1681751383, 1686550041, NULL);
 
 -- ----------------------------
 -- Table structure for hm_user_group
@@ -1033,35 +1049,6 @@ CREATE TABLE `hm_user_token`  (
 -- ----------------------------
 -- Records of hm_user_token
 -- ----------------------------
-INSERT INTO `hm_user_token` VALUES ('063917baea5d24d4b07fc35a64cae9e9087bc8e2', 2, 1679907008, 1682499008);
-INSERT INTO `hm_user_token` VALUES ('0ef63c4f972c3e5b68cac466f7ac64be8003b94b', 2, 1679826460, 1682418460);
-INSERT INTO `hm_user_token` VALUES ('15d0efbe4ce54f2c3fdf7f07902696d716019d12', 1, 1681476339, 1684068339);
-INSERT INTO `hm_user_token` VALUES ('37a7a079d9ff22ac75bb610cb28043ba32b66032', 2, 1680155722, 1682747722);
-INSERT INTO `hm_user_token` VALUES ('386738c3e8f466157bc66204e25b9b8b05f59e9a', 1, 1682074065, 1684666065);
-INSERT INTO `hm_user_token` VALUES ('3bed1c9df5cc35feea813c1784f30824e344b677', 2, 1680856000, 1683448000);
-INSERT INTO `hm_user_token` VALUES ('42b1283429478f75456c10175646717fdad91adb', 2, 1680262287, 1682854287);
-INSERT INTO `hm_user_token` VALUES ('4b92b9e40f6f6ea702f5e0c847cfb046f27443f5', 1, 1681920246, 1684512246);
-INSERT INTO `hm_user_token` VALUES ('595b3fd575ed6df66b0550fc8c3ab638597a2b75', 10, 1680364745, 1682956745);
-INSERT INTO `hm_user_token` VALUES ('6f2458f6bb4439bbecc0efdf4a602af4712507d9', 2, 1681130964, 1683722964);
-INSERT INTO `hm_user_token` VALUES ('7a44c3addcd4ae1dd31584d55a11441df3ebc46e', 1, 1681381121, 1683973121);
-INSERT INTO `hm_user_token` VALUES ('7e21ba443e5da7b1b0e92e1ce2116e14455ce65f', 8, 1680444359, 1683036359);
-INSERT INTO `hm_user_token` VALUES ('82f4c076d12408edcd8887d132d82720eb2460f2', 12, 1680444349, 1683036349);
-INSERT INTO `hm_user_token` VALUES ('87a2cfbd92ee9e043aea94938c17f939b0b656b6', 2, 1679995783, 1682587783);
-INSERT INTO `hm_user_token` VALUES ('897fca704a03588e6c9d6a23d891eef230928486', 2, 1680158806, 1682750806);
-INSERT INTO `hm_user_token` VALUES ('9fb1b1dc1940c1f3798e2c16a76c4763b8570bef', 4, 1682056430, 1684648430);
-INSERT INTO `hm_user_token` VALUES ('ac7b0c5f27a99f8c1aeded80a33612a978e13e2b', 2, 1679535411, 1682127411);
-INSERT INTO `hm_user_token` VALUES ('acfbf9ffefd1df4fc00faaec949dfb296dee16e1', 2, 1679657616, 1682249616);
-INSERT INTO `hm_user_token` VALUES ('b1ad04a203ad66ae317c5cd284dd8e28007744cb', 2, 1681116153, 1683708153);
-INSERT INTO `hm_user_token` VALUES ('b35fd128c379341fd05e0ca65499a1f4d33d1d4a', 2, 1680053680, 1682645680);
-INSERT INTO `hm_user_token` VALUES ('be1175c4a759cd38d4d00c132682a790d4c60094', 2, 1679578547, 1682170547);
-INSERT INTO `hm_user_token` VALUES ('c463312698c16238c410e8f5cceaa595ff54e1e0', 1, 1681455740, 1684047740);
-INSERT INTO `hm_user_token` VALUES ('c747c929c8789d97ce9b921f9bbfd66a0c9875e7', 2, 1679755103, 1682347103);
-INSERT INTO `hm_user_token` VALUES ('e2640b4952f6e485666eaa772c43ba00c283b8c2', 8, 1680436274, 1683028274);
-INSERT INTO `hm_user_token` VALUES ('e398b04f20db46189304ce5ae87005ad0300321d', 11, 1680362443, 1682954443);
-INSERT INTO `hm_user_token` VALUES ('f587667bdb9b2eefe337ec76798e05c189a5160d', 13, 1681288854, 1683880854);
-INSERT INTO `hm_user_token` VALUES ('f9aee7244d65bed0efd89113ede6841880f410a5', 14, 1681296435, 1683888435);
-INSERT INTO `hm_user_token` VALUES ('fc04b47dd043db51edf630c9b132f80181b00156', 2, 1679571414, 1682163414);
-INSERT INTO `hm_user_token` VALUES ('ff4f0e6708b17bca5c57e50dd539517af3a7d82a', 10, 1680436944, 1683028944);
 
 -- ----------------------------
 -- Table structure for hm_version

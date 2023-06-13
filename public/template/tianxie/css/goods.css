@@ -1,0 +1,206 @@
+.goods-box{
+    display: grid;
+    grid-template-columns: 80px calc(100% - 100px);
+    grid-column-gap: 18px;
+    grid-row-gap: 12px;
+    margin-bottom: 15px;
+}
+.order-number-box{
+    display: grid;
+    grid-template-columns: 77px 40px 100px 40px;
+}
+.goods-name{
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+}
+.goods-img{
+    text-align: center;
+}
+.goods-img img{
+    max-width: 80px;
+}
+.goods-cover{
+}
+.goods-param{
+    margin-top: 10px;
+}
+.btn-decrement, .btn-increment{
+    width: 100%;
+    border: 1px solid #ced4da;
+}
+#orderNumber{
+    border-radius: 0;
+}
+.breadcrumb{
+    background: #f8f9fa;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+.entry{
+    margin-top: 0;
+}
+.goods-write{
+    /*margin-left: 87px;*/
+}
+.pay-type{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+
+}
+.pay-type div{
+    width: 130px;
+}
+.pay-btn{
+    background: #448bff linear-gradient(45deg,#448bff,#44e9ff);
+    color: #fff;
+    font-size: 1rem;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0;
+    border: unset;
+    border-radius: 5px;
+    height: 40px;
+    width: 137px;
+}
+
+.footer_buy{
+    position: fixed;
+    bottom: 0;
+    z-index: 40;
+    color: #fff;
+    background: #fff;
+    font-weight: 700;
+    text-align: center;
+    width: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    box-shadow: 0 0 0.1rem #efefef;
+}
+.cons {
+    background: #fff;
+    display: flex;
+    margin: 0 .2rem;
+}
+.cons div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: .1rem .3rem;
+}
+.cons div img {
+    height: 2.76rem;
+    width: 2.76rem;
+    padding-bottom: 0.1rem;
+}
+.cons div span {
+    color: #545454;
+    font-weight: 400;
+}
+.to_pay {
+    color: #fff;
+    border: none;
+    text-align: center;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    background: #3369ff;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+@media (max-width: 992px){
+    .goods-box{
+        /*display: block;*/
+        margin-top: 0;
+        border-radius: 0;
+    }
+    .breadcrumb{
+        padding-left: 10px;
+    }
+    .goods-write{
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 992px){
+    .bt-mn-box, .bt-mn{
+        display: none!important;
+    }
+
+}
+
+@media (max-width: 768px){
+    label.input{
+        width: calc(100% - 82px);
+    }
+    label.input input{
+        width: 100%;
+    }
+    .pay-btn{
+        float: unset!important;
+        margin: 0 auto!important;
+        display: block!important;
+        margin-top: 10px!important;
+        width: 150px;
+        padding: 6px 30px
+    }
+}
+
+.custom-service{
+    display: none;
+}
+.footer_buy{
+    max-width: 1140px;
+    border-top: 1px solid #efefef;
+
+}
+.btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    border-radius: 3px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.pay-type, .select-specs {
+    font-size: 13px;
+    line-height: 13px;
+    border: 1.5px solid rgb(167 167 167 / 20%);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-weight: 500;
+    color: #010101;
+    padding: 5px 16px;
+    border-radius: 1px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 1px 1px rgba(32,35,51,.04), 0 2px 4px rgba(32,35,51,.02)!important;
+    box-shadow: 4px 4px 1px -1px rgba(32,35,51,.04), 0 2px 4px rgba(32,35,51,.02)!important;
+}
+.pay-type.active, .select-specs.active {
+    border: 2px solid #4aadff;
+    padding: 4px 15px!important;
+    /* background: #4aadff; */
+    /* color: #fff; */
+}

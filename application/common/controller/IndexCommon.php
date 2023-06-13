@@ -66,6 +66,8 @@ class IndexCommon extends Controller
 
     protected $is_mobile = false;
 
+    protected $agency = [];
+
     public function __construct(Request $request = null)
     {
         config('template.view_path', ROOT_PATH . 'content/');
@@ -206,6 +208,13 @@ class IndexCommon extends Controller
         }
 
         $this->is_mobile = is_mobile();
+
+
+        $this->agency = $this->userAgency();
+        $this->assign([
+            'agency' => $this->agency
+        ]);
+
 
         $tmp = [];
         if($this->is_mobile){ //手机

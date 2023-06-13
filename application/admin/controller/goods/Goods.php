@@ -179,6 +179,9 @@ class Goods extends Backend {
             $weigh = db::name('goods')->order('weigh desc')->value('weigh');
             $goods_insert['weigh'] = ++$weigh;
             $goods_id = Db::name('goods')->insertGetId($goods_insert);
+
+            db::name('sku')->where(['goods_id' => $goods_id])->delete();
+
             $sku_insert = [];
             if($params['is_sku'] == 0){ //单规格
                 $sku_insert[] = [

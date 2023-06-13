@@ -27,7 +27,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {checkbox: true},
                         {field: 'id', title: __('ID'), width: 80},
                         {field: 'name', title: __('Name'), operate: 'LIKE'},
-                        {field: 'discount', title: __('Discount'), operate:'BETWEEN'},
+                        {field: 'discount', title: __('折扣'), operate:'BETWEEN'},
                         {field: 'price', title: __('开通价格'), operate:'BETWEEN'},
                         {field: 'createtime', width: 180, title: __('Createtime'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
                         {field: 'updatetime', width: 180, title: __('Updatetime'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},

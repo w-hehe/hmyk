@@ -17,25 +17,23 @@ use think\Exception;
  * @icon   fa fa-cube
  * @remark 可在线安装、卸载、禁用、启用、配置、升级插件，插件升级前请做好备份。
  */
-class Market extends Backend
-{
+class Market extends Backend {
     protected $model = null;
     protected $noNeedRight = ['get_table_list'];
 
-    public function _initialize()
-    {
+    public function _initialize() {
         parent::_initialize();
 
     }
 
 
-    public function login(){
+    public function login() {
         $params = $this->request->param();
 
         return hmCurl(API . 'api/user/login', http_build_query($params), 1);
     }
 
-    public function user(){
+    public function user() {
         $params = $this->request->param();
         return hmCurl(API . 'api/user/index', http_build_query($params), 1);
     }
@@ -43,9 +41,8 @@ class Market extends Backend
     /**
      * 插件列表
      */
-    public function index()
-    {
-        if($this->request->isAjax()){
+    public function index() {
+        if ($this->request->isAjax()) {
 
             $user_id = $this->uid;
 
@@ -59,19 +56,19 @@ class Market extends Backend
             $pluginPath = ROOT_PATH . 'content';
             $pluginDir = @dir($pluginPath);
 
-            if ($pluginDir){
+            if ($pluginDir) {
                 while (($file = $pluginDir->read()) !== false) {
-                    if (preg_match('|^\.+$|', $file)){
+                    if (preg_match('|^\.+$|', $file)) {
                         continue;
                     }
-                    if (is_dir($pluginPath . '/' . $file)){
+                    if (is_dir($pluginPath . '/' . $file)) {
                         $pluginsSubDir = @ dir($pluginPath . '/' . $file);
-                        if ($pluginsSubDir){
+                        if ($pluginsSubDir) {
                             while (($subFile = $pluginsSubDir->read()) !== false) {
-                                if (preg_match('|^\.+$|', $subFile)){
+                                if (preg_match('|^\.+$|', $subFile)) {
                                     continue;
                                 }
-                                if ($subFile == 'info.php'){
+                                if ($subFile == 'info.php') {
                                     $pluginFiles[] = $file;
                                 }
                             }
@@ -81,13 +78,9 @@ class Market extends Backend
             }
 
 
-            foreach($result['rows'] as &$val){
+            foreach ($result['rows'] as &$val) {
                 $val['exist'] = in_array($val['english_name'], $pluginFiles) ? true : false;
             }
-
-
-
-
 
 
             return $result;
@@ -99,7 +92,7 @@ class Market extends Backend
     /**
      * 安装
      */
-    public function install(){
+    public function install() {
 
 
         $user_id = $this->uid;
@@ -111,8 +104,8 @@ class Market extends Backend
         $upgrade = $this->request->post('upgrade');
         $version = db::name('options')->where(['name' => 'version'])->value('value');
         $data = [
-            'uid'       => $uid,
-            'token'     => $token,
+            'uid' => $uid,
+            'token' => $token,
             'plugin_id' => $plugin_id,
             'host' => $_SERVER['HTTP_HOST'],
             'version' => $version,
@@ -127,12 +120,12 @@ class Market extends Backend
 
         $result = json_decode($result, true);
 
-        if($result['code'] != 200){
+        if ($result['code'] != 200) {
             return json($result);
         }
 
         $data = $result['data'];
-        if(empty($data['file'])){
+        if (empty($data['file'])) {
             return json(['code' => 400, 'msg' => '该插件正在维护, 请稍后下载']);
         }
 
@@ -144,17 +137,17 @@ class Market extends Backend
         /**
          * 下载插件压缩包到本地并赋值文件路径变量
          */
-        $file_url = API . ltrim($data['file'], '/') ;
+        $file_url = API . ltrim($data['file'], '/');
         $path = file_exists($dir . $filename) ? $dir . $filename : $this->download_file($file_url, $dir, $filename);
-        if($path == 'default_socket_timeout'){
+        if ($path == 'default_socket_timeout') {
             return json(['code' => 400, 'msg' => '下载连接超时，网络不太好哦~']);
         }
-        if(!class_exists("\ZipArchive")) return json(['code' => 400, 'msg' => '您的PHP缺少ZipArchive扩展，你可以尝试安装编译版的PHP解决这个问题！']);
+        if (!class_exists("\ZipArchive")) return json(['code' => 400, 'msg' => '您的PHP缺少ZipArchive扩展，你可以尝试安装编译版的PHP解决这个问题！']);
         $zip = new \ZipArchive();
 
         //打开压缩包
         if ($zip->open($path) === true) {
-            if($upgrade){ //升级
+            if ($upgrade) { //升级
                 $toPath = ROOT_PATH . 'runtime/plugin/' . $data['english_name'];
                 try {
                     //解压文件到toPath路径下
@@ -164,15 +157,20 @@ class Market extends Backend
                 } catch (\Exception $e) {
                     return json(['code' => 400, 'msg' => "没有该目录[" . $toPath . "]的写入权限"]);
                 }
-                if(file_exists($toPath . '/' . 'setting.php')){
+                if (file_exists($toPath . '/' . 'setting.php')) {
                     unlink($toPath . '/' . 'setting.php');
                 }
                 copydirs($toPath, ROOT_PATH . 'content/' . $data['english_name']);
                 rmdirs($toPath);
+                if(file_exists(ROOT_PATH . 'content/' . $data['english_name'] . '/template')){
+                    copydirs(ROOT_PATH . 'content/' . $data['english_name'] . '/template', ROOT_PATH . 'public/template');
+                }
+
                 $this->success('升级成功');
-            }else{ //安装
+            } else { //安装
                 $toPath = ROOT_PATH . 'content/' . $data['english_name'];
                 try {
+
                     //解压文件到toPath路径下
                     $zip->extractTo($toPath);
                     $zip->close();
@@ -180,6 +178,12 @@ class Market extends Backend
                 } catch (\Exception $e) {
                     return json(['code' => 400, 'msg' => "没有该目录[" . $toPath . "]的写入权限"]);
                 }
+
+                if(file_exists(ROOT_PATH . 'content/' . $data['english_name'] . '/template')){
+                    copydirs(ROOT_PATH . 'content/' . $data['english_name'] . '/template', ROOT_PATH . 'public/template');
+                }
+
+
                 $this->success('安装成功');
             }
 
@@ -206,7 +210,7 @@ class Market extends Backend
         ob_start();
         try {
             readfile($url);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return 'default_socket_timeout';
         }
         $img = ob_get_contents();
@@ -221,14 +225,13 @@ class Market extends Backend
     /**
      * 检测
      */
-    public function isbuy()
-    {
+    public function isbuy() {
         $plugin_id = $this->request->post("plugin_id");
         $uid = $this->request->post("uid");
         $token = $this->request->post("token");
         $data = [
-            'uid'       => $uid,
-            'token'     => $token,
+            'uid' => $uid,
+            'token' => $token,
             'plugin_id' => $plugin_id,
             'host' => $_SERVER['HTTP_HOST'],
             'out_trade_no' => $this->request->post('out_trade_no')
@@ -240,8 +243,7 @@ class Market extends Backend
     /**
      * 配置
      */
-    public function config($name = null)
-    {
+    public function config($name = null) {
         $name = $name ? $name : $this->request->get("name");
         if (!$name) {
             $this->error(__('Parameter %s can not be empty', 'name'));
@@ -308,12 +310,10 @@ class Market extends Backend
     }
 
 
-
     /**
      * 卸载
      */
-    public function uninstall()
-    {
+    public function uninstall() {
         $name = $this->request->post("name");
         $force = (int)$this->request->post("force");
         $droptables = (int)$this->request->post("droptables");
@@ -352,8 +352,7 @@ class Market extends Backend
     /**
      * 禁用启用
      */
-    public function state()
-    {
+    public function state() {
         $name = $this->request->post("name");
         $action = $this->request->post("action");
         $force = (int)$this->request->post("force");
@@ -379,8 +378,7 @@ class Market extends Backend
     /**
      * 本地上传
      */
-    public function local()
-    {
+    public function local() {
         Config::set('default_return_type', 'json');
 
         $info = [];
@@ -393,8 +391,8 @@ class Market extends Backend
                 throw new Exception(__('Please login and try to install'));
             }
             $extend = [
-                'uid'       => $uid,
-                'token'     => $token,
+                'uid' => $uid,
+                'token' => $token,
                 'faversion' => $faversion
             ];
             $info = Service::local($file, $extend);
@@ -409,8 +407,7 @@ class Market extends Backend
     /**
      * 更新插件
      */
-    public function upgrade()
-    {
+    public function upgrade() {
         $name = $this->request->post("name");
         $addonTmpDir = RUNTIME_PATH . 'addons' . DS;
         if (!$name) {
@@ -431,11 +428,11 @@ class Market extends Backend
             $version = $this->request->post("version");
             $faversion = $this->request->post("faversion");
             $extend = [
-                'uid'        => $uid,
-                'token'      => $token,
-                'version'    => $version,
+                'uid' => $uid,
+                'token' => $token,
+                'version' => $version,
                 'oldversion' => $info['version'] ?? '',
-                'faversion'  => $faversion
+                'faversion' => $faversion
             ];
             //调用更新的方法
             $info = Service::upgrade($name, $extend);
@@ -451,8 +448,7 @@ class Market extends Backend
     /**
      * 测试数据
      */
-    public function testdata()
-    {
+    public function testdata() {
         $name = $this->request->post("name");
         if (!$name) {
             $this->error(__('Parameter %s can not be empty', 'name'));
@@ -474,8 +470,7 @@ class Market extends Backend
     /**
      * 已装插件
      */
-    public function downloaded()
-    {
+    public function downloaded() {
         $offset = (int)$this->request->get("offset");
         $limit = (int)$this->request->get("limit");
         $filter = $this->request->get("filter");
@@ -522,15 +517,13 @@ class Market extends Backend
     }
 
 
-
     /**
      * 刷新授权
      */
-    public function authorization()
-    {
+    public function authorization() {
         $params = [
-            'uid'       => $this->request->post('uid'),
-            'token'     => $this->request->post('token'),
+            'uid' => $this->request->post('uid'),
+            'token' => $this->request->post('token'),
             'faversion' => $this->request->post('faversion'),
         ];
         try {
@@ -544,8 +537,7 @@ class Market extends Backend
     /**
      * 获取插件相关表
      */
-    public function get_table_list()
-    {
+    public function get_table_list() {
         $name = $this->request->post("name");
         if (!preg_match("/^[a-zA-Z0-9]+$/", $name)) {
             $this->error(__('Addon name incorrect'));
@@ -562,15 +554,14 @@ class Market extends Backend
         $this->success('', null, ['tables' => $tables]);
     }
 
-    protected function getAddonList()
-    {
+    protected function getAddonList() {
         $onlineaddons = Cache::get("onlineaddons");
         if (!is_array($onlineaddons) && config('fastadmin.api_url')) {
             $onlineaddons = [];
             $params = [
-                'uid'       => $this->request->post('uid'),
-                'token'     => $this->request->post('token'),
-                'version'   => config('fastadmin.version'),
+                'uid' => $this->request->post('uid'),
+                'token' => $this->request->post('token'),
+                'version' => config('fastadmin.version'),
                 'faversion' => config('fastadmin.version'),
             ];
             $json = [];
