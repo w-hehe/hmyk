@@ -11,7 +11,7 @@
  Target Server Version : 50651 (5.6.51-log)
  File Encoding         : 65001
 
- Date: 13/06/2023 13:17:39
+ Date: 16/06/2023 11:31:14
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'bd1a633d31dcfc8eb0f84e87735e48ef', '7cb86c', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1686617963, '127.0.0.1', 1491635035, 1686617963, 'b446e4ad-a200-4d9b-b10b-b077334f6ef5', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'bd1a633d31dcfc8eb0f84e87735e48ef', '7cb86c', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1686877405, '127.0.0.1', 1491635035, 1686877405, '1017f355-ea8a-4f24-a5ad-ff49e5c54f78', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_admin_log
@@ -62,26 +62,11 @@ CREATE TABLE `hm_admin_log`  (
   `createtime` bigint(16) NULL DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `name`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员日志表' ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员日志表' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of hm_admin_log
 -- ----------------------------
-INSERT INTO `hm_admin_log` VALUES (1, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632814);
-INSERT INTO `hm_admin_log` VALUES (2, 1, 'admin', '/admin/plugin/market/isbuy', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"toekn\":\"9d8db9e2-95f5-43c0-a766-79ac800a1649\",\"out_trade_no\":\"20230613130654601432263\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632846);
-INSERT INTO `hm_admin_log` VALUES (3, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632851);
-INSERT INTO `hm_admin_log` VALUES (4, 1, 'admin', '/admin/plugin/myplugin/status/cmd/disable', '', '{\"action\":\"\",\"ids\":\"tianxie\",\"params\":\"\",\"cmd\":\"disable\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632857);
-INSERT INTO `hm_admin_log` VALUES (5, 1, 'admin', '/admin/plugin/myplugin/status/cmd/enable', '', '{\"action\":\"\",\"ids\":\"tianxie\",\"params\":\"\",\"cmd\":\"enable\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632862);
-INSERT INTO `hm_admin_log` VALUES (6, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/tianxie/ids/15', '', '{\"plugin_name\":\"tianxie\",\"ids\":\"15\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632902);
-INSERT INTO `hm_admin_log` VALUES (7, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632906);
-INSERT INTO `hm_admin_log` VALUES (8, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/tianxie/ids/15', '', '{\"plugin_name\":\"tianxie\",\"ids\":\"15\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686632999);
-INSERT INTO `hm_admin_log` VALUES (9, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633006);
-INSERT INTO `hm_admin_log` VALUES (10, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/tianxie/ids/15', '', '{\"plugin_name\":\"tianxie\",\"ids\":\"15\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633035);
-INSERT INTO `hm_admin_log` VALUES (11, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633152);
-INSERT INTO `hm_admin_log` VALUES (12, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/tianxie/ids/15', '', '{\"plugin_name\":\"tianxie\",\"ids\":\"15\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633207);
-INSERT INTO `hm_admin_log` VALUES (13, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633215);
-INSERT INTO `hm_admin_log` VALUES (14, 1, 'admin', '/admin/plugin/myplugin/delp/plugin_name/tianxie/ids/15', '', '{\"plugin_name\":\"tianxie\",\"ids\":\"15\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633247);
-INSERT INTO `hm_admin_log` VALUES (15, 1, 'admin', '/admin/plugin/market/install', '', '{\"plugin_id\":\"15\",\"uid\":\"1\",\"token\":\"***\",\"upgrade\":\"0\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36', 1686633260);
 
 -- ----------------------------
 -- Table structure for hm_area
@@ -716,7 +701,7 @@ CREATE TABLE `hm_options`  (
 INSERT INTO `hm_options` VALUES (1, 'rebeat_1', '10', '一级返佣');
 INSERT INTO `hm_options` VALUES (2, 'rebeat_2', '5', '二级返佣');
 INSERT INTO `hm_options` VALUES (3, 'rebeat_3', '2', '三级返佣');
-INSERT INTO `hm_options` VALUES (4, 'version', '1.1.14', '数据表版本');
+INSERT INTO `hm_options` VALUES (4, 'version', '1.1.15', '数据表版本');
 INSERT INTO `hm_options` VALUES (5, 'name', '我的网站', '网站名称');
 INSERT INTO `hm_options` VALUES (6, 'title', '为中华之崛起而读书', '网站标题');
 INSERT INTO `hm_options` VALUES (7, 'keywords', '基于Thinkphp开发的开源商城系统', '关键词');
@@ -941,7 +926,7 @@ INSERT INTO `hm_user_agency` VALUES (1, '普通代理', 9.50, 15.00, 4, 16789696
 INSERT INTO `hm_user_agency` VALUES (2, '精英代理', 8.00, 50.00, 3, 1678969642, 1678969642, NULL);
 INSERT INTO `hm_user_agency` VALUES (3, '至尊代理', 6.50, 100.00, 2, 1678969661, 1678969661, NULL);
 INSERT INTO `hm_user_agency` VALUES (4, '合作商', 5.00, 180.00, 1, 1678969668, 1678969668, NULL);
-INSERT INTO `hm_user_agency` VALUES (5, '测试等级', 9.80, 0.00, 5, 1681751383, 1686550041, NULL);
+INSERT INTO `hm_user_agency` VALUES (5, '测试等级', 9.80, 0.00, 5, 1681751383, 1686885451, 1686885451);
 
 -- ----------------------------
 -- Table structure for hm_user_group

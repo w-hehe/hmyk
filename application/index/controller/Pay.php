@@ -246,6 +246,7 @@ class Pay extends Frontend {
                     'create_time' => $this->timestamp
                 ];
             }
+
             db::name('deliver')->insertAll($deliver);
             doAction('send_goods', $order, $deliver);
         }

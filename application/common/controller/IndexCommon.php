@@ -366,16 +366,13 @@ class IndexCommon extends Controller
 	 * 完全处理详情
 	 */
 	protected function goodsDetail($goods, $agency){
-
-//		$goods['sku'] = json_decode($goods['sku'], true);
-//		$goods['price'] = json_decode($goods['price'], true);
+        $goods['pop_content'] = trim(strip_tags($goods['pop_content']), "\r\n");
 		$goods['attach'] = json_decode($goods['attach'], true);
 
 		$goods['wholesale'] = json_decode($goods['wholesale'], true);
 		foreach($goods['wholesale'] as &$val){
 			$val['offer'] = sprintf('%.2f', $val['offer']);
 		}
-//        echo '<pre>'; print_r($goods);die;
         $sku = json_decode($goods['sku'][0]['price'], true);
 		if($goods['is_sku'] == 0){
 			$goods['init_stock'] = $goods['stock'];
@@ -412,7 +409,8 @@ class IndexCommon extends Controller
 
 		$goods['sku_name'] = empty($goods['sku_name']) ? '类型' : $goods['sku_name'];
 		$goods['jiesheng'] = empty($goods['crossed_price']) ? false : sprintf('%.2f', $goods['crossed_price'] - $goods['init_price']);
-//        echo '<pre>'; print_r($goods);die;
+
+
 		return $goods;
 	}
 

@@ -102,7 +102,6 @@ class Index extends IndexCommon {
 
 //        echo '<pre>'; print_r($goods);die;
         $pay_list = getPayList($this->plugin);
-//        echo '<pre>'; print_r($pay_list);die;
 
 
         $this->assign([
@@ -112,6 +111,8 @@ class Index extends IndexCommon {
         ]);
         return view($this->template . 'goods');
     }
+
+
 
 
     /**
