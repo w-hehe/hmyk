@@ -88,6 +88,8 @@ class IndexCommon extends Controller
 		$this->timestamp = time();
 
 
+
+
         $this->auth = Auth::instance();
 
         // token
@@ -185,6 +187,14 @@ class IndexCommon extends Controller
                 }
             }
         }
+
+        $initPluginParams = [
+            'action' => $actionname,
+            'user' => $this->user
+        ];
+
+        doAction('init', $initPluginParams);
+
 
 
 

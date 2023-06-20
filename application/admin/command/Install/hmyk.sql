@@ -11,7 +11,7 @@
  Target Server Version : 50651 (5.6.51-log)
  File Encoding         : 65001
 
- Date: 16/06/2023 11:31:14
+ Date: 20/06/2023 10:59:45
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'bd1a633d31dcfc8eb0f84e87735e48ef', '7cb86c', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1686877405, '127.0.0.1', 1491635035, 1686877405, '1017f355-ea8a-4f24-a5ad-ff49e5c54f78', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'bd1a633d31dcfc8eb0f84e87735e48ef', '7cb86c', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1687226023, '127.0.0.1', 1491635035, 1687226023, 'cdae78b9-584a-4cc5-bb13-462b1a42e4c5', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_admin_log
@@ -701,13 +701,13 @@ CREATE TABLE `hm_options`  (
 INSERT INTO `hm_options` VALUES (1, 'rebeat_1', '10', '一级返佣');
 INSERT INTO `hm_options` VALUES (2, 'rebeat_2', '5', '二级返佣');
 INSERT INTO `hm_options` VALUES (3, 'rebeat_3', '2', '三级返佣');
-INSERT INTO `hm_options` VALUES (4, 'version', '1.1.15', '数据表版本');
+INSERT INTO `hm_options` VALUES (4, 'version', '1.1.16', '数据表版本');
 INSERT INTO `hm_options` VALUES (5, 'name', '我的网站', '网站名称');
 INSERT INTO `hm_options` VALUES (6, 'title', '为中华之崛起而读书', '网站标题');
 INSERT INTO `hm_options` VALUES (7, 'keywords', '基于Thinkphp开发的开源商城系统', '关键词');
 INSERT INTO `hm_options` VALUES (8, 'description', '基于Thinkphp开发的开源商城系统', '网站说明');
 INSERT INTO `hm_options` VALUES (9, 'logo', '/template/default/images/dist/logo-blue.png', '网站Logo');
-INSERT INTO `hm_options` VALUES (10, 'active_plugin', 'a:1:{i:3;s:4:\"scan\";}', '启用的插件');
+INSERT INTO `hm_options` VALUES (10, 'active_plugin', 'a:1:{i:0;s:4:\"scan\";}', '启用的插件');
 INSERT INTO `hm_options` VALUES (11, 'beian', '', '备案号');
 INSERT INTO `hm_options` VALUES (12, 'icon', '/assets/img/favicon.png', 'icon');
 INSERT INTO `hm_options` VALUES (13, 'custom_code', '<script>\r\nconsole.log(\'红盟云卡下载地址：https://blog.ysxue.net/\');\r\n</script>', '自定义代码');
@@ -1034,6 +1034,8 @@ CREATE TABLE `hm_user_token`  (
 -- ----------------------------
 -- Records of hm_user_token
 -- ----------------------------
+INSERT INTO `hm_user_token` VALUES ('9bbd3f54dddc69ac243f39f59ba74e572576ae9e', 2, 1687144195, 1689736195);
+INSERT INTO `hm_user_token` VALUES ('eb8ddb9e0fcdf9f20b045b1f34768a036ec9590c', 1, 1687154596, 1689746596);
 
 -- ----------------------------
 -- Table structure for hm_version

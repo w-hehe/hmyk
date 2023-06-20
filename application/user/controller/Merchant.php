@@ -88,13 +88,13 @@ class Merchant extends Frontend {
 
         $merchantModel = new \app\user\model\Merchant;
 
-        $merchant = $merchantModel->with(['grade'])->where(['user_id' => $this->user['id']])->order('id desc')->paginate(10);
+        $merchant_list = $merchantModel->with(['grade'])->where(['user_id' => $this->user['id']])->order('id desc')->paginate(10);
 
         $this->assign([
             'list' => $list, //分站等级列表
             'domain_list' => $domain_list, //域名列表
             'grade_json' => json_encode($grade_json), //分站等级列表
-            'merchant' => $merchant, //我的分站
+            'merchant_list' => $merchant_list, //我的分站
         ]);
         return view('default/merchant/index');
     }

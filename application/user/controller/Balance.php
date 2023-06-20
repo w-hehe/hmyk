@@ -82,9 +82,9 @@ class Balance extends Frontend {
                 return $result;
             }
             if($params['type'] == 'cashout'){ //提现
-                if($params['money'] < 0) $this->error('请输入正确的提现金额');
-                if(empty($params['name'])) $this->error('账户姓名不能为空');
-                if(empty($params['account'])) $this->error('账号不能为空');
+                if($params['money'] <= 0) $this->error('请输入提现金额');
+                if(empty($params['account'])) $this->error('提现账号不能为空');
+                if(empty($params['name'])) $this->error('提现账户姓名不能为空');
                 if($params['money'] > $this->user['money']) $this->error('余额不足');
                 $insert = [
                     'out_trade_no' => Trade::generateTradeNo(),

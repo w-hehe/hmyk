@@ -93,7 +93,7 @@
 
                             </thead>
                             <tbody>
-                            {volist name="merchant" id="vo"}
+                            {volist name="merchant_list" id="vo"}
                             <tr>
                                 <td>{$vo.title}</td>
                                 <td><a href="//{$vo.domain}" target="_blank">{$vo.domain}</a></td>
@@ -104,7 +104,7 @@
                             {/volist}
                             </tbody>
                         </table>
-                        {$merchant->render()}
+                        {$merchant_list->render()}
                     </div>
                 </div>
             </div>
