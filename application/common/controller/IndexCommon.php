@@ -190,7 +190,8 @@ class IndexCommon extends Controller
 
         $initPluginParams = [
             'action' => $actionname,
-            'user' => $this->user
+            'user' => $this->user,
+            'params' => $this->request->param()
         ];
 
         doAction('init', $initPluginParams);

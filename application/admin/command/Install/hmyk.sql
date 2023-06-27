@@ -11,7 +11,7 @@
  Target Server Version : 50651 (5.6.51-log)
  File Encoding         : 65001
 
- Date: 20/06/2023 10:59:45
+ Date: 27/06/2023 10:03:11
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `hm_admin`  (
 -- ----------------------------
 -- Records of hm_admin
 -- ----------------------------
-INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'bd1a633d31dcfc8eb0f84e87735e48ef', '7cb86c', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1687226023, '127.0.0.1', 1491635035, 1687226023, 'cdae78b9-584a-4cc5-bb13-462b1a42e4c5', 'normal');
+INSERT INTO `hm_admin` VALUES (1, 'admin', 'Admin', 'bd1a633d31dcfc8eb0f84e87735e48ef', '7cb86c', 'http://hm.test.com/assets/img/avatar.png', 'admin@admin.com', '', 0, 1687830674, '127.0.0.1', 1491635035, 1687830674, 'ec1b5c68-02dc-411f-859c-06fbc49ebae0', 'normal');
 
 -- ----------------------------
 -- Table structure for hm_admin_log
@@ -701,7 +701,7 @@ CREATE TABLE `hm_options`  (
 INSERT INTO `hm_options` VALUES (1, 'rebeat_1', '10', '一级返佣');
 INSERT INTO `hm_options` VALUES (2, 'rebeat_2', '5', '二级返佣');
 INSERT INTO `hm_options` VALUES (3, 'rebeat_3', '2', '三级返佣');
-INSERT INTO `hm_options` VALUES (4, 'version', '1.1.16', '数据表版本');
+INSERT INTO `hm_options` VALUES (4, 'version', '1.1.17', '数据表版本');
 INSERT INTO `hm_options` VALUES (5, 'name', '我的网站', '网站名称');
 INSERT INTO `hm_options` VALUES (6, 'title', '为中华之崛起而读书', '网站标题');
 INSERT INTO `hm_options` VALUES (7, 'keywords', '基于Thinkphp开发的开源商城系统', '关键词');

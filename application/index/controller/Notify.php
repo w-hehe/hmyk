@@ -120,6 +120,10 @@ class Notify extends Frontend {
                     db::name('goods_order')->where(['id' => $order['id']])->update(['pay_time' => $this->timestamp, 'trade_no' => $result['trade_no']]);
                     $goods = db::name('goods')->where(['id' => $order['goods_id']])->find();
                     $this->notifyGoodsSuccess($goods, $order);
+                    $afterPayData = [
+                        'order' => $order
+                    ];
+                    doAction('afterPay', $afterPayData);
                     echo $eo;die;
                 }
 

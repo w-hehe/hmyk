@@ -68,7 +68,7 @@ class Balance extends Frontend {
                 $payPlugin = selectPayPlugin($this->plugin, $params['pay_type']);
                 
                 
-                include_once ROOT_PATH . 'plugin/' . $payPlugin['english_name'] . '/' . $payPlugin['english_name'] . '.php';
+                include_once ROOT_PATH . 'content/' . $payPlugin['english_name'] . '/' . $payPlugin['english_name'] . '.php';
 
                 $result = pay([
                     'subject' => '会员充值',

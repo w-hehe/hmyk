@@ -158,6 +158,10 @@ class Pay extends Frontend {
                     $result = $this->notifyGoodsSuccess($goods, $out_trade_no);
                 } else {
                     // 发起支付
+                    $beforePay = [
+                        'order' => $order_insert
+                    ];
+                    doAction('beforePay', $beforePay);
                     $payPlugin = selectPayPlugin($this->plugin, $params['pay_type']);
 
                     include_once ROOT_PATH . 'content/' . $payPlugin['english_name'] . '/' . $payPlugin['english_name'] . '.php';

@@ -141,11 +141,11 @@ return [
     // | 异常及错误设置
     // +----------------------------------------------------------------------
     // 异常页面的模板文件
-//    'exception_tmpl'         => APP_PATH . 'common' . DS . 'view' . DS . 'tpl' . DS . 'think_exception.tpl',
+    'exception_tmpl'         => APP_PATH . 'common' . DS . 'view' . DS . 'tpl' . DS . 'think_exception.tpl',
     // 错误显示信息,非调试模式有效
     'error_message'          => '你所浏览的页面暂时无法访问',
     // 显示错误信息
-    'show_error_msg'         => false,
+    'show_error_msg'         => true,
     // 异常处理handle类 留空使用 \think\exception\Handle
     'exception_handle'       => '',
     // +----------------------------------------------------------------------
